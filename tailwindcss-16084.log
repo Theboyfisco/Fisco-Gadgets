@@ -1,0 +1,95 @@
+2026-03-04T01:10:37.239766Z  INFO tailwindcss_oxide::scanner: Provided sources:
+2026-03-04T01:10:37.240070Z  INFO tailwindcss_oxide::scanner: Source: PublicSourceEntry { base: "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub", pattern: "**/*", negated: false }
+2026-03-04T01:10:37.240505Z  INFO tailwindcss_oxide::scanner: Optimized sources:
+2026-03-04T01:10:37.240584Z  INFO tailwindcss_oxide::scanner: Source: Auto { base: "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub" }
+2026-03-04T01:10:37.245125Z  INFO discover_sources: tailwindcss_oxide::scanner: enter
+2026-03-04T01:10:37.245225Z  INFO discover_sources:walk_synchronous: tailwindcss_oxide::scanner: enter
+2026-03-04T01:10:37.271504Z  INFO discover_sources:walk_synchronous: tailwindcss_oxide::scanner: exit
+2026-03-04T01:10:37.274744Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\app\\shipping\\page.tsx"
+2026-03-04T01:10:37.274752Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\components\\ui\\LoadingSkeleton.tsx"
+2026-03-04T01:10:37.274837Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\postcss.config.mjs"
+2026-03-04T01:10:37.274864Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\app\\api\\paystack\\webhook\\route.ts"
+2026-03-04T01:10:37.274744Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\actions\\order.ts"
+2026-03-04T01:10:37.275051Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\components\\ui\\Navbar.tsx"
+2026-03-04T01:10:37.275065Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\app\\checkout\\success\\page.tsx"
+2026-03-04T01:10:37.275125Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\app\\brand\\[id]\\page.tsx"
+2026-03-04T01:10:37.275150Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\prisma\\migrations\\20260303233705_init\\migration.sql"
+2026-03-04T01:10:37.275280Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\components\\ui\\SearchOverlay.tsx"
+2026-03-04T01:10:37.275342Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\app\\category\\[id]\\page.tsx"
+2026-03-04T01:10:37.275365Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\app\\terms\\page.tsx"
+2026-03-04T01:10:37.275150Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\actions\\paystack.ts"
+2026-03-04T01:10:37.275402Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\app\\compare\\page.tsx"
+2026-03-04T01:10:37.275468Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\deployment_guide.md"
+2026-03-04T01:10:37.275579Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\app\\warranty\\page.tsx"
+2026-03-04T01:10:37.275579Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\actions\\product.ts"
+2026-03-04T01:10:37.275595Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\app\\checkout\\page.tsx"
+2026-03-04T01:10:37.275652Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\app\\contact\\page.tsx"
+2026-03-04T01:10:37.275700Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\eslint.config.mjs"
+2026-03-04T01:10:37.275827Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\app\\about\\page.tsx"
+2026-03-04T01:10:37.275365Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\prisma\\migrations\\20260304010332_add_payment_reference_index\\migration.sql"
+2026-03-04T01:10:37.275871Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\lib\\dummy-data.ts"
+2026-03-04T01:10:37.275963Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\app\\layout.tsx"
+2026-03-04T01:10:37.275966Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\FEATURES.md"
+2026-03-04T01:10:37.276017Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\info.md"
+2026-03-04T01:10:37.276095Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\prisma\\migrations\\migration_lock.toml"
+2026-03-04T01:10:37.276151Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\lib\\validations\\order.ts"
+2026-03-04T01:10:37.276196Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\lint_output_4.txt"
+2026-03-04T01:10:37.276234Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\lib\\db.ts"
+2026-03-04T01:10:37.276275Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\app\\page.tsx"
+2026-03-04T01:10:37.275765Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\BACKEND_SETUP.md"
+2026-03-04T01:10:37.276398Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\lint_output.txt"
+2026-03-04T01:10:37.276415Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\lint_output_5.txt"
+2026-03-04T01:10:37.276322Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\prisma\\schema.prisma"
+2026-03-04T01:10:37.276572Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\components\\product\\AddToCartButton.tsx"
+2026-03-04T01:10:37.276630Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\lint_output_2.txt"
+2026-03-04T01:10:37.276642Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\next.config.ts"
+2026-03-04T01:10:37.276662Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\app\\privacy\\page.tsx"
+2026-03-04T01:10:37.276676Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\build_output.txt"
+2026-03-04T01:10:37.276698Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\prisma\\seed.ts"
+2026-03-04T01:10:37.276850Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\package.json"
+2026-03-04T01:10:37.276882Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\app\\product\\[id]\\page.tsx"
+2026-03-04T01:10:37.276882Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\components\\product\\CompareProvider.tsx"
+2026-03-04T01:10:37.276933Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\components\\cart\\CartDrawer.tsx"
+2026-03-04T01:10:37.277083Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\components\\product\\BentoProductCard.tsx"
+2026-03-04T01:10:37.277091Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\app\\returns\\page.tsx"
+2026-03-04T01:10:37.277102Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\components\\product\\SpecComparison.tsx"
+2026-03-04T01:10:37.277120Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\public\\next.svg"
+2026-03-04T01:10:37.277383Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\components\\product\\CompareButton.tsx"
+2026-03-04T01:10:37.277449Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\services\\shipping.ts"
+2026-03-04T01:10:37.277486Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\public\\vercel.svg"
+2026-03-04T01:10:37.277563Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\components\\product\\CompareFloatingBar.tsx"
+2026-03-04T01:10:37.277587Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\components\\product\\StickyBottomCTA.tsx"
+2026-03-04T01:10:37.277606Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\tsc_output.txt"
+2026-03-04T01:10:37.277657Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\tsconfig.json"
+2026-03-04T01:10:37.277699Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\public\\window.svg"
+2026-03-04T01:10:37.277777Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\components\\cart\\CartWrapper.tsx"
+2026-03-04T01:10:37.277935Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\public\\globe.svg"
+2026-03-04T01:10:37.278005Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\components\\ui\\Footer.tsx"
+2026-03-04T01:10:37.278114Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\tsc_output_3.txt"
+2026-03-04T01:10:37.276903Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\public\\file.svg"
+2026-03-04T01:10:37.277813Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\tsc_output_2.txt"
+2026-03-04T01:10:37.277143Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\components\\cart\\CartProvider.tsx"
+2026-03-04T01:10:37.277887Z  INFO tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\README.md"
+2026-03-04T01:10:37.278716Z  INFO discover_sources: tailwindcss_oxide::scanner: exit
+2026-03-04T01:10:37.278771Z  INFO extract_candidates: tailwindcss_oxide::scanner: enter
+2026-03-04T01:10:37.278789Z  INFO extract_candidates:parse_all_blobs: tailwindcss_oxide::scanner: enter
+2026-03-04T01:10:37.278808Z  INFO extract_candidates:parse_all_blobs:extract: tailwindcss_oxide::scanner: enter
+2026-03-04T01:10:37.281427Z  INFO extract_candidates:parse_all_blobs:extract: tailwindcss_oxide::scanner: exit
+2026-03-04T01:10:37.281502Z  INFO extract_candidates:parse_all_blobs: tailwindcss_oxide::scanner: exit
+2026-03-04T01:10:37.281520Z  INFO extract_candidates:read_all_files: tailwindcss_oxide::scanner: enter
+2026-03-04T01:10:37.281530Z  INFO extract_candidates:read_all_files: tailwindcss_oxide::scanner: Reading 1 file(s)
+2026-03-04T01:10:37.281787Z  INFO extract_candidates:read_all_files: tailwindcss_oxide::scanner: Reading "C:\\Users\\ifean\\Downloads\\JS series\\New folder (2)\\tech-hub\\app\\globals.css"
+2026-03-04T01:10:37.281818Z  INFO extract_candidates:read_all_files: tailwindcss_oxide::scanner: exit
+2026-03-04T01:10:37.281861Z  INFO extract_candidates:extract_css_variables: tailwindcss_oxide::scanner: enter
+2026-03-04T01:10:37.281882Z  INFO extract_candidates:extract_css_variables:extract: tailwindcss_oxide::scanner: enter
+2026-03-04T01:10:37.282034Z  INFO extract_candidates:extract_css_variables:extract: tailwindcss_oxide::scanner: exit
+2026-03-04T01:10:37.282066Z  INFO extract_candidates:extract_css_variables: tailwindcss_oxide::scanner: exit
+2026-03-04T01:10:37.282648Z  INFO extract_candidates: tailwindcss_oxide::scanner: exit
+2026-03-04T01:10:37.284243Z  INFO get_files: tailwindcss_oxide::scanner: enter
+2026-03-04T01:10:37.284289Z  INFO get_files:discover_sources: tailwindcss_oxide::scanner: enter
+2026-03-04T01:10:37.284301Z  INFO get_files:discover_sources: tailwindcss_oxide::scanner: exit
+2026-03-04T01:10:37.284521Z  INFO get_files: tailwindcss_oxide::scanner: exit
+2026-03-04T01:10:37.286220Z  INFO get_globs: tailwindcss_oxide::scanner: enter
+2026-03-04T01:10:37.286281Z  INFO get_globs:discover_sources: tailwindcss_oxide::scanner: enter
+2026-03-04T01:10:37.286303Z  INFO get_globs:discover_sources: tailwindcss_oxide::scanner: exit
+2026-03-04T01:10:37.306336Z  INFO get_globs: tailwindcss_oxide::scanner: exit

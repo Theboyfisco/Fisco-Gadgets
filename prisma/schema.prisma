@@ -1,0 +1,100 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Category {
+  id       String    @id @default(cuid())
+  name     String
+  slug     String    @unique
+  image    String
+  products Product[]
+
+  @@index([slug])
+}
+
+model Product {
+  id             String      @id @default(cuid())
+  name           String
+  slug           String      @unique
+  description    String
+  price          Int
+  stock          Int         @default(0)
+  condition      Condition   @default(NEW)
+  technicalSpecs Json
+  images         String[]
+  categoryId     String
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  orderItems     OrderItem[]
+  category       Category    @relation(fields: [categoryId], references: [id])
+
+  @@index([slug])
+  @@index([categoryId])
+}
+
+model Order {
+  id               String           @id @default(cuid())
+  email            String
+  phone            String
+  status           OrderStatus      @default(PENDING)
+  totalAmount      Int
+  paymentReference String?          @unique
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  items            OrderItem[]
+  shippingDetails  ShippingDetails?
+
+  @@index([email])
+  @@index([paymentReference])
+}
+
+model OrderItem {
+  id              String  @id @default(cuid())
+  orderId         String
+  productId       String
+  quantity        Int
+  priceAtPurchase Int
+  order           Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product         Product @relation(fields: [productId], references: [id])
+
+  @@index([orderId])
+  @@index([productId])
+}
+
+model ShippingDetails {
+  id           String       @id @default(cuid())
+  orderId      String       @unique
+  fullName     String
+  address      String
+  city         String
+  state        String
+  shippingType ShippingType @default(DELIVERY)
+  shippingFee  Int
+  order        Order        @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([orderId])
+}
+
+enum Condition {
+  NEW
+  OPEN_BOX
+  REFURBISHED
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  SHIPPED
+  CANCELLED
+}
+
+enum ShippingType {
+  LOCAL_PICKUP
+  DELIVERY
+}

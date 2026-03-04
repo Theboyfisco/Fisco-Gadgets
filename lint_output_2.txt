@@ -1,0 +1,25 @@
+
+> tech-hub@0.1.0 lint
+> eslint
+
+
+C:\Users\ifean\Downloads\JS series\New folder (2)\tech-hub\components\cart\CartProvider.tsx
+  26:17  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\ifean\Downloads\JS series\New folder (2)\tech-hub\components\cart\CartProvider.tsx:26:17
+  24 |             const stored = localStorage.getItem("v1_techhub_cart");
+  25 |             if (stored) {
+> 26 |                 setCartItems(JSON.parse(stored));
+     |                 ^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  27 |             }
+  28 |         } catch (e) {
+  29 |             console.error("Failed to load cart", e);  react-hooks/set-state-in-effect
+
+✖ 1 problem (1 error, 0 warnings)
+

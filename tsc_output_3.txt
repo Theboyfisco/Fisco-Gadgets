@@ -1,0 +1,10 @@
+app/page.tsx(3,10): error TS2300: Duplicate identifier 'ShieldCheck'.
+app/page.tsx(3,23): error TS2300: Duplicate identifier 'Truck'.
+app/page.tsx(3,30): error TS2300: Duplicate identifier 'Clock'.
+app/page.tsx(3,37): error TS2300: Duplicate identifier 'CreditCard'.
+app/page.tsx(4,8): error TS2300: Duplicate identifier 'Link'.
+app/page.tsx(6,10): error TS2300: Duplicate identifier 'ShieldCheck'.
+app/page.tsx(6,23): error TS2300: Duplicate identifier 'Truck'.
+app/page.tsx(6,30): error TS2300: Duplicate identifier 'Clock'.
+app/page.tsx(6,37): error TS2300: Duplicate identifier 'CreditCard'.
+app/page.tsx(7,8): error TS2300: Duplicate identifier 'Link'.

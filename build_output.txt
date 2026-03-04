@@ -1,0 +1,28 @@
+
+> tech-hub@0.1.0 build
+> next build
+
+ÔÜá Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of C:\Users\ifean\package-lock.json as the root directory.
+ To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+ Detected additional lockfiles: 
+   * C:\Users\ifean\Downloads\JS series\New folder (2)\tech-hub\package-lock.json
+
+Ôû▓ Next.js 16.1.6 (Turbopack)
+
+  Creating an optimized production build ...
+Ô£ô Compiled successfully in 5.8s
+  Running TypeScript ...
+  Collecting page data using 7 workers ...
+  Generating static pages using 7 workers (0/4) ...
+Error occurred prerendering page "/". Read more: https://nextjs.org/docs/messages/prerender-error
+Error: Attempted to call createMotionComponent() from the server but createMotionComponent is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.
+    at <unknown> (C:\Users\ifean\Downloads\JS series\New folder (2)\tech-hub\.next\server\chunks\ssr\Downloads_JS series_New folder (2)_tech-hub_ed359f55._.js:1:671)
+    at Object.get (C:\Users\ifean\Downloads\JS series\New folder (2)\tech-hub\.next\server\chunks\ssr\Downloads_JS series_New folder (2)_tech-hub_ed359f55._.js:1:101282)
+    at f (C:\Users\ifean\Downloads\JS series\New folder (2)\tech-hub\.next\server\chunks\ssr\[root-of-the-server]__ad9a6fe6._.js:1:2281)
+    at stringify (<anonymous>) {
+  digest: '3853576675'
+}
+Export encountered an error on /page: /, exiting the build.
+Ô¿» Next.js build worker exited with code: 1 and signal: null
