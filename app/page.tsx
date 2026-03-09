@@ -46,7 +46,7 @@ export default async function Home() {
               <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-primary">
                 Built for modern shopping in Nigeria
               </p>
-              <h1 className="mb-6 max-w-xl text-4xl font-extrabold leading-tight tracking-tight text-white sm:text-6xl">
+              <h1 className="mb-6 max-w-xl text-4xl font-extrabold leading-tight tracking-tight text-[var(--foreground)] sm:text-6xl">
                 Clean tech shopping with real-time stock and instant checkout.
               </h1>
               <p className="mb-8 max-w-xl text-base leading-relaxed text-secondary sm:text-lg">
@@ -62,7 +62,7 @@ export default async function Home() {
                 </Link>
                 <Link
                   href="/category/phones"
-                  className="inline-flex items-center justify-center rounded-standard border border-border-subtle bg-white/5 px-8 py-3 text-sm font-semibold text-white transition-colors hover:bg-white/10"
+                  className="inline-flex items-center justify-center rounded-standard border border-border-subtle bg-[var(--surface-card)] px-8 py-3 text-sm font-semibold text-[var(--foreground)] transition-colors hover:bg-[var(--surface-cta)]"
                 >
                   Browse Phones
                 </Link>
@@ -72,7 +72,7 @@ export default async function Home() {
 
           <Reveal delay={0.1} className="mx-auto hidden w-full max-w-xl lg:block">
             <Tilt3D maxTilt={7} spotlightOpacity={0.38}>
-              <div className="relative h-[29rem] overflow-hidden rounded-[1.8rem] border border-white/10 bg-gradient-to-b from-white/10 to-white/[0.03] p-6 shadow-2xl">
+              <div className="relative h-[29rem] overflow-hidden rounded-[1.8rem] border border-[var(--border-subtle)] bg-gradient-to-b from-[var(--surface-cta)] to-[var(--surface-soft)] p-6 shadow-2xl">
                 <div className="absolute left-5 top-5 rounded-full border border-primary/40 bg-primary/15 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-primary [transform:translateZ(40px)]">
                   New Arrival
                 </div>
@@ -89,9 +89,9 @@ export default async function Home() {
                   />
                 </div>
 
-                <div className="absolute bottom-5 left-5 right-5 rounded-2xl border border-white/10 bg-black/45 p-5 backdrop-blur-md [transform:translateZ(55px)]">
+                <div className="absolute bottom-5 left-5 right-5 rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-contrast)] p-5 backdrop-blur-md [transform:translateZ(55px)]">
                   <p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-secondary">Recommended today</p>
-                  <h4 className="text-lg font-bold text-white">{leadProduct?.name || "New Arrival"}</h4>
+                  <h4 className="text-lg font-bold text-[var(--foreground)]">{leadProduct?.name || "New Arrival"}</h4>
                   <p className="text-base font-semibold text-primary">
                     {leadProduct
                       ? new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN" }).format(leadProduct.price)
@@ -105,14 +105,14 @@ export default async function Home() {
 
         <Reveal className="mb-20 lg:mb-24">
           <div className="mb-6 flex items-center justify-between">
-            <h2 className="text-2xl font-bold text-white">Shop by Category</h2>
+            <h2 className="text-2xl font-bold text-[var(--foreground)]">Shop by Category</h2>
           </div>
           <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
             {dbCategories.map((category: any) => (
               <Tilt3D key={category.id} maxTilt={5} spotlightOpacity={0.28}>
                 <Link
                   href={`/category/${category.id}`}
-                  className="group relative block h-40 overflow-hidden rounded-featured border border-border-subtle bg-black/20"
+                  className="group relative block h-40 overflow-hidden rounded-featured border border-border-subtle bg-[var(--surface-contrast)]"
                 >
                   <Image
                     src={category.image}
@@ -122,9 +122,9 @@ export default async function Home() {
                     quality={90}
                     className="object-cover opacity-70 transition-transform duration-500 group-hover:scale-110"
                   />
-                  <div className={`absolute inset-0 bg-gradient-to-t ${categoryTone(category.id)} via-black/25 to-black/70`} />
-                  <div className="absolute bottom-3 left-3 right-3 rounded-xl border border-white/10 bg-black/30 px-3 py-2 backdrop-blur-sm transition-transform duration-300 group-hover:[transform:translateZ(16px)]">
-                    <h3 className="text-sm font-semibold text-white sm:text-base">{category.name}</h3>
+                  <div className={`absolute inset-0 bg-gradient-to-t ${categoryTone(category.id)} via-[var(--surface-contrast)] to-[var(--surface-contrast)]`} />
+                  <div className="absolute bottom-3 left-3 right-3 rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-contrast)] px-3 py-2 backdrop-blur-sm transition-transform duration-300 group-hover:[transform:translateZ(16px)]">
+                    <h3 className="text-sm font-semibold text-[var(--foreground)] sm:text-base">{category.name}</h3>
                   </div>
                 </Link>
               </Tilt3D>
@@ -132,26 +132,26 @@ export default async function Home() {
           </div>
         </Reveal>
 
-        <Reveal className="mb-20 rounded-2xl border border-white/10 bg-white/[0.04] p-6 md:mb-24 md:p-10" delay={0.05}>
+        <Reveal className="mb-20 rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-6 md:mb-24 md:p-10" delay={0.05}>
           <div className="grid gap-8 md:grid-cols-4 md:gap-6">
             <div className="text-center">
               <Truck size={30} className="mx-auto mb-3 text-primary" />
-              <h3 className="mb-2 text-sm font-semibold text-white">Fast Delivery</h3>
+              <h3 className="mb-2 text-sm font-semibold text-[var(--foreground)]">Fast Delivery</h3>
               <p className="text-xs leading-relaxed text-secondary">Same day in Asaba, 1-3 days nationwide.</p>
             </div>
             <div className="text-center">
               <ShieldCheck size={30} className="mx-auto mb-3 text-primary" />
-              <h3 className="mb-2 text-sm font-semibold text-white">Authentic Warranty</h3>
+              <h3 className="mb-2 text-sm font-semibold text-[var(--foreground)]">Authentic Warranty</h3>
               <p className="text-xs leading-relaxed text-secondary">Manufacturer-backed and store-covered support.</p>
             </div>
             <div className="text-center">
               <CreditCard size={30} className="mx-auto mb-3 text-primary" />
-              <h3 className="mb-2 text-sm font-semibold text-white">Secure Payments</h3>
+              <h3 className="mb-2 text-sm font-semibold text-[var(--foreground)]">Secure Payments</h3>
               <p className="text-xs leading-relaxed text-secondary">Paystack, transfer, and verified payment flow.</p>
             </div>
             <div className="text-center">
               <Clock size={30} className="mx-auto mb-3 text-primary" />
-              <h3 className="mb-2 text-sm font-semibold text-white">24/7 Help</h3>
+              <h3 className="mb-2 text-sm font-semibold text-[var(--foreground)]">24/7 Help</h3>
               <p className="text-xs leading-relaxed text-secondary">Live WhatsApp concierge whenever you need it.</p>
             </div>
           </div>
@@ -160,7 +160,7 @@ export default async function Home() {
         <section id="featured">
           <Reveal>
             <div className="mb-6 flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-white">Featured Deals</h2>
+              <h2 className="text-2xl font-bold text-[var(--foreground)]">Featured Deals</h2>
             </div>
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
               {featuredProducts.map((product: any, index: number) => (

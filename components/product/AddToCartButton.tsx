@@ -9,7 +9,10 @@ export function AddToCartButton({ product, className }: { product: Product; clas
     return (
         <button
             onClick={() => addToCart(product)}
-            className={className || "flex-1 bg-white/5 hover:bg-white/10 text-white rounded-standard py-4 font-bold active:scale-95 transition-all outline-none focus:ring-2 focus:ring-white/20 border border-white/10"}
+            className={
+                className ||
+                "flex-1 rounded-standard border border-[var(--border-subtle)] bg-[var(--surface-card)] py-4 font-bold text-[var(--foreground)] transition-all hover:bg-[var(--surface-cta)] active:scale-95 outline-none focus:ring-2 focus:ring-[var(--border-strong)]"
+            }
         >
             Add to Cart
         </button>

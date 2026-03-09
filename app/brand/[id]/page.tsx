@@ -41,14 +41,14 @@ export default async function BrandPage({ params }: { params: Promise<{ id: stri
   return (
     <div className="container mx-auto flex-1 px-4 py-10">
       <Reveal className="mb-10">
-        <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-black/20 p-8 md:p-10">
+        <div className="relative overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-contrast)] p-8 md:p-10">
           <Image src={heroImage} alt={`${brandName} showcase`} fill quality={92} className="object-cover opacity-35" priority />
-          <div className={`absolute inset-0 bg-gradient-to-r ${brandTone(brandId)} via-black/50 to-black/85`} />
+          <div className={`absolute inset-0 bg-gradient-to-r ${brandTone(brandId)} via-[var(--surface-contrast)] to-[var(--surface-contrast)]`} />
           <div className="relative z-10 max-w-2xl">
-            <p className="mb-3 inline-flex rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-white/90">
+            <p className="mb-3 inline-flex rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--foreground)]">
               Official Collection
             </p>
-            <h1 className="mb-4 text-4xl font-extrabold tracking-tight text-white capitalize md:text-5xl">{brandName} Store</h1>
+            <h1 className="mb-4 text-4xl font-extrabold tracking-tight text-[var(--foreground)] capitalize md:text-5xl">{brandName} Store</h1>
             <p className="text-base text-secondary md:text-lg">
               Authentic {brandName} devices with verified warranty, tailored bundles, and fast delivery across Nigeria.
             </p>
@@ -57,7 +57,7 @@ export default async function BrandPage({ params }: { params: Promise<{ id: stri
       </Reveal>
 
       {products.length === 0 ? (
-        <div className="rounded-standard border border-border-subtle bg-white/5 p-12 text-center">
+        <div className="rounded-standard border border-border-subtle bg-[var(--surface-card)] p-12 text-center">
           <p className="text-lg text-secondary">No products found for this brand.</p>
         </div>
       ) : (

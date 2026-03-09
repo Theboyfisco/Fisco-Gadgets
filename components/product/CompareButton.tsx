@@ -28,12 +28,12 @@ export function CompareButton({ product, className = "", showLabel = false }: Co
     return (
         <button
             onClick={toggleCompare}
-            className={`flex items-center gap-2 transition-all duration-300 ${active ? "text-primary" : "text-secondary hover:text-white"} ${className}`}
+            className={`flex items-center gap-2 transition-all duration-300 ${active ? "text-primary" : "text-secondary hover:text-[var(--foreground)]"} ${className}`}
             title={active ? "Remove from comparison" : "Add to comparison"}
         >
             <motion.div
                 whileTap={{ scale: 0.8 }}
-                className={`p-2 rounded-full ${active ? "bg-primary/20" : "bg-white/5"} border ${active ? "border-primary/30" : "border-white/10"}`}
+                className={`rounded-full border p-2 ${active ? "border-primary/30 bg-primary/20" : "border-[var(--border-subtle)] bg-[var(--surface-card)]"}`}
             >
                 <Scale size={18} />
             </motion.div>

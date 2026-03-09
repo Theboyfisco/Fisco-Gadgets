@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -33,13 +34,25 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const categories = await prisma.category.findMany({
-    select: { id: true, name: true }
+    select: { id: true, name: true },
   });
 
   return (
-    <html lang="en" className="dark">
+    <html lang="en" data-theme="dark" suppressHydrationWarning>
+      <head>
+        <Script id="theme-init" strategy="beforeInteractive">
+          {`(() => {
+            try {
+              const saved = localStorage.getItem('fisco-theme');
+              const preferred = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+              const theme = saved || preferred;
+              document.documentElement.setAttribute('data-theme', theme);
+            } catch {}
+          })();`}
+        </Script>
+      </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased selection:bg-primary/20 selection:text-white flex flex-col min-h-screen`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased selection:bg-primary/20 selection:text-[var(--foreground)] flex flex-col min-h-screen`}
       >
         <CompareProvider>
           <CartProvider>

@@ -60,32 +60,30 @@ export function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; onClose: (
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0"
-            style={{ backgroundColor: "rgba(0, 0, 0, 0.92)", backdropFilter: "blur(20px)" }}
+            className="fixed inset-0 bg-[var(--overlay-strong)] backdrop-blur-[20px]"
           />
 
           <motion.div
             initial={{ opacity: 0, y: -20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.95 }}
-            className="relative w-full max-w-2xl overflow-hidden rounded-3xl border border-white/10 shadow-2xl"
-            style={{ backgroundColor: "#0f0f13" }}
+            className="relative w-full max-w-2xl overflow-hidden rounded-3xl border border-[var(--border-subtle)] bg-[var(--panel-bg)] shadow-2xl"
           >
-            <div className="flex items-center gap-4 border-b border-white/10 p-4 sm:p-6">
-              <div className={`rounded-xl p-2 transition-colors ${query ? "bg-primary/20 text-primary" : "bg-white/5 text-secondary"}`}>
+            <div className="flex items-center gap-4 border-b border-[var(--border-subtle)] p-4 sm:p-6">
+              <div className={`rounded-xl p-2 transition-colors ${query ? "bg-primary/20 text-primary" : "bg-[var(--surface-card)] text-secondary"}`}>
                 <SearchIcon size={24} />
               </div>
               <input
                 autoFocus
                 type="text"
                 placeholder="Search iPhones, MacBooks, Accessories..."
-                className="flex-1 bg-transparent text-lg font-bold text-white placeholder:text-secondary focus:outline-none sm:text-2xl"
+                className="flex-1 bg-transparent text-lg font-bold text-[var(--foreground)] placeholder:text-secondary focus:outline-none sm:text-2xl"
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
               />
               <button
                 onClick={onClose}
-                className="rounded-xl p-2 text-secondary transition-colors hover:bg-white/10 hover:text-white"
+                className="rounded-xl p-2 text-secondary transition-colors hover:bg-[var(--surface-cta)] hover:text-[var(--foreground)]"
                 aria-label="Close search"
               >
                 <X size={24} />
@@ -104,13 +102,13 @@ export function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; onClose: (
                         key={product.id}
                         href={`/product/${product.id}`}
                         onClick={onClose}
-                        className="group flex items-center gap-4 rounded-xl border border-transparent p-3 transition-colors hover:border-white/5 hover:bg-white/5"
+                        className="group flex items-center gap-4 rounded-xl border border-transparent p-3 transition-colors hover:border-[var(--border-subtle)] hover:bg-[var(--surface-card)]"
                       >
-                        <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-base">
+                        <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-[var(--surface-card)]">
                           <Image src={product.image} alt={product.name} fill className="object-cover" />
                         </div>
                         <div className="flex-1">
-                          <h4 className="font-semibold text-white transition-colors group-hover:text-primary">{product.name}</h4>
+                          <h4 className="font-semibold text-[var(--foreground)] transition-colors group-hover:text-primary">{product.name}</h4>
                           <p className="text-xs capitalize text-secondary">
                             {product.categoryId} • ₦{product.price.toLocaleString()}
                           </p>
@@ -141,23 +139,23 @@ export function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; onClose: (
                       key={index}
                       href={category.href}
                       onClick={onClose}
-                      className="flex items-center gap-3 rounded-xl border border-white/5 bg-white/5 p-3 text-left transition-colors hover:bg-white/10"
+                      className="flex items-center gap-3 rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-3 text-left transition-colors hover:bg-[var(--surface-cta)]"
                     >
                       <category.icon className={category.color} size={20} />
-                      <span className="text-sm font-medium text-white">{category.label}</span>
+                      <span className="text-sm font-medium text-[var(--foreground)]">{category.label}</span>
                     </Link>
                   ))}
                 </div>
               )}
             </div>
 
-            <div className="flex items-center justify-between border-t border-white/5 bg-white/[0.02] p-4">
+            <div className="flex items-center justify-between border-t border-[var(--border-subtle)] bg-[var(--surface-soft)] p-4">
               <div className="flex gap-4 text-[10px] text-secondary">
                 <span className="flex items-center gap-1">
-                  <kbd className="rounded bg-white/10 px-1">ESC</kbd> to close
+                  <kbd className="rounded bg-[var(--kbd-bg)] px-1">ESC</kbd> to close
                 </span>
                 <span className="flex items-center gap-1">
-                  <kbd className="rounded bg-white/10 px-1">↵</kbd> to select
+                  <kbd className="rounded bg-[var(--kbd-bg)] px-1">↵</kbd> to select
                 </span>
               </div>
               <p className="text-[10px] font-medium italic text-primary/60">Powered by Fisco Search</p>

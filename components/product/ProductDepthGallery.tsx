@@ -22,7 +22,7 @@ export function ProductDepthGallery({ name, images, condition = "New" }: Product
   return (
     <div className="space-y-5">
       <Tilt3D maxTilt={8}>
-        <div className="relative h-[420px] w-full overflow-hidden rounded-2xl border border-border-subtle bg-gradient-to-b from-white/10 to-white/[0.03] p-5 lg:h-[610px]">
+        <div className="relative h-[420px] w-full overflow-hidden rounded-2xl border border-border-subtle bg-gradient-to-b from-[var(--surface-cta)] to-[var(--surface-soft)] p-5 lg:h-[610px]">
           <div className="pointer-events-none absolute -left-8 -top-10 h-40 w-40 rounded-full bg-primary/20 blur-3xl" />
           <div className="pointer-events-none absolute -bottom-10 -right-8 h-40 w-40 rounded-full bg-cyan-400/20 blur-3xl" />
 
@@ -49,9 +49,9 @@ export function ProductDepthGallery({ name, images, condition = "New" }: Product
             />
           </div>
 
-          <div className="absolute bottom-4 left-4 right-4 rounded-xl border border-white/10 bg-black/45 p-4 backdrop-blur-md [transform:translateZ(46px)]">
+          <div className="absolute bottom-4 left-4 right-4 rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-contrast)] p-4 backdrop-blur-md [transform:translateZ(46px)]">
             <p className="text-xs uppercase tracking-[0.14em] text-secondary">Studio view</p>
-            <p className="mt-1 text-sm font-semibold text-white">{name}</p>
+            <p className="mt-1 text-sm font-semibold text-[var(--foreground)]">{name}</p>
           </div>
         </div>
       </Tilt3D>
@@ -68,7 +68,7 @@ export function ProductDepthGallery({ name, images, condition = "New" }: Product
                 className={`relative h-20 w-20 overflow-hidden rounded-xl border transition-all duration-300 ${
                   active
                     ? "z-20 -translate-y-1 rotate-0 border-primary/50 shadow-[0_0_25px_rgba(16,185,129,0.35)]"
-                    : "z-10 rotate-[-4deg] border-white/10 hover:-translate-y-0.5 hover:rotate-0 hover:border-white/30"
+                    : "z-10 rotate-[-4deg] border-[var(--border-subtle)] hover:-translate-y-0.5 hover:rotate-0 hover:border-[var(--border-strong)]"
                 }`}
                 aria-label={`Select image ${index + 1}`}
               >

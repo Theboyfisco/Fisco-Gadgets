@@ -19,7 +19,7 @@ export function CompareFloatingBar() {
                 exit={{ y: 100, opacity: 0 }}
                 className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-2xl"
             >
-                <div className="bg-surface/80 backdrop-blur-xl border border-white/10 rounded-2xl p-4 shadow-2xl flex items-center justify-between gap-4">
+                <div className="flex items-center justify-between gap-4 rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card-strong)] p-4 shadow-2xl backdrop-blur-xl">
                     <div className="flex items-center gap-4 flex-1 overflow-hidden">
                         <div className="hidden sm:flex p-2 bg-primary/20 text-primary rounded-lg shrink-0">
                             <Scale size={20} />
@@ -27,19 +27,19 @@ export function CompareFloatingBar() {
                         <div className="flex gap-2 overflow-x-auto no-scrollbar py-1">
                             {compareItems.map((item) => (
                                 <div key={item.id} className="relative group shrink-0">
-                                    <div className="w-12 h-12 rounded-lg overflow-hidden border border-white/10 bg-white/5 relative">
+                                    <div className="relative h-12 w-12 overflow-hidden rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-card)]">
                                         <Image src={item.image} alt={item.name} fill className="object-cover" />
                                     </div>
                                     <button
                                         onClick={() => removeFromCompare(item.id)}
-                                        className="absolute -top-2 -right-2 bg-white text-black rounded-full p-0.5 shadow-lg lg:opacity-0 lg:group-hover:opacity-100 transition-opacity"
+                                        className="absolute -right-2 -top-2 rounded-full bg-[var(--surface-card-strong)] p-0.5 text-[var(--foreground)] shadow-lg transition-opacity lg:opacity-0 lg:group-hover:opacity-100"
                                     >
                                         <X size={12} />
                                     </button>
                                 </div>
                             ))}
                             {Array.from({ length: Math.max(0, 2 - compareItems.length) }).map((_, i) => (
-                                <div key={i} className="w-12 h-12 rounded-lg border-2 border-dashed border-white/5 flex items-center justify-center shrink-0">
+                                <div key={i} className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border-2 border-dashed border-[var(--border-subtle)]">
                                     <span className="text-[10px] text-secondary">Add</span>
                                 </div>
                             ))}
@@ -58,7 +58,7 @@ export function CompareFloatingBar() {
                         )}
                         <button
                             onClick={clearCompare}
-                            className="text-secondary hover:text-white p-2"
+                            className="p-2 text-secondary hover:text-[var(--foreground)]"
                             title="Clear all"
                         >
                             <X size={20} />

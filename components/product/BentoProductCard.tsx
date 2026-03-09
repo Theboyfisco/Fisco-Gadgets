@@ -45,7 +45,7 @@ export function BentoProductCard({ product, featured = false }: BentoProductCard
       <motion.div whileHover={{ y: -4 }} className={containerClass}>
         <div className="pointer-events-none absolute -left-10 -top-12 h-36 w-36 rounded-full bg-primary/15 blur-3xl" />
 
-        <div className={`relative mb-4 w-full overflow-hidden rounded-xl border border-white/10 ${featured ? "h-64" : "h-48"}`}>
+        <div className={`relative mb-4 w-full overflow-hidden rounded-xl border border-[var(--border-subtle)] ${featured ? "h-64" : "h-48"}`}>
           <Image
             src={product.image}
             alt={product.name}
@@ -56,17 +56,17 @@ export function BentoProductCard({ product, featured = false }: BentoProductCard
             placeholder={product.blurHash ? "blur" : "empty"}
             blurDataURL={product.blurHash}
           />
-          <div className={`pointer-events-none absolute inset-0 bg-gradient-to-b ${categoryTint(product.categoryId)} via-transparent to-black/50`} />
+          <div className={`pointer-events-none absolute inset-0 bg-gradient-to-b ${categoryTint(product.categoryId)} via-transparent to-[var(--surface-contrast)]`} />
         </div>
 
         <div className="[transform:translateZ(28px)]">
-          <h3 className="text-xl font-bold tracking-tight text-white md:text-2xl">{product.name}</h3>
+          <h3 className="text-xl font-bold tracking-tight text-[var(--foreground)] md:text-2xl">{product.name}</h3>
           <p className="mt-1 text-lg font-semibold text-primary md:text-xl">
             {new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN" }).format(product.price)}
           </p>
         </div>
 
-        <div className="mt-4 flex justify-between border-t border-white/10 pt-4 font-mono text-xs text-secondary transition-opacity duration-300 lg:opacity-0 lg:group-hover:opacity-100 [transform:translateZ(18px)]">
+        <div className="mt-4 flex justify-between border-t border-[var(--border-subtle)] pt-4 font-mono text-xs text-secondary transition-opacity duration-300 lg:opacity-0 lg:group-hover:opacity-100 [transform:translateZ(18px)]">
           <span>{product.technicalSpecs.battery || "4500mAh"}</span>
           <span>{product.technicalSpecs.storage || "128GB"}</span>
           <span>{product.technicalSpecs.ram || "8GB"}</span>
@@ -75,7 +75,7 @@ export function BentoProductCard({ product, featured = false }: BentoProductCard
         <div className="absolute right-4 top-4 z-10 flex flex-col gap-2 [transform:translateZ(40px)]">
           <a
             href={`https://wa.me/2348000000000?text=${whatsappMsg}`}
-            className="rounded-full border border-primary/20 bg-black/35 p-2 text-primary backdrop-blur-md transition-colors hover:bg-primary/30"
+            className="rounded-full border border-primary/20 bg-[var(--surface-contrast)] p-2 text-primary backdrop-blur-md transition-colors hover:bg-primary/30"
             onClick={(event) => event.stopPropagation()}
           >
             <MessageCircle size={20} />

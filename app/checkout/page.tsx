@@ -80,7 +80,7 @@ export default function CheckoutPage() {
     if (cartItems.length === 0 && step !== 3) {
         return (
             <div className="container mx-auto px-4 py-24 text-center">
-                <h1 className="text-3xl font-bold text-white mb-4">Your cart is empty</h1>
+                <h1 className="mb-4 text-3xl font-bold text-[var(--foreground)]">Your cart is empty</h1>
                 <p className="text-secondary mb-8">Add some gadgets to your stash before checking out.</p>
                 <Link href="/" className="bg-primary text-base px-8 py-3 rounded-standard font-bold hover:bg-emerald-400 transition-colors">
                     Back to Store
@@ -91,7 +91,7 @@ export default function CheckoutPage() {
 
     return (
         <div className="container mx-auto px-4 py-12 flex-1">
-            <Link href="/" className="flex items-center gap-2 text-secondary hover:text-white mb-8 transition-colors">
+            <Link href="/" className="mb-8 flex items-center gap-2 text-secondary transition-colors hover:text-[var(--foreground)]">
                 <ArrowLeft size={20} />
                 <span>Back to Store</span>
             </Link>
@@ -99,11 +99,11 @@ export default function CheckoutPage() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
                 <div className="lg:col-span-2">
                     <div className="flex items-center gap-4 mb-8">
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${step >= 1 ? 'bg-primary text-base' : 'bg-white/10 text-secondary'}`}>1</div>
-                        <div className="h-px bg-white/10 flex-1"></div>
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${step >= 2 ? 'bg-primary text-base' : 'bg-white/10 text-secondary'}`}>2</div>
-                        <div className="h-px bg-white/10 flex-1"></div>
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${step === 3 ? 'bg-primary text-base' : 'bg-white/10 text-secondary'}`}>3</div>
+                        <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${step >= 1 ? 'bg-primary text-base' : 'bg-[var(--surface-cta)] text-secondary'}`}>1</div>
+                        <div className="h-px bg-[var(--border-subtle)] flex-1"></div>
+                        <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${step >= 2 ? 'bg-primary text-base' : 'bg-[var(--surface-cta)] text-secondary'}`}>2</div>
+                        <div className="h-px bg-[var(--border-subtle)] flex-1"></div>
+                        <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${step === 3 ? 'bg-primary text-base' : 'bg-[var(--surface-cta)] text-secondary'}`}>3</div>
                     </div>
 
                     {error && (
@@ -114,40 +114,40 @@ export default function CheckoutPage() {
 
                     {step === 1 && (
                         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                            <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
+                            <h2 className="mb-6 flex items-center gap-2 text-2xl font-bold text-[var(--foreground)]">
                                 <User className="text-primary" /> Delivery Details
                             </h2>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-secondary">Full Name</label>
-                                    <input name="fullName" value={formData.fullName} onChange={handleInputChange} type="text" className="w-full bg-white/5 border border-border-subtle rounded-md px-4 py-3 text-white focus:outline-none focus:border-primary transition-colors" placeholder="John Doe" />
+                                    <input name="fullName" value={formData.fullName} onChange={handleInputChange} type="text" className="w-full rounded-md border border-border-subtle bg-[var(--surface-card)] px-4 py-3 text-[var(--foreground)] transition-colors focus:border-primary focus:outline-none" placeholder="John Doe" />
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-secondary">Email Address</label>
-                                    <input name="email" value={formData.email} onChange={handleInputChange} type="email" className="w-full bg-white/5 border border-border-subtle rounded-md px-4 py-3 text-white focus:outline-none focus:border-primary transition-colors" placeholder="john@example.com" />
+                                    <input name="email" value={formData.email} onChange={handleInputChange} type="email" className="w-full rounded-md border border-border-subtle bg-[var(--surface-card)] px-4 py-3 text-[var(--foreground)] transition-colors focus:border-primary focus:outline-none" placeholder="john@example.com" />
                                 </div>
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-secondary">Phone Number</label>
-                                    <input name="phone" value={formData.phone} onChange={handleInputChange} type="tel" className="w-full bg-white/5 border border-border-subtle rounded-md px-4 py-3 text-white focus:outline-none focus:border-primary transition-colors" placeholder="080 0000 0000" />
+                                    <input name="phone" value={formData.phone} onChange={handleInputChange} type="tel" className="w-full rounded-md border border-border-subtle bg-[var(--surface-card)] px-4 py-3 text-[var(--foreground)] transition-colors focus:border-primary focus:outline-none" placeholder="080 0000 0000" />
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-secondary">City (NG)</label>
-                                    <input name="city" value={formData.city} onChange={handleInputChange} type="text" className="w-full bg-white/5 border border-border-subtle rounded-md px-4 py-3 text-white focus:outline-none focus:border-primary transition-colors" placeholder="Asaba" />
+                                    <input name="city" value={formData.city} onChange={handleInputChange} type="text" className="w-full rounded-md border border-border-subtle bg-[var(--surface-card)] px-4 py-3 text-[var(--foreground)] transition-colors focus:border-primary focus:outline-none" placeholder="Asaba" />
                                 </div>
                             </div>
                             <div className="space-y-2">
                                 <label className="text-sm font-medium text-secondary">Shipping Address</label>
-                                <textarea name="address" value={formData.address} onChange={handleInputChange} className="w-full bg-white/5 border border-border-subtle rounded-md px-4 py-3 text-white focus:outline-none focus:border-primary transition-colors" rows={3} placeholder="Street address, Apartment, Estate, etc."></textarea>
+                                <textarea name="address" value={formData.address} onChange={handleInputChange} className="w-full rounded-md border border-border-subtle bg-[var(--surface-card)] px-4 py-3 text-[var(--foreground)] transition-colors focus:border-primary focus:outline-none" rows={3} placeholder="Street address, Apartment, Estate, etc."></textarea>
                             </div>
                             <div className="space-y-2">
                                 <label className="text-sm font-medium text-secondary">State</label>
-                                <select name="state" value={formData.state} onChange={handleInputChange} className="w-full bg-white/5 border border-border-subtle rounded-md px-4 py-3 text-white focus:outline-none focus:border-primary transition-colors appearance-none scrollbar-hide">
-                                    <option value="Delta" className="bg-base">Delta</option>
-                                    <option value="Lagos" className="bg-base">Lagos</option>
-                                    <option value="Abuja" className="bg-base">Abuja</option>
-                                    <option value="Anambra" className="bg-base">Anambra</option>
+                                <select name="state" value={formData.state} onChange={handleInputChange} className="w-full appearance-none rounded-md border border-border-subtle bg-[var(--surface-card)] px-4 py-3 text-[var(--foreground)] transition-colors focus:border-primary focus:outline-none scrollbar-hide">
+                                    <option value="Delta" className="bg-[var(--panel-bg)]">Delta</option>
+                                    <option value="Lagos" className="bg-[var(--panel-bg)]">Lagos</option>
+                                    <option value="Abuja" className="bg-[var(--panel-bg)]">Abuja</option>
+                                    <option value="Anambra" className="bg-[var(--panel-bg)]">Anambra</option>
                                 </select>
                             </div>
                             <button 
@@ -162,17 +162,17 @@ export default function CheckoutPage() {
 
                     {step === 2 && (
                         <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
-                            <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
+                            <h2 className="mb-6 flex items-center gap-2 text-2xl font-bold text-[var(--foreground)]">
                                 <CreditCard className="text-primary" /> Payment Method
                             </h2>
                             <div className="space-y-4">
                                 <div className="p-4 rounded-standard border border-primary bg-primary/10 flex items-center justify-between cursor-pointer">
                                     <div className="flex items-center gap-4">
-                                        <div className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center text-primary">
+                                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--surface-cta)] text-primary">
                                             <ShieldCheck />
                                         </div>
                                         <div>
-                                            <p className="text-white font-bold">Paystack Secure</p>
+                                            <p className="font-bold text-[var(--foreground)]">Paystack Secure</p>
                                             <p className="text-xs text-secondary">Cards, Bank Transfer, USSD</p>
                                         </div>
                                     </div>
@@ -186,7 +186,7 @@ export default function CheckoutPage() {
                                 <button 
                                     onClick={() => setStep(1)}
                                     disabled={isLoading}
-                                    className="flex-1 border border-border-subtle text-white py-4 rounded-standard font-bold hover:bg-white/5 transition-colors disabled:opacity-50"
+                                    className="flex-1 rounded-standard border border-border-subtle py-4 font-bold text-[var(--foreground)] transition-colors hover:bg-[var(--surface-card)] disabled:opacity-50"
                                 >
                                     Go Back
                                 </button>
@@ -211,11 +211,11 @@ export default function CheckoutPage() {
                             <div className="w-20 h-20 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-6 text-primary">
                                 <ShieldCheck size={48} />
                             </div>
-                            <h2 className="text-3xl font-extrabold text-white mb-4">Order Confirmed!</h2>
+                            <h2 className="mb-4 text-3xl font-extrabold text-[var(--foreground)]">Order Confirmed!</h2>
                             <p className="text-secondary max-w-md mx-auto mb-8">
                                 Thank you for your purchase. We&apos;ve sent a confirmation email to you. Our dispatch team will contact you shortly for delivery.
                             </p>
-                            <Link href="/" className="inline-block bg-white/5 border border-border-subtle text-white px-8 py-3 rounded-standard font-bold hover:bg-white/10 transition-colors">
+                            <Link href="/" className="inline-block rounded-standard border border-border-subtle bg-[var(--surface-card)] px-8 py-3 font-bold text-[var(--foreground)] transition-colors hover:bg-[var(--surface-cta)]">
                                 Return to Home
                             </Link>
                         </div>
@@ -224,16 +224,16 @@ export default function CheckoutPage() {
 
                 {/* Order Summary */}
                 <div className="lg:col-span-1">
-                    <div className="bg-white/5 border border-border-subtle rounded-standard p-6 sticky top-24">
-                        <h3 className="text-xl font-bold text-white mb-6 pb-4 border-b border-border-subtle">Order Summary</h3>
+                    <div className="sticky top-24 rounded-standard border border-border-subtle bg-[var(--surface-card)] p-6">
+                        <h3 className="mb-6 border-b border-border-subtle pb-4 text-xl font-bold text-[var(--foreground)]">Order Summary</h3>
                         <div className="space-y-4 mb-6 max-h-[400px] overflow-y-auto pr-2">
                             {cartItems.map((item, idx) => (
                                 <div key={idx} className="flex gap-4">
-                                    <div className="relative w-16 h-16 rounded-md overflow-hidden bg-base shrink-0">
+                                    <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-md bg-[var(--surface-card)]">
                                         <Image src={item.image} alt={item.name} fill className="object-cover" />
                                     </div>
                                     <div className="flex-1">
-                                        <p className="text-sm font-medium text-white line-clamp-1">{item.name}</p>
+                                        <p className="line-clamp-1 text-sm font-medium text-[var(--foreground)]">{item.name}</p>
                                         <p className="text-primary text-xs font-bold">
                                             {new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN' }).format(item.price)}
                                         </p>
@@ -250,7 +250,7 @@ export default function CheckoutPage() {
                                 <span>Shipping Fees</span>
                                 <span className="text-emerald-400">Calculated</span>
                             </div>
-                            <div className="flex justify-between text-lg font-bold text-white pt-2">
+                            <div className="flex justify-between pt-2 text-lg font-bold text-[var(--foreground)]">
                                 <span>Total Payable</span>
                                 <span>{new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN' }).format(total)}</span>
                             </div>

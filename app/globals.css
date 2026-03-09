@@ -29,6 +29,70 @@
   :root {
     --background: #07090f;
     --foreground: #f3f4f6;
+    --background-gradient: radial-gradient(circle at 14% 18%, rgba(16, 185, 129, 0.12), transparent 38%),
+      radial-gradient(circle at 88% 12%, rgba(34, 211, 238, 0.08), transparent 34%),
+      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    --grid-line: 48px 48px;
+    --accent-halo-1: rgba(16, 185, 129, 0.12);
+    --accent-halo-2: rgba(34, 211, 238, 0.08);
+    --surface-1: rgba(255, 255, 255, 0.1);
+    --surface-2: rgba(0, 0, 0, 0.35);
+    --surface-card: rgba(255, 255, 255, 0.05);
+    --surface-card-strong: rgba(255, 255, 255, 0.08);
+    --surface-soft: rgba(255, 255, 255, 0.03);
+    --surface-cta: rgba(255, 255, 255, 0.1);
+    --surface-contrast: rgba(0, 0, 0, 0.45);
+    --nav-bg: rgba(7, 9, 15, 0.68);
+    --nav-bg-scrolled: rgba(7, 9, 15, 0.92);
+    --interactive-bg: rgba(255, 255, 255, 0.1);
+    --interactive-bg-soft: rgba(255, 255, 255, 0.04);
+    --interactive-border: rgba(255, 255, 255, 0.12);
+    --interactive-fg: #ffffff;
+    --mobile-drawer-bg: #090c13;
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-strong: rgba(255, 255, 255, 0.16);
+    --overlay: rgba(0, 0, 0, 0.6);
+    --overlay-strong: rgba(0, 0, 0, 0.92);
+    --panel-bg: #0f1118;
+    --panel-bg-soft: rgba(15, 17, 24, 0.85);
+    --footer-bg: #07090f;
+    --footer-panel: rgba(255, 255, 255, 0.03);
+    --kbd-bg: rgba(0, 0, 0, 0.2);
+  }
+
+  :root[data-theme="light"] {
+    --background: #f6f9ff;
+    --foreground: #0f172a;
+    --background-gradient: radial-gradient(circle at 13% 15%, rgba(16, 185, 129, 0.16), transparent 43%),
+      radial-gradient(circle at 86% 14%, rgba(34, 211, 238, 0.13), transparent 39%),
+      linear-gradient(rgba(15, 23, 42, 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(15, 23, 42, 0.06) 1px, transparent 1px);
+    --accent-halo-1: rgba(16, 185, 129, 0.2);
+    --accent-halo-2: rgba(6, 182, 212, 0.16);
+    --surface-1: rgba(8, 17, 31, 0.08);
+    --surface-2: rgba(255, 255, 255, 0.78);
+    --surface-card: rgba(255, 255, 255, 0.9);
+    --surface-card-strong: rgba(255, 255, 255, 0.98);
+    --surface-soft: rgba(15, 23, 42, 0.04);
+    --surface-cta: rgba(15, 23, 42, 0.08);
+    --surface-contrast: rgba(15, 23, 42, 0.55);
+    --nav-bg: rgba(246, 249, 255, 0.88);
+    --nav-bg-scrolled: rgba(246, 249, 255, 0.98);
+    --interactive-bg: rgba(15, 23, 42, 0.08);
+    --interactive-bg-soft: rgba(255, 255, 255, 0.9);
+    --interactive-border: rgba(15, 23, 42, 0.14);
+    --interactive-fg: #0f172a;
+    --mobile-drawer-bg: #f9fbff;
+    --border-subtle: rgba(15, 23, 42, 0.08);
+    --border-strong: rgba(15, 23, 42, 0.16);
+    --overlay: rgba(15, 23, 42, 0.35);
+    --overlay-strong: rgba(248, 250, 255, 0.95);
+    --panel-bg: #f8fbff;
+    --panel-bg-soft: rgba(255, 255, 255, 0.92);
+    --footer-bg: #eef2ff;
+    --footer-panel: rgba(255, 255, 255, 0.8);
+    --kbd-bg: rgba(15, 23, 42, 0.08);
   }
 
   html {
@@ -38,12 +102,8 @@
   body {
     min-height: 100vh;
     background-color: var(--background);
-    background-image:
-      radial-gradient(circle at 14% 18%, rgba(16, 185, 129, 0.12), transparent 38%),
-      radial-gradient(circle at 88% 12%, rgba(34, 211, 238, 0.08), transparent 34%),
-      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-    background-size: auto, auto, 48px 48px, 48px 48px;
+    background-image: var(--background-gradient);
+    background-size: auto, auto, var(--grid-line), var(--grid-line);
     background-position: 0 0, 0 0, 0 0, 0 0;
     color: var(--foreground);
   }
@@ -73,4 +133,11 @@
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+:root[data-theme="light"] .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(15, 23, 42, 0.24);
+}
+:root[data-theme="light"] .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(15, 23, 42, 0.35);
 }

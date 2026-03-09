@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local build/lint/typecheck artifacts
+*_output*.txt
+tailwindcss-*.log
+dev_stdout.log
+dev_stderr.log

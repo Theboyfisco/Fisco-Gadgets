@@ -23,9 +23,9 @@ export function Footer({ categories = [] }: FooterProps) {
   };
 
   return (
-    <footer className="mt-auto w-full border-t border-white/10 bg-[#07090f] pt-14">
+    <footer className="mt-auto w-full border-t border-[var(--border-subtle)] bg-[var(--footer-bg)] pt-14">
       <div className="container mx-auto px-4">
-        <div className="mb-12 rounded-2xl border border-white/10 bg-white/[0.03] p-6 md:p-8">
+        <div className="mb-12 rounded-2xl border border-[var(--border-subtle)] bg-[var(--footer-panel)] p-6 md:p-8">
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
             <div className="lg:col-span-2">
               <Link
@@ -39,14 +39,14 @@ export function Footer({ categories = [] }: FooterProps) {
               </p>
 
               <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
-                <div className="rounded-xl border border-white/10 bg-white/[0.02] px-3 py-2 text-xs text-secondary">100% Authentic Devices</div>
-                <div className="rounded-xl border border-white/10 bg-white/[0.02] px-3 py-2 text-xs text-secondary">Fast Nationwide Shipping</div>
-                <div className="rounded-xl border border-white/10 bg-white/[0.02] px-3 py-2 text-xs text-secondary">Secure Checkout</div>
+                <div className="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-soft)] px-3 py-2 text-xs text-secondary">100% Authentic Devices</div>
+                <div className="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-soft)] px-3 py-2 text-xs text-secondary">Fast Nationwide Shipping</div>
+                <div className="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-soft)] px-3 py-2 text-xs text-secondary">Secure Checkout</div>
               </div>
             </div>
 
             <div>
-              <h3 className="mb-4 text-sm font-semibold uppercase tracking-[0.14em] text-white/90">Categories</h3>
+              <h3 className="mb-4 text-sm font-semibold uppercase tracking-[0.14em] text-[var(--foreground)]">Categories</h3>
               <ul className="space-y-3">
                 {categories.slice(0, 5).map((category) => (
                   <li key={category.id}>
@@ -64,7 +64,7 @@ export function Footer({ categories = [] }: FooterProps) {
             </div>
 
             <div>
-              <h3 className="mb-4 text-sm font-semibold uppercase tracking-[0.14em] text-white/90">Company</h3>
+              <h3 className="mb-4 text-sm font-semibold uppercase tracking-[0.14em] text-[var(--foreground)]">Company</h3>
               <ul className="space-y-3">
                 <li>
                   <Link href="/about" className="text-sm text-secondary transition-colors hover:text-primary">
@@ -97,8 +97,8 @@ export function Footer({ categories = [] }: FooterProps) {
         </div>
 
         <div className="mb-10 grid grid-cols-1 gap-8 lg:grid-cols-3">
-          <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-5">
-            <h3 className="mb-4 text-sm font-semibold uppercase tracking-[0.14em] text-white/90">Join Updates</h3>
+          <div className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-5">
+            <h3 className="mb-4 text-sm font-semibold uppercase tracking-[0.14em] text-[var(--foreground)]">Join Updates</h3>
             {subscribed ? (
               <motion.div
                 initial={{ opacity: 0, y: 6 }}
@@ -116,7 +116,7 @@ export function Footer({ categories = [] }: FooterProps) {
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
                   placeholder="you@example.com"
-                  className="w-full rounded-md border border-white/10 bg-black/20 px-3 py-2 text-sm text-white outline-none transition-colors focus:border-primary"
+                  className="w-full rounded-md border border-[var(--border-subtle)] bg-[var(--surface-cta)] px-3 py-2 text-sm text-[var(--foreground)] outline-none transition-colors focus:border-primary"
                 />
                 <button
                   type="submit"
@@ -128,8 +128,8 @@ export function Footer({ categories = [] }: FooterProps) {
             )}
           </div>
 
-          <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-5">
-            <h3 className="mb-4 text-sm font-semibold uppercase tracking-[0.14em] text-white/90">Contact</h3>
+          <div className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-5">
+            <h3 className="mb-4 text-sm font-semibold uppercase tracking-[0.14em] text-[var(--foreground)]">Contact</h3>
             <ul className="space-y-3">
               <li className="flex items-start gap-2 text-sm text-secondary">
                 <MapPin size={16} className="mt-0.5 shrink-0 text-primary" />
@@ -146,29 +146,29 @@ export function Footer({ categories = [] }: FooterProps) {
             </ul>
           </div>
 
-          <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-5">
-            <h3 className="mb-4 text-sm font-semibold uppercase tracking-[0.14em] text-white/90">Social</h3>
+          <div className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-5">
+            <h3 className="mb-4 text-sm font-semibold uppercase tracking-[0.14em] text-[var(--foreground)]">Social</h3>
             <div className="flex gap-3">
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="rounded-full border border-white/10 bg-white/[0.03] p-2 text-secondary transition-all hover:border-primary/30 hover:text-primary">
+              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-2 text-secondary transition-all hover:border-primary/30 hover:text-primary">
                 <Facebook size={16} />
               </a>
-              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="rounded-full border border-white/10 bg-white/[0.03] p-2 text-secondary transition-all hover:border-primary/30 hover:text-primary">
+              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-2 text-secondary transition-all hover:border-primary/30 hover:text-primary">
                 <Twitter size={16} />
               </a>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="rounded-full border border-white/10 bg-white/[0.03] p-2 text-secondary transition-all hover:border-primary/30 hover:text-primary">
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-2 text-secondary transition-all hover:border-primary/30 hover:text-primary">
                 <Instagram size={16} />
               </a>
             </div>
           </div>
         </div>
 
-        <div className="flex flex-col items-center justify-between gap-4 border-t border-white/10 py-6 text-sm text-secondary md:flex-row">
+        <div className="flex flex-col items-center justify-between gap-4 border-t border-[var(--border-subtle)] py-6 text-sm text-secondary md:flex-row">
           <p>© {new Date().getFullYear()} Fisco Gadgets. All rights reserved.</p>
           <div className="flex gap-5">
-            <Link href="/privacy" className="transition-colors hover:text-white">
+            <Link href="/privacy" className="transition-colors hover:text-[var(--foreground)]">
               Privacy Policy
             </Link>
-            <Link href="/terms" className="transition-colors hover:text-white">
+            <Link href="/terms" className="transition-colors hover:text-[var(--foreground)]">
               Terms of Service
             </Link>
           </div>

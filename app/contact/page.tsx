@@ -6,11 +6,11 @@ import Link from "next/link";
 export default function ContactPage() {
   return (
     <div className="container mx-auto px-4 py-8 md:py-16 flex-1">
-      <Link href="/" className="inline-flex items-center gap-2 text-secondary hover:text-white mb-8 transition-colors group">
+      <Link href="/" className="group mb-8 inline-flex items-center gap-2 text-secondary transition-colors hover:text-[var(--foreground)]">
         <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
         Back to Home
       </Link>
-      <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-white mb-6">Contact Us</h1>
+      <h1 className="mb-6 text-4xl font-extrabold tracking-tight text-[var(--foreground)] md:text-5xl">Contact Us</h1>
       <p className="text-secondary text-lg mb-12 max-w-2xl">
         Experiencing issues with an order or just want to chat gadgets? Drop us a line and our dedicated team will get back to you as soon as possible.
       </p>
@@ -18,49 +18,49 @@ export default function ContactPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
         <div className="space-y-8">
           <div className="flex items-start gap-4">
-            <div className="p-3 bg-white/5 rounded-full text-primary shrink-0"><MapPin /></div>
+            <div className="shrink-0 rounded-full bg-[var(--surface-card)] p-3 text-primary"><MapPin /></div>
             <div>
-              <h3 className="text-white font-bold text-lg">HQ Office</h3>
+              <h3 className="text-lg font-bold text-[var(--foreground)]">HQ Office</h3>
               <p className="text-secondary">12 Tech Avenue, G.R.A,<br/>Asaba, Delta State 320213, Nigeria</p>
             </div>
           </div>
           <div className="flex items-start gap-4">
-            <div className="p-3 bg-white/5 rounded-full text-primary shrink-0"><Phone /></div>
+            <div className="shrink-0 rounded-full bg-[var(--surface-card)] p-3 text-primary"><Phone /></div>
             <div>
-              <h3 className="text-white font-bold text-lg">Phone & WhatsApp</h3>
+              <h3 className="text-lg font-bold text-[var(--foreground)]">Phone & WhatsApp</h3>
               <p className="text-secondary">+234 (0) 800 000 0000<br/>+234 (0) 801 111 1111</p>
             </div>
           </div>
           <div className="flex items-start gap-4">
-            <div className="p-3 bg-white/5 rounded-full text-primary shrink-0"><Mail /></div>
+            <div className="shrink-0 rounded-full bg-[var(--surface-card)] p-3 text-primary"><Mail /></div>
             <div>
-              <h3 className="text-white font-bold text-lg">Email Support</h3>
+              <h3 className="text-lg font-bold text-[var(--foreground)]">Email Support</h3>
               <p className="text-secondary">support@fiscogadgets.com.ng<br/>sales@fiscogadgets.com.ng</p>
             </div>
           </div>
           <div className="flex items-start gap-4">
-            <div className="p-3 bg-white/5 rounded-full text-primary shrink-0"><Clock /></div>
+            <div className="shrink-0 rounded-full bg-[var(--surface-card)] p-3 text-primary"><Clock /></div>
             <div>
-              <h3 className="text-white font-bold text-lg">Operating Hours</h3>
+              <h3 className="text-lg font-bold text-[var(--foreground)]">Operating Hours</h3>
               <p className="text-secondary">Monday - Saturday: 8:00 AM - 6:00 PM<br/>Sundays: Closed</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white/5 border border-border-subtle rounded-standard p-8">
-          <h3 className="text-2xl font-bold text-white mb-6">Send a Message</h3>
+        <div className="rounded-standard border border-border-subtle bg-[var(--surface-card)] p-8">
+          <h3 className="mb-6 text-2xl font-bold text-[var(--foreground)]">Send a Message</h3>
           <form className="space-y-4">
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-secondary mb-1">Your Name</label>
-              <input type="text" id="name" className="w-full bg-base border border-border-subtle rounded-md px-4 py-3 text-white focus:outline-none focus:border-primary transition-colors" placeholder="John Doe" />
+              <input type="text" id="name" className="w-full rounded-md border border-border-subtle bg-[var(--surface-card)] px-4 py-3 text-[var(--foreground)] transition-colors focus:border-primary focus:outline-none" placeholder="John Doe" />
             </div>
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-secondary mb-1">Email Address</label>
-              <input type="email" id="email" className="w-full bg-base border border-border-subtle rounded-md px-4 py-3 text-white focus:outline-none focus:border-primary transition-colors" placeholder="john@example.com" />
+              <input type="email" id="email" className="w-full rounded-md border border-border-subtle bg-[var(--surface-card)] px-4 py-3 text-[var(--foreground)] transition-colors focus:border-primary focus:outline-none" placeholder="john@example.com" />
             </div>
             <div>
               <label htmlFor="message" className="block text-sm font-medium text-secondary mb-1">Message</label>
-              <textarea id="message" rows={5} className="w-full bg-base border border-border-subtle rounded-md px-4 py-3 text-white focus:outline-none focus:border-primary transition-colors" placeholder="How can we help?"></textarea>
+              <textarea id="message" rows={5} className="w-full rounded-md border border-border-subtle bg-[var(--surface-card)] px-4 py-3 text-[var(--foreground)] transition-colors focus:border-primary focus:outline-none" placeholder="How can we help?"></textarea>
             </div>
             <button type="button" className="w-full bg-primary hover:bg-emerald-400 text-base py-3 rounded-md font-bold transition-colors mt-4">
               Send Message

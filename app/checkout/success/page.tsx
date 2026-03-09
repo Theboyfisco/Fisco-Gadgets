@@ -33,17 +33,17 @@ export default async function SuccessPage({ searchParams }: { searchParams: Prom
                 <CheckCircle2 size={64} />
             </div>
 
-            <h1 className="text-4xl md:text-6xl font-extrabold text-white tracking-tight mb-4 text-center">
+            <h1 className="mb-4 text-center text-4xl font-extrabold tracking-tight text-[var(--foreground)] md:text-6xl">
                 Payment Received!
             </h1>
             <p className="text-secondary text-lg mb-12 text-center max-w-2xl">
-                Your order <span className="text-white font-mono bg-white/5 px-2 py-1 rounded">#{order.id.slice(-8).toUpperCase()}</span> has been confirmed. 
+                Your order <span className="rounded bg-[var(--surface-card)] px-2 py-1 font-mono text-[var(--foreground)]">#{order.id.slice(-8).toUpperCase()}</span> has been confirmed. 
                 Our team is already preparing your gadgets for dispatch.
             </p>
 
-            <div className="w-full max-w-2xl bg-white/5 border border-border-subtle rounded-3xl overflow-hidden mb-12">
-                <div className="p-6 border-b border-border-subtle bg-white/[0.02]">
-                    <h2 className="text-xl font-bold text-white flex items-center gap-2">
+            <div className="mb-12 w-full max-w-2xl overflow-hidden rounded-3xl border border-border-subtle bg-[var(--surface-card)]">
+                <div className="border-b border-border-subtle bg-[var(--surface-soft)] p-6">
+                    <h2 className="flex items-center gap-2 text-xl font-bold text-[var(--foreground)]">
                         <Package className="text-primary" /> Order Summary
                     </h2>
                 </div>
@@ -51,7 +51,7 @@ export default async function SuccessPage({ searchParams }: { searchParams: Prom
                 <div className="p-6 space-y-4">
                     {order.items.map((item: any) => (
                         <div key={item.id} className="flex gap-4 items-center">
-                            <div className="relative w-16 h-16 rounded-xl overflow-hidden bg-base shrink-0 border border-white/5">
+                            <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)]">
                                 <Image 
                                     src={item.product.images[0]} 
                                     alt={item.product.name} 
@@ -60,16 +60,16 @@ export default async function SuccessPage({ searchParams }: { searchParams: Prom
                                 />
                             </div>
                             <div className="flex-1">
-                                <p className="text-white font-medium">{item.product.name}</p>
+                                <p className="font-medium text-[var(--foreground)]">{item.product.name}</p>
                                 <p className="text-sm text-secondary">Qty: {item.quantity}</p>
                             </div>
-                            <p className="text-white font-semibold">
+                            <p className="font-semibold text-[var(--foreground)]">
                                 {new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN' }).format(item.priceAtPurchase)}
                             </p>
                         </div>
                     ))}
                     
-                    <div className="pt-4 border-t border-white/10 space-y-2 text-sm">
+                    <div className="space-y-2 border-t border-[var(--border-subtle)] pt-4 text-sm">
                         <div className="flex justify-between text-secondary">
                             <span>Subtotal</span>
                             <span>{new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN' }).format(order.totalAmount)}</span>
@@ -78,16 +78,16 @@ export default async function SuccessPage({ searchParams }: { searchParams: Prom
                             <span>Shipping Fee</span>
                             <span className="text-emerald-400">FREE</span>
                         </div>
-                        <div className="flex justify-between text-xl font-bold text-white pt-2">
+                        <div className="flex justify-between pt-2 text-xl font-bold text-[var(--foreground)]">
                             <span>Total Paid</span>
                             <span>{new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN' }).format(order.totalAmount)}</span>
                         </div>
                     </div>
                 </div>
 
-                <div className="p-6 bg-primary/5 border-t border-white/5">
-                    <h3 className="text-sm font-bold text-primary uppercase tracking-widest mb-2">Delivery Address</h3>
-                    <p className="text-white font-medium">{order.shippingDetails?.fullName}</p>
+                <div className="border-t border-[var(--border-subtle)] bg-primary/5 p-6">
+                    <h3 className="mb-2 text-sm font-bold uppercase tracking-widest text-primary">Delivery Address</h3>
+                    <p className="font-medium text-[var(--foreground)]">{order.shippingDetails?.fullName}</p>
                     <p className="text-secondary text-sm">{order.shippingDetails?.address}, {order.shippingDetails?.city}, {order.shippingDetails?.state}</p>
                 </div>
             </div>
@@ -102,7 +102,7 @@ export default async function SuccessPage({ searchParams }: { searchParams: Prom
                 </Link>
                 <Link 
                     href="/contact" 
-                    className="flex-1 bg-white/5 border border-white/10 text-white py-4 rounded-standard font-bold hover:bg-white/10 transition-all text-center flex items-center justify-center gap-2 active:scale-95"
+                    className="flex-1 rounded-standard border border-[var(--border-subtle)] bg-[var(--surface-card)] py-4 font-bold text-[var(--foreground)] transition-all hover:bg-[var(--surface-cta)] text-center flex items-center justify-center gap-2 active:scale-95"
                 >
                     Support
                     <ArrowRight size={20} />
