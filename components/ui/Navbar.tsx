@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import dynamic from "next/dynamic";
 import { createPortal } from "react-dom";
+import { ThemeToggle } from "./ThemeToggle";
 
 const SearchOverlay = dynamic(() => import("./SearchOverlay").then((mod) => mod.SearchOverlay), { ssr: false });
 
@@ -67,7 +68,9 @@ export function Navbar({ categories = [] }: NavbarProps) {
       <header
         className="sticky top-0 z-40 w-full border-b border-white/5 backdrop-blur-2xl transition-all duration-300"
         style={{
-          backgroundColor: scrolled ? "rgba(7, 9, 15, 0.92)" : "rgba(7, 9, 15, 0.68)",
+          backgroundColor: scrolled
+            ? "color-mix(in oklab, var(--background) 92%, transparent)"
+            : "color-mix(in oklab, var(--background) 72%, transparent)",
           paddingTop: scrolled ? "0.2rem" : "0.55rem",
           paddingBottom: scrolled ? "0.2rem" : "0.55rem",
         }}
@@ -131,6 +134,8 @@ export function Navbar({ categories = [] }: NavbarProps) {
             >
               <Search size={22} />
             </button>
+
+            <ThemeToggle />
 
             <button
               onClick={toggleCart}
