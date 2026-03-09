@@ -1,157 +1,175 @@
 import { BentoProductCard } from "@/components/product/BentoProductCard";
-import { ShieldCheck, Truck, Clock, CreditCard } from "lucide-react";
+import { Tilt3D } from "@/components/ui/Tilt3D";
+import { Reveal } from "@/components/ui/Reveal";
+import { ShieldCheck, Truck, Clock, CreditCard, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import prisma from "@/lib/db";
+
+function categoryTone(categoryId: string) {
+  if (categoryId === "phones") return "from-cyan-500/35";
+  if (categoryId === "laptops") return "from-indigo-500/35";
+  if (categoryId === "audio") return "from-orange-500/35";
+  return "from-emerald-500/35";
+}
 
 export default async function Home() {
   const [dbProducts, dbCategories] = await Promise.all([
     prisma.product.findMany({
       take: 8,
-      orderBy: { createdAt: 'desc' },
-      include: { category: true }
+      orderBy: { createdAt: "desc" },
+      include: { category: true },
     }),
-    prisma.category.findMany()
+    prisma.category.findMany(),
   ]);
 
-  // Map DB products to frontend Product type
   const featuredProducts = dbProducts.map((p: any) => ({
     id: p.id,
     name: p.name,
     price: p.price,
     image: p.images[0],
     categoryId: p.categoryId,
-    technicalSpecs: p.technicalSpecs as any
+    technicalSpecs: p.technicalSpecs as any,
   }));
+
+  const leadProduct = featuredProducts[0];
 
   return (
     <div className="min-h-screen pb-24">
+      <main className="container relative mx-auto overflow-hidden px-4 pt-8 sm:pt-12">
+        <div className="pointer-events-none absolute -left-28 top-8 h-80 w-80 rounded-full bg-primary/15 blur-[140px]" />
+        <div className="pointer-events-none absolute -right-20 top-44 h-[26rem] w-[26rem] rounded-full bg-cyan-400/10 blur-[180px]" />
 
-      <main className="container mx-auto px-4 pt-12 relative overflow-hidden">
-        {/* Animated Background Orbs */}
-        <div className="absolute top-0 -left-20 w-72 h-72 bg-primary/20 rounded-full blur-[120px] -z-10 animate-pulse" />
-        <div className="absolute top-40 -right-20 w-96 h-96 bg-emerald-500/10 rounded-full blur-[150px] -z-10 animate-pulse delay-700" />
-
-        {/* Hero Section */}
-        <section className="mb-24 flex flex-col lg:flex-row items-center justify-between gap-12 pt-8 lg:pt-16">
-          <div className="flex-1 text-center lg:text-left">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-border-subtle text-sm text-primary mb-8 animate-in fade-in slide-in-from-top-4 duration-500">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
-              </span>
-              Official Apple & Samsung Distributors in Asaba
-            </div>
-            <h1 className="text-5xl sm:text-7xl font-extrabold tracking-tighter text-white mb-8 leading-[1.1]">
-              Elevate Your <br />
-              <span className="bg-gradient-to-r from-emerald-400 via-emerald-500 to-teal-600 bg-clip-text text-transparent">Digital Lifestyle.</span>
-            </h1>
-            <p className="text-lg sm:text-xl text-secondary max-w-xl mb-10 mx-auto lg:mx-0 leading-relaxed">
-              Experience the pinnacle of technology. Authentic iPhones, MacBooks, and high-performance gadgets delivered to your doorstep.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-              <Link href="#featured" className="bg-primary text-base font-bold px-10 py-4 rounded-standard hover:bg-emerald-400 transition-all shadow-glow text-center hover:scale-105 active:scale-95">
-                Explore Deals
-              </Link>
-              <Link href="/category/phones" className="bg-white/5 border border-border-subtle text-white font-bold px-10 py-4 rounded-standard hover:bg-white/10 transition-all text-center">
-                View Catalog
-              </Link>
-            </div>
-          </div>
-
-          <div className="flex-1 relative hidden lg:block">
-            <div className="relative w-full aspect-square max-w-lg mx-auto">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent rounded-[2rem] blur-2xl -z-10" />
-              <div className="w-full h-full bg-white/5 backdrop-blur-3xl border border-white/10 rounded-[2rem] p-8 shadow-2xl relative overflow-hidden group">
-                 <div className="absolute top-0 right-0 p-4">
-                    <div className="bg-primary/20 text-primary text-[10px] uppercase font-bold tracking-widest px-3 py-1 rounded-full border border-primary/30">
-                       Best Seller
-                    </div>
-                 </div>
-                 <Image 
-                   src={featuredProducts[0]?.image || "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?q=80&w=800&auto=format&fit=crop"}
-                   alt="Featured Product"
-                   fill
-                   sizes="(max-width: 1024px) 100vw, 50vw"
-                   priority
-                   className="object-contain p-12 group-hover:scale-110 transition-transform duration-700"
-                 />
-                 <div className="absolute bottom-8 left-8 right-8 p-6 bg-black/40 backdrop-blur-md rounded-2xl border border-white/5">
-                    <p className="text-secondary text-xs uppercase font-bold tracking-widest mb-1">Latest Release</p>
-                    <h4 className="text-white text-xl font-bold">{featuredProducts[0]?.name || "New Arrival"}</h4>
-                    <p className="text-primary font-bold">
-                      {featuredProducts[0] ? new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN' }).format(featuredProducts[0].price) : "Coming Soon"}
-                    </p>
-                 </div>
+        <section className="mb-20 grid items-center gap-10 lg:mb-24 lg:grid-cols-2 lg:gap-12">
+          <Reveal>
+            <div>
+              <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-primary">
+                Built for modern shopping in Nigeria
+              </p>
+              <h1 className="mb-6 max-w-xl text-4xl font-extrabold leading-tight tracking-tight text-white sm:text-6xl">
+                Clean tech shopping with real-time stock and instant checkout.
+              </h1>
+              <p className="mb-8 max-w-xl text-base leading-relaxed text-secondary sm:text-lg">
+                Discover authentic devices, compare specs quickly, and order in minutes with fast nationwide delivery.
+              </p>
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <Link
+                  href="#featured"
+                  className="inline-flex items-center justify-center gap-2 rounded-standard bg-primary px-8 py-3 text-sm font-semibold text-black transition-all hover:scale-[1.02] hover:bg-emerald-300"
+                >
+                  Shop Featured
+                  <ArrowRight size={16} />
+                </Link>
+                <Link
+                  href="/category/phones"
+                  className="inline-flex items-center justify-center rounded-standard border border-border-subtle bg-white/5 px-8 py-3 text-sm font-semibold text-white transition-colors hover:bg-white/10"
+                >
+                  Browse Phones
+                </Link>
               </div>
             </div>
-          </div>
+          </Reveal>
+
+          <Reveal delay={0.1} className="mx-auto hidden w-full max-w-xl lg:block">
+            <Tilt3D maxTilt={7} spotlightOpacity={0.38}>
+              <div className="relative h-[29rem] overflow-hidden rounded-[1.8rem] border border-white/10 bg-gradient-to-b from-white/10 to-white/[0.03] p-6 shadow-2xl">
+                <div className="absolute left-5 top-5 rounded-full border border-primary/40 bg-primary/15 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-primary [transform:translateZ(40px)]">
+                  New Arrival
+                </div>
+
+                <div className="relative h-full w-full [transform-style:preserve-3d]">
+                  <Image
+                    src={leadProduct?.image || "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?q=80&w=800&auto=format&fit=crop"}
+                    alt={leadProduct?.name || "Featured Product"}
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    quality={95}
+                    priority
+                    className="object-contain p-10 [transform:translateZ(48px)_scale(1.04)]"
+                  />
+                </div>
+
+                <div className="absolute bottom-5 left-5 right-5 rounded-2xl border border-white/10 bg-black/45 p-5 backdrop-blur-md [transform:translateZ(55px)]">
+                  <p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-secondary">Recommended today</p>
+                  <h4 className="text-lg font-bold text-white">{leadProduct?.name || "New Arrival"}</h4>
+                  <p className="text-base font-semibold text-primary">
+                    {leadProduct
+                      ? new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN" }).format(leadProduct.price)
+                      : "Coming Soon"}
+                  </p>
+                </div>
+              </div>
+            </Tilt3D>
+          </Reveal>
         </section>
 
-        {/* Categories Section */}
-        <section className="mb-24">
-          <div className="flex items-center justify-between mb-8">
+        <Reveal className="mb-20 lg:mb-24">
+          <div className="mb-6 flex items-center justify-between">
             <h2 className="text-2xl font-bold text-white">Shop by Category</h2>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
             {dbCategories.map((category: any) => (
-              <Link href={`/category/${category.id}`} key={category.id} className="group relative h-40 rounded-standard overflow-hidden border border-border-subtle hover:border-primary/50 transition-colors">
-                <Image 
-                  src={category.image} 
-                  alt={category.name}
-                  fill
-                  sizes="(max-width: 768px) 50vw, 25vw"
-                  className="object-cover group-hover:scale-105 transition-transform duration-500 opacity-60 group-hover:opacity-40"
-                />
-                <div className="absolute inset-0 flex items-center justify-center p-4">
-                  <h3 className="text-white font-bold text-lg text-center drop-shadow-md">{category.name}</h3>
-                </div>
-              </Link>
+              <Tilt3D key={category.id} maxTilt={5} spotlightOpacity={0.28}>
+                <Link
+                  href={`/category/${category.id}`}
+                  className="group relative block h-40 overflow-hidden rounded-featured border border-border-subtle bg-black/20"
+                >
+                  <Image
+                    src={category.image}
+                    alt={category.name}
+                    fill
+                    sizes="(max-width: 768px) 50vw, 25vw"
+                    quality={90}
+                    className="object-cover opacity-70 transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <div className={`absolute inset-0 bg-gradient-to-t ${categoryTone(category.id)} via-black/25 to-black/70`} />
+                  <div className="absolute bottom-3 left-3 right-3 rounded-xl border border-white/10 bg-black/30 px-3 py-2 backdrop-blur-sm transition-transform duration-300 group-hover:[transform:translateZ(16px)]">
+                    <h3 className="text-sm font-semibold text-white sm:text-base">{category.name}</h3>
+                  </div>
+                </Link>
+              </Tilt3D>
             ))}
           </div>
-        </section>
+        </Reveal>
 
-        {/* Trust Indicators Section */}
-        <section className="mb-24 bg-white/5 border border-white/5 rounded-2xl p-8 lg:p-12 hidden md:block">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 divide-x divide-border-subtle/50">
-            <div className="flex flex-col items-center text-center px-4">
-              <Truck size={36} className="text-primary mb-4" />
-              <h3 className="text-white font-bold mb-2">Fast Nationwide Delivery</h3>
-              <p className="text-sm text-secondary">Same day for Asaba. 1-3 days for other cities.</p>
+        <Reveal className="mb-20 rounded-2xl border border-white/10 bg-white/[0.04] p-6 md:mb-24 md:p-10" delay={0.05}>
+          <div className="grid gap-8 md:grid-cols-4 md:gap-6">
+            <div className="text-center">
+              <Truck size={30} className="mx-auto mb-3 text-primary" />
+              <h3 className="mb-2 text-sm font-semibold text-white">Fast Delivery</h3>
+              <p className="text-xs leading-relaxed text-secondary">Same day in Asaba, 1-3 days nationwide.</p>
             </div>
-            <div className="flex flex-col items-center text-center px-4">
-              <ShieldCheck size={36} className="text-primary mb-4" />
-              <h3 className="text-white font-bold mb-2">Authentic Warranty</h3>
-              <p className="text-sm text-secondary">Manufacturer warranty and our 6-month store guarantee.</p>
+            <div className="text-center">
+              <ShieldCheck size={30} className="mx-auto mb-3 text-primary" />
+              <h3 className="mb-2 text-sm font-semibold text-white">Authentic Warranty</h3>
+              <p className="text-xs leading-relaxed text-secondary">Manufacturer-backed and store-covered support.</p>
             </div>
-            <div className="flex flex-col items-center text-center px-4">
-              <CreditCard size={36} className="text-primary mb-4" />
-              <h3 className="text-white font-bold mb-2">Secure Payments</h3>
-              <p className="text-sm text-secondary">Pay securely via Paystack, bank transfer, or crypto.</p>
+            <div className="text-center">
+              <CreditCard size={30} className="mx-auto mb-3 text-primary" />
+              <h3 className="mb-2 text-sm font-semibold text-white">Secure Payments</h3>
+              <p className="text-xs leading-relaxed text-secondary">Paystack, transfer, and verified payment flow.</p>
             </div>
-            <div className="flex flex-col items-center text-center px-4">
-              <Clock size={36} className="text-primary mb-4" />
-              <h3 className="text-white font-bold mb-2">24/7 Support</h3>
-              <p className="text-sm text-secondary">Our WhatsApp concierge is always available to help.</p>
+            <div className="text-center">
+              <Clock size={30} className="mx-auto mb-3 text-primary" />
+              <h3 className="mb-2 text-sm font-semibold text-white">24/7 Help</h3>
+              <p className="text-xs leading-relaxed text-secondary">Live WhatsApp concierge whenever you need it.</p>
             </div>
           </div>
-        </section>
+        </Reveal>
 
-        {/* Product Grid */}
         <section id="featured">
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-2xl font-bold text-white">Featured Deals</h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {featuredProducts.map((product: any, index: number) => (
-              <Link href={`/product/${product.id}`} key={product.id} className={index === 0 ? "md:col-span-2 lg:col-span-2" : ""}>
-                <BentoProductCard
-                  product={product as any}
-                  featured={index === 0}
-                />
-              </Link>
-            ))}
-          </div>
+          <Reveal>
+            <div className="mb-6 flex items-center justify-between">
+              <h2 className="text-2xl font-bold text-white">Featured Deals</h2>
+            </div>
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {featuredProducts.map((product: any, index: number) => (
+                <Link href={`/product/${product.id}`} key={product.id} className={index === 0 ? "md:col-span-2 lg:col-span-2" : ""}>
+                  <BentoProductCard product={product as any} featured={index === 0} />
+                </Link>
+              ))}
+            </div>
+          </Reveal>
         </section>
       </main>
     </div>

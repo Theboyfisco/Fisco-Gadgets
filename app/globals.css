@@ -27,14 +27,26 @@
 
 @layer base {
   :root {
-    --background: #09090b;
-    --foreground: #ededed;
+    --background: #07090f;
+    --foreground: #f3f4f6;
   }
-}
 
-body {
-  background-color: var(--background);
-  color: var(--foreground);
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    min-height: 100vh;
+    background-color: var(--background);
+    background-image:
+      radial-gradient(circle at 14% 18%, rgba(16, 185, 129, 0.12), transparent 38%),
+      radial-gradient(circle at 88% 12%, rgba(34, 211, 238, 0.08), transparent 34%),
+      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: auto, auto, 48px 48px, 48px 48px;
+    background-position: 0 0, 0 0, 0 0, 0 0;
+    color: var(--foreground);
+  }
 }
 
 /* Custom scrollbar for search overlay and other scroll containers */
@@ -50,4 +62,15 @@ body {
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

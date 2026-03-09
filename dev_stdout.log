@@ -1,0 +1,176 @@
+
+> tech-hub@0.1.0 dev
+> next dev
+
+▲ Next.js 16.1.6 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://10.136.233.235:3000
+- Environments: .env
+
+✓ Starting...
+✓ Ready in 2.4s
+prisma:query BEGIN
+prisma:query DEALLOCATE ALL
+prisma:query SELECT "public"."Category"."id", "public"."Category"."name" FROM "public"."Category" WHERE 1=1 OFFSET $1
+prisma:query COMMIT
+prisma:query BEGIN
+prisma:query DEALLOCATE ALL
+prisma:query SELECT "public"."Category"."id", "public"."Category"."name", "public"."Category"."slug", "public"."Category"."image" FROM "public"."Category" WHERE 1=1 OFFSET $1
+prisma:query COMMIT
+prisma:query BEGIN
+prisma:query DEALLOCATE ALL
+prisma:query SELECT "public"."Product"."id", "public"."Product"."name", "public"."Product"."slug", "public"."Product"."description", "public"."Product"."price", "public"."Product"."stock", "public"."Product"."condition"::text, "public"."Product"."technicalSpecs", "public"."Product"."images", "public"."Product"."categoryId", "public"."Product"."createdAt", "public"."Product"."updatedAt" FROM "public"."Product" WHERE 1=1 ORDER BY "public"."Product"."createdAt" DESC LIMIT $1 OFFSET $2
+prisma:query SELECT "public"."Category"."id", "public"."Category"."name", "public"."Category"."slug", "public"."Category"."image" FROM "public"."Category" WHERE "public"."Category"."id" IN ($1) OFFSET $2
+prisma:query COMMIT
+ GET / 200 in 8.2s (compile: 620ms, render: 7.6s)
+prisma:query SELECT 1
+prisma:query SELECT 1
+prisma:query BEGIN
+prisma:query SELECT 1
+prisma:query BEGIN
+prisma:query DEALLOCATE ALL
+prisma:query DEALLOCATE ALL
+prisma:query BEGIN
+prisma:query DEALLOCATE ALL
+prisma:query SELECT "public"."Product"."id", "public"."Product"."name", "public"."Product"."slug", "public"."Product"."description", "public"."Product"."price", "public"."Product"."stock", "public"."Product"."condition"::text, "public"."Product"."technicalSpecs", "public"."Product"."images", "public"."Product"."categoryId", "public"."Product"."createdAt", "public"."Product"."updatedAt" FROM "public"."Product" WHERE 1=1 ORDER BY "public"."Product"."createdAt" DESC LIMIT $1 OFFSET $2
+prisma:query SELECT "public"."Category"."id", "public"."Category"."name", "public"."Category"."slug", "public"."Category"."image" FROM "public"."Category" WHERE 1=1 OFFSET $1
+prisma:query COMMIT
+prisma:query SELECT "public"."Category"."id", "public"."Category"."name", "public"."Category"."slug", "public"."Category"."image" FROM "public"."Category" WHERE "public"."Category"."id" IN ($1) OFFSET $2
+prisma:query COMMIT
+prisma:query SELECT "public"."Category"."id", "public"."Category"."name" FROM "public"."Category" WHERE 1=1 OFFSET $1
+prisma:query COMMIT
+ GET / 200 in 2.3s (compile: 17ms, render: 2.3s)
+prisma:query BEGIN
+prisma:query BEGIN
+prisma:query BEGIN
+prisma:query DEALLOCATE ALL
+prisma:query DEALLOCATE ALL
+prisma:query DEALLOCATE ALL
+prisma:query SELECT "public"."Category"."id", "public"."Category"."name", "public"."Category"."slug", "public"."Category"."image" FROM "public"."Category" WHERE ("public"."Category"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."Product"."id", "public"."Product"."name", "public"."Product"."slug", "public"."Product"."description", "public"."Product"."price", "public"."Product"."stock", "public"."Product"."condition"::text, "public"."Product"."technicalSpecs", "public"."Product"."images", "public"."Product"."categoryId", "public"."Product"."createdAt", "public"."Product"."updatedAt" FROM "public"."Product" WHERE "public"."Product"."categoryId" = $1 ORDER BY "public"."Product"."createdAt" DESC OFFSET $2
+prisma:query COMMIT
+prisma:query SELECT "public"."Category"."id", "public"."Category"."name", "public"."Category"."slug", "public"."Category"."image" FROM "public"."Category" WHERE "public"."Category"."id" IN ($1) OFFSET $2
+prisma:query SELECT "public"."Category"."id", "public"."Category"."name" FROM "public"."Category" WHERE 1=1 OFFSET $1
+prisma:query COMMIT
+prisma:query COMMIT
+ GET /category/phones 200 in 3.9s (compile: 1582ms, render: 2.3s)
+prisma:query BEGIN
+prisma:query DEALLOCATE ALL
+prisma:query BEGIN
+prisma:query DEALLOCATE ALL
+prisma:query SELECT "public"."Category"."id", "public"."Category"."name" FROM "public"."Category" WHERE 1=1 OFFSET $1
+prisma:query COMMIT
+prisma:query SELECT "public"."Product"."id", "public"."Product"."name", "public"."Product"."slug", "public"."Product"."description", "public"."Product"."price", "public"."Product"."stock", "public"."Product"."condition"::text, "public"."Product"."technicalSpecs", "public"."Product"."images", "public"."Product"."categoryId", "public"."Product"."createdAt", "public"."Product"."updatedAt" FROM "public"."Product" WHERE ("public"."Product"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."Category"."id", "public"."Category"."name", "public"."Category"."slug", "public"."Category"."image" FROM "public"."Category" WHERE "public"."Category"."id" IN ($1) OFFSET $2
+prisma:query COMMIT
+ GET /product/prod_1 200 in 4.2s (compile: 1535ms, render: 2.6s)
+prisma:query BEGIN
+prisma:query BEGIN
+prisma:query DEALLOCATE ALL
+prisma:query DEALLOCATE ALL
+prisma:query SELECT "public"."Product"."id", "public"."Product"."name", "public"."Product"."slug", "public"."Product"."description", "public"."Product"."price", "public"."Product"."stock", "public"."Product"."condition"::text, "public"."Product"."technicalSpecs", "public"."Product"."images", "public"."Product"."categoryId", "public"."Product"."createdAt", "public"."Product"."updatedAt" FROM "public"."Product" WHERE ("public"."Product"."name" ILIKE $1 OR "public"."Product"."description" ILIKE $2) ORDER BY "public"."Product"."createdAt" DESC OFFSET $3
+prisma:query SELECT "public"."Category"."id", "public"."Category"."name", "public"."Category"."slug", "public"."Category"."image" FROM "public"."Category" WHERE "public"."Category"."id" IN ($1) OFFSET $2
+prisma:query SELECT "public"."Category"."id", "public"."Category"."name" FROM "public"."Category" WHERE 1=1 OFFSET $1
+prisma:query COMMIT
+prisma:query COMMIT
+ GET /brand/apple 200 in 3.9s (compile: 1863ms, render: 2.1s)
+prisma:query SELECT 1
+prisma:query BEGIN
+prisma:query DEALLOCATE ALL
+prisma:query SELECT "public"."Product"."id", "public"."Product"."name", "public"."Product"."slug", "public"."Product"."description", "public"."Product"."price", "public"."Product"."stock", "public"."Product"."condition"::text, "public"."Product"."technicalSpecs", "public"."Product"."images", "public"."Product"."categoryId", "public"."Product"."createdAt", "public"."Product"."updatedAt" FROM "public"."Product" WHERE ("public"."Product"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT 1
+prisma:query SELECT "public"."Category"."id", "public"."Category"."name", "public"."Category"."slug", "public"."Category"."image" FROM "public"."Category" WHERE "public"."Category"."id" IN ($1) OFFSET $2
+prisma:query BEGIN
+prisma:query COMMIT
+prisma:query DEALLOCATE ALL
+ GET /product/prod_7 200 in 3.2s (compile: 44ms, render: 3.2s)
+prisma:query SELECT "public"."Product"."id", "public"."Product"."name", "public"."Product"."slug", "public"."Product"."description", "public"."Product"."price", "public"."Product"."stock", "public"."Product"."condition"::text, "public"."Product"."technicalSpecs", "public"."Product"."images", "public"."Product"."categoryId", "public"."Product"."createdAt", "public"."Product"."updatedAt" FROM "public"."Product" WHERE ("public"."Product"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."Category"."id", "public"."Category"."name", "public"."Category"."slug", "public"."Category"."image" FROM "public"."Category" WHERE "public"."Category"."id" IN ($1) OFFSET $2
+prisma:query COMMIT
+ GET /product/prod_7 200 in 1531ms (compile: 87ms, render: 1444ms)
+prisma:query BEGIN
+prisma:query BEGIN
+prisma:query DEALLOCATE ALL
+prisma:query DEALLOCATE ALL
+prisma:query SELECT "public"."Product"."id", "public"."Product"."name", "public"."Product"."slug", "public"."Product"."description", "public"."Product"."price", "public"."Product"."stock", "public"."Product"."condition"::text, "public"."Product"."technicalSpecs", "public"."Product"."images", "public"."Product"."categoryId", "public"."Product"."createdAt", "public"."Product"."updatedAt" FROM "public"."Product" WHERE 1=1 ORDER BY "public"."Product"."createdAt" DESC LIMIT $1 OFFSET $2
+prisma:query SELECT "public"."Category"."id", "public"."Category"."name", "public"."Category"."slug", "public"."Category"."image" FROM "public"."Category" WHERE 1=1 OFFSET $1
+prisma:query SELECT "public"."Category"."id", "public"."Category"."name", "public"."Category"."slug", "public"."Category"."image" FROM "public"."Category" WHERE "public"."Category"."id" IN ($1) OFFSET $2
+prisma:query COMMIT
+prisma:query COMMIT
+ GET / 200 in 1762ms (compile: 16ms, render: 1746ms)
+prisma:query SELECT 1
+prisma:query BEGIN
+prisma:query SELECT 1
+prisma:query DEALLOCATE ALL
+prisma:query BEGIN
+prisma:query SELECT "public"."Product"."id", "public"."Product"."name", "public"."Product"."slug", "public"."Product"."description", "public"."Product"."price", "public"."Product"."stock", "public"."Product"."condition"::text, "public"."Product"."technicalSpecs", "public"."Product"."images", "public"."Product"."categoryId", "public"."Product"."createdAt", "public"."Product"."updatedAt" FROM "public"."Product" WHERE "public"."Product"."categoryId" = $1 ORDER BY "public"."Product"."createdAt" DESC OFFSET $2
+prisma:query DEALLOCATE ALL
+prisma:query SELECT "public"."Category"."id", "public"."Category"."name", "public"."Category"."slug", "public"."Category"."image" FROM "public"."Category" WHERE "public"."Category"."id" IN ($1) OFFSET $2
+prisma:query COMMIT
+prisma:query SELECT "public"."Category"."id", "public"."Category"."name", "public"."Category"."slug", "public"."Category"."image" FROM "public"."Category" WHERE ("public"."Category"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query COMMIT
+ GET /category/phones 200 in 2.3s (compile: 117ms, render: 2.2s)
+prisma:query SELECT 1
+prisma:query SELECT 1
+prisma:query BEGIN
+prisma:query SELECT 1
+prisma:query BEGIN
+prisma:query DEALLOCATE ALL
+prisma:query DEALLOCATE ALL
+prisma:query BEGIN
+prisma:query DEALLOCATE ALL
+prisma:query SELECT "public"."Product"."id", "public"."Product"."name", "public"."Product"."slug", "public"."Product"."description", "public"."Product"."price", "public"."Product"."stock", "public"."Product"."condition"::text, "public"."Product"."technicalSpecs", "public"."Product"."images", "public"."Product"."categoryId", "public"."Product"."createdAt", "public"."Product"."updatedAt" FROM "public"."Product" WHERE "public"."Product"."categoryId" = $1 ORDER BY "public"."Product"."createdAt" DESC OFFSET $2
+prisma:query SELECT "public"."Category"."id", "public"."Category"."name", "public"."Category"."slug", "public"."Category"."image" FROM "public"."Category" WHERE ("public"."Category"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query COMMIT
+prisma:query SELECT "public"."Category"."id", "public"."Category"."name", "public"."Category"."slug", "public"."Category"."image" FROM "public"."Category" WHERE "public"."Category"."id" IN ($1) OFFSET $2
+prisma:query SELECT "public"."Category"."id", "public"."Category"."name" FROM "public"."Category" WHERE 1=1 OFFSET $1
+prisma:query COMMIT
+prisma:query COMMIT
+ GET /category/phones 200 in 2.4s (compile: 51ms, render: 2.3s)
+prisma:query BEGIN
+prisma:query DEALLOCATE ALL
+prisma:query BEGIN
+prisma:query DEALLOCATE ALL
+prisma:query SELECT "public"."Category"."id", "public"."Category"."name", "public"."Category"."slug", "public"."Category"."image" FROM "public"."Category" WHERE 1=1 OFFSET $1
+prisma:query BEGIN
+prisma:query COMMIT
+prisma:query DEALLOCATE ALL
+prisma:query BEGIN
+prisma:query SELECT "public"."Product"."id", "public"."Product"."name", "public"."Product"."slug", "public"."Product"."description", "public"."Product"."price", "public"."Product"."stock", "public"."Product"."condition"::text, "public"."Product"."technicalSpecs", "public"."Product"."images", "public"."Product"."categoryId", "public"."Product"."createdAt", "public"."Product"."updatedAt" FROM "public"."Product" WHERE 1=1 ORDER BY "public"."Product"."createdAt" DESC LIMIT $1 OFFSET $2
+prisma:query SELECT "public"."Product"."id", "public"."Product"."name", "public"."Product"."slug", "public"."Product"."description", "public"."Product"."price", "public"."Product"."stock", "public"."Product"."condition"::text, "public"."Product"."technicalSpecs", "public"."Product"."images", "public"."Product"."categoryId", "public"."Product"."createdAt", "public"."Product"."updatedAt" FROM "public"."Product" WHERE 1=1 ORDER BY "public"."Product"."createdAt" DESC LIMIT $1 OFFSET $2
+prisma:query DEALLOCATE ALL
+prisma:query SELECT "public"."Category"."id", "public"."Category"."name", "public"."Category"."slug", "public"."Category"."image" FROM "public"."Category" WHERE "public"."Category"."id" IN ($1) OFFSET $2
+prisma:query SELECT "public"."Product"."id", "public"."Product"."name", "public"."Product"."slug", "public"."Product"."description", "public"."Product"."price", "public"."Product"."stock", "public"."Product"."condition"::text, "public"."Product"."technicalSpecs", "public"."Product"."images", "public"."Product"."categoryId", "public"."Product"."createdAt", "public"."Product"."updatedAt" FROM "public"."Product" WHERE 1=1 ORDER BY "public"."Product"."createdAt" DESC LIMIT $1 OFFSET $2
+prisma:query COMMIT
+prisma:query SELECT "public"."Category"."id", "public"."Category"."name", "public"."Category"."slug", "public"."Category"."image" FROM "public"."Category" WHERE "public"."Category"."id" IN ($1) OFFSET $2
+prisma:query SELECT "public"."Category"."id", "public"."Category"."name", "public"."Category"."slug", "public"."Category"."image" FROM "public"."Category" WHERE "public"."Category"."id" IN ($1) OFFSET $2
+prisma:query COMMIT
+prisma:query COMMIT
+prisma:query BEGIN
+prisma:query BEGIN
+prisma:query BEGIN
+ GET / 200 in 2.5s (compile: 36ms, render: 2.5s)
+prisma:query DEALLOCATE ALL
+prisma:query DEALLOCATE ALL
+prisma:query DEALLOCATE ALL
+prisma:query BEGIN
+prisma:query DEALLOCATE ALL
+prisma:query SELECT "public"."Product"."id", "public"."Product"."name", "public"."Product"."slug", "public"."Product"."description", "public"."Product"."price", "public"."Product"."stock", "public"."Product"."condition"::text, "public"."Product"."technicalSpecs", "public"."Product"."images", "public"."Product"."categoryId", "public"."Product"."createdAt", "public"."Product"."updatedAt" FROM "public"."Product" WHERE 1=1 ORDER BY "public"."Product"."createdAt" DESC LIMIT $1 OFFSET $2
+prisma:query SELECT "public"."Category"."id", "public"."Category"."name", "public"."Category"."slug", "public"."Category"."image" FROM "public"."Category" WHERE 1=1 OFFSET $1
+prisma:query SELECT "public"."Category"."id", "public"."Category"."name", "public"."Category"."slug", "public"."Category"."image" FROM "public"."Category" WHERE 1=1 OFFSET $1
+prisma:query COMMIT
+prisma:query COMMIT
+prisma:query SELECT "public"."Category"."id", "public"."Category"."name", "public"."Category"."slug", "public"."Category"."image" FROM "public"."Category" WHERE 1=1 OFFSET $1
+ GET / 200 in 2.6s (compile: 26ms, render: 2.5s)
+prisma:query COMMIT
+prisma:query SELECT "public"."Category"."id", "public"."Category"."name", "public"."Category"."slug", "public"."Category"."image" FROM "public"."Category" WHERE "public"."Category"."id" IN ($1) OFFSET $2
+ GET / 200 in 2.3s (compile: 11ms, render: 2.3s)
+prisma:query COMMIT
+ GET / 200 in 2.7s (compile: 29ms, render: 2.6s)
+prisma:query SELECT 1
+prisma:query BEGIN
+prisma:query DEALLOCATE ALL
+prisma:query SELECT "public"."Product"."id", "public"."Product"."name", "public"."Product"."slug", "public"."Product"."description", "public"."Product"."price", "public"."Product"."stock", "public"."Product"."condition"::text, "public"."Product"."technicalSpecs", "public"."Product"."images", "public"."Product"."categoryId", "public"."Product"."createdAt", "public"."Product"."updatedAt" FROM "public"."Product" WHERE 1=1 ORDER BY "public"."Product"."createdAt" DESC LIMIT $1 OFFSET $2
+prisma:query SELECT "public"."Category"."id", "public"."Category"."name", "public"."Category"."slug", "public"."Category"."image" FROM "public"."Category" WHERE "public"."Category"."id" IN ($1) OFFSET $2
+prisma:query COMMIT
+ POST / 200 in 1787ms (compile: 43ms, render: 1744ms)

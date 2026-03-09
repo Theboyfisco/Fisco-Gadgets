@@ -4,223 +4,229 @@ import Link from "next/link";
 import { ShoppingBag, ArrowLeft, Menu, X, Smartphone, Laptop, Headphones, Search, Info, Mail } from "lucide-react";
 import { useCart } from "../cart/CartProvider";
 import { usePathname } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import dynamic from "next/dynamic";
-
-const SearchOverlay = dynamic(() => import("./SearchOverlay").then(mod => mod.SearchOverlay), { ssr: false });
 import { createPortal } from "react-dom";
 
+const SearchOverlay = dynamic(() => import("./SearchOverlay").then((mod) => mod.SearchOverlay), { ssr: false });
+
 interface NavbarProps {
-    categories?: { id: string; name: string }[];
+  categories?: { id: string; name: string }[];
 }
 
 export function Navbar({ categories = [] }: NavbarProps) {
-    const { cartItems, toggleCart } = useCart();
-    const pathname = usePathname();
-    const isHome = pathname === "/";
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    const [isSearchOpen, setIsSearchOpen] = useState(false);
-    const [scrolled, setScrolled] = useState(false);
-    const [mounted, setMounted] = useState(false);
+  const { cartItems, toggleCart } = useCart();
+  const pathname = usePathname();
+  const isHome = pathname === "/";
 
-    useEffect(() => {
-        setMounted(true);
-    }, []);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
-    useEffect(() => {
-        const handleScroll = () => {
-            setScrolled(window.scrollY > 20);
-        };
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 18);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
-    useEffect(() => {
-        const handleKeyDown = (e: KeyboardEvent) => {
-            if ((e.metaKey || e.ctrlKey) && e.key === "k") {
-                e.preventDefault();
-                setIsSearchOpen(true);
-            }
-        };
-        window.addEventListener("keydown", handleKeyDown);
-        return () => window.removeEventListener("keydown", handleKeyDown);
-    }, []);
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if ((event.metaKey || event.ctrlKey) && event.key === "k") {
+        event.preventDefault();
+        setIsSearchOpen(true);
+      }
+    };
 
-    const navLinks = [
-        { name: "Home", href: "/", icon: Smartphone },
-        ...categories.map(cat => ({
-            name: cat.name,
-            href: `/category/${cat.id}`,
-            icon: cat.id === 'phones' ? Smartphone : cat.id === 'laptops' ? Laptop : cat.id === 'audio' ? Headphones : Smartphone
-        })),
-        { name: "About", href: "/about", icon: Info },
-        { name: "Contact", href: "/contact", icon: Mail }
-    ];
-    
-    return (
-        <>
-            <header 
-                className="sticky top-0 z-40 w-full transition-all duration-300 border-b backdrop-blur-xl"
-                style={{
-                    backgroundColor: scrolled ? 'rgba(9, 9, 11, 0.95)' : 'rgba(9, 9, 11, 0.7)',
-                    borderBottomColor: scrolled ? '#27272a' : 'transparent',
-                    paddingTop: scrolled ? 0 : '0.5rem',
-                    paddingBottom: scrolled ? 0 : '0.5rem',
-                }}
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
+  const navLinks = [
+    { name: "Home", href: "/", icon: Smartphone },
+    ...categories.map((category) => ({
+      name: category.name,
+      href: `/category/${category.id}`,
+      icon:
+        category.id === "phones"
+          ? Smartphone
+          : category.id === "laptops"
+            ? Laptop
+            : category.id === "audio"
+              ? Headphones
+              : Smartphone,
+    })),
+    { name: "About", href: "/about", icon: Info },
+    { name: "Contact", href: "/contact", icon: Mail },
+  ];
+
+  const renderSearchOverlay = typeof document !== "undefined";
+
+  return (
+    <>
+      <header
+        className="sticky top-0 z-40 w-full border-b border-white/5 backdrop-blur-2xl transition-all duration-300"
+        style={{
+          backgroundColor: scrolled ? "rgba(7, 9, 15, 0.92)" : "rgba(7, 9, 15, 0.68)",
+          paddingTop: scrolled ? "0.2rem" : "0.55rem",
+          paddingBottom: scrolled ? "0.2rem" : "0.55rem",
+        }}
+      >
+        <div className="container mx-auto flex h-16 items-center justify-between px-4">
+          <div className="flex items-center gap-3 sm:gap-4">
+            <button
+              className="-ml-2 p-2 text-secondary transition-colors hover:text-white lg:hidden"
+              onClick={() => setIsMobileMenuOpen(true)}
+              aria-label="Open menu"
             >
-                <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-                    <div className="flex items-center gap-3 sm:gap-4">
-                        {/* Mobile Menu Toggle */}
-                        <button 
-                            className="lg:hidden p-2 -ml-2 text-secondary hover:text-white transition-colors"
-                            onClick={() => setIsMobileMenuOpen(true)}
-                        >
-                            <Menu size={24} />
-                        </button>
+              <Menu size={24} />
+            </button>
 
-                        {!isHome ? (
-                            <Link href="/" className="flex items-center gap-2 text-secondary hover:text-white transition-colors group">
-                                <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
-                                <span className="hidden sm:inline font-medium">Back</span>
-                            </Link>
-                        ) : (
-                            <Link href="/" className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-emerald-600 tracking-tight">
-                                Fisco Gadgets
-                            </Link>
-                        )}
-                    </div>
-
-                    {/* Desktop Navigation - Hidden on mobile/tablet */}
-                    <nav className="hidden lg:flex items-center gap-6 xl:gap-8">
-                        {navLinks.map((link) => (
-                            <Link 
-                                key={link.name} 
-                                href={link.href}
-                                className={`text-sm font-medium transition-colors ${
-                                    pathname === link.href ? "text-primary" : "text-secondary hover:text-white"
-                                }`}
-                            >
-                                {link.name}
-                            </Link>
-                        ))}
-                    </nav>
-
-                    <div className="flex items-center gap-1 sm:gap-4 flex-1 justify-end max-w-sm lg:max-w-md">
-                        <button
-                            onClick={() => setIsSearchOpen(true)}
-                            className="flex-1 hidden lg:flex items-center gap-3 px-4 py-2 rounded-xl border text-secondary hover:text-white hover:bg-white/10 transition-all text-sm group"
-                            style={{ backgroundColor: 'rgba(255,255,255,0.05)', borderColor: '#27272a' }}
-                            aria-label="Open search"
-                        >
-                            <Search size={18} className="group-hover:text-primary transition-colors" />
-                            <span>Search gadgets...</span>
-                            <kbd className="ml-auto hidden xl:inline-flex h-5 items-center gap-1 rounded border border-white/10 bg-white/5 px-1.5 font-mono text-[10px] font-medium opacity-100">
-                                <span className="text-xs">⌘</span>K
-                            </kbd>
-                        </button>
-
-                        <button
-                            onClick={() => setIsSearchOpen(true)}
-                            className="lg:hidden p-2 text-secondary hover:text-white transition-colors"
-                            aria-label="Open search"
-                        >
-                            <Search size={22} />
-                        </button>
-
-                        <button
-                            onClick={toggleCart}
-                            className="relative p-2 text-secondary hover:text-white transition-colors"
-                            aria-label="Open cart"
-                        >
-                            <ShoppingBag size={24} />
-                            {cartItems.length > 0 && (
-                                <span className="absolute top-1 right-1 w-4 h-4 text-[10px] font-bold flex items-center justify-center bg-primary text-white rounded-full border-2 border-[#09090b]">
-                                    {cartItems.length}
-                                </span>
-                            )}
-                        </button>
-                    </div>
-                </div>
-            </header>
-
-            {/* Render SearchOverlay via portal so it escapes header stacking context */}
-            {mounted && createPortal(
-                <SearchOverlay isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />,
-                document.body
+            {!isHome ? (
+              <Link href="/" className="group flex items-center gap-2 text-secondary transition-colors hover:text-white">
+                <ArrowLeft size={20} className="transition-transform group-hover:-translate-x-1" />
+                <span className="hidden font-medium sm:inline">Back</span>
+              </Link>
+            ) : (
+              <Link href="/" className="bg-gradient-to-r from-emerald-300 via-emerald-400 to-cyan-300 bg-clip-text text-xl font-extrabold tracking-tight text-transparent">
+                Fisco Gadgets
+              </Link>
             )}
+          </div>
 
-            {/* Mobile Navigation Menu via portal */}
-            {mounted && createPortal(
-                <AnimatePresence>
-                    {isMobileMenuOpen && (
-                        <>
-                            <motion.div 
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
-                                onClick={() => setIsMobileMenuOpen(false)}
-                                className="fixed inset-0 z-50 lg:hidden"
-                                style={{ backgroundColor: 'rgba(0, 0, 0, 0.75)', backdropFilter: 'blur(8px)' }}
-                            />
-                            <motion.div 
-                                initial={{ x: '-100%' }}
-                                animate={{ x: 0 }}
-                                exit={{ x: '-100%' }}
-                                transition={{ type: "spring", bounce: 0, duration: 0.4 }}
-                                className="fixed left-0 top-0 bottom-0 w-[280px] border-r border-border-subtle z-[60] p-6 flex flex-col lg:hidden shadow-2xl"
-                                style={{ backgroundColor: '#09090b' }}
-                            >
-                                <div className="flex items-center justify-between mb-10">
-                                    <Link onClick={() => setIsMobileMenuOpen(false)} href="/" className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-emerald-600">
-                                        Fisco Gadgets
-                                    </Link>
-                                    <button 
-                                        onClick={() => setIsMobileMenuOpen(false)}
-                                        className="p-2 -mr-2 text-secondary hover:text-white transition-colors"
-                                    >
-                                        <X size={24} />
-                                    </button>
-                                </div>
-                                
-                                <p className="text-[10px] font-bold text-secondary/50 uppercase tracking-[0.2em] mb-4">Navigation</p>
-                                <nav className="flex flex-col gap-1">
-                                    {navLinks.map((link) => (
-                                        <Link 
-                                            key={link.name} 
-                                            href={link.href}
-                                            onClick={() => setIsMobileMenuOpen(false)}
-                                            className={`text-lg font-medium p-3 rounded-xl transition-all flex items-center gap-4 ${
-                                                pathname === link.href 
-                                                ? "bg-primary/10 text-primary border border-primary/20" 
-                                                : "text-secondary hover:text-white hover:bg-white/5 border border-transparent"
-                                            }`}
-                                        >
-                                            <div className={`p-2 rounded-lg ${pathname === link.href ? "bg-primary/20" : "bg-white/5"}`}>
-                                                {link.icon && <link.icon size={20} />}
-                                            </div>
-                                            {link.name}
-                                        </Link>
-                                    ))}
-                                </nav>
-                                
-                                <div className="mt-auto pt-8 border-t border-border-subtle">
-                                    <p className="text-secondary text-sm mb-4">Official Platform for Apple & Samsung Gadgets in Nigeria.</p>
-                                    <Link 
-                                        href="/contact"
-                                        onClick={() => setIsMobileMenuOpen(false)}
-                                        className="block w-full bg-primary text-center text-white py-4 rounded-xl font-bold hover:bg-emerald-400 transition-colors shadow-glow"
-                                    >
-                                        WhatsApp Support
-                                    </Link>
-                                </div>
-                            </motion.div>
-                        </>
-                    )}
-                </AnimatePresence>,
-                document.body
+          <nav className="hidden items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 lg:flex">
+            {navLinks.map((link) => {
+              const active = pathname === link.href;
+              return (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  className={`rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
+                    active ? "bg-white/10 text-white" : "text-secondary hover:text-white"
+                  }`}
+                >
+                  {link.name}
+                </Link>
+              );
+            })}
+          </nav>
+
+          <div className="flex max-w-sm flex-1 items-center justify-end gap-2 sm:gap-3 lg:max-w-md">
+            <button
+              onClick={() => setIsSearchOpen(true)}
+              className="group hidden flex-1 items-center gap-3 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-secondary transition-all hover:bg-white/10 hover:text-white lg:flex"
+              aria-label="Open search"
+            >
+              <Search size={17} className="transition-colors group-hover:text-primary" />
+              <span>Search gadgets...</span>
+              <kbd className="ml-auto hidden h-5 items-center gap-1 rounded border border-white/10 bg-black/20 px-1.5 font-mono text-[10px] font-medium xl:inline-flex">
+                <span className="text-xs">⌘</span>K
+              </kbd>
+            </button>
+
+            <button
+              onClick={() => setIsSearchOpen(true)}
+              className="p-2 text-secondary transition-colors hover:text-white lg:hidden"
+              aria-label="Open search"
+            >
+              <Search size={22} />
+            </button>
+
+            <button
+              onClick={toggleCart}
+              className="relative rounded-xl p-2 text-secondary transition-colors hover:bg-white/5 hover:text-white"
+              aria-label="Open cart"
+            >
+              <ShoppingBag size={23} />
+              {cartItems.length > 0 && (
+                <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full border border-[#07090f] bg-primary text-[10px] font-bold text-black">
+                  {cartItems.length}
+                </span>
+              )}
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {renderSearchOverlay &&
+        createPortal(<SearchOverlay isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />, document.body)}
+
+      {renderSearchOverlay &&
+        createPortal(
+          <AnimatePresence>
+            {isMobileMenuOpen && (
+              <>
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm lg:hidden"
+                />
+                <motion.div
+                  initial={{ x: "-100%" }}
+                  animate={{ x: 0 }}
+                  exit={{ x: "-100%" }}
+                  transition={{ type: "spring", bounce: 0, duration: 0.36 }}
+                  className="fixed bottom-0 left-0 top-0 z-[60] flex w-[290px] flex-col border-r border-white/10 bg-[#090c13] p-6 shadow-2xl lg:hidden"
+                >
+                  <div className="mb-10 flex items-center justify-between">
+                    <Link
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      href="/"
+                      className="bg-gradient-to-r from-emerald-300 to-cyan-300 bg-clip-text text-xl font-extrabold text-transparent"
+                    >
+                      Fisco Gadgets
+                    </Link>
+                    <button
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="-mr-2 p-2 text-secondary transition-colors hover:text-white"
+                      aria-label="Close menu"
+                    >
+                      <X size={24} />
+                    </button>
+                  </div>
+
+                  <p className="mb-4 text-[10px] font-bold uppercase tracking-[0.2em] text-secondary/60">Navigation</p>
+                  <nav className="flex flex-col gap-1.5">
+                    {navLinks.map((link) => {
+                      const active = pathname === link.href;
+                      return (
+                        <Link
+                          key={link.name}
+                          href={link.href}
+                          onClick={() => setIsMobileMenuOpen(false)}
+                          className={`flex items-center gap-4 rounded-xl border p-3 text-base font-medium transition-all ${
+                            active
+                              ? "border-primary/35 bg-primary/10 text-primary"
+                              : "border-transparent text-secondary hover:border-white/10 hover:bg-white/5 hover:text-white"
+                          }`}
+                        >
+                          <span className={`rounded-lg p-2 ${active ? "bg-primary/20" : "bg-white/5"}`}>
+                            <link.icon size={18} />
+                          </span>
+                          {link.name}
+                        </Link>
+                      );
+                    })}
+                  </nav>
+
+                  <div className="mt-auto border-t border-white/10 pt-7">
+                    <p className="mb-4 text-sm text-secondary">Support available every day via WhatsApp concierge.</p>
+                    <Link
+                      href="/contact"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="block w-full rounded-xl bg-primary py-3 text-center text-sm font-semibold text-black transition-colors hover:bg-emerald-300"
+                    >
+                      WhatsApp Support
+                    </Link>
+                  </div>
+                </motion.div>
+              </>
             )}
-        </>
-    );
+          </AnimatePresence>,
+          document.body,
+        )}
+    </>
+  );
 }
-

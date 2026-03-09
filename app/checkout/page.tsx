@@ -9,7 +9,6 @@ import Image from "next/image";
 import { createOrder } from "@/actions/order";
 import { initializePayment } from "@/actions/paystack";
 import { Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
 
 export default function CheckoutPage() {
     const { cartItems, clearCart } = useCart();
@@ -262,3 +261,4 @@ export default function CheckoutPage() {
         </div>
     );
 }
+
