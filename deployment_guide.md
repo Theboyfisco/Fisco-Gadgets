@@ -1,38 +1,58 @@
-# 🚀 Fisco Gadgets — Vercel Deployment Guide
+# Deployment Guide (Vercel)
 
-Follow these steps to take your store live on the web.
+Use this checklist to deploy Fisco Gadgets safely.
 
-## 1. Push to GitHub
+## 1. Push code
 
-1. Create a new repository on [GitHub](https://github.com/new).
-2. Run these commands in your project terminal:
-   ```bash
-   git add .
-   git commit -m "chore: prepare for vercel deployment"
-   git branch -M main
-   git remote add origin YOUR_GITHUB_REPO_URL
-   git push -u origin main
-   ```
+```bash
+git add .
+git commit -m "chore: prepare deployment"
+git push
+```
 
-## 2. Deploy to Vercel
+## 2. Import project in Vercel
 
-1. Go to [vercel.com](https://vercel.com) and sign in.
-2. Click **Add New** > **Project**.
-3. Import your `tech-hub` repository.
-4. **Environment Variables**: Open the "Environment Variables" section and add these exactly as they appear in your `.env` file:
-   - `DATABASE_URL`
-   - `DIRECT_URL`
-   - `PAYSTACK_SECRET_KEY`
-   - `PAYSTACK_PUBLIC_KEY`
-   - `NEXT_PUBLIC_APP_URL` (Use your temporary Vercel URL first, then update it later)
-5. Click **Deploy**.
+1. Open [https://vercel.com](https://vercel.com)
+2. Add new project
+3. Import this repository
 
-## 3. Final Verification
+## 3. Configure environment variables
 
-1. Once deployed, visit your Vercel URL.
-2. Test the **Comparison** feature and **Cart**.
-3. Verify that products are loading correctly from your Supabase database.
+Add these in Vercel project settings:
 
----
+- `DATABASE_URL`
+- `DIRECT_URL`
+- `PAYSTACK_SECRET_KEY`
+- `PAYSTACK_PUBLIC_KEY`
+- `NEXT_PUBLIC_APP_URL`
 
-_Note: I have already configured `package.json` to handle Prisma generation automatically during the Vercel build process._
+Set `NEXT_PUBLIC_APP_URL` to your actual production domain.
+
+## 4. Build and deploy
+
+Vercel build command (default):
+
+```bash
+npm run build
+```
+
+Prisma client generation is handled by `postinstall` in `package.json`.
+
+## 5. Post-deploy checks
+
+- Home page loads
+- Category pages load
+- Product page loads with gallery/images
+- Cart and compare work
+- Checkout initializes payment
+- Paystack webhook endpoint is reachable
+
+## 6. Troubleshooting
+
+- If image quality warnings appear, verify `images.qualities` in `next.config.ts`
+- If Turbopack root warnings appear, verify `turbopack.root = process.cwd()`
+- If DB errors appear, re-check `DATABASE_URL` and `DIRECT_URL`
+
+## 7. Security reminder
+
+If any key was exposed in docs/history, rotate it immediately.

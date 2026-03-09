@@ -1,67 +1,69 @@
-# Fisco Gadgets — Backend Setup & Deployment Guide
+# Backend Setup
 
-## 🛠 Supabase Configuration
+This document covers backend environment setup for local development and production.
 
-### 1. Database Connection
+## 1. Required environment variables
 
-Supabase uses Connection Pooling. In your `prisma/schema.prisma`, we use two URLs:
-
-- `DATABASE_URL`: Transaction mode (usually port 6543) for application queries.
-- `DIRECT_URL`: Session mode (usually port 5432) for migrations.
-
-**Format**:
-
-- `DATABASE_URL="postgres://postgres.[YOUR_PROJECT_ID]:[YOUR_PASSWORD]@aws-0-eu-central-1.pooler.supabase.com:6543/postgres?pgbouncer=true"`
-- `DIRECT_URL="postgres://postgres.[YOUR_PROJECT_ID]:[YOUR_PASSWORD]@aws-0-eu-central-1.pooler.supabase.com:5432/postgres"`
-
-### 2. Row Level Security (RLS)
-
-- **Status**: Enabled (Supabase default).
-- **Prisma Context**: Prisma bypasses RLS when using the `service_role` or a superuser (like `postgres`). For this internal e-commerce backend, we interact via the `postgres` user, so RLS doesn't block the server actions.
-
-## 💳 Paystack Integration Setup
-
-1. **Environment Variables**:
-   - `PAYSTACK_SECRET_KEY`: Get this from your Paystack Dashboard (Settings > API Keys & Webhooks).
-   - `NEXT_PUBLIC_APP_URL`: Your production URL (e.g., `https://fiscogadgets.com.ng`).
-
-2. **Webhook URL**:
-   - Set your webhook URL in Paystack Dashboard to: `https://your-domain.com/api/paystack/webhook`.
-   - Ensure the event `charge.success` is selected.
-
-## 🚀 Deployment Checklist
-
-### 1. Environment Variables (Vercel)
-
-Add the following to your Vercel project settings:
+Create/update `.env` with the following:
 
 ```bash
-DATABASE_URL=...
-DIRECT_URL=...
-PAYSTACK_SECRET_KEY=...
-NEXT_PUBLIC_APP_URL=...
+DATABASE_URL="postgresql://..."
+DIRECT_URL="postgresql://..."
+PAYSTACK_SECRET_KEY="sk_..."
+PAYSTACK_PUBLIC_KEY="pk_..."
+NEXT_PUBLIC_APP_URL="https://your-domain.com"
 ```
 
-### 2. Database Migrations
+## 2. Database connection model
 
-Run these commands locally before deploying, or as part of your CI/CD:
+- `DATABASE_URL`: pooled connection (runtime queries)
+- `DIRECT_URL`: direct connection (migrations)
+
+For Supabase, pooled and direct ports are usually different.
+
+## 3. Prisma workflow
 
 ```bash
-# Apply migrations to Supabase
-npx prisma migrate deploy
-
-# Generate Prisma Client
 npx prisma generate
+npx prisma migrate deploy
 ```
 
-### 3. Verification Workflow
+Optional local seed (if configured):
 
-1. **Product Seed**: Ensure your database has products (use a seed script or manual entry in Supabase Table Editor).
-2. **Checkout**: Select items -> Proceed to Checkout -> Enter Details.
-3. **Payment**: Redirect to Paystack -> Complete Test Payment.
-4. **Callback**: Verify redirect to `/checkout/success`.
-5. **Database Check**: Confirm the order status in Subabase is now `PAID`.
+```bash
+npx prisma db seed
+```
 
----
+## 4. Paystack setup
 
-_Senior Backend Engineering Guide — Fisco Gadgets_
+- Set webhook URL to:
+
+```text
+https://your-domain.com/api/paystack/webhook
+```
+
+- Ensure your server has `PAYSTACK_SECRET_KEY`
+- Confirm webhook signature verification remains enabled in code
+
+## 5. Backend sanity checks
+
+- Run lint/type/build:
+
+```bash
+npm run lint
+npx tsc --noEmit
+npm run build
+```
+
+- Validate checkout end-to-end:
+1. Add product to cart
+2. Submit checkout details
+3. Redirect to Paystack
+4. Complete test payment
+5. Confirm order status updates
+
+## Security checklist
+
+- Do not store secrets in Markdown files
+- Rotate any keys that were ever committed or shared
+- Keep production keys only in deployment platform env settings

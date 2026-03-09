@@ -1,19 +1,26 @@
-Supabase Project ID:
+# Environment Info Template (Safe)
 
-# Connect to Supabase via connection pooling
+Use this file as a local checklist only.
+Do not store real secrets in this file.
 
-DATABASE_URL="postgresql://postgres.yksqfvdsjsysnlicfblv:[jamesmoriaty1234]@aws-1-eu-west-1.pooler.supabase.com:6543/postgres?pgbouncer=true"
+## Supabase
 
-# Direct connection to the database. Used for migrations
+- Project ID: `<project_id>`
+- DATABASE_URL: `postgresql://<user>:<password>@<host>:<port>/<db>?pgbouncer=true`
+- DIRECT_URL: `postgresql://<user>:<password>@<host>:<port>/<db>`
 
-DIRECT_URL="postgresql://postgres.yksqfvdsjsysnlicfblv:[jamesmoriaty1234]@aws-1-eu-west-1.pooler.supabase.com:5432/postgres"
+## Paystack
 
-paystack project ID:
+- Secret key: `<PAYSTACK_SECRET_KEY>`
+- Public key: `<PAYSTACK_PUBLIC_KEY>`
+- Webhook URL: `https://<your-domain>/api/paystack/webhook`
 
-paystack secret key: sk_test_9b0d7fe7fac2f92ff17e779e07312f92c3fd5882;
+## App URL
 
-paystack public key: pk_test_1c1378179701b5616292b3f97b0dbe90474cdd3a
+- NEXT_PUBLIC_APP_URL: `https://<your-domain>`
 
-Test Webhook URL: https://shy-seals-ring.loca.lt
+## Security checklist
 
-NEXT_PUBLIC_APP_URL = https://shy-seals-ring.loca.lt
+- Keep real values only in `.env` and deployment environment settings
+- Never commit plaintext keys
+- Rotate keys immediately if exposed

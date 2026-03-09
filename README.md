@@ -1,47 +1,73 @@
-# Fisco Gadgets — Premium Tech Storefront
+# Fisco Gadgets
 
-Welcome to **Fisco Gadgets**, a cutting-edge, ultra-minimalist e-commerce frontend built with **Next.js 15** and **Tailwind CSS v4**.
+Fisco Gadgets is a full-stack e-commerce app for premium gadgets in Nigeria.
+It includes catalog browsing, search, cart, checkout, order creation, and Paystack-backed payment flow.
 
-Designed specifically for the Nigerian gadget market (Apple & Samsung specialists), this platform focuses on high conversion rates through mobile-first design, lightning-fast interactions, and glassmorphism aesthetics.
+## Highlights
 
-## ✨ Key Highlights
+- Modern Next.js 16 App Router architecture
+- 3D-enhanced UI interactions (tilt, spotlight, depth cards)
+- Product detail depth gallery with stacked thumbnails
+- Category and brand showcase pages
+- Global cart + comparison flows
+- Checkout + Paystack integration
+- Prisma + PostgreSQL backend
 
-- 🌑 **Premium Dark Mode**: Deep black backgrounds with emerald accents.
-- 🪟 **Glassmorphism 2.0**: Elegant blurs and translucent layers across the UI.
-- 🔍 **Portal-based Search**: High-performance search with `Cmd+K` accessibility.
-- 🛒 **Persistent Cart**: Lightweight shopping bag with local storage sync.
-- 📱 **Mobile Optimized**: Sticky CTAs and gestures designed for mobile users.
-- ⚡ **Next.js 15 (Turbo)**: Optimized for the fastest possible development and build times.
+## Stack
 
-## 🚀 Getting Started
+- Next.js 16
+- React 19
+- TypeScript
+- Tailwind CSS v4
+- Framer Motion
+- Prisma ORM
+- PostgreSQL
 
-1. **Enter the project directory**:
+## Scripts
 
-   ```bash
-   cd tech-hub
-   ```
+- `npm run dev` - Start development server
+- `npm run lint` - Lint the project
+- `npx tsc --noEmit` - Type-check only
+- `npm run build` - Build for production
+- `npm run start` - Start production server
 
-2. **Install dependencies**:
+## Quick start
 
-   ```bash
-   npm install
-   ```
+1. Install dependencies
 
-3. **Run the development server**:
+```bash
+npm install
+```
 
-   ```bash
-   npm run dev
-   ```
+2. Configure environment variables in `.env`
 
-4. **Visit the shop**:
-   Open [http://localhost:3000](http://localhost:3000) in your browser.
+3. Run locally
 
-## 📁 Documentation
+```bash
+npm run dev
+```
 
-For a deep dive into the specific features and technical implementation, check out:
+4. Open [http://localhost:3000](http://localhost:3000)
 
-- [**FEATURES.md**](./FEATURES.md): Detailed breakdown of every feature and design decision.
+## Verification
 
----
+```bash
+npm run lint
+npx tsc --noEmit
+npm run build
+```
 
-_Official Platform for Apple & Samsung Gadgets in Nigeria._
+## Notes
+
+- `next.config.ts` is configured with:
+  - Turbopack root pinning (`turbopack.root = process.cwd()`)
+  - Allowed image quality values used by the UI
+- Remote media source: `images.unsplash.com`
+- Never commit real keys/secrets to Markdown or source files
+
+## Docs
+
+- [FEATURES.md](./FEATURES.md)
+- [BACKEND_SETUP.md](./BACKEND_SETUP.md)
+- [deployment_guide.md](./deployment_guide.md)
+- [info.md](./info.md)
