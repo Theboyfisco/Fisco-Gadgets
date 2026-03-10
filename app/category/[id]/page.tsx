@@ -43,15 +43,15 @@ export default async function CategoryPage({ params }: { params: Promise<{ id: s
   return (
     <div className="container mx-auto flex-1 px-4 py-10">
       <Reveal className="mb-10">
-        <div className="relative overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-contrast)] p-8 md:p-10">
+        <div className="relative overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-contrast)] p-6 sm:p-8 md:p-10">
           <Image src={heroImage} alt={category.name} fill quality={92} className="object-cover opacity-35" priority />
           <div className={`absolute inset-0 bg-gradient-to-r ${categoryTone(category.id)} via-[var(--surface-contrast)] to-[var(--surface-contrast)]`} />
           <div className="relative z-10 max-w-2xl">
             <p className="mb-3 inline-flex rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--foreground)]">
               Curated Collection
             </p>
-            <h1 className="mb-4 text-4xl font-extrabold tracking-tight text-[var(--foreground)] md:text-5xl">{category.name}</h1>
-            <p className="text-base text-secondary md:text-lg">
+            <h1 className="mb-4 text-3xl font-extrabold tracking-tight text-[var(--foreground)] sm:text-4xl md:text-5xl">{category.name}</h1>
+            <p className="text-sm text-secondary sm:text-base md:text-lg">
               Handpicked premium {category.name.toLowerCase()} with clean specs, trusted warranty, and fast nationwide delivery.
             </p>
           </div>

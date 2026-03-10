@@ -38,21 +38,21 @@ export default async function Home() {
 
   return (
     <div className="min-h-screen pb-24">
-      <main className="container relative mx-auto overflow-hidden px-4 pt-8 sm:pt-12">
-        <section className="relative mb-20 overflow-hidden rounded-[2rem] border border-white/15 bg-black/30 p-8 shadow-[0_30px_80px_rgba(8,14,30,0.65)] lg:mb-24 lg:p-12">
+      <main className="container relative mx-auto overflow-hidden px-4 pt-6 sm:pt-10">
+        <section className="relative mb-16 overflow-hidden rounded-[2rem] border border-white/15 bg-black/30 p-6 shadow-[0_30px_80px_rgba(8,14,30,0.65)] sm:p-8 lg:mb-24 lg:p-12">
           <Image src={heroBackdrop} alt="Futuristic gadgets background" fill className="object-cover opacity-45" priority quality={95} />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(56,189,248,0.25),transparent_35%),radial-gradient(circle_at_80%_25%,rgba(16,185,129,0.25),transparent_35%),linear-gradient(to_bottom,rgba(5,8,16,0.2),rgba(5,8,16,0.85))]" />
 
-          <div className="relative z-10 grid items-center gap-10 lg:grid-cols-2 lg:gap-12">
+          <div className="relative z-10 grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
             <Reveal>
               <div>
                 <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-primary">
                   Built for modern shopping in Nigeria
                 </p>
-                <h1 className="mb-6 max-w-xl text-4xl font-extrabold leading-tight tracking-tight text-[var(--foreground)] sm:text-6xl">
+                <h1 className="mb-6 max-w-xl text-3xl font-extrabold leading-tight tracking-tight text-[var(--foreground)] sm:text-5xl lg:text-6xl">
                   Clean tech shopping with real-time stock and instant checkout.
                 </h1>
-                <p className="mb-8 max-w-xl text-base leading-relaxed text-secondary sm:text-lg">
+                <p className="mb-8 max-w-xl text-sm leading-relaxed text-secondary sm:text-lg">
                   Discover authentic devices, compare specs quickly, and order in minutes with fast nationwide delivery.
                 </p>
                 <div className="flex flex-col gap-3 sm:flex-row">
@@ -73,7 +73,7 @@ export default async function Home() {
               </div>
             </Reveal>
 
-            <Reveal delay={0.1} className="mx-auto hidden w-full max-w-xl lg:block">
+            <Reveal delay={0.1} className="mx-auto w-full max-w-lg sm:max-w-xl lg:mx-0">
               <LatestProductsCarousel products={featuredProducts} />
             </Reveal>
           </div>

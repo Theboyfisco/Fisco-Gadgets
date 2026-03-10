@@ -53,7 +53,7 @@ export function LatestProductsCarousel({ products }: LatestProductsCarouselProps
   }).format(activeProduct.price);
 
   return (
-    <div className="group relative h-[28rem] w-full max-w-xl overflow-hidden rounded-[2.2rem] border border-white/10 bg-[#0b0f14] shadow-[0_30px_80px_rgba(8,12,20,0.55)]">
+    <div className="group relative h-[22rem] w-full max-w-xl overflow-hidden rounded-[2.2rem] border border-white/10 bg-[#0b0f14] shadow-[0_30px_80px_rgba(8,12,20,0.55)] sm:h-[26rem] lg:h-[28rem]">
       <div className="absolute inset-0">
         <Image
           key={activeProduct.id}

@@ -22,7 +22,7 @@ export function ProductDepthGallery({ name, images, condition = "New" }: Product
   return (
     <div className="space-y-5">
       <Tilt3D maxTilt={8}>
-        <div className="relative h-[420px] w-full overflow-hidden rounded-2xl border border-border-subtle bg-gradient-to-b from-[var(--surface-cta)] to-[var(--surface-soft)] p-5 lg:h-[610px]">
+        <div className="relative h-[320px] w-full overflow-hidden rounded-2xl border border-border-subtle bg-gradient-to-b from-[var(--surface-cta)] to-[var(--surface-soft)] p-4 sm:h-[420px] sm:p-5 lg:h-[610px]">
           <div className="pointer-events-none absolute -left-8 -top-10 h-40 w-40 rounded-full bg-primary/20 blur-3xl" />
           <div className="pointer-events-none absolute -bottom-10 -right-8 h-40 w-40 rounded-full bg-cyan-400/20 blur-3xl" />
 
@@ -45,7 +45,7 @@ export function ProductDepthGallery({ name, images, condition = "New" }: Product
               sizes="(max-width: 1024px) 100vw, 50vw"
               quality={95}
               priority
-              className="object-contain p-10 [transform:translateZ(52px)_scale(1.03)]"
+              className="object-contain p-6 sm:p-10 [transform:translateZ(52px)_scale(1.03)]"
             />
           </div>
 
