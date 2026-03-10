@@ -5,6 +5,7 @@ const nextConfig: NextConfig = {
     root: process.cwd(),
   },
   images: {
+    unoptimized: true,
     qualities: [75, 85, 90, 92, 95],
     remotePatterns: [
       {

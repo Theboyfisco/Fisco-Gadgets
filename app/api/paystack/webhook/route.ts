@@ -4,6 +4,14 @@ import prisma from "@/lib/db";
 
 const PAYSTACK_SECRET_KEY = process.env.PAYSTACK_SECRET_KEY;
 
+function signaturesMatch(expectedHex: string, receivedHex: string) {
+  const expected = Buffer.from(expectedHex, "hex");
+  const received = Buffer.from(receivedHex, "hex");
+
+  if (expected.length !== received.length) return false;
+  return crypto.timingSafeEqual(expected, received);
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.text();
@@ -19,11 +27,16 @@ export async function POST(req: NextRequest) {
       .update(body)
       .digest("hex");
 
-    if (hash !== signature) {
+    if (!signaturesMatch(hash, signature)) {
       return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
     }
 
-    const event = JSON.parse(body);
+    let event: any;
+    try {
+      event = JSON.parse(body);
+    } catch {
+      return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
+    }
 
     // 2. Handle successful charge
     // Handle the event

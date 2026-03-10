@@ -23,14 +23,14 @@ export function Footer({ categories = [] }: FooterProps) {
   };
 
   return (
-    <footer className="mt-auto w-full border-t border-white/10 bg-[#07090f] pt-14">
+    <footer className="mt-auto w-full border-t border-white/15 bg-[#040915] pt-14">
       <div className="container mx-auto px-4">
-        <div className="mb-12 rounded-2xl border border-white/10 bg-white/[0.03] p-6 md:p-8">
+        <div className="mb-12 rounded-2xl border border-white/15 bg-white/[0.06] p-6 md:p-8 shadow-[0_20px_70px_rgba(8,17,45,0.45)]">
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
             <div className="lg:col-span-2">
               <Link
                 href="/"
-                className="mb-4 inline-block bg-gradient-to-r from-emerald-300 via-emerald-400 to-cyan-300 bg-clip-text text-2xl font-extrabold text-transparent"
+                className="mb-4 inline-block bg-gradient-to-r from-cyan-200 via-sky-300 to-violet-300 bg-clip-text text-2xl font-extrabold text-transparent"
               >
                 Fisco Gadgets
               </Link>
@@ -39,9 +39,9 @@ export function Footer({ categories = [] }: FooterProps) {
               </p>
 
               <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
-                <div className="rounded-xl border border-white/10 bg-white/[0.02] px-3 py-2 text-xs text-secondary">100% Authentic Devices</div>
-                <div className="rounded-xl border border-white/10 bg-white/[0.02] px-3 py-2 text-xs text-secondary">Fast Nationwide Shipping</div>
-                <div className="rounded-xl border border-white/10 bg-white/[0.02] px-3 py-2 text-xs text-secondary">Secure Checkout</div>
+                <div className="rounded-xl border border-white/20 bg-white/[0.08] px-3 py-2 text-xs text-secondary">100% Authentic Devices</div>
+                <div className="rounded-xl border border-white/20 bg-white/[0.08] px-3 py-2 text-xs text-secondary">Fast Nationwide Shipping</div>
+                <div className="rounded-xl border border-white/20 bg-white/[0.08] px-3 py-2 text-xs text-secondary">Secure Checkout</div>
               </div>
             </div>
 
@@ -97,7 +97,7 @@ export function Footer({ categories = [] }: FooterProps) {
         </div>
 
         <div className="mb-10 grid grid-cols-1 gap-8 lg:grid-cols-3">
-          <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-5">
+          <div className="rounded-2xl border border-white/20 bg-white/[0.08] p-5">
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-[0.14em] text-white/90">Join Updates</h3>
             {subscribed ? (
               <motion.div
@@ -116,7 +116,7 @@ export function Footer({ categories = [] }: FooterProps) {
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
                   placeholder="you@example.com"
-                  className="w-full rounded-md border border-white/10 bg-black/20 px-3 py-2 text-sm text-white outline-none transition-colors focus:border-primary"
+                  className="w-full rounded-md border border-white/10 bg-black/30 px-3 py-2 text-sm text-white outline-none transition-colors focus:border-primary"
                 />
                 <button
                   type="submit"
@@ -128,7 +128,7 @@ export function Footer({ categories = [] }: FooterProps) {
             )}
           </div>
 
-          <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-5">
+          <div className="rounded-2xl border border-white/20 bg-white/[0.08] p-5">
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-[0.14em] text-white/90">Contact</h3>
             <ul className="space-y-3">
               <li className="flex items-start gap-2 text-sm text-secondary">
@@ -146,16 +146,16 @@ export function Footer({ categories = [] }: FooterProps) {
             </ul>
           </div>
 
-          <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-5">
+          <div className="rounded-2xl border border-white/20 bg-white/[0.08] p-5">
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-[0.14em] text-white/90">Social</h3>
             <div className="flex gap-3">
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="rounded-full border border-white/10 bg-white/[0.03] p-2 text-secondary transition-all hover:border-primary/30 hover:text-primary">
+              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="rounded-full border border-white/20 bg-white/[0.1] p-2 text-secondary transition-all hover:border-primary/30 hover:text-primary">
                 <Facebook size={16} />
               </a>
-              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="rounded-full border border-white/10 bg-white/[0.03] p-2 text-secondary transition-all hover:border-primary/30 hover:text-primary">
+              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="rounded-full border border-white/20 bg-white/[0.1] p-2 text-secondary transition-all hover:border-primary/30 hover:text-primary">
                 <Twitter size={16} />
               </a>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="rounded-full border border-white/10 bg-white/[0.03] p-2 text-secondary transition-all hover:border-primary/30 hover:text-primary">
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="rounded-full border border-white/20 bg-white/[0.1] p-2 text-secondary transition-all hover:border-primary/30 hover:text-primary">
                 <Instagram size={16} />
               </a>
             </div>

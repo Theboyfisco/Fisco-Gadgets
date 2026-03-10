@@ -65,9 +65,9 @@ export function Navbar({ categories = [] }: NavbarProps) {
   return (
     <>
       <header
-        className="sticky top-0 z-40 w-full border-b border-white/5 backdrop-blur-2xl transition-all duration-300"
+        className="sticky top-0 z-40 w-full border-b border-white/10 backdrop-blur-2xl transition-all duration-300"
         style={{
-          backgroundColor: scrolled ? "rgba(7, 9, 15, 0.92)" : "rgba(7, 9, 15, 0.68)",
+          backgroundColor: scrolled ? "rgba(3, 7, 17, 0.9)" : "rgba(3, 7, 17, 0.55)",
           paddingTop: scrolled ? "0.2rem" : "0.55rem",
           paddingBottom: scrolled ? "0.2rem" : "0.55rem",
         }}
@@ -88,13 +88,13 @@ export function Navbar({ categories = [] }: NavbarProps) {
                 <span className="hidden font-medium sm:inline">Back</span>
               </Link>
             ) : (
-              <Link href="/" className="bg-gradient-to-r from-emerald-300 via-emerald-400 to-cyan-300 bg-clip-text text-xl font-extrabold tracking-tight text-transparent">
+              <Link href="/" className="bg-gradient-to-r from-cyan-200 via-sky-300 to-violet-300 bg-clip-text text-xl font-extrabold tracking-tight text-transparent">
                 Fisco Gadgets
               </Link>
             )}
           </div>
 
-          <nav className="hidden items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 lg:flex">
+          <nav className="hidden items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-3 py-1 lg:flex">
             {navLinks.map((link) => {
               const active = pathname === link.href;
               return (
@@ -102,7 +102,7 @@ export function Navbar({ categories = [] }: NavbarProps) {
                   key={link.name}
                   href={link.href}
                   className={`rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
-                    active ? "bg-white/10 text-white" : "text-secondary hover:text-white"
+                    active ? "bg-white/20 text-white" : "text-secondary hover:text-white"
                   }`}
                 >
                   {link.name}
@@ -114,7 +114,7 @@ export function Navbar({ categories = [] }: NavbarProps) {
           <div className="flex max-w-sm flex-1 items-center justify-end gap-2 sm:gap-3 lg:max-w-md">
             <button
               onClick={() => setIsSearchOpen(true)}
-              className="group hidden flex-1 items-center gap-3 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-secondary transition-all hover:bg-white/10 hover:text-white lg:flex"
+              className="group hidden flex-1 items-center gap-3 rounded-xl border border-white/20 bg-white/[0.08] px-4 py-2 text-sm text-secondary transition-all hover:bg-white/20 hover:text-white lg:flex"
               aria-label="Open search"
             >
               <Search size={17} className="transition-colors group-hover:text-primary" />
@@ -134,12 +134,12 @@ export function Navbar({ categories = [] }: NavbarProps) {
 
             <button
               onClick={toggleCart}
-              className="relative rounded-xl p-2 text-secondary transition-colors hover:bg-white/5 hover:text-white"
+              className="relative rounded-xl border border-white/10 bg-white/[0.04] p-2 text-secondary transition-colors hover:bg-white/20 hover:text-white"
               aria-label="Open cart"
             >
               <ShoppingBag size={23} />
               {cartItems.length > 0 && (
-                <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full border border-[#07090f] bg-primary text-[10px] font-bold text-black">
+                <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full border border-[#07090f] bg-cyan-300 text-[10px] font-bold text-slate-900">
                   {cartItems.length}
                 </span>
               )}
@@ -168,7 +168,7 @@ export function Navbar({ categories = [] }: NavbarProps) {
                   animate={{ x: 0 }}
                   exit={{ x: "-100%" }}
                   transition={{ type: "spring", bounce: 0, duration: 0.36 }}
-                  className="fixed bottom-0 left-0 top-0 z-[60] flex w-[290px] flex-col border-r border-white/10 bg-[#090c13] p-6 shadow-2xl lg:hidden"
+                  className="fixed bottom-0 left-0 top-0 z-[60] flex w-[290px] flex-col border-r border-white/20 bg-[#050b1a] p-6 shadow-2xl lg:hidden"
                 >
                   <div className="mb-10 flex items-center justify-between">
                     <Link
