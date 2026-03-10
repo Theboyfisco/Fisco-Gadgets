@@ -7,13 +7,6 @@ import Image from "next/image";
 import prisma from "@/lib/db";
 import { fallbackCategories, fallbackFeaturedProducts } from "@/lib/fallback-data";
 
-function categoryTone(categoryId: string) {
-  if (categoryId === "phones") return "from-cyan-500/45";
-  if (categoryId === "laptops") return "from-indigo-500/45";
-  if (categoryId === "audio") return "from-fuchsia-500/45";
-  return "from-emerald-500/45";
-}
-
 const heroBackdrop =
   "https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?q=80&w=1920&auto=format&fit=crop";
 
@@ -119,27 +112,27 @@ export default async function Home() {
           <div className="mb-6 flex items-center justify-between">
             <h2 className="text-2xl font-bold text-[var(--foreground)]">Shop by Category</h2>
           </div>
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
             {dbCategories.map((category: any) => (
-              <Tilt3D key={category.id} maxTilt={5} spotlightOpacity={0.28}>
-                <Link
-                  href={`/category/${category.id}`}
-                  className="group relative block h-40 overflow-hidden rounded-featured border border-border-subtle bg-[var(--surface-contrast)]"
-                >
-                  <Image
-                    src={category.image}
-                    alt={category.name}
-                    fill
-                    sizes="(max-width: 768px) 50vw, 25vw"
-                    quality={90}
-                    className="object-cover opacity-70 transition-transform duration-500 group-hover:scale-110"
-                  />
-                  <div className={`absolute inset-0 bg-gradient-to-t ${categoryTone(category.id)} via-[var(--surface-contrast)] to-[var(--surface-contrast)]`} />
-                  <div className="absolute bottom-3 left-3 right-3 rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-contrast)] px-3 py-2 backdrop-blur-sm transition-transform duration-300 group-hover:[transform:translateZ(16px)]">
-                    <h3 className="text-sm font-semibold text-[var(--foreground)] sm:text-base">{category.name}</h3>
-                  </div>
-                </Link>
-              </Tilt3D>
+              <Link
+                key={category.id}
+                href={`/category/${category.id}`}
+                className="group relative h-48 overflow-hidden rounded-[28px] border border-white/10 bg-black/30 shadow-[0_20px_60px_rgba(3,7,18,0.4)] transition duration-500 hover:-translate-y-1 hover:shadow-[0_30px_90px_rgba(0,0,0,0.6)]"
+              >
+                <Image
+                  src={category.image}
+                  alt={category.name}
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                  quality={90}
+                  className="object-cover transition duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+                <div className="absolute inset-x-4 bottom-4 rounded-2xl border border-white/20 bg-white/10 p-4 backdrop-blur-sm transition duration-300 group-hover:border-white/40">
+                  <p className="text-sm font-semibold uppercase tracking-wide text-white">{category.name}</p>
+                  <p className="mt-1 text-xs uppercase tracking-[0.3em] text-white/70">Explore collection</p>
+                </div>
+              </Link>
             ))}
           </div>
         </Reveal>
