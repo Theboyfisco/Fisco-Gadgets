@@ -1,5 +1,5 @@
 import { BentoProductCard } from "@/components/product/BentoProductCard";
-import { Tilt3D } from "@/components/ui/Tilt3D";
+import { LatestProductsCarousel } from "@/components/ui/LatestProductsCarousel";
 import { Reveal } from "@/components/ui/Reveal";
 import { ShieldCheck, Truck, Clock, CreditCard, ArrowRight } from "lucide-react";
 import Link from "next/link";
@@ -35,8 +35,6 @@ export default async function Home() {
           technicalSpecs: p.technicalSpecs as any,
         }))
       : fallbackFeaturedProducts;
-
-  const leadProduct = featuredProducts[0] ?? fallbackFeaturedProducts[0];
 
   return (
     <div className="min-h-screen pb-24">
@@ -76,34 +74,7 @@ export default async function Home() {
             </Reveal>
 
             <Reveal delay={0.1} className="mx-auto hidden w-full max-w-xl lg:block">
-              <Tilt3D maxTilt={7} spotlightOpacity={0.38}>
-                <div className="relative h-[29rem] overflow-hidden rounded-[1.8rem] border border-[var(--border-subtle)] bg-gradient-to-b from-[var(--surface-cta)] to-[var(--surface-soft)] p-6 shadow-2xl">
-                  <div className="absolute left-5 top-5 rounded-full border border-primary/40 bg-primary/15 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-primary [transform:translateZ(40px)]">
-                    New Arrival
-                  </div>
-                  <div className="relative h-full w-full [transform-style:preserve-3d]">
-                    <Image
-                      src={leadProduct?.image || "https://images.unsplash.com/photo-1598327105666-5b89351aff97?q=80&w=800&auto=format&fit=crop"}
-                      alt={leadProduct?.name || "Featured Product"}
-                      fill
-                      sizes="(max-width: 1024px) 100vw, 50vw"
-                      quality={95}
-                      priority
-                      className="object-contain p-10 [transform:translateZ(48px)_scale(1.04)]"
-                    />
-                  </div>
-
-                  <div className="absolute bottom-5 left-5 right-5 rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-contrast)] p-5 backdrop-blur-md [transform:translateZ(55px)]">
-                    <p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-secondary">Recommended today</p>
-                    <h4 className="text-lg font-bold text-[var(--foreground)]">{leadProduct?.name || "New Arrival"}</h4>
-                    <p className="text-base font-semibold text-primary">
-                      {leadProduct
-                        ? new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN" }).format(leadProduct.price)
-                        : "Coming Soon"}
-                    </p>
-                  </div>
-                </div>
-              </Tilt3D>
+              <LatestProductsCarousel products={featuredProducts} />
             </Reveal>
           </div>
         </section>
