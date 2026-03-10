@@ -1,28 +1,27 @@
 @import "tailwindcss";
 
 @theme {
-  /* Using oklch so Tailwind v4 alpha modifiers like bg-base/40 work correctly */
-  --color-base: oklch(0.145 0.005 286);
-  --color-primary: oklch(0.696 0.17 162);
-  --color-border-subtle: oklch(0.274 0.006 286);
-  --color-secondary: oklch(0.704 0.04 256);
+  --color-base: oklch(0.1 0.01 280);
+  --color-primary: oklch(0.79 0.11 210);
+  --color-border-subtle: oklch(0.31 0.03 270);
+  --color-secondary: oklch(0.84 0.02 260);
   --color-error: oklch(0.577 0.245 27);
-  --color-success: oklch(0.696 0.17 162);
-  --color-surface: oklch(1 0 0 / 0.05);
+  --color-success: oklch(0.72 0.14 175);
+  --color-surface: oklch(1 0 0 / 0.07);
 
   --spacing-18: 4.5rem;
   --spacing-88: 22rem;
 
-  --radius-standard: 12px;
-  --radius-featured: 16px;
+  --radius-standard: 14px;
+  --radius-featured: 20px;
 
   --breakpoint-xs: 375px;
 
-  --shadow-glass: 0 4px 30px rgba(0, 0, 0, 0.1);
-  --shadow-glow: 0 0 40px -10px rgba(16, 185, 129, 0.3);
+  --shadow-glass: 0 24px 65px rgba(6, 10, 28, 0.35);
+  --shadow-glow: 0 14px 50px -16px rgba(56, 189, 248, 0.45);
 
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: "Inter", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
 @layer base {
@@ -109,7 +108,6 @@
   }
 }
 
-/* Custom scrollbar for search overlay and other scroll containers */
 .custom-scrollbar::-webkit-scrollbar {
   width: 6px;
 }
@@ -117,11 +115,11 @@
   background: transparent;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.16);
   border-radius: 3px;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.3);
 }
 
 @media (prefers-reduced-motion: reduce) {

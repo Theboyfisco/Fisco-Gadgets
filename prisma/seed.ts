@@ -3,10 +3,10 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 const categories = [
-  { id: "phones", name: "Smartphones", image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=400&auto=format&fit=crop" },
-  { id: "laptops", name: "Laptops & MacBooks", image: "https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?q=80&w=400&auto=format&fit=crop" },
-  { id: "audio", name: "Audio & Headphones", image: "https://images.unsplash.com/photo-1583394838336-acd977736f90?q=80&w=400&auto=format&fit=crop" },
-  { id: "accessories", name: "Accessories", image: "https://images.unsplash.com/photo-1612815154858-60aa4c59eaa6?q=80&w=400&auto=format&fit=crop" }
+  { id: "phones", name: "Smartphones", image: "https://images.unsplash.com/photo-1556656793-08538906a9f8?q=80&w=400&auto=format&fit=crop" },
+  { id: "laptops", name: "Laptops & MacBooks", image: "https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?q=80&w=400&auto=format&fit=crop" },
+  { id: "audio", name: "Audio & Headphones", image: "https://images.unsplash.com/photo-1484704849700-f032a568e944?q=80&w=400&auto=format&fit=crop" },
+  { id: "accessories", name: "Accessories", image: "https://images.unsplash.com/photo-1625842268584-8f3296236761?q=80&w=400&auto=format&fit=crop" }
 ];
 
 const dummyProducts = [
@@ -200,6 +200,38 @@ const dummyProducts = [
     image: "https://images.unsplash.com/photo-1601445638532-3c6f6c3aa1d6?q=80&w=800&auto=format&fit=crop",
     categoryId: "accessories",
     technicalSpecs: { condition: "New", material: "Full CNC Aluminum", layout: "Tenkeyless", switchType: "Gateron G Pro Brown" }
+  },
+  {
+    id: "prod_11",
+    name: "Nothing Phone (2)",
+    price: 980000,
+    image: "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?q=80&w=800&auto=format&fit=crop",
+    categoryId: "phones",
+    technicalSpecs: { battery: "4700mAh", storage: "256GB", ram: "12GB", condition: "New", screen: "6.7in LTPO OLED 120Hz" }
+  },
+  {
+    id: "prod_12",
+    name: "Lenovo Legion Slim 7",
+    price: 2650000,
+    image: "https://images.unsplash.com/photo-1603302576837-37561b2e2302?q=80&w=800&auto=format&fit=crop",
+    categoryId: "laptops",
+    technicalSpecs: { battery: "99Wh", storage: "1TB SSD", ram: "32GB", condition: "New", screen: "16in WQXGA 240Hz" }
+  },
+  {
+    id: "prod_13",
+    name: "Marshall Stanmore III",
+    price: 520000,
+    image: "https://images.unsplash.com/photo-1545454675-3531b543be5d?q=80&w=800&auto=format&fit=crop",
+    categoryId: "audio",
+    technicalSpecs: { battery: "AC Powered", condition: "New", connectivity: "Bluetooth 5.2", sound: "80W Stereo" }
+  },
+  {
+    id: "prod_14",
+    name: "Anker 737 Power Bank",
+    price: 175000,
+    image: "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?q=80&w=800&auto=format&fit=crop",
+    categoryId: "accessories",
+    technicalSpecs: { condition: "New", battery: "24,000mAh", output: "140W USB-C", display: "Smart Digital Screen" }
   }
 ];
 

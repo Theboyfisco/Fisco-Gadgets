@@ -1,41 +1,32 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-export const metadata: Metadata = {
-  title: "Fisco Gadgets — Premium Tech Store",
-  description: "The official home for premium Apple, Samsung, and high-end tech accessories in Nigeria.",
-};
 
 import { CartProvider } from "@/components/cart/CartProvider";
 import { CompareProvider } from "@/components/product/CompareProvider";
 import { Navbar } from "@/components/ui/Navbar";
 import { CartWrapper } from "@/components/cart/CartWrapper";
 import { Footer } from "@/components/ui/Footer";
+import { CompareFloatingBar } from "@/components/product/CompareFloatingBar";
 
 import prisma from "@/lib/db";
+import { fallbackCategories } from "@/lib/fallback-data";
 
-import { CompareFloatingBar } from "@/components/product/CompareFloatingBar";
+export const metadata: Metadata = {
+  title: "Fisco Gadgets — Premium Tech Store",
+  description: "The official home for premium Apple, Samsung, and high-end tech accessories in Nigeria.",
+};
 
 export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const categories = await prisma.category.findMany({
-    select: { id: true, name: true },
-  });
+  const categories = process.env.DATABASE_URL
+    ? await prisma.category
+        .findMany({ select: { id: true, name: true } })
+        .catch(() => fallbackCategories.map((category) => ({ id: category.id, name: category.name })))
+    : fallbackCategories.map((category) => ({ id: category.id, name: category.name }));
 
   return (
     <html lang="en" data-theme="dark" suppressHydrationWarning>
@@ -51,9 +42,7 @@ export default async function RootLayout({
           })();`}
         </Script>
       </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased selection:bg-primary/20 selection:text-[var(--foreground)] flex flex-col min-h-screen`}
-      >
+      <body className="flex min-h-screen flex-col antialiased selection:bg-primary/20 selection:text-[var(--foreground)]">
         <CompareProvider>
           <CartProvider>
             <Navbar categories={categories} />

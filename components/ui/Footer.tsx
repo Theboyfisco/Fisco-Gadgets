@@ -30,7 +30,7 @@ export function Footer({ categories = [] }: FooterProps) {
             <div className="lg:col-span-2">
               <Link
                 href="/"
-                className="mb-4 inline-block bg-gradient-to-r from-emerald-300 via-emerald-400 to-cyan-300 bg-clip-text text-2xl font-extrabold text-transparent"
+                className="mb-4 inline-block bg-gradient-to-r from-cyan-200 via-sky-300 to-violet-300 bg-clip-text text-2xl font-extrabold text-transparent"
               >
                 Fisco Gadgets
               </Link>
@@ -120,7 +120,7 @@ export function Footer({ categories = [] }: FooterProps) {
                 />
                 <button
                   type="submit"
-                  className="rounded-md bg-primary px-4 py-2 text-sm font-semibold text-black transition-colors hover:bg-emerald-300"
+                  className="rounded-md bg-primary px-4 py-2 text-sm font-semibold text-slate-900 transition-colors hover:bg-cyan-200"
                 >
                   Join
                 </button>

@@ -176,7 +176,7 @@ export function Navbar({ categories = [] }: NavbarProps) {
                     <Link
                       onClick={() => setIsMobileMenuOpen(false)}
                       href="/"
-                      className="bg-gradient-to-r from-emerald-300 to-cyan-300 bg-clip-text text-xl font-extrabold text-transparent"
+                      className="bg-gradient-to-r from-cyan-200 via-sky-300 to-violet-300 bg-clip-text text-xl font-extrabold text-transparent"
                     >
                       Fisco Gadgets
                     </Link>
@@ -218,7 +218,7 @@ export function Navbar({ categories = [] }: NavbarProps) {
                     <Link
                       href="/contact"
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className="block w-full rounded-xl bg-primary py-3 text-center text-sm font-semibold text-black transition-colors hover:bg-emerald-300"
+                      className="block w-full rounded-xl bg-primary py-3 text-center text-sm font-semibold text-slate-900 transition-colors hover:bg-cyan-200"
                     >
                       WhatsApp Support
                     </Link>
