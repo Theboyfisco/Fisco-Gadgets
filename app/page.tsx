@@ -50,10 +50,10 @@ export default async function Home() {
                   Built for modern shopping in Nigeria
                 </p>
                 <h1 className="mb-6 max-w-xl text-3xl font-extrabold leading-tight tracking-tight text-[var(--foreground)] sm:text-5xl lg:text-6xl">
-                  Clean tech shopping with real-time stock and instant checkout.
+                  Tech you can trust, delivered at the speed of your life.
                 </h1>
                 <p className="mb-8 max-w-xl text-sm leading-relaxed text-secondary sm:text-lg">
-                  Discover authentic devices, compare specs quickly, and order in minutes with fast nationwide delivery.
+                  Curated drops, verified originals, and concierge-level checkout built for Nigeria.
                 </p>
                 <div className="flex flex-col gap-3 sm:flex-row">
                   <Link
