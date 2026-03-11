@@ -80,7 +80,7 @@ export function CartDrawer({ isOpen, onClose, cartItems }: CartDrawerProps) {
                                 <Link 
                                     href="/checkout" 
                                     onClick={onClose}
-                                    className="w-full bg-primary text-base py-4 rounded-standard font-bold hover:bg-emerald-400 transition-colors shadow-glow active:scale-95 text-center flex items-center justify-center"
+                                    className="w-full bg-primary text-black text-base py-4 rounded-standard font-bold hover:bg-emerald-400 transition-colors shadow-glow active:scale-95 text-center flex items-center justify-center"
                                 >
                                     Secure Checkout
                                 </Link>

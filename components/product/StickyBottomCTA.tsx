@@ -12,7 +12,7 @@ export function StickyBottomCTA({ product }: { product: Product }) {
             <AddToCartButton product={product} className="flex-1 rounded-standard border border-[var(--border-subtle)] bg-[var(--surface-cta)] py-3 font-medium text-[var(--foreground)] transition-transform active:scale-95" />
             <a
                 href={`https://wa.me/2348000000000?text=${whatsappMsg}`}
-                className="flex-1 bg-primary text-base rounded-standard py-3 font-medium flex items-center justify-center gap-2 active:scale-95 transition-transform shadow-glow"
+                className="flex-1 bg-primary text-black text-base rounded-standard py-3 font-medium flex items-center justify-center gap-2 active:scale-95 transition-transform shadow-glow"
             >
                 <MessageCircle size={18} />
                 WhatsApp Buy

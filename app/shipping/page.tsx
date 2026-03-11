@@ -17,7 +17,7 @@ export default function ShippingPage() {
           <h2 className="mb-4 text-2xl font-bold text-[var(--foreground)]">Delivery Times</h2>
           <p className="mb-4">We pride ourselves on lightning-fast delivery across Nigeria. Delivery estimates depend on your location:</p>
           <ul className="list-disc pl-6 space-y-2">
-            <li><strong className="text-emerald-400">Asaba & Environs:</strong> Same day delivery for orders placed before 2 PM. Orders placed after 2 PM will arrive the next morning.</li>
+            <li><strong className="text-primary">Asaba & Environs:</strong> Same day delivery for orders placed before 2 PM. Orders placed after 2 PM will arrive the next morning.</li>
             <li><strong className="text-[var(--foreground)]">Lagos, Abuja, PH:</strong> 1-2 business days.</li>
             <li><strong className="text-[var(--foreground)]">Other Locations in Nigeria:</strong> 2-4 business days.</li>
           </ul>

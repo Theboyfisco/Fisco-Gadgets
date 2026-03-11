@@ -49,7 +49,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
 
             <h1 className="mb-4 text-4xl font-extrabold tracking-tight text-[var(--foreground)] lg:text-5xl">{product.name}</h1>
 
-            <p className="mb-8 text-3xl font-semibold text-emerald-400">
+            <p className="mb-8 text-3xl font-semibold text-primary">
               {new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN" }).format(product.price)}
             </p>
 

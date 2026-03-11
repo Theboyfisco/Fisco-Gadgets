@@ -1,13 +1,15 @@
 @import "tailwindcss";
 
 @theme {
-  --color-base: oklch(0.1 0.01 280);
-  --color-primary: oklch(0.79 0.11 210);
-  --color-border-subtle: oklch(0.31 0.03 270);
-  --color-secondary: oklch(0.84 0.02 260);
-  --color-error: oklch(0.577 0.245 27);
-  --color-success: oklch(0.72 0.14 175);
-  --color-surface: oklch(1 0 0 / 0.07);
+  --color-base: var(--base);
+  --color-primary: var(--primary);
+  --color-border-subtle: var(--border-subtle-color);
+  --color-secondary: var(--secondary);
+  --color-error: var(--error);
+  --color-success: var(--success);
+  --color-surface: var(--surface-color);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
 
   --spacing-18: 4.5rem;
   --spacing-88: 22rem;
@@ -18,23 +20,42 @@
   --breakpoint-xs: 375px;
 
   --shadow-glass: 0 24px 65px rgba(6, 10, 28, 0.35);
-  --shadow-glow: 0 14px 50px -16px rgba(56, 189, 248, 0.45);
+  --shadow-glow: 0 14px 50px -16px rgba(16, 185, 129, 0.4);
 
   --font-sans: "Inter", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-mono: "JetBrains Mono", "Fira Code", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --font-mono:
+    "JetBrains Mono", "Fira Code", ui-monospace, SFMono-Regular, Menlo, Monaco,
+    Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
 @layer base {
+  /* ─── DARK THEME (default) ─── */
   :root {
     --background: #07090f;
     --foreground: #f3f4f6;
-    --background-gradient: radial-gradient(circle at 14% 18%, rgba(16, 185, 129, 0.12), transparent 38%),
-      radial-gradient(circle at 88% 12%, rgba(34, 211, 238, 0.08), transparent 34%),
-      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    --base: oklch(0.1 0.01 280);
+    --primary: oklch(0.79 0.11 210);
+    --border-subtle-color: oklch(0.31 0.03 270);
+    --secondary: oklch(0.84 0.02 260);
+    --error: oklch(0.577 0.245 27);
+    --success: oklch(0.72 0.14 175);
+    --surface-color: oklch(1 0 0 / 0.07);
+    --background-gradient:
+      radial-gradient(
+        circle at 14% 18%,
+        rgba(16, 185, 129, 0.1),
+        transparent 38%
+      ),
+      radial-gradient(
+        circle at 88% 12%,
+        rgba(16, 185, 129, 0.06),
+        transparent 34%
+      ),
+      linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
     --grid-line: 48px 48px;
     --accent-halo-1: rgba(16, 185, 129, 0.12);
-    --accent-halo-2: rgba(34, 211, 238, 0.08);
+    --accent-halo-2: rgba(16, 185, 129, 0.06);
     --surface-1: rgba(255, 255, 255, 0.1);
     --surface-2: rgba(0, 0, 0, 0.35);
     --surface-card: rgba(255, 255, 255, 0.05);
@@ -58,40 +79,155 @@
     --footer-bg: #07090f;
     --footer-panel: rgba(255, 255, 255, 0.03);
     --kbd-bg: rgba(0, 0, 0, 0.2);
+    --hero-surface: rgba(0, 0, 0, 0.3);
+    --hero-border: rgba(255, 255, 255, 0.15);
+    --hero-shadow: 0 30px 80px rgba(8, 14, 30, 0.65);
+    --hero-overlay:
+      radial-gradient(
+        circle at 20% 20%,
+        rgba(16, 185, 129, 0.2),
+        transparent 35%
+      ),
+      radial-gradient(
+        circle at 80% 25%,
+        rgba(16, 185, 129, 0.14),
+        transparent 35%
+      ),
+      linear-gradient(to bottom, rgba(5, 8, 16, 0.2), rgba(5, 8, 16, 0.85));
+    --media-card-surface: #0b0f14;
+    --media-card-border: rgba(255, 255, 255, 0.1);
+    --media-card-shadow: 0 30px 80px rgba(8, 12, 20, 0.55);
+    --media-card-overlay:
+      radial-gradient(circle at top, rgba(16, 185, 129, 0.18), transparent 45%),
+      radial-gradient(
+        circle at 20% 80%,
+        rgba(16, 185, 129, 0.22),
+        transparent 42%
+      ),
+      linear-gradient(180deg, rgba(6, 12, 18, 0.2), rgba(6, 12, 18, 0.9));
+    --media-card-foreground: #ffffff;
+    --media-card-pill-bg: rgba(255, 255, 255, 0.1);
+    --media-card-pill-border: rgba(255, 255, 255, 0.15);
+    --media-card-pill-text: rgba(255, 255, 255, 0.8);
+    --media-card-line-bg: rgba(255, 255, 255, 0.2);
+    --media-card-line-fill: rgba(255, 255, 255, 0.7);
+    --category-card-surface: rgba(0, 0, 0, 0.3);
+    --category-card-border: rgba(255, 255, 255, 0.1);
+    --category-card-shadow: 0 20px 60px rgba(3, 7, 18, 0.4);
+    --category-card-shadow-hover: 0 30px 90px rgba(0, 0, 0, 0.6);
+    --category-card-overlay: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.8),
+      rgba(0, 0, 0, 0.4),
+      transparent
+    );
+    --category-pill-bg: rgba(255, 255, 255, 0.1);
+    --category-pill-border: rgba(255, 255, 255, 0.2);
+    --category-pill-border-hover: rgba(255, 255, 255, 0.4);
+    --category-pill-title: #ffffff;
+    --category-pill-subtitle: rgba(255, 255, 255, 0.7);
   }
 
+  /* ─── LIGHT THEME ─── */
   :root[data-theme="light"] {
-    --background: #f6f9ff;
+    --background: #f8fafb;
     --foreground: #0f172a;
-    --background-gradient: radial-gradient(circle at 13% 15%, rgba(16, 185, 129, 0.16), transparent 43%),
-      radial-gradient(circle at 86% 14%, rgba(34, 211, 238, 0.13), transparent 39%),
-      linear-gradient(rgba(15, 23, 42, 0.06) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(15, 23, 42, 0.06) 1px, transparent 1px);
-    --accent-halo-1: rgba(16, 185, 129, 0.2);
-    --accent-halo-2: rgba(6, 182, 212, 0.16);
-    --surface-1: rgba(8, 17, 31, 0.08);
-    --surface-2: rgba(255, 255, 255, 0.78);
-    --surface-card: rgba(255, 255, 255, 0.9);
+    --base: oklch(0.98 0.01 280); /* white text on dark primary buttons in light mode! */
+    --primary: oklch(0.45 0.15 210); /* even darker teal for light mode to contrast with white text */
+    --border-subtle-color: oklch(0.85 0.02 260);
+    --secondary: oklch(0.35 0.02 260);
+    --error: oklch(0.577 0.245 27);
+    --success: oklch(0.5 0.14 175);
+    --surface-color: oklch(0 0 0 / 0.05);
+    --background-gradient:
+      radial-gradient(
+        circle at 13% 15%,
+        rgba(16, 185, 129, 0.07),
+        transparent 43%
+      ),
+      radial-gradient(
+        circle at 86% 14%,
+        rgba(16, 185, 129, 0.05),
+        transparent 39%
+      ),
+      linear-gradient(rgba(15, 23, 42, 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(15, 23, 42, 0.035) 1px, transparent 1px);
+    --accent-halo-1: rgba(16, 185, 129, 0.12);
+    --accent-halo-2: rgba(16, 185, 129, 0.08);
+    --surface-1: rgba(8, 17, 31, 0.06);
+    --surface-2: rgba(255, 255, 255, 0.85);
+    --surface-card: rgba(255, 255, 255, 0.92);
     --surface-card-strong: rgba(255, 255, 255, 0.98);
-    --surface-soft: rgba(15, 23, 42, 0.04);
-    --surface-cta: rgba(15, 23, 42, 0.08);
+    --surface-soft: rgba(15, 23, 42, 0.03);
+    --surface-cta: rgba(15, 23, 42, 0.06);
     --surface-contrast: rgba(15, 23, 42, 0.55);
-    --nav-bg: rgba(246, 249, 255, 0.88);
-    --nav-bg-scrolled: rgba(246, 249, 255, 0.98);
-    --interactive-bg: rgba(15, 23, 42, 0.08);
-    --interactive-bg-soft: rgba(255, 255, 255, 0.9);
-    --interactive-border: rgba(15, 23, 42, 0.14);
+    --nav-bg: rgba(248, 250, 251, 0.88);
+    --nav-bg-scrolled: rgba(248, 250, 251, 0.98);
+    --interactive-bg: rgba(15, 23, 42, 0.07);
+    --interactive-bg-soft: rgba(255, 255, 255, 0.92);
+    --interactive-border: rgba(15, 23, 42, 0.1);
     --interactive-fg: #0f172a;
-    --mobile-drawer-bg: #f9fbff;
+    --mobile-drawer-bg: #f8fafb;
     --border-subtle: rgba(15, 23, 42, 0.08);
-    --border-strong: rgba(15, 23, 42, 0.16);
+    --border-strong: rgba(15, 23, 42, 0.14);
     --overlay: rgba(15, 23, 42, 0.35);
-    --overlay-strong: rgba(248, 250, 255, 0.95);
-    --panel-bg: #f8fbff;
-    --panel-bg-soft: rgba(255, 255, 255, 0.92);
-    --footer-bg: #eef2ff;
-    --footer-panel: rgba(255, 255, 255, 0.8);
-    --kbd-bg: rgba(15, 23, 42, 0.08);
+    --overlay-strong: rgba(248, 250, 251, 0.96);
+    --panel-bg: #f5f7f9;
+    --panel-bg-soft: rgba(255, 255, 255, 0.94);
+    --footer-bg: #f0f3f5;
+    --footer-panel: rgba(255, 255, 255, 0.75);
+    --kbd-bg: rgba(15, 23, 42, 0.06);
+    --hero-surface: rgba(255, 255, 255, 0.72);
+    --hero-border: rgba(15, 23, 42, 0.1);
+    --hero-shadow: 0 30px 80px rgba(15, 23, 42, 0.12);
+    --hero-overlay:
+      radial-gradient(
+        circle at 20% 20%,
+        rgba(16, 185, 129, 0.12),
+        transparent 40%
+      ),
+      radial-gradient(
+        circle at 80% 25%,
+        rgba(16, 185, 129, 0.1),
+        transparent 40%
+      ),
+      linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.15),
+        rgba(15, 23, 42, 0.28)
+      );
+    --media-card-surface: rgba(255, 255, 255, 0.8);
+    --media-card-border: rgba(15, 23, 42, 0.1);
+    --media-card-shadow: 0 28px 70px rgba(15, 23, 42, 0.14);
+    --media-card-overlay:
+      radial-gradient(circle at top, rgba(16, 185, 129, 0.14), transparent 45%),
+      radial-gradient(
+        circle at 20% 80%,
+        rgba(16, 185, 129, 0.12),
+        transparent 42%
+      ),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(15, 23, 42, 0.6));
+    --media-card-foreground: #ffffff;
+    --media-card-pill-bg: rgba(255, 255, 255, 0.2);
+    --media-card-pill-border: rgba(255, 255, 255, 0.36);
+    --media-card-pill-text: rgba(255, 255, 255, 0.94);
+    --media-card-line-bg: rgba(255, 255, 255, 0.28);
+    --media-card-line-fill: rgba(255, 255, 255, 0.95);
+    --category-card-surface: rgba(255, 255, 255, 0.6);
+    --category-card-border: rgba(15, 23, 42, 0.08);
+    --category-card-shadow: 0 20px 60px rgba(15, 23, 42, 0.1);
+    --category-card-shadow-hover: 0 28px 80px rgba(15, 23, 42, 0.18);
+    --category-card-overlay: linear-gradient(
+      to top,
+      rgba(15, 23, 42, 0.72),
+      rgba(15, 23, 42, 0.4),
+      transparent
+    );
+    --category-pill-bg: rgba(255, 255, 255, 0.16);
+    --category-pill-border: rgba(255, 255, 255, 0.3);
+    --category-pill-border-hover: rgba(255, 255, 255, 0.5);
+    --category-pill-title: #ffffff;
+    --category-pill-subtitle: rgba(255, 255, 255, 0.8);
   }
 
   html {
@@ -103,7 +239,11 @@
     background-color: var(--background);
     background-image: var(--background-gradient);
     background-size: auto, auto, var(--grid-line), var(--grid-line);
-    background-position: 0 0, 0 0, 0 0, 0 0;
+    background-position:
+      0 0,
+      0 0,
+      0 0,
+      0 0;
     color: var(--foreground);
   }
 }
@@ -134,8 +274,8 @@
 }
 
 :root[data-theme="light"] .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(15, 23, 42, 0.24);
+  background: rgba(15, 23, 42, 0.18);
 }
 :root[data-theme="light"] .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(15, 23, 42, 0.35);
+  background: rgba(15, 23, 42, 0.28);
 }

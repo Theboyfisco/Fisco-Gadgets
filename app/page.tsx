@@ -39,9 +39,9 @@ export default async function Home() {
   return (
     <div className="min-h-screen pb-24">
       <main className="container relative mx-auto overflow-hidden px-4 pt-6 sm:pt-10">
-        <section className="relative mb-16 overflow-hidden rounded-[2rem] border border-white/15 bg-black/30 p-6 shadow-[0_30px_80px_rgba(8,14,30,0.65)] sm:p-8 lg:mb-24 lg:p-12">
+        <section className="relative mb-16 overflow-hidden rounded-[2rem] border border-[var(--hero-border)] bg-[var(--hero-surface)] p-6 shadow-[var(--hero-shadow)] sm:p-8 lg:mb-24 lg:p-12">
           <Image src={heroBackdrop} alt="Futuristic gadgets background" fill className="object-cover opacity-45" priority quality={95} />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(56,189,248,0.25),transparent_35%),radial-gradient(circle_at_80%_25%,rgba(16,185,129,0.25),transparent_35%),linear-gradient(to_bottom,rgba(5,8,16,0.2),rgba(5,8,16,0.85))]" />
+          <div className="absolute inset-0 bg-[var(--hero-overlay)]" />
 
           <div className="relative z-10 grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
             <Reveal>
@@ -88,7 +88,7 @@ export default async function Home() {
               <Link
                 key={category.id}
                 href={`/category/${category.id}`}
-                className="group relative h-48 overflow-hidden rounded-[28px] border border-white/10 bg-black/30 shadow-[0_20px_60px_rgba(3,7,18,0.4)] transition duration-500 hover:-translate-y-1 hover:shadow-[0_30px_90px_rgba(0,0,0,0.6)]"
+                className="group relative h-48 overflow-hidden rounded-[28px] border border-[var(--category-card-border)] bg-[var(--category-card-surface)] shadow-[var(--category-card-shadow)] transition duration-500 hover:-translate-y-1 hover:shadow-[var(--category-card-shadow-hover)]"
               >
                 <Image
                   src={category.image}
@@ -98,10 +98,10 @@ export default async function Home() {
                   quality={90}
                   className="object-cover transition duration-700 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-                <div className="absolute inset-x-4 bottom-4 rounded-2xl border border-white/20 bg-white/10 p-4 backdrop-blur-sm transition duration-300 group-hover:border-white/40">
-                  <p className="text-sm font-semibold uppercase tracking-wide text-white">{category.name}</p>
-                  <p className="mt-1 text-xs uppercase tracking-[0.3em] text-white/70">Explore collection</p>
+                <div className="absolute inset-0 bg-[var(--category-card-overlay)]" />
+                <div className="absolute inset-x-4 bottom-4 rounded-2xl border border-[var(--category-pill-border)] bg-[var(--category-pill-bg)] p-4 backdrop-blur-sm transition duration-300 group-hover:border-[var(--category-pill-border-hover)]">
+                  <p className="text-sm font-semibold uppercase tracking-wide text-[var(--category-pill-title)]">{category.name}</p>
+                  <p className="mt-1 text-xs uppercase tracking-[0.3em] text-[var(--category-pill-subtitle)]">Explore collection</p>
                 </div>
               </Link>
             ))}

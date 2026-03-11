@@ -76,7 +76,7 @@ export default async function SuccessPage({ searchParams }: { searchParams: Prom
                         </div>
                         <div className="flex justify-between text-secondary">
                             <span>Shipping Fee</span>
-                            <span className="text-emerald-400">FREE</span>
+                            <span className="text-primary">FREE</span>
                         </div>
                         <div className="flex justify-between pt-2 text-xl font-bold text-[var(--foreground)]">
                             <span>Total Paid</span>
@@ -95,7 +95,7 @@ export default async function SuccessPage({ searchParams }: { searchParams: Prom
             <div className="flex flex-col sm:flex-row gap-4 w-full max-w-md">
                 <Link 
                     href="/" 
-                    className="flex-1 bg-primary text-base py-4 rounded-standard font-bold hover:bg-emerald-400 transition-all text-center flex items-center justify-center gap-2 shadow-glow active:scale-95"
+                    className="flex-1 bg-primary text-black text-base py-4 rounded-standard font-bold hover:bg-emerald-400 transition-all text-center flex items-center justify-center gap-2 shadow-glow active:scale-95"
                 >
                     <ShoppingBag size={20} />
                     Continue Shopping

@@ -130,10 +130,10 @@ export function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; onClose: (
               {!query && (
                 <div className="mt-8 grid grid-cols-2 gap-3 lg:grid-cols-4">
                   {[
-                    { icon: Smartphone, label: "Phones", color: "text-blue-400", href: "/category/phones" },
-                    { icon: Laptop, label: "Laptops", color: "text-purple-400", href: "/category/laptops" },
-                    { icon: Headphones, label: "Audio", color: "text-orange-400", href: "/category/audio" },
-                    { icon: Gamepad, label: "Accessories", color: "text-emerald-400", href: "/category/accessories" },
+                    { icon: Smartphone, label: "Phones", color: "text-primary", href: "/category/phones" },
+                    { icon: Laptop, label: "Laptops", color: "text-primary", href: "/category/laptops" },
+                    { icon: Headphones, label: "Audio", color: "text-primary", href: "/category/audio" },
+                    { icon: Gamepad, label: "Accessories", color: "text-primary", href: "/category/accessories" },
                   ].map((category, index) => (
                     <Link
                       key={index}

@@ -27,11 +27,8 @@ interface BentoProductCardProps {
   featured?: boolean;
 }
 
-function categoryTint(categoryId: string) {
-  if (categoryId === "phones") return "from-cyan-400/20";
-  if (categoryId === "laptops") return "from-indigo-400/20";
-  if (categoryId === "audio") return "from-orange-400/20";
-  return "from-emerald-400/20";
+function categoryTint() {
+  return "from-primary/20";
 }
 
 export function BentoProductCard({ product, featured = false }: BentoProductCardProps) {
@@ -56,7 +53,7 @@ export function BentoProductCard({ product, featured = false }: BentoProductCard
             placeholder={product.blurHash ? "blur" : "empty"}
             blurDataURL={product.blurHash}
           />
-          <div className={`pointer-events-none absolute inset-0 bg-gradient-to-b ${categoryTint(product.categoryId)} via-transparent to-[var(--surface-contrast)]`} />
+          <div className={`pointer-events-none absolute inset-0 bg-gradient-to-b ${categoryTint()} via-transparent to-[var(--surface-contrast)]`} />
         </div>
 
         <div className="[transform:translateZ(28px)]">

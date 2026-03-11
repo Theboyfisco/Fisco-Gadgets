@@ -62,7 +62,7 @@ export default function ContactPage() {
               <label htmlFor="message" className="block text-sm font-medium text-secondary mb-1">Message</label>
               <textarea id="message" rows={5} className="w-full rounded-md border border-border-subtle bg-[var(--surface-card)] px-4 py-3 text-[var(--foreground)] transition-colors focus:border-primary focus:outline-none" placeholder="How can we help?"></textarea>
             </div>
-            <button type="button" className="w-full bg-primary hover:bg-emerald-400 text-base py-3 rounded-md font-bold transition-colors mt-4">
+            <button type="button" className="w-full bg-primary text-black hover:bg-emerald-400 text-base py-3 rounded-md font-bold transition-colors mt-4">
               Send Message
             </button>
           </form>
