@@ -7,9 +7,6 @@ import Image from "next/image";
 import prisma from "@/lib/db";
 import { fallbackCategories, fallbackFeaturedProducts } from "@/lib/fallback-data";
 
-const heroBackdrop =
-  "https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?q=80&w=1920&auto=format&fit=crop";
-
 export default async function Home() {
   const [dbProducts, dbCategories] = process.env.DATABASE_URL
     ? await Promise.all([
@@ -40,32 +37,53 @@ export default async function Home() {
     <div className="min-h-screen pb-24">
       <main className="container relative mx-auto overflow-hidden px-4 pt-6 sm:pt-10">
         <section className="relative mb-16 overflow-hidden rounded-[2rem] border border-[var(--hero-border)] bg-[var(--hero-surface)] p-6 shadow-[var(--hero-shadow)] sm:p-8 lg:mb-24 lg:p-12">
-          <Image src={heroBackdrop} alt="Futuristic gadgets background" fill className="object-cover opacity-45" priority quality={95} />
+          <div className="pointer-events-none absolute -left-16 top-0 h-48 w-48 rounded-full bg-[var(--brand-tint-primary)] blur-3xl" />
+          <div className="pointer-events-none absolute bottom-0 right-0 h-56 w-56 rounded-full bg-[var(--brand-tint-secondary)] blur-3xl" />
+          <div className="absolute inset-0 bg-[linear-gradient(135deg,var(--bg-secondary)_0%,var(--hero-surface)_45%,var(--bg-tertiary)_100%)]" />
+          <div
+            className="absolute inset-y-0 right-0 w-full bg-cover bg-center bg-no-repeat opacity-65 lg:w-[58%]"
+            style={{ backgroundImage: "var(--hero-illustration)" }}
+          />
           <div className="absolute inset-0 bg-[var(--hero-overlay)]" />
+          <div className="absolute inset-y-0 left-0 w-full bg-[linear-gradient(90deg,var(--hero-surface)_0%,rgba(255,255,255,0.08)_56%,transparent_100%)] lg:w-[64%]" />
 
           <div className="relative z-10 grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
             <Reveal>
-              <div>
-                <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-primary">
+              <div className="max-w-2xl rounded-[2rem] border border-[var(--interactive-border)] bg-[var(--surface-secondary)] p-5 shadow-[0_20px_50px_rgba(15,23,42,0.08)] backdrop-blur-xl sm:p-7">
+                <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-[var(--interactive-border)] bg-[var(--surface-primary)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--hero-foreground)]">
                   Built for modern shopping in Nigeria
                 </p>
-                <h1 className="mb-6 max-w-xl text-3xl font-extrabold leading-tight tracking-tight text-[var(--foreground)] sm:text-5xl lg:text-6xl">
+                <h1 className="mb-6 max-w-xl text-3xl font-extrabold leading-tight tracking-tight text-[var(--hero-foreground)] sm:text-5xl lg:text-6xl">
                   Tech you can trust, delivered at the speed of your life.
                 </h1>
-                <p className="mb-8 max-w-xl text-sm leading-relaxed text-secondary sm:text-lg">
+                <p className="mb-8 max-w-xl text-sm leading-relaxed text-[var(--hero-foreground-soft)] sm:text-lg">
                   Curated drops, verified originals, and concierge-level checkout built for Nigeria.
                 </p>
+                <div className="mb-8 grid max-w-xl grid-cols-3 gap-3">
+                  <div className="rounded-2xl border border-[var(--interactive-border)] bg-[var(--surface-primary)] px-4 py-3 backdrop-blur-md">
+                    <p className="text-[10px] uppercase tracking-[0.22em] text-[var(--hero-foreground-soft)]">Brands</p>
+                    <p className="mt-2 text-lg font-semibold text-[var(--hero-foreground)]">Apple</p>
+                  </div>
+                  <div className="rounded-2xl border border-[var(--interactive-border)] bg-[var(--surface-primary)] px-4 py-3 backdrop-blur-md">
+                    <p className="text-[10px] uppercase tracking-[0.22em] text-[var(--hero-foreground-soft)]">Delivery</p>
+                    <p className="mt-2 text-lg font-semibold text-[var(--hero-foreground)]">1-3 days</p>
+                  </div>
+                  <div className="rounded-2xl border border-[var(--interactive-border)] bg-[var(--surface-primary)] px-4 py-3 backdrop-blur-md">
+                    <p className="text-[10px] uppercase tracking-[0.22em] text-[var(--hero-foreground-soft)]">Support</p>
+                    <p className="mt-2 text-lg font-semibold text-[var(--hero-foreground)]">Live help</p>
+                  </div>
+                </div>
                 <div className="flex flex-col gap-3 sm:flex-row">
                   <Link
                     href="#featured"
-                    className="inline-flex items-center justify-center gap-2 rounded-standard bg-primary px-8 py-3 text-sm font-semibold text-black transition-all hover:scale-[1.02] hover:bg-emerald-300"
+                    className="inline-flex items-center justify-center gap-2 rounded-standard bg-primary px-8 py-3 text-sm font-semibold text-[var(--primary-contrast)] transition-all hover:scale-[1.02] hover:bg-[var(--primary-hover)]"
                   >
                     Shop Featured
                     <ArrowRight size={16} />
                   </Link>
                   <Link
                     href="/category/phones"
-                    className="inline-flex items-center justify-center rounded-standard border border-border-subtle bg-[var(--surface-card)] px-8 py-3 text-sm font-semibold text-[var(--foreground)] transition-colors hover:bg-[var(--surface-cta)]"
+                    className="inline-flex items-center justify-center rounded-standard border border-[var(--interactive-border)] bg-[var(--surface-primary)] px-8 py-3 text-sm font-semibold text-[var(--hero-foreground)] transition-colors hover:bg-[var(--interactive-hover)]"
                   >
                     Browse Phones
                   </Link>
@@ -151,3 +169,4 @@ export default async function Home() {
     </div>
   );
 }
+

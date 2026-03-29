@@ -1,0 +1,47 @@
+<svg width="1600" height="1000" viewBox="0 0 1600 1000" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="1000" fill="#F5F8FD"/>
+  <g opacity="0.95">
+    <circle cx="260" cy="166" r="186" fill="#7CB8FF" fill-opacity="0.16"/>
+    <circle cx="1280" cy="182" r="212" fill="#71DDE6" fill-opacity="0.14"/>
+    <circle cx="1180" cy="762" r="260" fill="#7B8BFF" fill-opacity="0.12"/>
+  </g>
+  <g opacity="0.55">
+    <path d="M120 842C352 720 560 656 790 630C1006 607 1206 630 1480 748" stroke="#6EA2F8" stroke-width="2"/>
+    <path d="M170 910C404 786 618 720 836 700C1040 680 1236 706 1458 814" stroke="#7BB8FF" stroke-width="2"/>
+  </g>
+  <rect x="878" y="198" width="436" height="528" rx="54" fill="#FFFFFF" stroke="#D6DEF1" stroke-width="2"/>
+  <rect x="904" y="226" width="384" height="472" rx="38" fill="url(#screen1)"/>
+  <rect x="1038" y="244" width="116" height="14" rx="7" fill="#AFC0E6"/>
+  <rect x="952" y="304" width="300" height="176" rx="28" fill="#F7FBFF" fill-opacity="0.65"/>
+  <rect x="952" y="503" width="142" height="142" rx="26" fill="#EEF4FF" stroke="#D8E3F8"/>
+  <rect x="1110" y="503" width="142" height="142" rx="26" fill="#EEF4FF" stroke="#D8E3F8"/>
+  <circle cx="1188" cy="340" r="54" fill="#DCE7FA"/>
+  <path d="M986 412H1148" stroke="#3C4A6C" stroke-width="18" stroke-linecap="round" stroke-opacity="0.95"/>
+  <path d="M986 452H1090" stroke="#6D80A8" stroke-width="12" stroke-linecap="round"/>
+  <rect x="324" y="310" width="434" height="272" rx="34" fill="#FFFFFF" stroke="#D6DEF1" stroke-width="2"/>
+  <rect x="350" y="336" width="382" height="220" rx="24" fill="url(#laptopScreen)"/>
+  <rect x="424" y="392" width="240" height="18" rx="9" fill="#24324B"/>
+  <rect x="424" y="430" width="182" height="12" rx="6" fill="#6077A1"/>
+  <rect x="406" y="596" width="278" height="18" rx="9" fill="#D3DBEA"/>
+  <path d="M278 606H808L736 664H350L278 606Z" fill="#E7EDF7"/>
+  <g opacity="0.7">
+    <path d="M326 184L446 264" stroke="#7DCFF0" stroke-width="4" stroke-linecap="round"/>
+    <path d="M1216 120L1150 206" stroke="#8BA9FF" stroke-width="4" stroke-linecap="round"/>
+    <path d="M688 180L742 252" stroke="#78B5FF" stroke-width="4" stroke-linecap="round"/>
+  </g>
+  <circle cx="291" cy="165" r="14" fill="#78B5FF"/>
+  <circle cx="1242" cy="87" r="12" fill="#7CE0E8"/>
+  <circle cx="712" cy="144" r="10" fill="#8FA6FF"/>
+  <defs>
+    <linearGradient id="screen1" x1="904" y1="226" x2="1288" y2="698" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF"/>
+      <stop offset="0.42" stop-color="#F4F7FE"/>
+      <stop offset="1" stop-color="#DCE7FB"/>
+    </linearGradient>
+    <linearGradient id="laptopScreen" x1="350" y1="336" x2="732" y2="556" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F9FBFF"/>
+      <stop offset="0.45" stop-color="#EEF4FF"/>
+      <stop offset="1" stop-color="#DAE5F9"/>
+    </linearGradient>
+  </defs>
+</svg>

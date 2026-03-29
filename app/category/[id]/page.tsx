@@ -6,10 +6,10 @@ import { BentoProductCard } from "@/components/product/BentoProductCard";
 import { Reveal } from "@/components/ui/Reveal";
 
 function categoryTone(categoryId: string) {
-  if (categoryId === "phones") return "from-cyan-500/45";
-  if (categoryId === "laptops") return "from-indigo-500/45";
-  if (categoryId === "audio") return "from-orange-500/45";
-  return "from-emerald-500/45";
+  if (categoryId === "phones") return "from-[var(--tone-phones)]";
+  if (categoryId === "laptops") return "from-[var(--tone-laptops)]";
+  if (categoryId === "audio") return "from-[var(--tone-audio)]";
+  return "from-[var(--tone-generic)]";
 }
 
 export default async function CategoryPage({ params }: { params: Promise<{ id: string }> }) {
@@ -47,11 +47,11 @@ export default async function CategoryPage({ params }: { params: Promise<{ id: s
           <Image src={heroImage} alt={category.name} fill quality={92} className="object-cover opacity-35" priority />
           <div className={`absolute inset-0 bg-gradient-to-r ${categoryTone(category.id)} via-[var(--surface-contrast)] to-[var(--surface-contrast)]`} />
           <div className="relative z-10 max-w-2xl">
-            <p className="mb-3 inline-flex rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--foreground)]">
+            <p className="mb-3 inline-flex rounded-full border border-[var(--interactive-border)] bg-[var(--surface-card)] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--hero-foreground)] backdrop-blur-md">
               Curated Collection
             </p>
-            <h1 className="mb-4 text-3xl font-extrabold tracking-tight text-[var(--foreground)] sm:text-4xl md:text-5xl">{category.name}</h1>
-            <p className="text-sm text-secondary sm:text-base md:text-lg">
+            <h1 className="mb-4 text-3xl font-extrabold tracking-tight text-[var(--hero-foreground)] drop-shadow-[0_8px_24px_rgba(0,0,0,0.45)] sm:text-4xl md:text-5xl">{category.name}</h1>
+            <p className="text-sm text-[var(--hero-foreground-soft)] sm:text-base md:text-lg">
               Handpicked premium {category.name.toLowerCase()} with clean specs, trusted warranty, and fast nationwide delivery.
             </p>
           </div>

@@ -82,7 +82,10 @@ export default function CheckoutPage() {
             <div className="container mx-auto px-4 py-24 text-center">
                 <h1 className="mb-4 text-3xl font-bold text-[var(--foreground)]">Your cart is empty</h1>
                 <p className="text-secondary mb-8">Add some gadgets to your stash before checking out.</p>
-                <Link href="/" className="bg-primary text-base px-8 py-3 rounded-standard font-bold hover:bg-emerald-400 transition-colors">
+                <Link
+                  href="/"
+                  className="rounded-standard bg-primary px-8 py-3 text-base font-bold text-[var(--primary-contrast)] transition-colors hover:bg-[var(--primary-hover)]"
+                >
                     Back to Store
                 </Link>
             </div>
@@ -99,11 +102,11 @@ export default function CheckoutPage() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
                 <div className="lg:col-span-2">
                     <div className="flex items-center gap-4 mb-8">
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${step >= 1 ? 'bg-primary text-base' : 'bg-[var(--surface-cta)] text-secondary'}`}>1</div>
+                        <div className={`flex h-8 w-8 items-center justify-center rounded-full font-bold ${step >= 1 ? 'bg-primary text-[var(--primary-contrast)]' : 'bg-[var(--surface-cta)] text-secondary'}`}>1</div>
                         <div className="h-px bg-[var(--border-subtle)] flex-1"></div>
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${step >= 2 ? 'bg-primary text-base' : 'bg-[var(--surface-cta)] text-secondary'}`}>2</div>
+                        <div className={`flex h-8 w-8 items-center justify-center rounded-full font-bold ${step >= 2 ? 'bg-primary text-[var(--primary-contrast)]' : 'bg-[var(--surface-cta)] text-secondary'}`}>2</div>
                         <div className="h-px bg-[var(--border-subtle)] flex-1"></div>
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${step === 3 ? 'bg-primary text-base' : 'bg-[var(--surface-cta)] text-secondary'}`}>3</div>
+                        <div className={`flex h-8 w-8 items-center justify-center rounded-full font-bold ${step === 3 ? 'bg-primary text-[var(--primary-contrast)]' : 'bg-[var(--surface-cta)] text-secondary'}`}>3</div>
                     </div>
 
                     {error && (
@@ -153,7 +156,7 @@ export default function CheckoutPage() {
                             <button 
                                 onClick={() => setStep(2)}
                                 disabled={!formData.fullName || !formData.email || !formData.phone || !formData.address}
-                                className="w-full bg-primary text-base py-4 rounded-standard font-bold hover:bg-emerald-400 transition-colors shadow-glow mt-8 disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="mt-8 w-full rounded-standard bg-primary py-4 text-base font-bold text-[var(--primary-contrast)] transition-colors hover:bg-[var(--primary-hover)] disabled:cursor-not-allowed disabled:opacity-50"
                             >
                                 Continue to Payment
                             </button>
@@ -193,7 +196,7 @@ export default function CheckoutPage() {
                                 <button 
                                     onClick={handleConfirmOrder}
                                     disabled={isLoading}
-                                    className="flex-[2] bg-primary text-base py-4 rounded-standard font-bold hover:bg-emerald-400 transition-colors shadow-glow flex items-center justify-center gap-2 disabled:opacity-70"
+                                    className="flex flex-[2] items-center justify-center gap-2 rounded-standard bg-primary py-4 text-base font-bold text-[var(--primary-contrast)] transition-colors hover:bg-[var(--primary-hover)] disabled:opacity-70"
                                 >
                                     {isLoading ? (
                                         <>
@@ -248,7 +251,7 @@ export default function CheckoutPage() {
                             </div>
                             <div className="flex justify-between text-secondary">
                                 <span>Shipping Fees</span>
-                                <span className="text-emerald-400">Calculated</span>
+                                <span className="text-[var(--success)]">Calculated</span>
                             </div>
                             <div className="flex justify-between pt-2 text-lg font-bold text-[var(--foreground)]">
                                 <span>Total Payable</span>
@@ -261,4 +264,5 @@ export default function CheckoutPage() {
         </div>
     );
 }
+
 

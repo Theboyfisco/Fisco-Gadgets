@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export interface LatestProduct {
   id: string;
@@ -20,25 +21,30 @@ const AUTOPLAY_INTERVAL = 4500;
 export function LatestProductsCarousel({ products }: LatestProductsCarouselProps) {
   const visibleProducts = useMemo(() => products.filter((product) => Boolean(product.image)), [products]);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+
+  const count = visibleProducts.length;
+  const safeIndex = count ? activeIndex % count : 0;
+  const activeProduct = visibleProducts[safeIndex] ?? visibleProducts[0];
 
   useEffect(() => {
-    if (visibleProducts.length <= 1) {
+    if (count <= 1 || isPaused) {
       return;
     }
 
     const timer = setInterval(() => {
-      setActiveIndex((current) => (current + 1) % visibleProducts.length);
+      setActiveIndex((current) => (current + 1) % count);
     }, AUTOPLAY_INTERVAL);
 
     return () => clearInterval(timer);
-  }, [visibleProducts.length]);
+  }, [count, isPaused]);
 
-  const safeIndex = visibleProducts.length ? activeIndex % visibleProducts.length : 0;
-  const activeProduct = visibleProducts[safeIndex] ?? visibleProducts[0];
+  const goNext = () => setActiveIndex((current) => (count ? (current + 1) % count : 0));
+  const goPrev = () => setActiveIndex((current) => (count ? (current - 1 + count) % count : 0));
 
   if (!activeProduct) {
     return (
-      <div className="relative h-[29rem] w-full max-w-xl overflow-hidden rounded-[1.8rem] border border-[var(--border-subtle)] bg-gradient-to-b from-[var(--surface-cta)] to-[var(--surface-soft)] p-6 shadow-2xl" />
+      <div className="relative h-[29rem] w-full max-w-xl overflow-hidden rounded-[1.8rem] border border-[var(--carousel-border)] bg-[var(--carousel-surface)] p-6 shadow-[var(--carousel-shadow)]" />
     );
   }
 
@@ -48,7 +54,16 @@ export function LatestProductsCarousel({ products }: LatestProductsCarouselProps
   }).format(activeProduct.price);
 
   return (
-    <div className="group relative h-[22rem] w-full max-w-xl overflow-hidden rounded-[2.2rem] border border-[var(--media-card-border)] bg-[var(--media-card-surface)] shadow-[var(--media-card-shadow)] sm:h-[26rem] lg:h-[28rem]">
+    <div
+      className="group relative h-[22rem] w-full max-w-xl overflow-hidden rounded-[2.2rem] border border-[var(--carousel-border)] bg-[var(--carousel-surface)] shadow-[var(--carousel-shadow)] sm:h-[26rem] lg:h-[28rem]"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+      onFocusCapture={() => setIsPaused(true)}
+      onBlurCapture={() => setIsPaused(false)}
+    >
+      <div className="pointer-events-none absolute -left-14 -top-16 h-44 w-44 rounded-full bg-[var(--carousel-glow-1)] blur-3xl" />
+      <div className="pointer-events-none absolute -bottom-16 -right-10 h-48 w-48 rounded-full bg-[var(--carousel-glow-2)] blur-3xl" />
+
       <div className="absolute inset-0">
         <Image
           key={activeProduct.id}
@@ -57,13 +72,38 @@ export function LatestProductsCarousel({ products }: LatestProductsCarouselProps
           fill
           sizes="(max-width: 1024px) 100vw, 50vw"
           quality={95}
-          className="object-cover opacity-90 transition duration-700 group-hover:scale-[1.03]"
+          className="object-cover opacity-95 transition duration-700 group-hover:scale-[1.03]"
         />
-        <div className="absolute inset-0 bg-[var(--media-card-overlay)]" />
+        <div className="absolute inset-0 bg-[var(--carousel-overlay)]" />
       </div>
 
-      <div className="relative z-10 flex h-full flex-col justify-end gap-6 p-7 text-[var(--media-card-foreground)] sm:p-8">
-        <div className="inline-flex w-fit items-center gap-2 rounded-full border border-[var(--media-card-pill-border)] bg-[var(--media-card-pill-bg)] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.35em] text-[var(--media-card-pill-text)]">
+      <div className="relative z-10 flex h-full flex-col justify-between p-7 sm:p-8">
+        <div className="flex items-start justify-between">
+          <div className="inline-flex w-fit items-center gap-2 rounded-full border border-[var(--carousel-control-border)] bg-[var(--carousel-control-bg)] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.32em] text-[var(--foreground)] backdrop-blur-md">
+            Featured now
+          </div>
+          <div className="hidden items-center gap-2 sm:flex">
+            <button
+              type="button"
+              onClick={goPrev}
+              aria-label="Previous product"
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-[var(--carousel-control-border)] bg-[var(--carousel-control-bg)] text-[var(--foreground)] backdrop-blur-md transition hover:border-primary/50 hover:text-primary"
+            >
+              <ChevronLeft size={18} />
+            </button>
+            <button
+              type="button"
+              onClick={goNext}
+              aria-label="Next product"
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-[var(--carousel-control-border)] bg-[var(--carousel-control-bg)] text-[var(--foreground)] backdrop-blur-md transition hover:border-primary/50 hover:text-primary"
+            >
+              <ChevronRight size={18} />
+            </button>
+          </div>
+        </div>
+
+        <div className="space-y-6 text-[var(--media-card-foreground)]">
+          <div className="inline-flex w-fit items-center gap-2 rounded-full border border-[var(--media-card-pill-border)] bg-[var(--media-card-pill-bg)] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.35em] text-[var(--media-card-pill-text)]">
           Latest drops
         </div>
 
@@ -72,16 +112,28 @@ export function LatestProductsCarousel({ products }: LatestProductsCarouselProps
           <p className="mt-2 text-lg font-semibold text-primary">{formattedPrice}</p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-4">
+        <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-[var(--carousel-control-border)] bg-[var(--carousel-control-bg)] p-3 backdrop-blur-md">
           <Link
             href={`/product/${activeProduct.id}`}
-            className="inline-flex items-center justify-center rounded-full border border-[var(--media-card-pill-border)] bg-[var(--surface-card-strong)] px-6 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--foreground)] transition hover:border-primary/40 hover:bg-primary/25 hover:text-[var(--foreground)]"
+            className="inline-flex items-center justify-center rounded-full border border-[var(--media-card-pill-border)] bg-[var(--surface-card-strong)] px-6 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--foreground)] transition hover:border-primary/40 hover:bg-primary/25"
           >
             View Product
           </Link>
-          <div className="flex h-[2px] w-24 overflow-hidden rounded-full bg-[var(--media-card-line-bg)]">
-            <span className="h-full w-full origin-left animate-[pulse_4.5s_ease-in-out_infinite] rounded-full bg-[var(--media-card-line-fill)]" />
+          <div className="flex items-center gap-2">
+            {visibleProducts.map((item, index) => {
+              const isActive = index === safeIndex;
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => setActiveIndex(index)}
+                  aria-label={`Show ${item.name}`}
+                  className={`h-2.5 rounded-full transition-all ${isActive ? "w-7 bg-[var(--carousel-dot-active)]" : "w-2.5 bg-[var(--carousel-dot)] hover:bg-[var(--carousel-dot-active)]/70"}`}
+                />
+              );
+            })}
           </div>
+        </div>
         </div>
       </div>
     </div>

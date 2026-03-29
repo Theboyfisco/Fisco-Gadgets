@@ -28,7 +28,7 @@ export function ThemeSwitcher() {
     <button
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
       aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
-      className="group relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl border border-[var(--interactive-border)] bg-[var(--interactive-bg)] text-[var(--interactive-fg)] transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-[0_0_22px_-10px_var(--color-primary)]"
+      className="interactive-focus group relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl border border-[var(--interactive-border)] bg-[var(--interactive-bg)] text-[var(--interactive-fg)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--interactive-border-strong)] hover:bg-[var(--interactive-active)] hover:shadow-[0_0_22px_-10px_var(--color-primary)]"
     >
       <span className="absolute inset-0 bg-gradient-to-br from-primary/0 via-primary/0 to-primary/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 

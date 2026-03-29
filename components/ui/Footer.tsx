@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Facebook, Instagram, Twitter, MapPin, Mail, Phone, CheckCircle2 } from "lucide-react";
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { BrandLogo } from "./BrandLogo";
 
 interface FooterProps {
   categories?: { id: string; name: string }[];
@@ -28,20 +29,15 @@ export function Footer({ categories = [] }: FooterProps) {
         <div className="mb-12 rounded-2xl border border-[var(--border-subtle)] bg-[var(--footer-panel)] p-6 md:p-8">
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
             <div className="lg:col-span-2">
-              <Link
-                href="/"
-                className="mb-4 inline-block bg-gradient-to-r from-emerald-400 via-primary to-cyan-400 bg-clip-text text-2xl font-extrabold text-transparent"
-              >
-                Fisco Gadgets
-              </Link>
-              <p className="max-w-md text-sm leading-relaxed text-secondary">
+              <BrandLogo className="mb-4" />
+              <p className="text-muted max-w-md text-sm leading-relaxed">
                 Clean, trusted gadget shopping for Nigeria with authentic devices, transparent pricing, and quick delivery.
               </p>
 
               <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
-                <div className="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-soft)] px-3 py-2 text-xs text-secondary">100% Authentic Devices</div>
-                <div className="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-soft)] px-3 py-2 text-xs text-secondary">Fast Nationwide Shipping</div>
-                <div className="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-soft)] px-3 py-2 text-xs text-secondary">Secure Checkout</div>
+                <div className="text-muted rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-soft)] px-3 py-2 text-xs">100% Authentic Devices</div>
+                <div className="text-muted rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-soft)] px-3 py-2 text-xs">Fast Nationwide Shipping</div>
+                <div className="text-muted rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-soft)] px-3 py-2 text-xs">Secure Checkout</div>
               </div>
             </div>
 
@@ -50,13 +46,13 @@ export function Footer({ categories = [] }: FooterProps) {
               <ul className="space-y-3">
                 {categories.slice(0, 5).map((category) => (
                   <li key={category.id}>
-                    <Link href={`/category/${category.id}`} className="text-sm text-secondary transition-colors hover:text-primary">
+                    <Link href={`/category/${category.id}`} className="interactive-focus text-muted link-accent text-sm transition-colors">
                       {category.name}
                     </Link>
                   </li>
                 ))}
                 <li>
-                  <Link href="/brand/apple" className="text-sm text-secondary transition-colors hover:text-primary">
+                  <Link href="/brand/apple" className="interactive-focus text-muted link-accent text-sm transition-colors">
                     Apple Store
                   </Link>
                 </li>
@@ -67,27 +63,27 @@ export function Footer({ categories = [] }: FooterProps) {
               <h3 className="mb-4 text-sm font-semibold uppercase tracking-[0.14em] text-[var(--foreground)]">Company</h3>
               <ul className="space-y-3">
                 <li>
-                  <Link href="/about" className="text-sm text-secondary transition-colors hover:text-primary">
+                  <Link href="/about" className="interactive-focus text-muted link-accent text-sm transition-colors">
                     About Us
                   </Link>
                 </li>
                 <li>
-                  <Link href="/contact" className="text-sm text-secondary transition-colors hover:text-primary">
+                  <Link href="/contact" className="interactive-focus text-muted link-accent text-sm transition-colors">
                     Contact & Support
                   </Link>
                 </li>
                 <li>
-                  <Link href="/shipping" className="text-sm text-secondary transition-colors hover:text-primary">
+                  <Link href="/shipping" className="interactive-focus text-muted link-accent text-sm transition-colors">
                     Shipping Policy
                   </Link>
                 </li>
                 <li>
-                  <Link href="/returns" className="text-sm text-secondary transition-colors hover:text-primary">
+                  <Link href="/returns" className="interactive-focus text-muted link-accent text-sm transition-colors">
                     Returns & Refunds
                   </Link>
                 </li>
                 <li>
-                  <Link href="/warranty" className="text-sm text-secondary transition-colors hover:text-primary">
+                  <Link href="/warranty" className="interactive-focus text-muted link-accent text-sm transition-colors">
                     Warranty Information
                   </Link>
                 </li>
@@ -116,11 +112,11 @@ export function Footer({ categories = [] }: FooterProps) {
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
                   placeholder="you@example.com"
-                  className="w-full rounded-md border border-[var(--border-subtle)] bg-[var(--surface-cta)] px-3 py-2 text-sm text-[var(--foreground)] outline-none transition-colors focus:border-primary"
+                  className="interactive-focus w-full rounded-md border border-[var(--border-subtle)] bg-[var(--surface-cta)] px-3 py-2 text-sm text-[var(--foreground)] outline-none transition-colors placeholder:text-[var(--text-soft)] focus:border-[var(--interactive-border-strong)]"
                 />
                 <button
                   type="submit"
-                  className="rounded-md bg-primary px-4 py-2 text-sm font-semibold text-black transition-colors hover:bg-emerald-300"
+                  className="interactive-focus primary-action rounded-md px-4 py-2 text-sm font-semibold transition-colors"
                 >
                   Join
                 </button>
@@ -131,15 +127,15 @@ export function Footer({ categories = [] }: FooterProps) {
           <div className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-5">
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-[0.14em] text-[var(--foreground)]">Contact</h3>
             <ul className="space-y-3">
-              <li className="flex items-start gap-2 text-sm text-secondary">
+              <li className="text-muted flex items-start gap-2 text-sm">
                 <MapPin size={16} className="mt-0.5 shrink-0 text-primary" />
                 <span>12 Tech Avenue, G.R.A, Asaba, Delta State 320213</span>
               </li>
-              <li className="flex items-center gap-2 text-sm text-secondary">
+              <li className="text-muted flex items-center gap-2 text-sm">
                 <Phone size={16} className="shrink-0 text-primary" />
                 <span>+234 (0) 800 000 0000</span>
               </li>
-              <li className="flex items-center gap-2 text-sm text-secondary">
+              <li className="text-muted flex items-center gap-2 text-sm">
                 <Mail size={16} className="shrink-0 text-primary" />
                 <span>support@fiscogadgets.com.ng</span>
               </li>
@@ -149,26 +145,26 @@ export function Footer({ categories = [] }: FooterProps) {
           <div className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-5">
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-[0.14em] text-[var(--foreground)]">Social</h3>
             <div className="flex gap-3">
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-2 text-secondary transition-all hover:border-primary/30 hover:text-primary">
+              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="interactive-focus rounded-full border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-2 text-secondary transition-all hover:border-[var(--interactive-border-strong)] hover:bg-[var(--interactive-hover)] hover:text-primary">
                 <Facebook size={16} />
               </a>
-              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-2 text-secondary transition-all hover:border-primary/30 hover:text-primary">
+              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="interactive-focus rounded-full border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-2 text-secondary transition-all hover:border-[var(--interactive-border-strong)] hover:bg-[var(--interactive-hover)] hover:text-primary">
                 <Twitter size={16} />
               </a>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-2 text-secondary transition-all hover:border-primary/30 hover:text-primary">
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="interactive-focus rounded-full border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-2 text-secondary transition-all hover:border-[var(--interactive-border-strong)] hover:bg-[var(--interactive-hover)] hover:text-primary">
                 <Instagram size={16} />
               </a>
             </div>
           </div>
         </div>
 
-        <div className="flex flex-col items-center justify-between gap-4 border-t border-[var(--border-subtle)] py-6 text-sm text-secondary md:flex-row">
+        <div className="text-muted flex flex-col items-center justify-between gap-4 border-t border-[var(--border-subtle)] py-6 text-sm md:flex-row">
           <p>© {new Date().getFullYear()} Fisco Gadgets. All rights reserved.</p>
           <div className="flex gap-5">
-            <Link href="/privacy" className="transition-colors hover:text-[var(--foreground)]">
+            <Link href="/privacy" className="interactive-focus transition-colors hover:text-[var(--foreground)]">
               Privacy Policy
             </Link>
-            <Link href="/terms" className="transition-colors hover:text-[var(--foreground)]">
+            <Link href="/terms" className="interactive-focus transition-colors hover:text-[var(--foreground)]">
               Terms of Service
             </Link>
           </div>
@@ -177,3 +173,4 @@ export function Footer({ categories = [] }: FooterProps) {
     </footer>
   );
 }
+

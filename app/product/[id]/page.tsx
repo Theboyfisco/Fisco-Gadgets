@@ -78,7 +78,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
               <AddToCartButton product={product} className="flex-1 rounded-standard border border-[var(--border-subtle)] bg-[var(--surface-card)] py-4 font-bold text-[var(--foreground)] outline-none transition-all hover:bg-[var(--surface-cta)] focus:ring-2 focus:ring-[var(--border-strong)] active:scale-95" />
               <a
                 href={`https://wa.me/2348000000000?text=${whatsappMsg}`}
-                className="flex flex-1 items-center justify-center gap-2 rounded-standard bg-primary py-4 text-base font-bold text-black transition-all hover:scale-[1.02] hover:bg-emerald-300 active:scale-95"
+                className="flex flex-1 items-center justify-center gap-2 rounded-standard bg-primary py-4 text-base font-bold text-[var(--primary-contrast)] transition-all hover:scale-[1.02] hover:bg-[var(--primary-hover)] active:scale-95"
               >
                 <MessageCircle size={20} />
                 Buy via WhatsApp
@@ -109,3 +109,4 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
     </div>
   );
 }
+

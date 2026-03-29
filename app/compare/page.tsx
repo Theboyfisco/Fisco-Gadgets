@@ -23,7 +23,7 @@ export default function ComparePage() {
                 </div>
                 <h1 className="mb-4 text-4xl font-extrabold text-[var(--foreground)]">Comparison List is Empty</h1>
                 <p className="text-secondary mb-12">Add some products to see them compared side-by-side.</p>
-                <Link href="/" className="bg-primary text-black hover:bg-emerald-400 text-base px-8 py-4 rounded-xl font-bold transition-all shadow-glow">
+                <Link href="/" className="bg-primary text-[var(--primary-contrast)] hover:bg-[var(--primary-hover)] text-base px-8 py-4 rounded-xl font-bold transition-all shadow-glow">
                     Browse Products
                 </Link>
             </div>
@@ -127,3 +127,4 @@ export default function ComparePage() {
         </div>
     );
 }
+

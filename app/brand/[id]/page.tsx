@@ -5,9 +5,9 @@ import Link from "next/link";
 import Image from "next/image";
 
 function brandTone(brandId: string) {
-  if (brandId.toLowerCase() === "apple") return "from-zinc-200/25";
-  if (brandId.toLowerCase() === "samsung") return "from-blue-500/35";
-  return "from-emerald-500/35";
+  if (brandId.toLowerCase() === "apple") return "from-[var(--tone-apple)]";
+  if (brandId.toLowerCase() === "samsung") return "from-[var(--tone-samsung)]";
+  return "from-[var(--tone-brand)]";
 }
 
 export default async function BrandPage({ params }: { params: Promise<{ id: string }> }) {
@@ -45,11 +45,11 @@ export default async function BrandPage({ params }: { params: Promise<{ id: stri
           <Image src={heroImage} alt={`${brandName} showcase`} fill quality={92} className="object-cover opacity-35" priority />
           <div className={`absolute inset-0 bg-gradient-to-r ${brandTone(brandId)} via-[var(--surface-contrast)] to-[var(--surface-contrast)]`} />
           <div className="relative z-10 max-w-2xl">
-            <p className="mb-3 inline-flex rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--foreground)]">
+            <p className="mb-3 inline-flex rounded-full border border-[var(--interactive-border)] bg-[var(--surface-card)] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--hero-foreground)] backdrop-blur-md">
               Official Collection
             </p>
-            <h1 className="mb-4 text-3xl font-extrabold tracking-tight text-[var(--foreground)] capitalize sm:text-4xl md:text-5xl">{brandName} Store</h1>
-            <p className="text-sm text-secondary sm:text-base md:text-lg">
+            <h1 className="mb-4 text-3xl font-extrabold tracking-tight text-[var(--hero-foreground)] capitalize drop-shadow-[0_8px_24px_rgba(0,0,0,0.45)] sm:text-4xl md:text-5xl">{brandName} Store</h1>
+            <p className="text-sm text-[var(--hero-foreground-soft)] sm:text-base md:text-lg">
               Authentic {brandName} devices with verified warranty, tailored bundles, and fast delivery across Nigeria.
             </p>
           </div>

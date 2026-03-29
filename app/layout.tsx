@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import { Manrope, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 
 import { CartProvider } from "@/components/cart/CartProvider";
@@ -15,7 +16,22 @@ import { fallbackCategories } from "@/lib/fallback-data";
 export const metadata: Metadata = {
   title: "Fisco Gadgets — Premium Tech Store",
   description: "The official home for premium Apple, Samsung, and high-end tech accessories in Nigeria.",
+  icons: {
+    icon: "/brand-mark.svg",
+    shortcut: "/brand-mark.svg",
+    apple: "/brand-mark.svg",
+  },
 };
+
+const manrope = Manrope({
+  subsets: ["latin"],
+  variable: "--font-manrope",
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-space-grotesk",
+});
 
 export default async function RootLayout({
   children,
@@ -42,7 +58,9 @@ export default async function RootLayout({
           })();`}
         </Script>
       </head>
-      <body className="flex min-h-screen flex-col antialiased selection:bg-primary/20 selection:text-[var(--foreground)]">
+      <body
+        className={`${manrope.variable} ${spaceGrotesk.variable} flex min-h-screen flex-col antialiased selection:bg-primary/20 selection:text-[var(--foreground)]`}
+      >
         <CompareProvider>
           <CartProvider>
             <Navbar categories={categories} />

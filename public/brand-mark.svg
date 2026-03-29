@@ -1,0 +1,37 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="256" height="256" rx="72" fill="#09101D"/>
+  <rect x="18" y="18" width="220" height="220" rx="58" fill="url(#bg)"/>
+  <path d="M72 73C72 64.7157 78.7157 58 87 58H164C172.284 58 179 64.7157 179 73V95C179 103.284 172.284 110 164 110H87C78.7157 110 72 103.284 72 95V73Z" fill="url(#panelTop)"/>
+  <path d="M72 128C72 119.716 78.7157 113 87 113H130C138.284 113 145 119.716 145 128V182C145 190.284 138.284 197 130 197H87C78.7157 197 72 190.284 72 182V128Z" fill="url(#panelLeft)"/>
+  <path d="M150 128C150 119.716 156.716 113 165 113H169C177.284 113 184 119.716 184 128V182C184 190.284 177.284 197 169 197H165C156.716 197 150 190.284 150 182V128Z" fill="url(#panelRight)"/>
+  <circle cx="161" cy="84" r="10" fill="#C6FBFF"/>
+  <circle cx="107" cy="155" r="11" fill="#D8E7FF" fill-opacity="0.95"/>
+  <path d="M95 84H145" stroke="#ECF6FF" stroke-width="10" stroke-linecap="round"/>
+  <path d="M95 155H121" stroke="#ECF6FF" stroke-width="10" stroke-linecap="round"/>
+  <path d="M95 175H113" stroke="#A5C2FF" stroke-width="8" stroke-linecap="round"/>
+  <rect x="43" y="43" width="170" height="170" rx="50" stroke="url(#ring)" stroke-width="2"/>
+  <defs>
+    <linearGradient id="bg" x1="32" y1="24" x2="224" y2="232" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#11213F"/>
+      <stop offset="0.5" stop-color="#101B33"/>
+      <stop offset="1" stop-color="#0C1630"/>
+    </linearGradient>
+    <linearGradient id="panelTop" x1="72" y1="58" x2="179" y2="110" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5DB7FF"/>
+      <stop offset="0.5" stop-color="#728FFF"/>
+      <stop offset="1" stop-color="#6DE4E8"/>
+    </linearGradient>
+    <linearGradient id="panelLeft" x1="72" y1="113" x2="145" y2="197" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F1F7FF"/>
+      <stop offset="1" stop-color="#BED1FF"/>
+    </linearGradient>
+    <linearGradient id="panelRight" x1="150" y1="113" x2="184" y2="197" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#77E6EB"/>
+      <stop offset="1" stop-color="#6A88FF"/>
+    </linearGradient>
+    <linearGradient id="ring" x1="58" y1="43" x2="198" y2="213" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#73BFFF" stop-opacity="0.75"/>
+      <stop offset="1" stop-color="#7EE7DE" stop-opacity="0.2"/>
+    </linearGradient>
+  </defs>
+</svg>

@@ -1,0 +1,44 @@
+<svg width="640" height="180" viewBox="0 0 640 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="8" y="18" width="144" height="144" rx="42" fill="#09101D"/>
+  <rect x="18" y="28" width="124" height="124" rx="34" fill="url(#bg)"/>
+  <path d="M48 57C48 52.5817 51.5817 49 56 49H100C104.418 49 108 52.5817 108 57V68C108 72.4183 104.418 76 100 76H56C51.5817 76 48 72.4183 48 68V57Z" fill="url(#panelTop)"/>
+  <path d="M48 90C48 85.5817 51.5817 82 56 82H80C84.4183 82 88 85.5817 88 90V119C88 123.418 84.4183 127 80 127H56C51.5817 127 48 123.418 48 119V90Z" fill="url(#panelLeft)"/>
+  <path d="M91 90C91 85.5817 94.5817 82 99 82H101C105.418 82 109 85.5817 109 90V119C109 123.418 105.418 127 101 127H99C94.5817 127 91 123.418 91 119V90Z" fill="url(#panelRight)"/>
+  <circle cx="99" cy="63" r="5.5" fill="#C6FBFF"/>
+  <circle cx="67" cy="104" r="6.5" fill="#D8E7FF"/>
+  <path d="M61 63H87" stroke="#ECF6FF" stroke-width="6.5" stroke-linecap="round"/>
+  <path d="M60 103H76" stroke="#ECF6FF" stroke-width="6.5" stroke-linecap="round"/>
+  <path d="M60 116H72" stroke="#A5C2FF" stroke-width="5" stroke-linecap="round"/>
+  <rect x="215" y="45" width="338" height="20" rx="10" fill="url(#word1)"/>
+  <rect x="215" y="79" width="232" height="20" rx="10" fill="url(#word2)"/>
+  <rect x="215" y="113" width="174" height="13" rx="6.5" fill="#6A7A9D"/>
+  <defs>
+    <linearGradient id="bg" x1="18" y1="28" x2="142" y2="152" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#11213F"/>
+      <stop offset="0.5" stop-color="#101B33"/>
+      <stop offset="1" stop-color="#0C1630"/>
+    </linearGradient>
+    <linearGradient id="panelTop" x1="48" y1="49" x2="108" y2="76" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5DB7FF"/>
+      <stop offset="0.5" stop-color="#728FFF"/>
+      <stop offset="1" stop-color="#6DE4E8"/>
+    </linearGradient>
+    <linearGradient id="panelLeft" x1="48" y1="82" x2="88" y2="127" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F1F7FF"/>
+      <stop offset="1" stop-color="#BED1FF"/>
+    </linearGradient>
+    <linearGradient id="panelRight" x1="91" y1="82" x2="109" y2="127" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#77E6EB"/>
+      <stop offset="1" stop-color="#6A88FF"/>
+    </linearGradient>
+    <linearGradient id="word1" x1="215" y1="45" x2="553" y2="65" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#74BEFF"/>
+      <stop offset="0.5" stop-color="#768DFF"/>
+      <stop offset="1" stop-color="#73E0E5"/>
+    </linearGradient>
+    <linearGradient id="word2" x1="215" y1="79" x2="447" y2="99" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F5F9FF"/>
+      <stop offset="1" stop-color="#C8D5F7"/>
+    </linearGradient>
+  </defs>
+</svg>

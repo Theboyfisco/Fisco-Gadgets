@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import dynamic from "next/dynamic";
 import { createPortal } from "react-dom";
+import { BrandLogo } from "./BrandLogo";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 
 const SearchOverlay = dynamic(() => import("./SearchOverlay").then((mod) => mod.SearchOverlay), { ssr: false });
@@ -76,7 +77,7 @@ export function Navbar({ categories = [] }: NavbarProps) {
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
           <div className="flex items-center gap-3 sm:gap-4">
             <button
-              className="-ml-2 p-2 text-secondary transition-colors hover:text-[var(--foreground)] lg:hidden"
+              className="interactive-focus -ml-2 rounded-lg p-2 text-secondary transition-colors hover:bg-[var(--interactive-hover)] hover:text-[var(--foreground)] lg:hidden"
               onClick={() => setIsMobileMenuOpen(true)}
               aria-label="Open menu"
             >
@@ -84,14 +85,12 @@ export function Navbar({ categories = [] }: NavbarProps) {
             </button>
 
             {!isHome ? (
-              <Link href="/" className="group flex items-center gap-2 text-secondary transition-colors hover:text-[var(--foreground)]">
+              <Link href="/" className="interactive-focus group rounded-lg px-1 py-1 text-secondary transition-colors hover:text-[var(--foreground)]">
                 <ArrowLeft size={20} className="transition-transform group-hover:-translate-x-1" />
                 <span className="hidden font-medium sm:inline">Back</span>
               </Link>
             ) : (
-              <Link href="/" className="bg-gradient-to-r from-emerald-400 via-primary to-cyan-400 bg-clip-text text-xl font-extrabold tracking-tight text-transparent">
-                Fisco Gadgets
-              </Link>
+              <BrandLogo />
             )}
           </div>
 
@@ -103,7 +102,9 @@ export function Navbar({ categories = [] }: NavbarProps) {
                   key={link.name}
                   href={link.href}
                   className={`rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
-                    active ? "bg-[var(--interactive-bg)] text-[var(--interactive-fg)]" : "text-secondary hover:text-[var(--interactive-fg)]"
+                    active
+                      ? "interactive-focus bg-[var(--interactive-active)] text-[var(--interactive-fg)]"
+                      : "interactive-focus text-secondary hover:bg-[var(--interactive-hover)] hover:text-[var(--interactive-fg)]"
                   }`}
                 >
                   {link.name}
@@ -115,7 +116,7 @@ export function Navbar({ categories = [] }: NavbarProps) {
           <div className="flex max-w-sm flex-1 items-center justify-end gap-2 sm:gap-3 lg:max-w-md">
             <button
               onClick={() => setIsSearchOpen(true)}
-              className="group hidden flex-1 items-center gap-3 rounded-xl border border-[var(--interactive-border)] bg-[var(--interactive-bg-soft)] px-4 py-2 text-sm text-secondary transition-all hover:bg-[var(--interactive-bg)] hover:text-[var(--interactive-fg)] lg:flex"
+              className="interactive-focus group hidden flex-1 items-center gap-3 rounded-xl border border-[var(--interactive-border)] bg-[var(--interactive-bg-soft)] px-4 py-2 text-sm text-secondary transition-all hover:bg-[var(--interactive-active)] hover:text-[var(--interactive-fg)] lg:flex"
               aria-label="Open search"
             >
               <Search size={17} className="transition-colors group-hover:text-primary" />
@@ -127,7 +128,7 @@ export function Navbar({ categories = [] }: NavbarProps) {
 
             <button
               onClick={() => setIsSearchOpen(true)}
-              className="p-2 text-secondary transition-colors hover:text-[var(--foreground)] lg:hidden"
+              className="interactive-focus rounded-lg p-2 text-secondary transition-colors hover:bg-[var(--interactive-hover)] hover:text-[var(--foreground)] lg:hidden"
               aria-label="Open search"
             >
               <Search size={22} />
@@ -136,12 +137,12 @@ export function Navbar({ categories = [] }: NavbarProps) {
             <ThemeSwitcher />
             <button
               onClick={toggleCart}
-              className="relative rounded-xl p-2 text-secondary transition-colors hover:bg-[var(--interactive-bg)] hover:text-[var(--interactive-fg)]"
+              className="interactive-focus relative rounded-xl p-2 text-secondary transition-colors hover:bg-[var(--interactive-active)] hover:text-[var(--interactive-fg)]"
               aria-label="Open cart"
             >
               <ShoppingBag size={23} />
               {cartItems.length > 0 && (
-                <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full border border-[var(--background)] bg-primary text-[10px] font-bold text-black">
+                <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full border border-[var(--background)] bg-primary text-[10px] font-bold text-[var(--primary-contrast)]">
                   {cartItems.length}
                 </span>
               )}
@@ -173,23 +174,17 @@ export function Navbar({ categories = [] }: NavbarProps) {
                   className="fixed bottom-0 left-0 top-0 z-[60] flex w-[290px] flex-col border-r border-[var(--interactive-border)] bg-[var(--mobile-drawer-bg)] p-6 shadow-2xl lg:hidden"
                 >
                   <div className="mb-10 flex items-center justify-between">
-                    <Link
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      href="/"
-                      className="bg-gradient-to-r from-emerald-400 via-primary to-cyan-400 bg-clip-text text-xl font-extrabold text-transparent"
-                    >
-                      Fisco Gadgets
-                    </Link>
+                    <BrandLogo onClick={() => setIsMobileMenuOpen(false)} />
                     <button
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className="-mr-2 p-2 text-secondary transition-colors hover:text-[var(--foreground)]"
+                      className="interactive-focus -mr-2 rounded-lg p-2 text-secondary transition-colors hover:bg-[var(--interactive-hover)] hover:text-[var(--foreground)]"
                       aria-label="Close menu"
                     >
                       <X size={24} />
                     </button>
                   </div>
 
-                  <p className="mb-4 text-[10px] font-bold uppercase tracking-[0.2em] text-secondary/60">Navigation</p>
+                  <p className="text-soft mb-4 text-[10px] font-bold uppercase tracking-[0.2em]">Navigation</p>
                   <nav className="flex flex-col gap-1.5">
                     {navLinks.map((link) => {
                       const active = pathname === link.href;
@@ -200,8 +195,8 @@ export function Navbar({ categories = [] }: NavbarProps) {
                           onClick={() => setIsMobileMenuOpen(false)}
                           className={`flex items-center gap-4 rounded-xl border p-3 text-base font-medium transition-all ${
                             active
-                              ? "border-primary/35 bg-primary/10 text-primary"
-                              : "border-transparent text-secondary hover:border-[var(--interactive-border)] hover:bg-[var(--interactive-bg)] hover:text-[var(--interactive-fg)]"
+                              ? "interactive-focus border-primary/35 bg-primary/10 text-primary"
+                              : "interactive-focus border-transparent text-secondary hover:border-[var(--interactive-border)] hover:bg-[var(--interactive-hover)] hover:text-[var(--interactive-fg)]"
                           }`}
                         >
                           <span className={`rounded-lg p-2 ${active ? "bg-primary/20" : "bg-[var(--interactive-bg)]"}`}>
@@ -218,7 +213,7 @@ export function Navbar({ categories = [] }: NavbarProps) {
                     <Link
                       href="/contact"
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className="block w-full rounded-xl bg-primary py-3 text-center text-sm font-semibold text-black transition-colors hover:bg-emerald-300"
+                      className="interactive-focus primary-action block w-full rounded-xl py-3 text-center text-sm font-semibold transition-colors"
                     >
                       WhatsApp Support
                     </Link>
@@ -232,3 +227,4 @@ export function Navbar({ categories = [] }: NavbarProps) {
     </>
   );
 }
+

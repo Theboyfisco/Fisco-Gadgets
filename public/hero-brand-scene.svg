@@ -1,0 +1,73 @@
+<svg width="1600" height="1000" viewBox="0 0 1600 1000" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="1000" fill="#08101D"/>
+  <g opacity="0.9">
+    <circle cx="236" cy="188" r="182" fill="#58A8FF" fill-opacity="0.18"/>
+    <circle cx="1312" cy="214" r="196" fill="#59D7DF" fill-opacity="0.14"/>
+    <circle cx="1220" cy="760" r="244" fill="#6F84FF" fill-opacity="0.12"/>
+  </g>
+  <g opacity="0.7">
+    <path d="M110 873C358 742 556 662 780 630C1013 597 1208 627 1494 772" stroke="url(#beam)" stroke-width="2"/>
+    <path d="M180 925C420 792 633 722 840 700C1044 678 1222 704 1450 820" stroke="url(#beamSoft)" stroke-width="2"/>
+  </g>
+  <rect x="864" y="196" width="454" height="542" rx="56" fill="url(#phoneShell)"/>
+  <rect x="890" y="224" width="402" height="486" rx="40" fill="#0C1830"/>
+  <rect x="1034" y="241" width="118" height="16" rx="8" fill="#23385E"/>
+  <rect x="935" y="301" width="312" height="184" rx="28" fill="url(#screen1)"/>
+  <rect x="935" y="512" width="148" height="148" rx="28" fill="url(#screen2)"/>
+  <rect x="1098" y="512" width="148" height="148" rx="28" fill="url(#screen3)"/>
+  <circle cx="1190" cy="340" r="54" fill="#C6FBFF" fill-opacity="0.2"/>
+  <path d="M985 414H1148" stroke="#EFF5FF" stroke-width="18" stroke-linecap="round" stroke-opacity="0.95"/>
+  <path d="M985 454H1088" stroke="#A5C2FF" stroke-width="12" stroke-linecap="round"/>
+  <rect x="326" y="310" width="436" height="274" rx="34" fill="url(#laptopShell)"/>
+  <rect x="352" y="336" width="384" height="222" rx="24" fill="#0B1730"/>
+  <rect x="424" y="392" width="240" height="18" rx="9" fill="#F1F7FF"/>
+  <rect x="424" y="430" width="182" height="12" rx="6" fill="#A8C4FF"/>
+  <rect x="408" y="596" width="272" height="18" rx="9" fill="#203658"/>
+  <path d="M279 606H810L738 664H351L279 606Z" fill="url(#base)"/>
+  <g opacity="0.75">
+    <path d="M324 183L445 264" stroke="#69DDE7" stroke-width="4" stroke-linecap="round"/>
+    <path d="M1215 122L1150 206" stroke="#8BAAFF" stroke-width="4" stroke-linecap="round"/>
+    <path d="M690 180L742 252" stroke="#6AB8FF" stroke-width="4" stroke-linecap="round"/>
+  </g>
+  <circle cx="291" cy="165" r="14" fill="#6AB8FF"/>
+  <circle cx="1242" cy="87" r="12" fill="#72E3E7"/>
+  <circle cx="713" cy="144" r="10" fill="#8BAAFF"/>
+  <defs>
+    <linearGradient id="phoneShell" x1="864" y1="196" x2="1318" y2="738" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#13284D"/>
+      <stop offset="1" stop-color="#0B1730"/>
+    </linearGradient>
+    <linearGradient id="screen1" x1="935" y1="301" x2="1247" y2="485" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#63B4FF"/>
+      <stop offset="0.5" stop-color="#798EFF"/>
+      <stop offset="1" stop-color="#6FE0E6"/>
+    </linearGradient>
+    <linearGradient id="screen2" x1="935" y1="512" x2="1083" y2="660" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#EEF5FF"/>
+      <stop offset="1" stop-color="#BCD0FF"/>
+    </linearGradient>
+    <linearGradient id="screen3" x1="1098" y1="512" x2="1246" y2="660" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#79E2E8"/>
+      <stop offset="1" stop-color="#6583FF"/>
+    </linearGradient>
+    <linearGradient id="laptopShell" x1="326" y1="310" x2="762" y2="584" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#13284D"/>
+      <stop offset="1" stop-color="#0A162D"/>
+    </linearGradient>
+    <linearGradient id="base" x1="279" y1="606" x2="810" y2="664" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#334C78"/>
+      <stop offset="0.5" stop-color="#1A2B4A"/>
+      <stop offset="1" stop-color="#10203B"/>
+    </linearGradient>
+    <linearGradient id="beam" x1="110" y1="873" x2="1494" y2="772" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5DB7FF" stop-opacity="0"/>
+      <stop offset="0.4" stop-color="#5DB7FF"/>
+      <stop offset="1" stop-color="#71E2E7" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="beamSoft" x1="180" y1="925" x2="1450" y2="820" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6E88FF" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#6E88FF"/>
+      <stop offset="1" stop-color="#6E88FF" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+</svg>

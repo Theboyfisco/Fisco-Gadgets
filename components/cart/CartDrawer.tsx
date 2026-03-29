@@ -52,7 +52,7 @@ export function CartDrawer({ isOpen, onClose, cartItems }: CartDrawerProps) {
                                     <ShoppingBag size={48} />
                                 </div>
                                 <p className="text-secondary text-lg">Your gadget stash is empty.</p>
-                                <button onClick={onClose} className="mt-4 text-primary hover:text-emerald-400 font-medium">
+                                <button onClick={onClose} className="mt-4 font-medium text-primary transition-colors hover:text-[var(--primary-hover)]">
                                     Continue Browsing
                                 </button>
                             </div>
@@ -80,7 +80,7 @@ export function CartDrawer({ isOpen, onClose, cartItems }: CartDrawerProps) {
                                 <Link 
                                     href="/checkout" 
                                     onClick={onClose}
-                                    className="w-full bg-primary text-black text-base py-4 rounded-standard font-bold hover:bg-emerald-400 transition-colors shadow-glow active:scale-95 text-center flex items-center justify-center"
+                                    className="w-full bg-primary text-[var(--primary-contrast)] text-base py-4 rounded-standard font-bold hover:bg-[var(--primary-hover)] transition-colors shadow-glow active:scale-95 text-center flex items-center justify-center"
                                 >
                                     Secure Checkout
                                 </Link>
@@ -92,3 +92,4 @@ export function CartDrawer({ isOpen, onClose, cartItems }: CartDrawerProps) {
         </AnimatePresence>
     );
 }
+

@@ -77,13 +77,13 @@ export function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; onClose: (
                 autoFocus
                 type="text"
                 placeholder="Search iPhones, MacBooks, Accessories..."
-                className="flex-1 bg-transparent text-lg font-bold text-[var(--foreground)] placeholder:text-secondary focus:outline-none sm:text-2xl"
+                className="interactive-focus flex-1 bg-transparent text-lg font-bold text-[var(--foreground)] placeholder:text-[var(--text-soft)] focus:outline-none sm:text-2xl"
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
               />
               <button
                 onClick={onClose}
-                className="rounded-xl p-2 text-secondary transition-colors hover:bg-[var(--surface-cta)] hover:text-[var(--foreground)]"
+                className="interactive-focus rounded-xl p-2 text-secondary transition-colors hover:bg-[var(--interactive-hover)] hover:text-[var(--foreground)]"
                 aria-label="Close search"
               >
                 <X size={24} />
@@ -93,7 +93,7 @@ export function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; onClose: (
             <div className="custom-scrollbar max-h-[60vh] overflow-y-auto p-4">
               {results.length > 0 ? (
                 <div className="space-y-2">
-                  <p className="mb-4 px-2 text-xs font-bold uppercase tracking-widest text-secondary">
+                  <p className="text-muted mb-4 px-2 text-xs font-bold uppercase tracking-widest">
                     {query ? `Found ${results.length} results` : "Trending Now"}
                   </p>
                   <div className="grid grid-cols-1 gap-2">
@@ -102,14 +102,14 @@ export function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; onClose: (
                         key={product.id}
                         href={`/product/${product.id}`}
                         onClick={onClose}
-                        className="group flex items-center gap-4 rounded-xl border border-transparent p-3 transition-colors hover:border-[var(--border-subtle)] hover:bg-[var(--surface-card)]"
+                        className="interactive-focus group flex items-center gap-4 rounded-xl border border-transparent p-3 transition-colors hover:border-[var(--interactive-border-strong)] hover:bg-[var(--surface-card)]"
                       >
                         <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-[var(--surface-card)]">
                           <Image src={product.image} alt={product.name} fill className="object-cover" />
                         </div>
                         <div className="flex-1">
                           <h4 className="font-semibold text-[var(--foreground)] transition-colors group-hover:text-primary">{product.name}</h4>
-                          <p className="text-xs capitalize text-secondary">
+                          <p className="text-muted text-xs capitalize">
                             {product.categoryId} • ₦{product.price.toLocaleString()}
                           </p>
                         </div>
@@ -120,8 +120,8 @@ export function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; onClose: (
                 </div>
               ) : (
                 <div className="py-12 text-center">
-                  <p className="text-lg text-secondary">No gadgets found for &quot;{query}&quot;</p>
-                  <button onClick={() => setQuery("")} className="mt-2 text-primary hover:underline">
+                  <p className="text-muted text-lg">No gadgets found for &quot;{query}&quot;</p>
+                  <button onClick={() => setQuery("")} className="interactive-focus link-accent mt-2">
                     Clear search
                   </button>
                 </div>
@@ -139,7 +139,7 @@ export function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; onClose: (
                       key={index}
                       href={category.href}
                       onClick={onClose}
-                      className="flex items-center gap-3 rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-3 text-left transition-colors hover:bg-[var(--surface-cta)]"
+                      className="interactive-focus flex items-center gap-3 rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-3 text-left transition-colors hover:bg-[var(--interactive-hover)]"
                     >
                       <category.icon className={category.color} size={20} />
                       <span className="text-sm font-medium text-[var(--foreground)]">{category.label}</span>
@@ -150,7 +150,7 @@ export function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; onClose: (
             </div>
 
             <div className="flex items-center justify-between border-t border-[var(--border-subtle)] bg-[var(--surface-soft)] p-4">
-              <div className="flex gap-4 text-[10px] text-secondary">
+              <div className="text-muted flex gap-4 text-[10px]">
                 <span className="flex items-center gap-1">
                   <kbd className="rounded bg-[var(--kbd-bg)] px-1">ESC</kbd> to close
                 </span>
@@ -158,7 +158,7 @@ export function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; onClose: (
                   <kbd className="rounded bg-[var(--kbd-bg)] px-1">↵</kbd> to select
                 </span>
               </div>
-              <p className="text-[10px] font-medium italic text-primary/60">Powered by Fisco Search</p>
+              <p className="text-[10px] font-medium italic text-[var(--text-soft)]">Powered by Fisco Search</p>
             </div>
           </motion.div>
         </div>
