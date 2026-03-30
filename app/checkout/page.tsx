@@ -9,12 +9,15 @@ import Image from "next/image";
 import { createOrder } from "@/actions/order";
 import { initializePayment } from "@/actions/paystack";
 import { Loader2 } from "lucide-react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { MOTION } from "@/lib/motion";
 
 export default function CheckoutPage() {
     const { cartItems, clearCart } = useCart();
     const [step, setStep] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const prefersReducedMotion = useReducedMotion();
 
     // Form State
     const [formData, setFormData] = useState({
@@ -115,8 +118,16 @@ export default function CheckoutPage() {
                         </div>
                     )}
 
+                    <AnimatePresence mode="wait">
                     {step === 1 && (
-                        <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                        <motion.div
+                            key="step-1"
+                            initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 12 }}
+                            animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
+                            exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: -12 }}
+                            transition={{ duration: MOTION.duration.base, ease: MOTION.ease.standard }}
+                            className="space-y-6"
+                        >
                             <h2 className="mb-6 flex items-center gap-2 text-2xl font-bold text-[var(--foreground)]">
                                 <User className="text-primary" /> Delivery Details
                             </h2>
@@ -160,11 +171,18 @@ export default function CheckoutPage() {
                             >
                                 Continue to Payment
                             </button>
-                        </div>
+                        </motion.div>
                     )}
 
                     {step === 2 && (
-                        <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
+                        <motion.div
+                            key="step-2"
+                            initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 12 }}
+                            animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
+                            exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: -12 }}
+                            transition={{ duration: MOTION.duration.base, ease: MOTION.ease.standard }}
+                            className="space-y-6"
+                        >
                             <h2 className="mb-6 flex items-center gap-2 text-2xl font-bold text-[var(--foreground)]">
                                 <CreditCard className="text-primary" /> Payment Method
                             </h2>
@@ -206,11 +224,18 @@ export default function CheckoutPage() {
                                     ) : "Initialize Payment"}
                                 </button>
                             </div>
-                        </div>
+                        </motion.div>
                     )}
 
                     {step === 3 && (
-                        <div className="text-center py-12 animate-in zoom-in duration-500">
+                        <motion.div
+                            key="step-3"
+                            initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, scale: 0.98 }}
+                            animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, scale: 1 }}
+                            exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, scale: 0.98 }}
+                            transition={{ duration: MOTION.duration.base, ease: MOTION.ease.standard }}
+                            className="text-center py-12"
+                        >
                             <div className="w-20 h-20 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-6 text-primary">
                                 <ShieldCheck size={48} />
                             </div>
@@ -221,8 +246,9 @@ export default function CheckoutPage() {
                             <Link href="/" className="inline-block rounded-standard border border-border-subtle bg-[var(--surface-card)] px-8 py-3 font-bold text-[var(--foreground)] transition-colors hover:bg-[var(--surface-cta)]">
                                 Return to Home
                             </Link>
-                        </div>
+                        </motion.div>
                     )}
+                    </AnimatePresence>
                 </div>
 
                 {/* Order Summary */}

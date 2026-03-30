@@ -97,9 +97,46 @@ export default async function Home() {
           </div>
         </section>
 
+        <Reveal className="mb-16">
+          <div className="flex flex-col gap-6 rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-6 md:flex-row md:items-center md:justify-between">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--text-soft)]">Trusted by tech lovers</p>
+              <h2 className="mt-2 text-2xl font-bold text-[var(--foreground)]">Top brands, curated weekly</h2>
+              <p className="mt-2 text-sm text-secondary">Verified originals, fast delivery, and concierge support.</p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {["Apple", "Samsung", "Sony", "Lenovo", "Anker"].map((brand) => (
+                <span
+                  key={brand}
+                  className="rounded-full border border-[var(--interactive-border)] bg-[var(--surface-card)] px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--foreground)]"
+                >
+                  {brand}
+                </span>
+              ))}
+              <Link
+                href="/brand/apple"
+                className="rounded-full border border-[var(--interactive-border)] bg-[var(--surface-card)] px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-secondary transition-colors hover:text-[var(--foreground)]"
+              >
+                See all
+              </Link>
+            </div>
+          </div>
+        </Reveal>
+
         <Reveal className="mb-20 lg:mb-24">
-          <div className="mb-6 flex items-center justify-between">
-            <h2 className="text-2xl font-bold text-[var(--foreground)]">Shop by Category</h2>
+          <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--text-soft)]">Browse fast</p>
+              <h2 className="text-2xl font-bold text-[var(--foreground)]">Shop by Category</h2>
+              <p className="text-sm text-secondary">Start with your device type or accessory need.</p>
+            </div>
+            <Link
+              href="/category/phones"
+              className="inline-flex items-center gap-2 rounded-full border border-[var(--interactive-border)] bg-[var(--surface-card)] px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-secondary transition-colors hover:text-[var(--foreground)]"
+            >
+              View all
+              <ArrowRight size={14} />
+            </Link>
           </div>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
             {dbCategories.map((category: any) => (
@@ -128,22 +165,22 @@ export default async function Home() {
 
         <Reveal className="mb-20 rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-6 md:mb-24 md:p-10" delay={0.05}>
           <div className="grid gap-8 md:grid-cols-4 md:gap-6">
-            <div className="text-center">
+            <div className="group text-center transition-transform duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:-translate-y-1">
               <Truck size={30} className="mx-auto mb-3 text-primary" />
               <h3 className="mb-2 text-sm font-semibold text-[var(--foreground)]">Fast Delivery</h3>
               <p className="text-xs leading-relaxed text-secondary">Same day in Asaba, 1-3 days nationwide.</p>
             </div>
-            <div className="text-center">
+            <div className="group text-center transition-transform duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:-translate-y-1">
               <ShieldCheck size={30} className="mx-auto mb-3 text-primary" />
               <h3 className="mb-2 text-sm font-semibold text-[var(--foreground)]">Authentic Warranty</h3>
               <p className="text-xs leading-relaxed text-secondary">Manufacturer-backed and store-covered support.</p>
             </div>
-            <div className="text-center">
+            <div className="group text-center transition-transform duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:-translate-y-1">
               <CreditCard size={30} className="mx-auto mb-3 text-primary" />
               <h3 className="mb-2 text-sm font-semibold text-[var(--foreground)]">Secure Payments</h3>
               <p className="text-xs leading-relaxed text-secondary">Paystack, transfer, and verified payment flow.</p>
             </div>
-            <div className="text-center">
+            <div className="group text-center transition-transform duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:-translate-y-1">
               <Clock size={30} className="mx-auto mb-3 text-primary" />
               <h3 className="mb-2 text-sm font-semibold text-[var(--foreground)]">24/7 Help</h3>
               <p className="text-xs leading-relaxed text-secondary">Live WhatsApp concierge whenever you need it.</p>
@@ -153,8 +190,28 @@ export default async function Home() {
 
         <section id="featured">
           <Reveal>
-            <div className="mb-6 flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-[var(--foreground)]">Featured Deals</h2>
+            <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--text-soft)]">Curated picks</p>
+                <h2 className="text-2xl font-bold text-[var(--foreground)]">Featured Deals</h2>
+                <p className="text-sm text-secondary">Best value gadgets with verified warranty.</p>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {[
+                  { label: "Phones", href: "/category/phones" },
+                  { label: "Laptops", href: "/category/laptops" },
+                  { label: "Audio", href: "/category/audio" },
+                  { label: "Compare", href: "/compare" },
+                ].map((chip) => (
+                  <Link
+                    key={chip.label}
+                    href={chip.href}
+                    className="rounded-full border border-[var(--interactive-border)] bg-[var(--surface-card)] px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-secondary transition-colors hover:text-[var(--foreground)]"
+                  >
+                    {chip.label}
+                  </Link>
+                ))}
+              </div>
             </div>
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
               {featuredProducts.map((product: any, index: number) => (

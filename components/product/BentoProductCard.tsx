@@ -83,7 +83,7 @@ export function BentoProductCard({ product, featured = false }: BentoProductCard
           <span>{product.technicalSpecs.ram || "8GB"}</span>
         </div>
 
-        <div className="absolute right-4 top-4 z-10 flex flex-col gap-2 [transform:translateZ(40px)]">
+        <div className="absolute right-4 top-4 z-10 flex flex-col gap-2 opacity-0 pointer-events-none transition-opacity duration-[var(--motion-base)] ease-[var(--ease-standard)] group-hover:opacity-100 group-hover:pointer-events-auto group-focus-within:opacity-100 group-focus-within:pointer-events-auto [transform:translateZ(40px)]">
           <button
             className="rounded-full border border-primary/20 bg-[var(--surface-contrast)] p-2 text-primary backdrop-blur-md transition-colors hover:bg-primary/30"
             aria-label={`Add ${product.name} to cart`}

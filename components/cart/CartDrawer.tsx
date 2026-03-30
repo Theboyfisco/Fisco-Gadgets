@@ -82,13 +82,14 @@ export function CartDrawer({ isOpen, onClose, cartItems, onRemove, onClear, onIn
                         animate={{ x: 0 }}
                         exit={{ x: '100%' }}
                         transition={prefersReducedMotion ? { duration: 0 } : { type: "spring", bounce: 0, duration: MOTION.duration.slow }}
-                        className="fixed right-0 top-0 bottom-0 z-50 flex w-full max-w-md flex-col border-l border-border-subtle bg-[var(--panel-bg)] p-6 shadow-2xl"
-                        role="dialog"
-                        aria-modal="true"
-                        aria-labelledby="cart-title"
-                        tabIndex={-1}
-                        ref={dialogRef}
-                    >
+            className="fixed right-0 top-0 bottom-0 z-50 flex w-full max-w-md flex-col border-l border-border-subtle bg-[var(--panel-bg)] p-6 shadow-2xl"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="cart-title"
+            id="cart-drawer"
+            tabIndex={-1}
+            ref={dialogRef}
+          >
                         <div className="mb-8 flex items-center justify-between">
                             <h2 id="cart-title" className="flex items-center gap-2 text-2xl font-bold text-[var(--foreground)]">
                                 <ShoppingBag /> Your Cart

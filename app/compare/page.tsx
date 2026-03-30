@@ -1,15 +1,17 @@
 "use client";
 
 import { useCompare } from "@/components/product/CompareProvider";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { ArrowLeft, Trash2, ShoppingCart, MessageCircle } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { useCart } from "@/components/cart/CartProvider";
+import { MOTION } from "@/lib/motion";
 
 export default function ComparePage() {
     const { compareItems, removeFromCompare, clearCompare } = useCompare();
     const { addToCart } = useCart();
+    const prefersReducedMotion = useReducedMotion();
 
     const specs = Array.from(new Set(
         compareItems.flatMap(item => Object.keys(item.technicalSpecs))
@@ -57,8 +59,9 @@ export default function ComparePage() {
                             <motion.div
                                 key={product.id}
                                 layout
-                                initial={{ opacity: 0, scale: 0.95 }}
-                                animate={{ opacity: 1, scale: 1 }}
+                                initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, scale: 0.98 }}
+                                animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, scale: 1 }}
+                                transition={{ duration: MOTION.duration.base, ease: MOTION.ease.standard }}
                                 className="h-fit overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-surface/50 shadow-glass backdrop-blur-md"
                             >
                                 <div className="relative h-48 sm:h-64 w-full">

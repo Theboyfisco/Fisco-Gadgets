@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, RefreshCcw } from "lucide-react";
+import { Reveal } from "@/components/ui/Reveal";
 
 export default function ReturnsPage() {
   return (
@@ -10,24 +11,38 @@ export default function ReturnsPage() {
         <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
         Back to Home
       </Link>
-      <h1 className="mb-8 text-4xl font-extrabold text-[var(--foreground)]">Returns & Refunds</h1>
-      
-      <div className="space-y-8 text-secondary">
-        <section>
-          <h2 className="mb-4 text-2xl font-bold text-[var(--foreground)]">7-Day Return Policy</h2>
-          <p className="mb-4">We offer a 7-day return window for products that are factory-defective. To be eligible for a return, your item must be unused, in the same condition that you received it, and in its original packaging with all seals intact.</p>
-          <p>Items purchased under &quot;Open Box&quot; or &quot;Refurbished&quot; tags have a separate assessment criteria listed in your receipt.</p>
-        </section>
+      <Reveal>
+        <div className="mb-10 rounded-2xl border border-border-subtle bg-[var(--surface-card)] p-6 shadow-glass/30">
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[var(--interactive-border)] bg-[var(--surface-cta)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-secondary">
+            <RefreshCcw size={14} /> Returns
+          </div>
+          <h1 className="mb-3 text-4xl font-extrabold text-[var(--foreground)]">Returns & Refunds</h1>
+          <p className="text-sm text-secondary">Built to keep your purchase risk‑free.</p>
+        </div>
+      </Reveal>
 
-        <section>
-          <h2 className="mb-4 text-2xl font-bold text-[var(--foreground)]">Process a Return</h2>
-          <p className="mb-4">To initiate a return, immediately contact our support via WhatsApp or email (support@fiscogadgets.com.ng). Do not ship items back without a Return Authorization number provided by our team.</p>
-        </section>
+      <div className="space-y-6 text-secondary">
+        <Reveal>
+          <section className="rounded-standard border border-border-subtle bg-[var(--surface-card)] p-6 shadow-glass/20">
+            <h2 className="mb-3 text-2xl font-bold text-[var(--foreground)]">7-Day Return Policy</h2>
+            <p className="mb-4">We offer a 7-day return window for products that are factory-defective. To be eligible for a return, your item must be unused, in the same condition that you received it, and in its original packaging with all seals intact.</p>
+            <p>Items purchased under &quot;Open Box&quot; or &quot;Refurbished&quot; tags have a separate assessment criteria listed in your receipt.</p>
+          </section>
+        </Reveal>
 
-        <section>
-          <h2 className="mb-4 text-2xl font-bold text-[var(--foreground)]">Refunds</h2>
-          <p>Once we receive and inspect your item, we will notify you of the approval or rejection of your refund. Approved refunds will be processed to the original method of payment within 3-5 business days.</p>
-        </section>
+        <Reveal delay={0.05}>
+          <section className="rounded-standard border border-border-subtle bg-[var(--surface-card)] p-6 shadow-glass/20">
+            <h2 className="mb-3 text-2xl font-bold text-[var(--foreground)]">Process a Return</h2>
+            <p className="mb-4">To initiate a return, immediately contact our support via WhatsApp or email (support@fiscogadgets.com.ng). Do not ship items back without a Return Authorization number provided by our team.</p>
+          </section>
+        </Reveal>
+
+        <Reveal delay={0.1}>
+          <section className="rounded-standard border border-border-subtle bg-[var(--surface-card)] p-6 shadow-glass/20">
+            <h2 className="mb-3 text-2xl font-bold text-[var(--foreground)]">Refunds</h2>
+            <p>Once we receive and inspect your item, we will notify you of the approval or rejection of your refund. Approved refunds will be processed to the original method of payment within 3-5 business days.</p>
+          </section>
+        </Reveal>
       </div>
     </div>
   );

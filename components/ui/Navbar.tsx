@@ -214,6 +214,8 @@ export function Navbar({ categories = [] }: NavbarProps) {
               onClick={toggleCart}
               className="interactive-focus relative rounded-xl p-2 text-secondary transition-colors hover:bg-[var(--interactive-active)] hover:text-[var(--interactive-fg)]"
               aria-label="Open cart"
+              aria-expanded={cartItems.length > 0}
+              aria-controls="cart-drawer"
             >
               <ShoppingBag size={23} />
               {cartItems.length > 0 && (
