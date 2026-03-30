@@ -507,3 +507,20 @@
 :root[data-theme="light"] select {
   color-scheme: light;
 }
+
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  filter: blur(6px);
+  transition:
+    opacity var(--motion-slow) var(--ease-standard),
+    transform var(--motion-slow) var(--ease-standard),
+    filter var(--motion-slow) var(--ease-standard);
+  will-change: opacity, transform, filter;
+}
+
+.scroll-reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}

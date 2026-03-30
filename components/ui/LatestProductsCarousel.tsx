@@ -4,7 +4,8 @@ import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { MOTION } from "@/lib/motion";
 
 export interface LatestProduct {
   id: string;
@@ -66,18 +67,26 @@ export function LatestProductsCarousel({ products }: LatestProductsCarouselProps
       <div className="pointer-events-none absolute -left-14 -top-16 h-44 w-44 rounded-full bg-[var(--carousel-glow-1)] blur-3xl" />
       <div className="pointer-events-none absolute -bottom-16 -right-10 h-48 w-48 rounded-full bg-[var(--carousel-glow-2)] blur-3xl" />
 
-      <div className="absolute inset-0">
-        <Image
+      <AnimatePresence mode="wait">
+        <motion.div
           key={activeProduct.id}
-          src={activeProduct.image}
-          alt={activeProduct.name}
-          fill
-          sizes="(max-width: 1024px) 100vw, 50vw"
-          quality={95}
-          className={`object-cover opacity-95 ${prefersReducedMotion ? "" : "transition duration-[var(--motion-slow)] ease-[var(--ease-standard)] group-hover:scale-[1.03]"}`}
-        />
-        <div className="absolute inset-0 bg-[var(--carousel-overlay)]" />
-      </div>
+          className="absolute inset-0"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: MOTION.duration.base, ease: MOTION.ease.standard }}
+        >
+          <Image
+            src={activeProduct.image}
+            alt={activeProduct.name}
+            fill
+            sizes="(max-width: 1024px) 100vw, 50vw"
+            quality={95}
+            className={`object-cover opacity-95 ${prefersReducedMotion ? "" : "transition duration-[var(--motion-slow)] ease-[var(--ease-standard)] group-hover:scale-[1.03]"}`}
+          />
+          <div className="absolute inset-0 bg-[var(--carousel-overlay)]" />
+        </motion.div>
+      </AnimatePresence>
 
       <div className="relative z-10 flex h-full flex-col justify-between p-7 sm:p-8">
         <div className="flex items-start justify-between">
@@ -105,39 +114,49 @@ export function LatestProductsCarousel({ products }: LatestProductsCarouselProps
         </div>
 
         <div className="space-y-6 text-[var(--media-card-foreground)]">
-          <div className="inline-flex w-fit items-center gap-2 rounded-full border border-[var(--media-card-pill-border)] bg-[var(--media-card-pill-bg)] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.35em] text-[var(--media-card-pill-text)]">
-          Latest drops
-        </div>
-
-        <div>
-          <h3 className="text-3xl font-semibold leading-tight sm:text-4xl">{activeProduct.name}</h3>
-          <p className="mt-2 text-lg font-semibold text-primary">{formattedPrice}</p>
-        </div>
-
-        <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-[var(--carousel-control-border)] bg-[var(--carousel-control-bg)] p-3 backdrop-blur-md">
-          <Link
-            href={`/product/${activeProduct.id}`}
-            className="inline-flex items-center justify-center rounded-full border border-[var(--media-card-pill-border)] bg-[var(--surface-card-strong)] px-6 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--foreground)] transition hover:border-primary/40 hover:bg-primary/25"
+          <motion.div
+            key={`${activeProduct.id}-content`}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: MOTION.duration.base, ease: MOTION.ease.standard }}
+            className="space-y-6"
           >
-            View Product
-          </Link>
-          <div className="flex items-center gap-2">
-            {visibleProducts.map((item, index) => {
-              const isActive = index === safeIndex;
-              return (
-                <button
-                  key={item.id}
-                  type="button"
-                  onClick={() => setActiveIndex(index)}
-                  aria-label={`Show ${item.name}`}
-                  className={`h-2.5 rounded-full transition-all ${isActive ? "w-7 bg-[var(--carousel-dot-active)]" : "w-2.5 bg-[var(--carousel-dot)] hover:bg-[var(--carousel-dot-active)]/70"}`}
-                />
-              );
-            })}
-          </div>
+            <div className="inline-flex w-fit items-center gap-2 rounded-full border border-[var(--media-card-pill-border)] bg-[var(--media-card-pill-bg)] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.35em] text-[var(--media-card-pill-text)]">
+              Latest drops
+            </div>
+
+            <div>
+              <h3 className="text-3xl font-semibold leading-tight sm:text-4xl">{activeProduct.name}</h3>
+              <p className="mt-2 text-lg font-semibold text-primary">{formattedPrice}</p>
+            </div>
+
+            <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-[var(--carousel-control-border)] bg-[var(--carousel-control-bg)] p-3 backdrop-blur-md">
+              <Link
+                href={`/product/${activeProduct.id}`}
+                className="inline-flex items-center justify-center rounded-full border border-[var(--media-card-pill-border)] bg-[var(--surface-card-strong)] px-6 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--foreground)] transition hover:border-primary/40 hover:bg-primary/25"
+              >
+                View Product
+              </Link>
+              <div className="flex items-center gap-2">
+                {visibleProducts.map((item, index) => {
+                  const isActive = index === safeIndex;
+                  return (
+                    <motion.button
+                      key={item.id}
+                      type="button"
+                      onClick={() => setActiveIndex(index)}
+                      aria-label={`Show ${item.name}`}
+                      whileTap={{ scale: 0.9 }}
+                      className={`h-2.5 rounded-full transition-all ${isActive ? "w-7 bg-[var(--carousel-dot-active)]" : "w-2.5 bg-[var(--carousel-dot)] hover:bg-[var(--carousel-dot-active)]/70"}`}
+                    />
+                  );
+                })}
+              </div>
+            </div>
+          </motion.div>
         </div>
         </div>
       </div>
-    </div>
   );
 }

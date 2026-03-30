@@ -13,6 +13,7 @@ import { Footer } from "@/components/ui/Footer";
 import { CompareFloatingBar } from "@/components/product/CompareFloatingBar";
 import { WishlistWrapper } from "@/components/product/WishlistWrapper";
 import { ScrollProgress } from "@/components/ui/ScrollProgress";
+import { PageShell } from "@/components/ui/PageShell";
 
 import prisma from "@/lib/db";
 import { fallbackCategories } from "@/lib/fallback-data";
@@ -78,7 +79,7 @@ export default async function RootLayout({
                 <Navbar categories={categories} />
                 <ScrollProgress />
                 <div id="main-content" className="flex min-h-screen flex-col">
-                  {children}
+                  <PageShell>{children}</PageShell>
                 </div>
                 <Footer categories={categories} />
                 <CartWrapper />

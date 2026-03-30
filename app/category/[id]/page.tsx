@@ -1,4 +1,5 @@
 import prisma from "@/lib/db";
+import type { Prisma } from "@prisma/client";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -19,7 +20,7 @@ export default async function CategoryPage({
   searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams?: { sort?: string };
+  searchParams?: { sort?: string; min?: string; max?: string };
 }) {
   const resolvedParams = await params;
   const categoryId = resolvedParams.id;
@@ -29,7 +30,7 @@ export default async function CategoryPage({
   const minValue = Number.isFinite(min) ? (min as number) : undefined;
   const maxValue = Number.isFinite(max) ? (max as number) : undefined;
 
-  const orderBy =
+  const orderBy: Prisma.ProductOrderByWithRelationInput =
     sort === "price-asc"
       ? { price: "asc" }
       : sort === "price-desc"

@@ -42,8 +42,8 @@ export function BentoProductCard({ product, featured = false }: BentoProductCard
   const [quickViewOpen, setQuickViewOpen] = useState(false);
   const whatsappMsg = encodeURIComponent(`Hi, I'm interested in the ${product.name} listed for ₦${product.price}`);
   const containerClass = featured
-    ? "relative group overflow-hidden border border-border-subtle bg-surface/90 backdrop-blur-md shadow-glow rounded-featured p-4 md:p-5"
-    : "relative group overflow-hidden border border-border-subtle bg-surface/80 backdrop-blur-md rounded-standard p-4";
+    ? "relative group overflow-hidden border border-border-subtle bg-surface/90 backdrop-blur-md shadow-glow rounded-featured p-4 md:p-5 transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:shadow-[0_30px_80px_rgba(8,18,38,0.35)]"
+    : "relative group overflow-hidden border border-border-subtle bg-surface/80 backdrop-blur-md rounded-standard p-4 transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:shadow-[0_24px_60px_rgba(8,18,38,0.28)]";
 
   return (
     <Tilt3D className="h-full" maxTilt={featured ? 8 : 10}>
@@ -52,9 +52,9 @@ export function BentoProductCard({ product, featured = false }: BentoProductCard
         transition={{ duration: MOTION.duration.base, ease: MOTION.ease.standard }}
         className={containerClass}
       >
-        <div className="pointer-events-none absolute -left-10 -top-12 h-36 w-36 rounded-full bg-primary/15 blur-3xl" />
+        <div className="pointer-events-none absolute -left-10 -top-12 h-36 w-36 rounded-full bg-primary/15 blur-3xl transition-opacity duration-[var(--motion-base)] ease-[var(--ease-standard)] group-hover:opacity-80" />
 
-        <div className={`relative mb-4 w-full overflow-hidden rounded-xl border border-[var(--border-subtle)] ${featured ? "h-64" : "h-48"}`}>
+        <div className={`relative mb-4 w-full overflow-hidden rounded-xl border border-[var(--border-subtle)] ${featured ? "h-64" : "h-48"} transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] group-hover:border-[var(--interactive-border-strong)]`}>
           <Image
             src={product.image}
             alt={product.name}
@@ -83,7 +83,7 @@ export function BentoProductCard({ product, featured = false }: BentoProductCard
           <span>{product.technicalSpecs.ram || "8GB"}</span>
         </div>
 
-        <div className="absolute right-4 top-4 z-10 flex flex-col gap-2 opacity-0 pointer-events-none transition-opacity duration-[var(--motion-base)] ease-[var(--ease-standard)] group-hover:opacity-100 group-hover:pointer-events-auto group-focus-within:opacity-100 group-focus-within:pointer-events-auto [transform:translateZ(40px)]">
+        <div className="absolute right-4 top-4 z-10 flex flex-col gap-2 opacity-0 pointer-events-none translate-y-2 scale-[0.96] blur-[1px] transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] group-hover:opacity-100 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:scale-100 group-hover:blur-0 group-focus-within:opacity-100 group-focus-within:pointer-events-auto group-focus-within:translate-y-0 group-focus-within:scale-100 group-focus-within:blur-0 [transform:translateZ(40px)]">
           <button
             className="rounded-full border border-primary/20 bg-[var(--surface-contrast)] p-2 text-primary backdrop-blur-md transition-colors hover:bg-primary/30"
             aria-label={`Add ${product.name} to cart`}
@@ -109,13 +109,18 @@ export function BentoProductCard({ product, featured = false }: BentoProductCard
           <div onClick={(event) => event.stopPropagation()}>
             <WishlistButton product={product} />
           </div>
-          <a
-            href={`https://wa.me/2348000000000?text=${whatsappMsg}`}
+          <button
+            type="button"
             className="rounded-full border border-primary/20 bg-[var(--surface-contrast)] p-2 text-primary backdrop-blur-md transition-colors hover:bg-primary/30"
-            onClick={(event) => event.stopPropagation()}
+            aria-label={`Message about ${product.name} on WhatsApp`}
+            onClick={(event) => {
+              event.stopPropagation();
+              const url = `https://wa.me/2348000000000?text=${whatsappMsg}`;
+              window.open(url, "_blank", "noopener,noreferrer");
+            }}
           >
             <MessageCircle size={20} />
-          </a>
+          </button>
           <div onClick={(event) => event.stopPropagation()}>
             <CompareButton product={product} />
           </div>

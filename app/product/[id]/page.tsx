@@ -7,6 +7,7 @@ import { CompareButton } from "@/components/product/CompareButton";
 import { WishlistButton } from "@/components/product/WishlistButton";
 import { Reveal } from "@/components/ui/Reveal";
 import { ProductDepthGallery } from "@/components/product/ProductDepthGallery";
+import { RecentlyViewedTracker } from "@/components/ui/RecentlyViewedTracker";
 
 export default async function ProductPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = await params;
@@ -108,6 +109,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
       </main>
 
       <StickyBottomCTA product={product} />
+      <RecentlyViewedTracker product={product} />
     </div>
   );
 }

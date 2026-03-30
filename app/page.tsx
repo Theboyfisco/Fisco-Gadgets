@@ -1,6 +1,7 @@
-import { BentoProductCard } from "@/components/product/BentoProductCard";
 import { LatestProductsCarousel } from "@/components/ui/LatestProductsCarousel";
+import { FeaturedProductsGrid } from "@/components/ui/FeaturedProductsGrid";
 import { Reveal } from "@/components/ui/Reveal";
+import { RecentlyViewedRail } from "@/components/ui/RecentlyViewedRail";
 import { ShieldCheck, Truck, Clock, CreditCard, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -76,8 +77,9 @@ export default async function Home() {
                 <div className="flex flex-col gap-3 sm:flex-row">
                   <Link
                     href="#featured"
-                    className="inline-flex items-center justify-center gap-2 rounded-standard bg-primary px-8 py-3 text-sm font-semibold text-[var(--primary-contrast)] transition-all hover:scale-[1.02] hover:bg-[var(--primary-hover)]"
+                    className="inline-flex items-center justify-center gap-2 rounded-standard bg-primary px-8 py-3 text-sm font-semibold text-[var(--primary-contrast)] transition-all hover:scale-[1.02] hover:bg-[var(--primary-hover)] relative overflow-hidden"
                   >
+                    <span className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.35),transparent_55%)] opacity-0 transition-opacity duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:opacity-100" />
                     Shop Featured
                     <ArrowRight size={16} />
                   </Link>
@@ -96,6 +98,8 @@ export default async function Home() {
             </Reveal>
           </div>
         </section>
+
+        <RecentlyViewedRail />
 
         <Reveal className="mb-16">
           <div className="flex flex-col gap-6 rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-6 md:flex-row md:items-center md:justify-between">
@@ -143,7 +147,7 @@ export default async function Home() {
               <Link
                 key={category.id}
                 href={`/category/${category.id}`}
-                className="group relative h-48 overflow-hidden rounded-[28px] border border-[var(--category-card-border)] bg-[var(--category-card-surface)] shadow-[var(--category-card-shadow)] transition duration-500 hover:-translate-y-1 hover:shadow-[var(--category-card-shadow-hover)]"
+                className="group relative h-48 overflow-hidden rounded-[28px] border border-[var(--category-card-border)] bg-[var(--category-card-surface)] shadow-[var(--category-card-shadow)] transition duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:-translate-y-1 hover:shadow-[var(--category-card-shadow-hover)]"
               >
                 <Image
                   src={category.image}
@@ -151,10 +155,10 @@ export default async function Home() {
                   fill
                   sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                   quality={90}
-                  className="object-cover transition duration-700 group-hover:scale-105"
+                  className="object-cover transition duration-[var(--motion-slow)] ease-[var(--ease-standard)] group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-[var(--category-card-overlay)]" />
-                <div className="absolute inset-x-4 bottom-4 rounded-2xl border border-[var(--category-pill-border)] bg-[var(--category-pill-bg)] p-4 backdrop-blur-sm transition duration-300 group-hover:border-[var(--category-pill-border-hover)]">
+                <div className="absolute inset-x-4 bottom-4 rounded-2xl border border-[var(--category-pill-border)] bg-[var(--category-pill-bg)] p-4 backdrop-blur-sm transition duration-[var(--motion-base)] ease-[var(--ease-standard)] group-hover:border-[var(--category-pill-border-hover)] group-hover:-translate-y-1">
                   <p className="text-sm font-semibold uppercase tracking-wide text-[var(--category-pill-title)]">{category.name}</p>
                   <p className="mt-1 text-xs uppercase tracking-[0.3em] text-[var(--category-pill-subtitle)]">Explore collection</p>
                 </div>
@@ -213,13 +217,7 @@ export default async function Home() {
                 ))}
               </div>
             </div>
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {featuredProducts.map((product: any, index: number) => (
-                <Link href={`/product/${product.id}`} key={product.id} className={index === 0 ? "md:col-span-2 lg:col-span-2" : ""}>
-                  <BentoProductCard product={product as any} featured={index === 0} />
-                </Link>
-              ))}
-            </div>
+            <FeaturedProductsGrid products={featuredProducts as any} />
           </Reveal>
         </section>
       </main>

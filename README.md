@@ -1,77 +1,50 @@
 # Fisco Gadgets
 
-Fisco Gadgets is a premium gadget storefront built for the Nigerian market, combining a polished, immersive shopping interface with a practical, production-ready checkout flow.
+Premium gadget storefront built for the Nigerian market, pairing an immersive, modern shopping UI with a production-grade checkout and payment pipeline.
 
-It is designed to feel modern and tactile on the front end (3D interactions, depth galleries, smooth motion), while staying reliable on the back end (Prisma + PostgreSQL + Paystack payment orchestration).
-
----
-
-## What this app is
-
-At its core, Fisco Gadgets is an end-to-end e-commerce experience focused on discovery and confidence:
-
-- **Discover** products through curated categories and brand pages.
-- **Evaluate** devices with rich product pages and side-by-side comparison.
-- **Decide** with a fast cart and checkout flow.
-- **Pay securely** through Paystack.
-- **Track order integrity** through server-side validation and webhook-driven updates.
+This repo focuses on a tactile frontend (depth galleries, smooth motion, rich product pages) and a reliable backend (Prisma + PostgreSQL + Paystack orchestration).
 
 ---
 
-## Core user journeys
+## Highlights
 
-### 1) Browse and discover
-
-- Landing experience with featured products
-- Category pages for thematic exploration
-- Brand storefront pages for brand-led shopping
-- Search overlay with keyboard shortcut support (`Cmd/Ctrl + K`)
-
-### 2) Inspect and compare
-
-- Detailed product pages with specs and visual depth
-- Stacked gallery interactions for better product context
-- Compare workflow for side-by-side decision support
-
-### 3) Buy with confidence
-
-- Persistent cart flow
-- Checkout form with server-side order creation
-- Paystack initialization for payment handoff
-- Webhook endpoint to confirm payment outcomes and update order state
+- Curated category and brand storefronts
+- Rich product detail pages with depth gallery and specs
+- Side-by-side product comparison flow
+- Fast cart and checkout experience
+- Paystack payment initialization and webhook-confirmed order updates
+- Mobile-first UX with strong purchase CTAs
 
 ---
 
-## Experience principles
+## Product journey
 
-Fisco Gadgets emphasizes:
-
-- **Premium feel**: glassmorphism-inspired UI, depth, animation, and motion polish
-- **Clarity**: clean information hierarchy from listing to checkout
-- **Responsiveness**: mobile-first behavior with focused purchase CTAs
-- **Reliability**: validated backend flows and payment confirmation pipeline
+1. Discover products via landing, categories, and brand pages
+2. Inspect details and compare devices side-by-side
+3. Checkout quickly with server-validated order creation
+4. Pay securely through Paystack
+5. Receive confirmed order updates via webhook verification
 
 ---
 
-## Technical architecture
+## Tech stack (current)
 
-### Frontend
+**Frontend**
 
-- Next.js 16 App Router
-- React 19 + TypeScript
-- Tailwind CSS v4
-- Framer Motion
+- Next.js `16.1.6` (App Router)
+- React `19.2.3` + TypeScript `5.x`
+- Tailwind CSS `v4`
+- Framer Motion `12.x`
 
-### Backend and data
+**Backend and data**
 
-- Prisma ORM
+- Prisma `6.2.1`
 - PostgreSQL (pooled runtime connection + direct migration connection)
-- Server actions / API routes for checkout and payment workflows
+- Server actions / API routes for checkout + payments
 
-### Payments
+**Payments**
 
-- Paystack payment initialization
-- Paystack webhook verification and order update handling
+- Paystack initialization + webhook verification
 
 ---
 
@@ -80,19 +53,19 @@ Fisco Gadgets emphasizes:
 - `app/` — routes, layouts, and page-level composition
 - `components/` — reusable UI and feature components
 - `actions/` — server actions for search, checkout, and payment initiation
-- `lib/` — shared utilities (database, helpers)
+- `lib/` — shared utilities (db, helpers)
 - `prisma/` — schema, migrations, and seed scripts
-- `docs/` — additional documentation
+- `docs/` — supporting documentation
 
 ---
 
-## Local development
+## Local setup
 
 ### Prerequisites
 
 - Node.js 20+
 - npm
-- PostgreSQL database (or managed Postgres such as Supabase)
+- PostgreSQL (local or hosted, e.g. Supabase)
 
 ### 1) Install dependencies
 
@@ -102,7 +75,7 @@ npm install
 
 ### 2) Configure environment variables
 
-Create `.env` with:
+Create `.env` and set:
 
 ```bash
 DATABASE_URL="postgresql://..."
@@ -131,46 +104,64 @@ npx prisma db seed
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Open `http://localhost:3000`.
+
+---
+
+## Environment variables
+
+| Variable | Purpose |
+| --- | --- |
+| `DATABASE_URL` | Runtime pooled connection string |
+| `DIRECT_URL` | Direct connection for migrations |
+| `PAYSTACK_SECRET_KEY` | Server-side Paystack secret |
+| `PAYSTACK_PUBLIC_KEY` | Client-side Paystack public key |
+| `NEXT_PUBLIC_APP_URL` | Public base URL for redirects and webhooks |
 
 ---
 
 ## Scripts
 
-- `npm run dev` — start local development server
-- `npm run build` — create production build
-- `npm run start` — run production server
-- `npm run lint` — run ESLint checks
-- `npx tsc --noEmit` — type-check without emitting files
+| Command | Description |
+| --- | --- |
+| `npm run dev` | Start local development server |
+| `npm run build` | Create production build |
+| `npm run start` | Run production server |
+| `npm run lint` | Run ESLint |
+| `npx tsc --noEmit` | Type-check without emitting files |
+| `npm run scrape:images` | Scrape and save product images |
 
 ---
 
-## Deployment notes
+## Deployment (Vercel)
 
-- Default target: Vercel
-- Prisma client is generated on install via `postinstall`
-- Ensure all environment variables are configured in your deployment platform
-- Configure Paystack webhook to:
+1. Push your repository to GitHub
+2. Import project in Vercel
+3. Add all environment variables from `.env`
+4. Build command: `npm run build`
+5. Configure Paystack webhook:
 
 ```text
 https://<your-domain>/api/paystack/webhook
 ```
 
+Prisma client generation runs automatically on install via `postinstall`.
+
 ---
 
-## Security and operations
+## Security notes
 
-- Keep secrets only in `.env` / deployment settings
-- Never commit real API keys to the repository
-- Rotate exposed keys immediately
-- Verify webhook signature validation stays enabled
+- Keep secrets only in `.env` or your deployment platform settings
+- Never commit real API keys
+- Rotate keys immediately if exposed
+- Ensure webhook signature verification remains enabled
 
 ---
 
 ## Related docs
 
-- [FEATURES.md](./FEATURES.md)
-- [BACKEND_SETUP.md](./BACKEND_SETUP.md)
-- [deployment_guide.md](./deployment_guide.md)
-- [info.md](./info.md)
+- `FEATURES.md`
+- `BACKEND_SETUP.md`
+- `deployment_guide.md`
+- `info.md`
 
