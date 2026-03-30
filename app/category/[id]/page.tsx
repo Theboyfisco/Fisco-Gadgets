@@ -5,7 +5,7 @@ import Image from "next/image";
 import { BentoProductCard } from "@/components/product/BentoProductCard";
 import { Reveal } from "@/components/ui/Reveal";
 import { CategorySort } from "@/components/ui/CategorySort";
-import { CategoryFilters } from "@/components/ui/CategoryFilters";
+import { CategoryFiltersServer } from "@/components/ui/CategoryFiltersServer";
 
 function categoryTone(categoryId: string) {
   if (categoryId === "phones") return "from-[var(--tone-phones)]";
@@ -26,6 +26,8 @@ export default async function CategoryPage({
   const sort = searchParams?.sort ?? "newest";
   const min = searchParams?.min ? Number(searchParams.min) : undefined;
   const max = searchParams?.max ? Number(searchParams.max) : undefined;
+  const minValue = Number.isFinite(min) ? (min as number) : undefined;
+  const maxValue = Number.isFinite(max) ? (max as number) : undefined;
 
   const orderBy =
     sort === "price-asc"
@@ -39,11 +41,11 @@ export default async function CategoryPage({
     prisma.product.findMany({
       where: {
         categoryId,
-        ...(Number.isFinite(min) || Number.isFinite(max)
+        ...(Number.isFinite(minValue) || Number.isFinite(maxValue)
           ? {
               price: {
-                ...(Number.isFinite(min) ? { gte: min } : {}),
-                ...(Number.isFinite(max) ? { lte: max } : {}),
+                ...(Number.isFinite(minValue) ? { gte: minValue } : {}),
+                ...(Number.isFinite(maxValue) ? { lte: maxValue } : {}),
               },
             }
           : {}),
@@ -86,19 +88,23 @@ export default async function CategoryPage({
         </div>
       </Reveal>
 
-      {products.length === 0 ? (
-        <div className="rounded-standard border border-border-subtle bg-[var(--surface-card)] p-12 text-center">
-          <p className="text-lg text-secondary">No products found in this category.</p>
-        </div>
-      ) : (
-        <Reveal>
-          <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-            <div className="flex items-center gap-4">
-              <p className="text-sm text-secondary">{products.length} items</p>
-              <CategorySort />
-            </div>
-            <CategoryFilters />
+      <Reveal>
+        <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div className="flex items-center gap-4">
+            <p className="text-sm text-secondary">{products.length} items</p>
+            <CategorySort />
           </div>
+          <CategoryFiltersServer min={minValue} max={maxValue} />
+        </div>
+
+        {products.length === 0 ? (
+          <div className="rounded-standard border border-border-subtle bg-[var(--surface-card)] p-12 text-center">
+            <p className="text-lg text-secondary">No products match your filters.</p>
+            <Link href={`/category/${category.id}`} className="interactive-focus link-accent mt-2 inline-block text-sm">
+              Clear filters
+            </Link>
+          </div>
+        ) : (
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {products.map((product: any) => (
               <Link href={`/product/${product.id}`} key={product.id}>
@@ -106,8 +112,8 @@ export default async function CategoryPage({
               </Link>
             ))}
           </div>
-        </Reveal>
-      )}
+        )}
+      </Reveal>
     </div>
   );
 }

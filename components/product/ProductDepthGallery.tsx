@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useMemo, useState } from "react";
+import { useReducedMotion } from "framer-motion";
 import { Tilt3D } from "@/components/ui/Tilt3D";
 
 interface ProductDepthGalleryProps {
@@ -18,10 +19,11 @@ export function ProductDepthGallery({ name, images, condition = "New" }: Product
 
   const [activeIndex, setActiveIndex] = useState(0);
   const activeImage = safeImages[activeIndex] ?? safeImages[0];
+  const prefersReducedMotion = useReducedMotion();
 
   return (
     <div className="space-y-5">
-      <Tilt3D maxTilt={8}>
+      <Tilt3D maxTilt={prefersReducedMotion ? 0 : 8}>
         <div className="relative h-[320px] w-full overflow-hidden rounded-2xl border border-border-subtle bg-gradient-to-b from-[var(--surface-cta)] to-[var(--surface-soft)] p-4 sm:h-[420px] sm:p-5 lg:h-[610px]">
           <div className="pointer-events-none absolute -left-8 -top-10 h-40 w-40 rounded-full bg-primary/20 blur-3xl" />
           <div className="pointer-events-none absolute -bottom-10 -right-8 h-40 w-40 rounded-full bg-[var(--carousel-glow-2)] blur-3xl" />
@@ -56,7 +58,7 @@ export function ProductDepthGallery({ name, images, condition = "New" }: Product
         </div>
       </Tilt3D>
 
-      <div className="overflow-x-auto pb-1">
+      <div className="no-scrollbar overflow-x-auto pb-1">
         <div className="mx-auto flex w-max -space-x-6 px-2">
           {safeImages.slice(0, 8).map((image, index) => {
             const active = index === activeIndex;

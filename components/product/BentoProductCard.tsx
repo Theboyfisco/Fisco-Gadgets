@@ -1,13 +1,15 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import { MessageCircle, ShoppingCart } from "lucide-react";
+import { MessageCircle, ShoppingCart, Eye } from "lucide-react";
 import Image from "next/image";
 import { CompareButton } from "./CompareButton";
 import { Tilt3D } from "../ui/Tilt3D";
 import { MOTION } from "@/lib/motion";
 import { useCart } from "../cart/CartProvider";
 import { WishlistButton } from "./WishlistButton";
+import { QuickViewModal } from "./QuickViewModal";
+import { useState } from "react";
 
 export interface Product {
   id: string;
@@ -37,6 +39,7 @@ function categoryTint() {
 export function BentoProductCard({ product, featured = false }: BentoProductCardProps) {
   const prefersReducedMotion = useReducedMotion();
   const { addToCart } = useCart();
+  const [quickViewOpen, setQuickViewOpen] = useState(false);
   const whatsappMsg = encodeURIComponent(`Hi, I'm interested in the ${product.name} listed for ₦${product.price}`);
   const containerClass = featured
     ? "relative group overflow-hidden border border-border-subtle bg-surface/90 backdrop-blur-md shadow-glow rounded-featured p-4 md:p-5"
@@ -92,6 +95,17 @@ export function BentoProductCard({ product, featured = false }: BentoProductCard
           >
             <ShoppingCart size={20} />
           </button>
+          <button
+            className="rounded-full border border-primary/20 bg-[var(--surface-contrast)] p-2 text-primary backdrop-blur-md transition-colors hover:bg-primary/30"
+            aria-label={`Quick view ${product.name}`}
+            onClick={(event) => {
+              event.stopPropagation();
+              event.preventDefault();
+              setQuickViewOpen(true);
+            }}
+          >
+            <Eye size={20} />
+          </button>
           <div onClick={(event) => event.stopPropagation()}>
             <WishlistButton product={product} />
           </div>
@@ -106,6 +120,7 @@ export function BentoProductCard({ product, featured = false }: BentoProductCard
             <CompareButton product={product} />
           </div>
         </div>
+        <QuickViewModal product={product} isOpen={quickViewOpen} onClose={() => setQuickViewOpen(false)} />
       </motion.div>
     </Tilt3D>
   );

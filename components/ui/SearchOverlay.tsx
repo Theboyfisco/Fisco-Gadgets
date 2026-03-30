@@ -9,15 +9,20 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { MOTION } from "@/lib/motion";
 import { WishlistButton } from "@/components/product/WishlistButton";
+import { useBodyScrollLock } from "@/lib/useBodyScrollLock";
+import { QuickViewModal } from "@/components/product/QuickViewModal";
 
 export function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<any[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [quickViewProduct, setQuickViewProduct] = useState<any | null>(null);
   const router = useRouter();
   const dialogRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const lastActiveRef = useRef<HTMLElement | null>(null);
+
+  useBodyScrollLock(isOpen);
 
   useEffect(() => {
     const performSearch = async () => {
@@ -46,6 +51,7 @@ export function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; onClose: (
   }, [query, isOpen]);
 
   useEffect(() => {
+    if (quickViewProduct) return;
     const handleKeys = (event: KeyboardEvent) => {
       if (event.key === "Escape") onClose();
       if (event.key === "ArrowDown" && results.length > 0) {
@@ -66,7 +72,7 @@ export function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; onClose: (
 
     window.addEventListener("keydown", handleKeys);
     return () => window.removeEventListener("keydown", handleKeys);
-  }, [onClose, results, query, router, activeIndex]);
+  }, [onClose, results, query, router, activeIndex, quickViewProduct]);
 
   useEffect(() => {
     if (isOpen) {
@@ -80,6 +86,7 @@ export function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; onClose: (
 
   useEffect(() => {
     if (!isOpen) return;
+    if (quickViewProduct) return;
 
     const handleTabTrap = (event: KeyboardEvent) => {
       if (event.key !== "Tab") return;
@@ -102,7 +109,7 @@ export function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; onClose: (
 
     document.addEventListener("keydown", handleTabTrap);
     return () => document.removeEventListener("keydown", handleTabTrap);
-  }, [isOpen]);
+  }, [isOpen, quickViewProduct]);
 
   return (
     <AnimatePresence>
@@ -182,6 +189,17 @@ export function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; onClose: (
                             {product.categoryId} • ₦{product.price.toLocaleString()}
                           </p>
                         </div>
+                        <button
+                          onClick={(event) => {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            setQuickViewProduct(product);
+                          }}
+                          className="rounded-full border border-[var(--border-subtle)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-secondary transition-colors hover:border-primary/40 hover:text-primary"
+                          aria-label={`Quick view ${product.name}`}
+                        >
+                          Quick
+                        </button>
                         <WishlistButton product={product} />
                         <ArrowRight className="-translate-x-2 text-secondary opacity-0 transition-all group-hover:translate-x-0 group-hover:opacity-100" size={18} />
                       </Link>
@@ -237,6 +255,13 @@ export function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; onClose: (
             </div>
           </motion.div>
         </div>
+      )}
+      {quickViewProduct && (
+        <QuickViewModal
+          product={quickViewProduct}
+          isOpen={Boolean(quickViewProduct)}
+          onClose={() => setQuickViewProduct(null)}
+        />
       )}
     </AnimatePresence>
   );

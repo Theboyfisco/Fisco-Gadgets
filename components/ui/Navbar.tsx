@@ -21,7 +21,7 @@ interface NavbarProps {
 
 export function Navbar({ categories = [] }: NavbarProps) {
   const { cartItems, toggleCart } = useCart();
-  const { wishlistItems } = useWishlist();
+  const { wishlistItems, toggleWishlistDrawer, isWishlistOpen } = useWishlist();
   const pathname = usePathname();
   const isHome = pathname === "/";
 
@@ -196,10 +196,12 @@ export function Navbar({ categories = [] }: NavbarProps) {
             </button>
 
             <ThemeSwitcher />
-            <Link
-              href="/wishlist"
+            <button
+              onClick={toggleWishlistDrawer}
               className="interactive-focus relative rounded-xl p-2 text-secondary transition-colors hover:bg-[var(--interactive-active)] hover:text-[var(--interactive-fg)]"
               aria-label="View wishlist"
+              aria-expanded={isWishlistOpen}
+              aria-controls="wishlist-drawer"
             >
               <Heart size={22} />
               {wishlistItems.length > 0 && (
@@ -207,7 +209,7 @@ export function Navbar({ categories = [] }: NavbarProps) {
                   {wishlistItems.length}
                 </span>
               )}
-            </Link>
+            </button>
             <button
               onClick={toggleCart}
               className="interactive-focus relative rounded-xl p-2 text-secondary transition-colors hover:bg-[var(--interactive-active)] hover:text-[var(--interactive-fg)]"
@@ -216,7 +218,7 @@ export function Navbar({ categories = [] }: NavbarProps) {
               <ShoppingBag size={23} />
               {cartItems.length > 0 && (
                 <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full border border-[var(--background)] bg-primary text-[10px] font-bold text-[var(--primary-contrast)]">
-                  {cartItems.length}
+                  {cartItems.reduce((sum, item) => sum + item.quantity, 0)}
                 </span>
               )}
             </button>

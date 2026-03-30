@@ -9,11 +9,11 @@ const FILTERS = [
   { label: "₦500k+", min: 500000, max: undefined },
 ];
 
-export function CategoryFilters() {
+export function CategoryFilters({ initialMin, initialMax }: { initialMin?: number; initialMax?: number }) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const min = searchParams.get("min");
-  const max = searchParams.get("max");
+  const min = searchParams.get("min") ?? (initialMin !== undefined ? String(initialMin) : null);
+  const max = searchParams.get("max") ?? (initialMax !== undefined ? String(initialMax) : null);
 
   const handleSelect = (minValue?: number, maxValue?: number) => {
     const params = new URLSearchParams(searchParams);
@@ -36,8 +36,10 @@ export function CategoryFilters() {
     return minMatch && maxMatch;
   };
 
+  const hasFilter = Boolean(min) || Boolean(max);
+
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-wrap items-center gap-2">
       {FILTERS.map((filter) => {
         const active = isActive(filter.min, filter.max);
         return (
@@ -55,6 +57,15 @@ export function CategoryFilters() {
           </button>
         );
       })}
+      {hasFilter && (
+        <button
+          type="button"
+          onClick={() => handleSelect(undefined, undefined)}
+          className="rounded-full border border-[var(--border-subtle)] px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-secondary transition-colors hover:border-[var(--interactive-border-strong)] hover:text-[var(--foreground)]"
+        >
+          Clear
+        </button>
+      )}
     </div>
   );
 }

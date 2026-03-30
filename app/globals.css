@@ -470,6 +470,14 @@
   background: rgba(255, 255, 255, 0.3);
 }
 
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

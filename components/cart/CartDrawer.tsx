@@ -5,22 +5,27 @@ import { ShoppingBag, X, Trash2 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useRef } from "react";
-import type { Product } from "../product/BentoProductCard";
+import type { CartItem } from "./CartProvider";
 import { MOTION } from "@/lib/motion";
+import { useBodyScrollLock } from "@/lib/useBodyScrollLock";
 
 interface CartDrawerProps {
     isOpen: boolean;
     onClose: () => void;
-    cartItems: Product[];
+    cartItems: CartItem[];
     onRemove: (productId: string) => void;
     onClear: () => void;
+    onIncrease: (productId: string) => void;
+    onDecrease: (productId: string) => void;
 }
 
-export function CartDrawer({ isOpen, onClose, cartItems, onRemove, onClear }: CartDrawerProps) {
-    const total = cartItems.reduce((acc, item) => acc + item.price, 0);
+export function CartDrawer({ isOpen, onClose, cartItems, onRemove, onClear, onIncrease, onDecrease }: CartDrawerProps) {
+    const total = cartItems.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
     const prefersReducedMotion = useReducedMotion();
     const dialogRef = useRef<HTMLDivElement>(null);
     const lastActiveRef = useRef<HTMLElement | null>(null);
+
+    useBodyScrollLock(isOpen);
 
     useEffect(() => {
         if (isOpen) {
@@ -110,21 +115,44 @@ export function CartDrawer({ isOpen, onClose, cartItems, onRemove, onClear }: Ca
                             </div>
                         ) : (
                             <div className="flex-1 overflow-y-auto space-y-4 pr-2">
-                                {cartItems.map((item, idx) => (
-                                    <div key={`${item.id}-${idx}`} className="flex items-center gap-4 rounded-standard border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
+                                {cartItems.map((item) => (
+                                    <div key={item.product.id} className="flex items-center gap-4 rounded-standard border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
                                         <div className="relative h-14 w-14 overflow-hidden rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-cta)]">
-                                            {item.image && <Image src={item.image} alt={item.name} fill className="object-cover" />}
+                                            {item.product.image && <Image src={item.product.image} alt={item.product.name} fill className="object-cover" />}
                                         </div>
                                         <div className="flex-1">
-                                            <h4 className="font-semibold text-[var(--foreground)]">{item.name}</h4>
+                                            <h4 className="font-semibold text-[var(--foreground)]">{item.product.name}</h4>
                                             <p className="text-primary text-sm">
-                                                {new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN" }).format(item.price)}
+                                                {new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN" }).format(item.product.price)}
                                             </p>
+                                            <div className="mt-2 inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-cta)] px-2 py-1 text-xs text-secondary">
+                                                <button
+                                                    onClick={() => onDecrease(item.product.id)}
+                                                    className="h-6 w-6 rounded-full border border-[var(--border-subtle)] text-sm font-semibold text-secondary transition-colors hover:border-primary/40 hover:text-primary"
+                                                    aria-label={`Decrease quantity for ${item.product.name}`}
+                                                >
+                                                    -
+                                                </button>
+                                                <span className="min-w-[2ch] text-center text-sm font-semibold text-[var(--foreground)]">{item.quantity}</span>
+                                                <button
+                                                    onClick={() => onIncrease(item.product.id)}
+                                                    className="h-6 w-6 rounded-full border border-[var(--border-subtle)] text-sm font-semibold text-secondary transition-colors hover:border-primary/40 hover:text-primary"
+                                                    aria-label={`Increase quantity for ${item.product.name}`}
+                                                >
+                                                    +
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div className="text-right text-xs text-secondary">
+                                            <p className="font-semibold text-[var(--foreground)]">
+                                                {new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN" }).format(item.product.price * item.quantity)}
+                                            </p>
+                                            <p>Line total</p>
                                         </div>
                                         <button
-                                            onClick={() => onRemove(item.id)}
+                                            onClick={() => onRemove(item.product.id)}
                                             className="rounded-full border border-[var(--border-subtle)] p-2 text-secondary transition-colors hover:border-primary/40 hover:text-primary"
-                                            aria-label={`Remove ${item.name} from cart`}
+                                            aria-label={`Remove ${item.product.name} from cart`}
                                         >
                                             <Trash2 size={16} />
                                         </button>

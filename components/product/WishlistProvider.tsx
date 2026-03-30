@@ -5,11 +5,14 @@ import type { Product } from "@/components/product/BentoProductCard";
 
 interface WishlistContextType {
   wishlistItems: Product[];
+  isWishlistOpen: boolean;
   addToWishlist: (product: Product) => void;
   removeFromWishlist: (productId: string) => void;
   toggleWishlist: (product: Product) => void;
   clearWishlist: () => void;
   isInWishlist: (productId: string) => boolean;
+  toggleWishlistDrawer: () => void;
+  closeWishlistDrawer: () => void;
 }
 
 const WishlistContext = createContext<WishlistContextType | undefined>(undefined);
@@ -27,6 +30,7 @@ function readInitialWishlist(): Product[] {
 
 export function WishlistProvider({ children }: { children: React.ReactNode }) {
   const [wishlistItems, setWishlistItems] = useState<Product[]>(readInitialWishlist);
+  const [isWishlistOpen, setIsWishlistOpen] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -59,8 +63,23 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
     return wishlistItems.some((item) => item.id === productId);
   };
 
+  const toggleWishlistDrawer = () => setIsWishlistOpen((prev) => !prev);
+  const closeWishlistDrawer = () => setIsWishlistOpen(false);
+
   return (
-    <WishlistContext.Provider value={{ wishlistItems, addToWishlist, removeFromWishlist, toggleWishlist, clearWishlist, isInWishlist }}>
+    <WishlistContext.Provider
+      value={{
+        wishlistItems,
+        isWishlistOpen,
+        addToWishlist,
+        removeFromWishlist,
+        toggleWishlist,
+        clearWishlist,
+        isInWishlist,
+        toggleWishlistDrawer,
+        closeWishlistDrawer,
+      }}
+    >
       {children}
     </WishlistContext.Provider>
   );

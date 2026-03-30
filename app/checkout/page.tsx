@@ -27,7 +27,7 @@ export default function CheckoutPage() {
         shippingType: "DELIVERY" as const
     });
 
-    const total = cartItems.reduce((acc, item) => acc + item.price, 0);
+    const total = cartItems.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -44,8 +44,8 @@ export default function CheckoutPage() {
                 email: formData.email,
                 phone: formData.phone,
                 items: cartItems.map(item => ({
-                    productId: item.id,
-                    quantity: 1 // Logic for quantity can be expanded later
+                    productId: item.product.id,
+                    quantity: item.quantity
                 })),
                 shipping: {
                     fullName: formData.fullName,
@@ -230,15 +230,19 @@ export default function CheckoutPage() {
                     <div className="sticky top-24 rounded-standard border border-border-subtle bg-[var(--surface-card)] p-6">
                         <h3 className="mb-6 border-b border-border-subtle pb-4 text-xl font-bold text-[var(--foreground)]">Order Summary</h3>
                         <div className="space-y-4 mb-6 max-h-[400px] overflow-y-auto pr-2">
-                            {cartItems.map((item, idx) => (
-                                <div key={idx} className="flex gap-4">
+                            {cartItems.map((item) => (
+                                <div key={item.product.id} className="flex gap-4">
                                     <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-md bg-[var(--surface-card)]">
-                                        <Image src={item.image} alt={item.name} fill className="object-cover" />
+                                        <Image src={item.product.image} alt={item.product.name} fill className="object-cover" />
                                     </div>
                                     <div className="flex-1">
-                                        <p className="line-clamp-1 text-sm font-medium text-[var(--foreground)]">{item.name}</p>
+                                        <p className="line-clamp-1 text-sm font-medium text-[var(--foreground)]">{item.product.name}</p>
+                                        <p className="text-secondary text-xs">Qty {item.quantity}</p>
                                         <p className="text-primary text-xs font-bold">
-                                            {new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN' }).format(item.price)}
+                                            {new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN' }).format(item.product.price)}
+                                        </p>
+                                        <p className="text-xs text-secondary">
+                                            Line: {new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN' }).format(item.product.price * item.quantity)}
                                         </p>
                                     </div>
                                 </div>
