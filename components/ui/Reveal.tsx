@@ -2,6 +2,7 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import { type ReactNode } from "react";
+import { MOTION } from "@/lib/motion";
 
 interface RevealProps {
   children: ReactNode;
@@ -22,7 +23,7 @@ export function Reveal({ children, className = "", delay = 0, y = 16 }: RevealPr
       initial={{ opacity: 0, y }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.55, ease: "easeOut", delay }}
+      transition={{ duration: MOTION.duration.slow, ease: MOTION.ease.standard, delay }}
       className={className}
     >
       {children}

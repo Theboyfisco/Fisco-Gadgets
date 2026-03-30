@@ -22,6 +22,13 @@
   --shadow-glass: 0 24px 65px rgba(6, 10, 28, 0.35);
   --shadow-glow: 0 14px 50px -16px rgba(16, 185, 129, 0.4);
 
+  --motion-fast: 160ms;
+  --motion-base: 240ms;
+  --motion-slow: 420ms;
+  --ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-enter: cubic-bezier(0, 0, 0.2, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+
   --font-sans: var(--font-manrope), "Segoe UI", "Helvetica Neue", sans-serif;
   --font-mono:
     var(--font-space-grotesk), "JetBrains Mono", "Fira Code", ui-monospace, SFMono-Regular, Menlo, Monaco,

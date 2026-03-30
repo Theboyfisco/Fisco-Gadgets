@@ -5,6 +5,7 @@ import "./globals.css";
 
 import { CartProvider } from "@/components/cart/CartProvider";
 import { CompareProvider } from "@/components/product/CompareProvider";
+import { WishlistProvider } from "@/components/product/WishlistProvider";
 import { Navbar } from "@/components/ui/Navbar";
 import { CartWrapper } from "@/components/cart/CartWrapper";
 import { Footer } from "@/components/ui/Footer";
@@ -62,13 +63,15 @@ export default async function RootLayout({
         className={`${manrope.variable} ${spaceGrotesk.variable} flex min-h-screen flex-col antialiased selection:bg-primary/20 selection:text-[var(--foreground)]`}
       >
         <CompareProvider>
-          <CartProvider>
-            <Navbar categories={categories} />
-            {children}
-            <Footer categories={categories} />
-            <CartWrapper />
-            <CompareFloatingBar />
-          </CartProvider>
+          <WishlistProvider>
+            <CartProvider>
+              <Navbar categories={categories} />
+              {children}
+              <Footer categories={categories} />
+              <CartWrapper />
+              <CompareFloatingBar />
+            </CartProvider>
+          </WishlistProvider>
         </CompareProvider>
       </body>
     </html>

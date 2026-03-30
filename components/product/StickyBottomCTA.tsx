@@ -3,6 +3,7 @@
 import { MessageCircle } from 'lucide-react';
 import type { Product } from './BentoProductCard';
 import { AddToCartButton } from './AddToCartButton';
+import { WishlistButton } from './WishlistButton';
 
 export function StickyBottomCTA({ product }: { product: Product }) {
     const whatsappMsg = encodeURIComponent(`Hi, I want to buy ${product.name}`);
@@ -17,6 +18,7 @@ export function StickyBottomCTA({ product }: { product: Product }) {
                 <MessageCircle size={18} />
                 WhatsApp Buy
             </a>
+            <WishlistButton product={product} className="rounded-standard border border-[var(--border-subtle)] bg-[var(--surface-cta)] px-3" />
         </div>
     );
 }

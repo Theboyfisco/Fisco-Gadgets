@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { ShoppingBag, ArrowLeft, Menu, X, Smartphone, Laptop, Headphones, Search, Info, Mail } from "lucide-react";
+import { ShoppingBag, ArrowLeft, Menu, X, Smartphone, Laptop, Headphones, Search, Info, Mail, Heart } from "lucide-react";
 import { useCart } from "../cart/CartProvider";
+import { useWishlist } from "../product/WishlistProvider";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -10,6 +11,7 @@ import dynamic from "next/dynamic";
 import { createPortal } from "react-dom";
 import { BrandLogo } from "./BrandLogo";
 import { ThemeSwitcher } from "./ThemeSwitcher";
+import { MOTION } from "@/lib/motion";
 
 const SearchOverlay = dynamic(() => import("./SearchOverlay").then((mod) => mod.SearchOverlay), { ssr: false });
 
@@ -19,6 +21,7 @@ interface NavbarProps {
 
 export function Navbar({ categories = [] }: NavbarProps) {
   const { cartItems, toggleCart } = useCart();
+  const { wishlistItems } = useWishlist();
   const pathname = usePathname();
   const isHome = pathname === "/";
 
@@ -44,30 +47,35 @@ export function Navbar({ categories = [] }: NavbarProps) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  const navLinks = [
+  const categoryLinks = categories.map((category) => ({
+    name: category.name,
+    href: `/category/${category.id}`,
+    icon:
+      category.id === "phones"
+        ? Smartphone
+        : category.id === "laptops"
+          ? Laptop
+          : category.id === "audio"
+            ? Headphones
+            : Smartphone,
+  }));
+
+  const coreLinks = [
     { name: "Home", href: "/", icon: Smartphone },
-    ...categories.map((category) => ({
-      name: category.name,
-      href: `/category/${category.id}`,
-      icon:
-        category.id === "phones"
-          ? Smartphone
-          : category.id === "laptops"
-            ? Laptop
-            : category.id === "audio"
-              ? Headphones
-              : Smartphone,
-    })),
     { name: "About", href: "/about", icon: Info },
     { name: "Contact", href: "/contact", icon: Mail },
   ];
+
+  const visibleCategories = categoryLinks.slice(0, 3);
+  const navLinks = [coreLinks[0], ...visibleCategories, ...coreLinks.slice(1)];
+  const showMegaMenu = categoryLinks.length > visibleCategories.length;
 
   const renderSearchOverlay = typeof document !== "undefined";
 
   return (
     <>
       <header
-        className="sticky top-0 z-40 w-full border-b border-[var(--border-subtle)] backdrop-blur-2xl transition-all duration-300"
+        className="sticky top-0 z-40 w-full border-b border-[var(--border-subtle)] backdrop-blur-2xl transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)]"
         style={{
           backgroundColor: scrolled ? "var(--nav-bg-scrolled)" : "var(--nav-bg)",
           paddingTop: scrolled ? "0.2rem" : "0.55rem",
@@ -80,6 +88,8 @@ export function Navbar({ categories = [] }: NavbarProps) {
               className="interactive-focus -ml-2 rounded-lg p-2 text-secondary transition-colors hover:bg-[var(--interactive-hover)] hover:text-[var(--foreground)] lg:hidden"
               onClick={() => setIsMobileMenuOpen(true)}
               aria-label="Open menu"
+              aria-expanded={isMobileMenuOpen}
+              aria-controls="mobile-menu"
             >
               <Menu size={24} />
             </button>
@@ -101,6 +111,7 @@ export function Navbar({ categories = [] }: NavbarProps) {
                 <Link
                   key={link.name}
                   href={link.href}
+                  aria-current={active ? "page" : undefined}
                   className={`rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
                     active
                       ? "interactive-focus bg-[var(--interactive-active)] text-[var(--interactive-fg)]"
@@ -111,12 +122,62 @@ export function Navbar({ categories = [] }: NavbarProps) {
                 </Link>
               );
             })}
+            {showMegaMenu && (
+              <details className="group relative">
+                <summary className="interactive-focus list-none rounded-full px-3 py-1.5 text-sm font-medium text-secondary transition-colors hover:bg-[var(--interactive-hover)] hover:text-[var(--interactive-fg)] [&::-webkit-details-marker]:hidden">
+                  Browse
+                </summary>
+                <div className="absolute right-0 top-12 z-50 w-[560px] rounded-2xl border border-[var(--interactive-border)] bg-[var(--panel-bg-soft)] p-4 shadow-2xl">
+                  <div className="grid gap-4 md:grid-cols-3">
+                    <div className="md:col-span-2">
+                      <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--text-soft)]">Categories</p>
+                      <div className="grid grid-cols-2 gap-2">
+                        {categoryLinks.map((link) => {
+                          const active = pathname === link.href;
+                          return (
+                            <Link
+                              key={link.name}
+                              href={link.href}
+                              aria-current={active ? "page" : undefined}
+                              className={`flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium transition-colors ${
+                                active
+                                  ? "bg-[var(--interactive-active)] text-[var(--interactive-fg)]"
+                                  : "text-secondary hover:bg-[var(--interactive-hover)] hover:text-[var(--interactive-fg)]"
+                              }`}
+                            >
+                              <link.icon size={16} className="text-primary" />
+                              {link.name}
+                            </Link>
+                          );
+                        })}
+                      </div>
+                    </div>
+                    <div className="space-y-3">
+                      <Link
+                        href="/compare"
+                        className="block rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-4 text-sm font-semibold text-[var(--foreground)] transition-colors hover:bg-[var(--interactive-hover)]"
+                      >
+                        Compare devices
+                        <p className="mt-2 text-xs font-normal text-secondary">Line up specs side by side.</p>
+                      </Link>
+                      <Link
+                        href="/#featured"
+                        className="block rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-4 text-sm font-semibold text-[var(--foreground)] transition-colors hover:bg-[var(--interactive-hover)]"
+                      >
+                        Featured drops
+                        <p className="mt-2 text-xs font-normal text-secondary">Curated deals this week.</p>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </details>
+            )}
           </nav>
 
           <div className="flex max-w-sm flex-1 items-center justify-end gap-2 sm:gap-3 lg:max-w-md">
             <button
               onClick={() => setIsSearchOpen(true)}
-              className="interactive-focus group hidden flex-1 items-center gap-3 rounded-xl border border-[var(--interactive-border)] bg-[var(--interactive-bg-soft)] px-4 py-2 text-sm text-secondary transition-all hover:bg-[var(--interactive-active)] hover:text-[var(--interactive-fg)] lg:flex"
+              className="interactive-focus group hidden flex-1 items-center gap-3 rounded-xl border border-[var(--interactive-border)] bg-[var(--interactive-bg-soft)] px-4 py-2 text-sm text-secondary transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:bg-[var(--interactive-active)] hover:text-[var(--interactive-fg)] lg:flex"
               aria-label="Open search"
             >
               <Search size={17} className="transition-colors group-hover:text-primary" />
@@ -135,6 +196,18 @@ export function Navbar({ categories = [] }: NavbarProps) {
             </button>
 
             <ThemeSwitcher />
+            <Link
+              href="/wishlist"
+              className="interactive-focus relative rounded-xl p-2 text-secondary transition-colors hover:bg-[var(--interactive-active)] hover:text-[var(--interactive-fg)]"
+              aria-label="View wishlist"
+            >
+              <Heart size={22} />
+              {wishlistItems.length > 0 && (
+                <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full border border-[var(--background)] bg-primary text-[10px] font-bold text-[var(--primary-contrast)]">
+                  {wishlistItems.length}
+                </span>
+              )}
+            </Link>
             <button
               onClick={toggleCart}
               className="interactive-focus relative rounded-xl p-2 text-secondary transition-colors hover:bg-[var(--interactive-active)] hover:text-[var(--interactive-fg)]"
@@ -170,8 +243,9 @@ export function Navbar({ categories = [] }: NavbarProps) {
                   initial={{ x: "-100%" }}
                   animate={{ x: 0 }}
                   exit={{ x: "-100%" }}
-                  transition={{ type: "spring", bounce: 0, duration: 0.36 }}
+                  transition={{ type: "spring", bounce: 0, duration: MOTION.duration.slow }}
                   className="fixed bottom-0 left-0 top-0 z-[60] flex w-[290px] flex-col border-r border-[var(--interactive-border)] bg-[var(--mobile-drawer-bg)] p-6 shadow-2xl lg:hidden"
+                  id="mobile-menu"
                 >
                   <div className="mb-10 flex items-center justify-between">
                     <BrandLogo onClick={() => setIsMobileMenuOpen(false)} />
@@ -193,6 +267,7 @@ export function Navbar({ categories = [] }: NavbarProps) {
                           key={link.name}
                           href={link.href}
                           onClick={() => setIsMobileMenuOpen(false)}
+                          aria-current={active ? "page" : undefined}
                           className={`flex items-center gap-4 rounded-xl border p-3 text-base font-medium transition-all ${
                             active
                               ? "interactive-focus border-primary/35 bg-primary/10 text-primary"

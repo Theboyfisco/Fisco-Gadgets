@@ -1,10 +1,13 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { MessageCircle } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
+import { MessageCircle, ShoppingCart } from "lucide-react";
 import Image from "next/image";
 import { CompareButton } from "./CompareButton";
 import { Tilt3D } from "../ui/Tilt3D";
+import { MOTION } from "@/lib/motion";
+import { useCart } from "../cart/CartProvider";
+import { WishlistButton } from "./WishlistButton";
 
 export interface Product {
   id: string;
@@ -32,6 +35,8 @@ function categoryTint() {
 }
 
 export function BentoProductCard({ product, featured = false }: BentoProductCardProps) {
+  const prefersReducedMotion = useReducedMotion();
+  const { addToCart } = useCart();
   const whatsappMsg = encodeURIComponent(`Hi, I'm interested in the ${product.name} listed for ₦${product.price}`);
   const containerClass = featured
     ? "relative group overflow-hidden border border-border-subtle bg-surface/90 backdrop-blur-md shadow-glow rounded-featured p-4 md:p-5"
@@ -39,7 +44,11 @@ export function BentoProductCard({ product, featured = false }: BentoProductCard
 
   return (
     <Tilt3D className="h-full" maxTilt={featured ? 8 : 10}>
-      <motion.div whileHover={{ y: -4 }} className={containerClass}>
+      <motion.div
+        whileHover={prefersReducedMotion ? undefined : { y: -4 }}
+        transition={{ duration: MOTION.duration.base, ease: MOTION.ease.standard }}
+        className={containerClass}
+      >
         <div className="pointer-events-none absolute -left-10 -top-12 h-36 w-36 rounded-full bg-primary/15 blur-3xl" />
 
         <div className={`relative mb-4 w-full overflow-hidden rounded-xl border border-[var(--border-subtle)] ${featured ? "h-64" : "h-48"}`}>
@@ -49,7 +58,9 @@ export function BentoProductCard({ product, featured = false }: BentoProductCard
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
             quality={92}
-            className="object-cover transition-transform duration-500 will-change-transform [transform:translateZ(36px)_scale(1.03)] group-hover:scale-110"
+            className={`object-cover transition-transform duration-[var(--motion-slow)] ease-[var(--ease-standard)] will-change-transform [transform:translateZ(36px)_scale(1.03)] ${
+              prefersReducedMotion ? "" : "group-hover:scale-110"
+            }`}
             placeholder={product.blurHash ? "blur" : "empty"}
             blurDataURL={product.blurHash}
           />
@@ -70,6 +81,20 @@ export function BentoProductCard({ product, featured = false }: BentoProductCard
         </div>
 
         <div className="absolute right-4 top-4 z-10 flex flex-col gap-2 [transform:translateZ(40px)]">
+          <button
+            className="rounded-full border border-primary/20 bg-[var(--surface-contrast)] p-2 text-primary backdrop-blur-md transition-colors hover:bg-primary/30"
+            aria-label={`Add ${product.name} to cart`}
+            onClick={(event) => {
+              event.stopPropagation();
+              event.preventDefault();
+              addToCart(product);
+            }}
+          >
+            <ShoppingCart size={20} />
+          </button>
+          <div onClick={(event) => event.stopPropagation()}>
+            <WishlistButton product={product} />
+          </div>
           <a
             href={`https://wa.me/2348000000000?text=${whatsappMsg}`}
             className="rounded-full border border-primary/20 bg-[var(--surface-contrast)] p-2 text-primary backdrop-blur-md transition-colors hover:bg-primary/30"

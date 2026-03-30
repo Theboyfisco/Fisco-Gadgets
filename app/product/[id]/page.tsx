@@ -4,6 +4,7 @@ import { StickyBottomCTA } from "@/components/product/StickyBottomCTA";
 import { MessageCircle, ShieldCheck, Truck } from "lucide-react";
 import { AddToCartButton } from "@/components/product/AddToCartButton";
 import { CompareButton } from "@/components/product/CompareButton";
+import { WishlistButton } from "@/components/product/WishlistButton";
 import { Reveal } from "@/components/ui/Reveal";
 import { ProductDepthGallery } from "@/components/product/ProductDepthGallery";
 
@@ -84,6 +85,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
                 Buy via WhatsApp
               </a>
               <CompareButton product={product} showLabel className="rounded-standard border border-[var(--border-subtle)] bg-[var(--surface-card)] px-6 hover:bg-[var(--surface-cta)]" />
+              <WishlistButton product={product} showLabel className="rounded-standard border border-[var(--border-subtle)] bg-[var(--surface-card)] px-6 hover:bg-[var(--surface-cta)]" />
             </div>
           </Reveal>
         </div>

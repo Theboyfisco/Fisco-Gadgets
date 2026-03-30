@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useReducedMotion } from "framer-motion";
 
 export interface LatestProduct {
   id: string;
@@ -22,13 +23,14 @@ export function LatestProductsCarousel({ products }: LatestProductsCarouselProps
   const visibleProducts = useMemo(() => products.filter((product) => Boolean(product.image)), [products]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const prefersReducedMotion = useReducedMotion();
 
   const count = visibleProducts.length;
   const safeIndex = count ? activeIndex % count : 0;
   const activeProduct = visibleProducts[safeIndex] ?? visibleProducts[0];
 
   useEffect(() => {
-    if (count <= 1 || isPaused) {
+    if (count <= 1 || isPaused || prefersReducedMotion) {
       return;
     }
 
@@ -37,7 +39,7 @@ export function LatestProductsCarousel({ products }: LatestProductsCarouselProps
     }, AUTOPLAY_INTERVAL);
 
     return () => clearInterval(timer);
-  }, [count, isPaused]);
+  }, [count, isPaused, prefersReducedMotion]);
 
   const goNext = () => setActiveIndex((current) => (count ? (current + 1) % count : 0));
   const goPrev = () => setActiveIndex((current) => (count ? (current - 1 + count) % count : 0));
@@ -72,7 +74,7 @@ export function LatestProductsCarousel({ products }: LatestProductsCarouselProps
           fill
           sizes="(max-width: 1024px) 100vw, 50vw"
           quality={95}
-          className="object-cover opacity-95 transition duration-700 group-hover:scale-[1.03]"
+          className={`object-cover opacity-95 ${prefersReducedMotion ? "" : "transition duration-[var(--motion-slow)] ease-[var(--ease-standard)] group-hover:scale-[1.03]"}`}
         />
         <div className="absolute inset-0 bg-[var(--carousel-overlay)]" />
       </div>
@@ -87,7 +89,7 @@ export function LatestProductsCarousel({ products }: LatestProductsCarouselProps
               type="button"
               onClick={goPrev}
               aria-label="Previous product"
-              className="flex h-9 w-9 items-center justify-center rounded-full border border-[var(--carousel-control-border)] bg-[var(--carousel-control-bg)] text-[var(--foreground)] backdrop-blur-md transition hover:border-primary/50 hover:text-primary"
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-[var(--carousel-control-border)] bg-[var(--carousel-control-bg)] text-[var(--foreground)] backdrop-blur-md transition duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:border-primary/50 hover:text-primary"
             >
               <ChevronLeft size={18} />
             </button>
@@ -95,7 +97,7 @@ export function LatestProductsCarousel({ products }: LatestProductsCarouselProps
               type="button"
               onClick={goNext}
               aria-label="Next product"
-              className="flex h-9 w-9 items-center justify-center rounded-full border border-[var(--carousel-control-border)] bg-[var(--carousel-control-bg)] text-[var(--foreground)] backdrop-blur-md transition hover:border-primary/50 hover:text-primary"
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-[var(--carousel-control-border)] bg-[var(--carousel-control-bg)] text-[var(--foreground)] backdrop-blur-md transition duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:border-primary/50 hover:text-primary"
             >
               <ChevronRight size={18} />
             </button>

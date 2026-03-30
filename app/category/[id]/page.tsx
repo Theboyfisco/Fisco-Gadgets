@@ -4,6 +4,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { BentoProductCard } from "@/components/product/BentoProductCard";
 import { Reveal } from "@/components/ui/Reveal";
+import { CategorySort } from "@/components/ui/CategorySort";
+import { CategoryFilters } from "@/components/ui/CategoryFilters";
 
 function categoryTone(categoryId: string) {
   if (categoryId === "phones") return "from-[var(--tone-phones)]";
@@ -12,15 +14,41 @@ function categoryTone(categoryId: string) {
   return "from-[var(--tone-generic)]";
 }
 
-export default async function CategoryPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function CategoryPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams?: { sort?: string };
+}) {
   const resolvedParams = await params;
   const categoryId = resolvedParams.id;
+  const sort = searchParams?.sort ?? "newest";
+  const min = searchParams?.min ? Number(searchParams.min) : undefined;
+  const max = searchParams?.max ? Number(searchParams.max) : undefined;
+
+  const orderBy =
+    sort === "price-asc"
+      ? { price: "asc" }
+      : sort === "price-desc"
+        ? { price: "desc" }
+        : { createdAt: "desc" };
 
   const [category, dbProducts] = await Promise.all([
     prisma.category.findUnique({ where: { id: categoryId } }),
     prisma.product.findMany({
-      where: { categoryId },
-      orderBy: { createdAt: "desc" },
+      where: {
+        categoryId,
+        ...(Number.isFinite(min) || Number.isFinite(max)
+          ? {
+              price: {
+                ...(Number.isFinite(min) ? { gte: min } : {}),
+                ...(Number.isFinite(max) ? { lte: max } : {}),
+              },
+            }
+          : {}),
+      },
+      orderBy,
       include: { category: true },
     }),
   ]);
@@ -64,6 +92,13 @@ export default async function CategoryPage({ params }: { params: Promise<{ id: s
         </div>
       ) : (
         <Reveal>
+          <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div className="flex items-center gap-4">
+              <p className="text-sm text-secondary">{products.length} items</p>
+              <CategorySort />
+            </div>
+            <CategoryFilters />
+          </div>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {products.map((product: any) => (
               <Link href={`/product/${product.id}`} key={product.id}>
