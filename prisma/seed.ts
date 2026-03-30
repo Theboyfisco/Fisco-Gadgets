@@ -9,7 +9,7 @@ const categories = [
   { id: "accessories", name: "Accessories", image: "https://images.unsplash.com/photo-1625842268584-8f3296236761?q=80&w=400&auto=format&fit=crop" }
 ];
 
-const dummyProducts = [
+const baseProducts = [
   // PHONES
   {
     id: "prod_1",
@@ -165,7 +165,7 @@ const dummyProducts = [
     id: "prod_8_2",
     name: "Apple AirTag (4 Pack)",
     price: 125000,
-    image: "https://images.unsplash.com/photo-1619890145610-1845bb5b1287?q=80&w=800&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?q=80&w=800&auto=format&fit=crop",
     categoryId: "accessories",
     technicalSpecs: { condition: "New", battery: "1 Year", connectivity: "Ultra Wideband / Bluetooth" }
   },
@@ -235,6 +235,189 @@ const dummyProducts = [
   }
 ];
 
+const slugify = (value: string) =>
+  value
+    .toLowerCase()
+    .replace(/\s+/g, '-')
+    .replace(/[^\w-]+/g, '');
+
+const hashString = (value: string) =>
+  Array.from(value).reduce((hash, char) => ((hash * 31 + char.charCodeAt(0)) >>> 0), 0);
+
+const stockImagePools = {
+  phones: [
+    "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?q=80&w=1200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1696446701796-da61225697cc?q=80&w=1200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1678652197831-2d180705cd2c?q=80&w=1200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?q=80&w=1200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1678911820864-e2c567c655d7?q=80&w=1200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1696446702183-cbd13d78e1e7?q=80&w=1200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?q=80&w=1200&auto=format&fit=crop"
+  ],
+  laptops: [
+    "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=1200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?q=80&w=1200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?q=80&w=1200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?q=80&w=1200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1603302576837-37561b2e2302?q=80&w=1200&auto=format&fit=crop"
+  ],
+  audio: [
+    "https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?q=80&w=1200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?q=80&w=1200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1613040809024-b4ef7ba99bc3?q=80&w=1200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1545127398-14699f92334b?q=80&w=1200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1589003077984-894e133dabab?q=80&w=1200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1545454675-3531b543be5d?q=80&w=1200&auto=format&fit=crop"
+  ],
+  accessories: [
+    "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?q=80&w=1200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1615526675159-e248c3021d3f?q=80&w=1200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?q=80&w=1200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1585338107529-13afc5f02586?q=80&w=1200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?q=80&w=1200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1601445638532-3c6f6c3aa1d6?q=80&w=1200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?q=80&w=1200&auto=format&fit=crop"
+  ]
+};
+
+const pickImages = (pool: string[], seed: number, count: number) => {
+  if (pool.length === 0) return [];
+  const chosen: string[] = [];
+  const base = hashString(`${seed}`) % pool.length;
+
+  for (let i = 0; i < pool.length && chosen.length < count; i++) {
+    const idx = (base + i * 13) % pool.length;
+    const url = pool[idx];
+    if (!chosen.includes(url)) {
+      chosen.push(url);
+    }
+  }
+
+  while (chosen.length < count) {
+    chosen.push(pool[chosen.length % pool.length]);
+  }
+
+  return chosen;
+};
+
+const buildStockImages = (category: string, seed: number) => {
+  const pool = stockImagePools[category as keyof typeof stockImagePools] ?? [];
+  return pickImages(pool, seed, 3);
+};
+
+const chunk = <T,>(items: T[], size: number) => {
+  const result: T[][] = [];
+  for (let i = 0; i < items.length; i += size) {
+    result.push(items.slice(i, i + size));
+  }
+  return result;
+};
+
+const seededNumber = (seed: number, min: number, max: number) => {
+  const rand = ((seed * 9301 + 49297) % 233280) / 233280;
+  return Math.floor(rand * (max - min + 1)) + min;
+};
+
+const phoneBrands = ["Apple", "Samsung", "Google", "OnePlus", "Xiaomi", "Nothing", "Tecno", "Infinix"];
+const phoneModels = ["Pro", "Ultra", "Plus", "Max", "Edge", "Neo", "Note", "Lite"];
+const laptopBrands = ["Apple", "Dell", "HP", "Lenovo", "ASUS", "Acer", "MSI", "Razer"];
+const laptopLines = ["Pro", "Air", "XPS", "Spectre", "ThinkPad", "ROG", "Swift", "Blade"];
+const audioBrands = ["Sony", "Bose", "Apple", "JBL", "Beats", "Sennheiser", "Marshall", "Anker"];
+const audioTypes = ["Headphones", "Earbuds", "Speaker", "Soundbar", "Studio Monitors"];
+const accessoryBrands = ["Apple", "Anker", "Logitech", "Samsung", "Belkin", "UGREEN", "TP-Link", "RAVPower"];
+const accessoryTypes = ["Power Bank", "Wireless Charger", "Mouse", "Keyboard", "Smart Watch", "USB-C Hub", "Phone Case", "Stylus"];
+
+const conditionValues = ["NEW", "OPEN_BOX", "REFURBISHED"] as const;
+
+const buildAutoProducts = () => {
+  const products: Array<(typeof baseProducts)[number] & { images: string[] }> = [];
+  const perCategory = 100;
+
+  for (let i = 1; i <= perCategory; i++) {
+    const phoneBrand = phoneBrands[i % phoneBrands.length];
+    const phoneModel = phoneModels[i % phoneModels.length];
+    const phoneName = `${phoneBrand} ${phoneModel} ${2024 + (i % 3)} ${i}`;
+    const phoneImages = buildStockImages("phones", hashString(phoneName));
+    products.push({
+      id: `auto_phone_${i}`,
+      name: phoneName,
+      price: seededNumber(i, 350000, 1900000),
+      image: phoneImages[0],
+      images: phoneImages,
+      categoryId: "phones",
+      technicalSpecs: {
+        battery: `${seededNumber(i + 11, 3900, 5600)}mAh`,
+        storage: `${seededNumber(i + 12, 128, 512)}GB`,
+        ram: `${seededNumber(i + 13, 6, 16)}GB`,
+        condition: conditionValues[i % conditionValues.length],
+        screen: `${seededNumber(i + 14, 61, 69) / 10}in OLED 120Hz`
+      }
+    });
+
+    const laptopBrand = laptopBrands[i % laptopBrands.length];
+    const laptopLine = laptopLines[i % laptopLines.length];
+    const laptopName = `${laptopBrand} ${laptopLine} ${2023 + (i % 4)} ${i}`;
+    const laptopImages = buildStockImages("laptops", hashString(laptopName));
+    products.push({
+      id: `auto_laptop_${i}`,
+      name: laptopName,
+      price: seededNumber(i + 101, 850000, 4200000),
+      image: laptopImages[0],
+      images: laptopImages,
+      categoryId: "laptops",
+      technicalSpecs: {
+        battery: `${seededNumber(i + 102, 45, 99)}Wh`,
+        storage: `${seededNumber(i + 103, 256, 2048)}GB SSD`,
+        ram: `${seededNumber(i + 104, 8, 64)}GB`,
+        condition: conditionValues[(i + 1) % conditionValues.length],
+        screen: `${seededNumber(i + 105, 133, 173) / 10}in ${seededNumber(i + 106, 1080, 3840)}p`
+      }
+    });
+
+    const audioBrand = audioBrands[i % audioBrands.length];
+    const audioType = audioTypes[i % audioTypes.length];
+    const audioName = `${audioBrand} ${audioType} ${2022 + (i % 5)} ${i}`;
+    const audioImages = buildStockImages("audio", hashString(audioName));
+    products.push({
+      id: `auto_audio_${i}`,
+      name: audioName,
+      price: seededNumber(i + 201, 35000, 780000),
+      image: audioImages[0],
+      images: audioImages,
+      categoryId: "audio",
+      technicalSpecs: {
+        battery: `${seededNumber(i + 202, 6, 50)} Hours`,
+        condition: conditionValues[(i + 2) % conditionValues.length],
+        connectivity: `Bluetooth ${seededNumber(i + 203, 50, 54) / 10}`,
+        noiseCancellation: i % 2 === 0 ? "Active ANC" : "Adaptive ANC"
+      }
+    });
+
+    const accessoryBrand = accessoryBrands[i % accessoryBrands.length];
+    const accessoryType = accessoryTypes[i % accessoryTypes.length];
+    const accessoryName = `${accessoryBrand} ${accessoryType} ${2023 + (i % 4)} ${i}`;
+    const accessoryImages = buildStockImages("accessories", hashString(accessoryName));
+    products.push({
+      id: `auto_accessory_${i}`,
+      name: accessoryName,
+      price: seededNumber(i + 301, 15000, 450000),
+      image: accessoryImages[0],
+      images: accessoryImages,
+      categoryId: "accessories",
+      technicalSpecs: {
+        condition: conditionValues[(i + 3) % conditionValues.length],
+        compatibility: i % 3 === 0 ? "Universal" : "iOS / Android",
+        warranty: `${seededNumber(i + 304, 6, 24)} Months`,
+        output: i % 2 === 0 ? "USB-C PD" : "Qi Wireless"
+      }
+    });
+  }
+
+  return products;
+};
+
+const dummyProducts = [...baseProducts, ...buildAutoProducts()];
+
 
 async function main() {
   console.log('Start seeding...')
@@ -243,7 +426,11 @@ async function main() {
   for (const cat of categories) {
     await prisma.category.upsert({
       where: { id: cat.id },
-      update: {},
+      update: {
+        name: cat.name,
+        slug: cat.id.toLowerCase(),
+        image: cat.image
+      },
       create: {
         id: cat.id,
         name: cat.name,
@@ -254,26 +441,42 @@ async function main() {
   }
 
   // 2. Seed Products
-  for (const prod of dummyProducts) {
+  const productData = dummyProducts.map((prod) => {
     const rawCondition = prod.technicalSpecs.condition || "New";
     const mappedCondition = rawCondition.toUpperCase().replace(/\s+/g, '_') as "NEW" | "OPEN_BOX" | "REFURBISHED";
 
-    await prisma.product.upsert({
-      where: { id: prod.id },
-      update: {},
-      create: {
-        id: prod.id,
-        name: prod.name,
-        slug: prod.name.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, ''),
-        description: `Premium ${prod.name} with advanced features and top-tier performance.`,
-        price: prod.price,
-        stock: 50,
-        condition: ["NEW", "OPEN_BOX", "REFURBISHED"].includes(mappedCondition) ? mappedCondition : "NEW",
-        technicalSpecs: prod.technicalSpecs,
-        images: [prod.image],
-        categoryId: prod.categoryId,
-      },
-    })
+    return {
+      id: prod.id,
+      name: prod.name,
+      slug: slugify(prod.name),
+      description: `Premium ${prod.name} with advanced features and top-tier performance.`,
+      price: prod.price,
+      stock: 50,
+      condition: ["NEW", "OPEN_BOX", "REFURBISHED"].includes(mappedCondition) ? mappedCondition : "NEW",
+      technicalSpecs: prod.technicalSpecs,
+      images: "images" in prod ? prod.images : [prod.image],
+      categoryId: prod.categoryId
+    };
+  });
+
+  for (const batch of chunk(productData, 50)) {
+    for (const product of batch) {
+      await prisma.product.upsert({
+        where: { id: product.id },
+        update: {
+          name: product.name,
+          slug: product.slug,
+          description: product.description,
+          price: product.price,
+          stock: product.stock,
+          condition: product.condition,
+          technicalSpecs: product.technicalSpecs,
+          images: product.images,
+          categoryId: product.categoryId
+        },
+        create: product
+      });
+    }
   }
 
   console.log('Seeding finished.')
