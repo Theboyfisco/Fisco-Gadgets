@@ -2,7 +2,13 @@ import { PrismaClient } from '@prisma/client'
 import * as fs from 'node:fs'
 import * as path from 'node:path'
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient({
+  datasources: {
+    db: {
+      url: process.env.DIRECT_URL ?? process.env.DATABASE_URL ?? ''
+    }
+  }
+})
 const imageCachePath = path.join(process.cwd(), 'prisma', 'product-image-cache.json')
 
 type CachedImageEntry = {
@@ -394,6 +400,7 @@ const chunk = <T,>(items: T[], size: number) => {
 };
 
 const upsertProductBatch = async (
+  client: PrismaClient,
   batch: Array<{
     id: string
     name: string
@@ -407,28 +414,22 @@ const upsertProductBatch = async (
     categoryId: string
   }>
 ) => {
-  const batchPrisma = new PrismaClient()
-
-  try {
-    for (const product of batch) {
-      await batchPrisma.product.upsert({
-        where: { id: product.id },
-        update: {
-          name: product.name,
-          slug: product.slug,
-          description: product.description,
-          price: product.price,
-          stock: product.stock,
-          condition: product.condition,
-          technicalSpecs: product.technicalSpecs as any,
-          images: product.images,
-          categoryId: product.categoryId
-        },
-        create: product as any
-      })
-    }
-  } finally {
-    await batchPrisma.$disconnect()
+  for (const product of batch) {
+    await client.product.upsert({
+      where: { id: product.id },
+      update: {
+        name: product.name,
+        slug: product.slug,
+        description: product.description,
+        price: product.price,
+        stock: product.stock,
+        condition: product.condition,
+        technicalSpecs: product.technicalSpecs as any,
+        images: product.images,
+        categoryId: product.categoryId
+      },
+      create: product as any
+    })
   }
 }
 
@@ -704,8 +705,8 @@ async function main() {
     };
   }));
 
-  for (const batch of chunk(productData, 50)) {
-    await upsertProductBatch(batch)
+  for (const batch of chunk(productData, 25)) {
+    await upsertProductBatch(prisma, batch)
   }
 
   console.log('Seeding finished.')
