@@ -1,0 +1,92 @@
+
+> tech-hub@0.1.0 scrape:images
+> tsx scripts/scrape-product-images.ts --refresh --concurrency=4
+
+[1] Resolving prod_1: iPhone 15 Pro Max
+[2] Resolving prod_1_2: iPhone 15 Pro
+[3] Resolving prod_1_3: iPhone 14 Pro Max
+[4] Resolving prod_3: Samsung Galaxy S24 Ultra
+[1] Resolving prod_3_2: Samsung Galaxy Z Fold 5
+[2] Resolving prod_3_3: Google Pixel 8 Pro
+[4] Resolving prod_2: MacBook Pro M3
+[3] Resolving prod_2_2: MacBook Air M2
+[1] Resolving prod_2_3: Dell XPS 15
+[3] Resolving prod_2_4: ASUS ROG Zephyrus G14
+[4] Resolving prod_4: Sony WH-1000XM5
+[2] Resolving prod_5: AirPods Pro (2nd Gen)
+[3] Resolving prod_5_2: AirPods Max
+[1] Resolving prod_5_3: Beats Studio Pro
+[4] Resolving prod_5_4: Sony SRS-XG300 Speaker
+[4] Resolving prod_6: iPad Pro 12.9 M2
+[3] Resolving prod_7: Apple MagSafe Charger
+[1] Resolving prod_8: iPhone 15 Leather Case
+[1] Resolving prod_8_2: Apple AirTag (4 Pack)
+[3] Resolving prod_8_3: Apple Pencil (2nd Gen)
+[1] Resolving prod_8_4: Logitech MX Master 3S
+[3] Resolving prod_9: Apple Watch Ultra 2
+page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.apple.com/airpods-pro/", waiting until "domcontentloaded"
+
+    at collectOfficialImageCandidates (C:\Users\ifean\Downloads\JS series\New folder (2)\scripts\scrape-product-images.ts:455:14)
+    at async resolveProductImages (C:\Users\ifean\Downloads\JS series\New folder (2)\scripts\scrape-product-images.ts:511:24)
+    at async worker (C:\Users\ifean\Downloads\JS series\New folder (2)\scripts\scrape-product-images.ts:579:24)
+    at async main (C:\Users\ifean\Downloads\JS series\New folder (2)\scripts\scrape-product-images.ts:612:3) {
+  name: 'TimeoutError'
+}
+[3] Resolving prod_10: Keychron Q3 Mechanical Keyboard
+[3] Resolving prod_11: Nothing Phone (2)
+[1] Resolving prod_12: Lenovo Legion Slim 7
+[4] Resolving prod_13: Marshall Stanmore III
+[3] Resolving prod_14: Anker 737 Power Bank
+[4] Resolving auto_phone_1: iPhone 15 Pro Max 128GB
+[4] Resolving auto_laptop_1: MacBook Pro 14 M3 16GB/512GB
+[1] Resolving auto_audio_1: Sony WH-1000XM5 Black
+[1] Resolving auto_accessory_1: Apple MagSafe Charger Standard
+[4] Resolving auto_phone_2: iPhone 15 Pro Max 256GB
+[3] Resolving auto_laptop_2: MacBook Pro 14 M3 16GB/1TB
+[1] Resolving auto_audio_2: Sony WH-1000XM5 Silver
+[3] Resolving auto_accessory_2: Apple MagSafe Charger Pro
+[4] Resolving auto_phone_3: iPhone 15 Pro Max 512GB
+[1] Resolving auto_laptop_3: MacBook Pro 14 M3 32GB/1TB
+[4] Resolving auto_audio_3: Sony WH-1000XM5 White
+[3] Resolving auto_accessory_3: Apple MagSafe Charger Max
+[1] Resolving auto_phone_4: iPhone 15 Pro Max 1TB
+[4] Resolving auto_laptop_4: MacBook Pro 14 M3 32GB/2TB
+[3] Resolving auto_audio_4: Sony WH-1000XM5 Midnight
+[1] Resolving auto_accessory_4: Apple MagSafe Charger Bundle
+[4] Resolving auto_phone_5: iPhone 15 Pro Max 12GB+256GB
+[3] Resolving auto_laptop_5: MacBook Pro 14 M3 64GB/2TB
+[1] Resolving auto_audio_5: Sony WH-1000XM5 Bundle
+[4] Resolving auto_accessory_5: Apple AirTag (4 Pack) Standard
+[3] Resolving auto_phone_6: iPhone 15 Pro 128GB
+[1] Resolving auto_laptop_6: MacBook Pro 16 M3 Pro 16GB/512GB
+[4] Resolving auto_audio_6: Sony WF-1000XM5 Black
+[3] Resolving auto_accessory_6: Apple AirTag (4 Pack) Pro
+[1] Resolving auto_phone_7: iPhone 15 Pro 256GB
+[3] Resolving auto_laptop_7: MacBook Pro 16 M3 Pro 16GB/1TB
+[1] Resolving auto_audio_7: Sony WF-1000XM5 Silver
+[3] Resolving auto_accessory_7: Apple AirTag (4 Pack) Max
+[3] Resolving auto_phone_8: iPhone 15 Pro 512GB
+[4] Resolving auto_laptop_8: MacBook Pro 16 M3 Pro 32GB/1TB
+[1] Resolving auto_audio_8: Sony WF-1000XM5 White
+[3] Resolving auto_accessory_8: Apple AirTag (4 Pack) Bundle
+[4] Resolving auto_phone_9: iPhone 15 Pro 1TB
+[1] Resolving auto_laptop_9: MacBook Pro 16 M3 Pro 32GB/2TB
+[3] Resolving auto_audio_9: Sony WF-1000XM5 Midnight
+[4] Resolving auto_accessory_9: Apple Pencil (2nd Gen) Standard
+[1] Resolving auto_phone_10: iPhone 15 Pro 12GB+256GB
+[3] Resolving auto_laptop_10: MacBook Pro 16 M3 Pro 64GB/2TB
+[4] Resolving auto_audio_10: Sony WF-1000XM5 Bundle
+[1] Resolving auto_accessory_10: Apple Pencil (2nd Gen) Pro
+[3] Resolving auto_phone_11: iPhone 15 Plus 128GB
+[4] Resolving auto_laptop_11: MacBook Air 13 M2 16GB/512GB
+[1] Resolving auto_audio_11: AirPods Pro (2nd Gen) Black
+[3] Resolving auto_accessory_11: Apple Pencil (2nd Gen) Max
+[3] Resolving auto_phone_12: iPhone 15 Plus 256GB
+[4] Resolving auto_laptop_12: MacBook Air 13 M2 16GB/1TB
+[4] Resolving auto_audio_12: AirPods Pro (2nd Gen) Silver
+[3] Resolving auto_accessory_12: Apple Pencil (2nd Gen) Bundle
+[3] Resolving auto_phone_13: iPhone 15 Plus 512GB
+[3] Resolving auto_laptop_13: MacBook Air 13 M2 32GB/1TB
+[3] Resolving auto_audio_13: AirPods Pro (2nd Gen) White

@@ -1,0 +1,37 @@
+
+> tech-hub@0.1.0 scrape:images
+> tsx scripts/scrape-product-images.ts --offset=394 --limit=33 --concurrency=6
+
+[1] Skipping auto_audio_100: cached
+[1] Skipping auto_phone_99: cached
+[1] Skipping auto_phone_100: cached
+[1] Skipping auto_audio_97: cached
+[1] Skipping auto_phone_96: cached
+[1] Skipping auto_laptop_97: cached
+[1] Skipping auto_audio_95: cached
+[1] Skipping auto_accessory_95: cached
+[1] Skipping auto_laptop_96: cached
+[1] Skipping auto_laptop_100: cached
+[1] Skipping auto_laptop_99: cached
+[1] Skipping auto_accessory_97: cached
+[1] Skipping auto_audio_96: cached
+[1] Skipping auto_laptop_98: cached
+[1] Skipping auto_phone_97: cached
+[1] Skipping auto_phone_98: cached
+[1] Skipping auto_accessory_93: cached
+[1] Skipping auto_audio_92: cached
+[1] Skipping auto_laptop_94: cached
+[1] Skipping auto_phone_94: cached
+[1] Skipping auto_phone_92: cached
+[1] Skipping auto_phone_89: cached
+[1] Skipping auto_audio_87: cached
+[1] Skipping auto_laptop_89: cached
+[1] Skipping auto_accessory_88: cached
+[1] Skipping auto_audio_89: cached
+[1] Skipping auto_phone_84: cached
+[1] Skipping auto_accessory_83: cached
+[1] Skipping auto_laptop_85: cached
+[1] Skipping auto_laptop_82: cached
+[1] Skipping auto_audio_78: cached
+[1] Skipping auto_phone_79: cached
+[1] Skipping auto_phone_77: cached
