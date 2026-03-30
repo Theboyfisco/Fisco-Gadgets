@@ -1,0 +1,1997 @@
+{
+  "generatedAt": "2026-03-30T08:20:30.940Z",
+  "items": {
+    "prod_1": {
+      "productId": "prod_1",
+      "productName": "iPhone 15 Pro Max",
+      "query": "iPhone 15 Pro Max phones product",
+      "provider": "bing",
+      "images": [
+        "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6525/6525489_sd.jpg",
+        "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6525/6525491cv15d.jpg",
+        "https://www.apple.com/newsroom/images/2023/09/apple-unveils-iphone-15-pro-and-iphone-15-pro-max/article/Apple-iPhone-15-Pro-lineup-hero-230912_Full-Bleed-Image.jpg.large_2x.jpg"
+      ],
+      "updatedAt": "2026-03-30T05:34:06.026Z"
+    },
+    "prod_1_2": {
+      "productId": "prod_1_2",
+      "productName": "iPhone 15 Pro",
+      "query": "iPhone 15 Pro phones product",
+      "provider": "bing",
+      "images": [
+        "https://www.apple.com/newsroom/images/2023/09/apple-unveils-iphone-15-pro-and-iphone-15-pro-max/article/Apple-iPhone-15-Pro-lineup-color-lineup-geo-230912_big.jpg.large_2x.jpg",
+        "http://www.istudio.store/cdn/shop/files/TH_iPhone_15_Pro_Max_Natural_Titanium_PDP_Image_Position-1A_Natural_Titanium_Color.jpg?v=1707278006",
+        "https://s13emagst.akamaized.net/products/60458/60457155/images/res_bc44fa0bbdf0de65a3c655809352aba9.jpg"
+      ],
+      "updatedAt": "2026-03-30T05:34:22.435Z"
+    },
+    "prod_1_3": {
+      "productId": "prod_1_3",
+      "productName": "iPhone 14 Pro Max",
+      "query": "iPhone 14 Pro Max phones product",
+      "provider": "bing",
+      "images": [
+        "https://www.apple.com/newsroom/images/product/iphone/geo/Apple-iPhone-14-Pro-iPhone-14-Pro-Max-gold-220907-geo_inline.jpg.large_2x.jpg",
+        "https://www.apple.com/newsroom/images/product/iphone/standard/Apple-iPhone-14-Pro-iPhone-14-Pro-Max-deep-purple-220907_inline.jpg.large.jpg",
+        "https://www.apple.com/newsroom/images/product/iphone/standard/Apple-iPhone-14-Pro-iPhone-14-Pro-Max-hero-220907_Full-Bleed-Image.jpg.large.jpg"
+      ],
+      "updatedAt": "2026-03-30T05:34:34.692Z"
+    },
+    "prod_3": {
+      "productId": "prod_3",
+      "productName": "Samsung Galaxy S24 Ultra",
+      "query": "Samsung Galaxy S24 Ultra phones product",
+      "provider": "bing",
+      "images": [
+        "https://image-us.samsung.com/us/smartphones/galaxy-s24/all-gallery/01_E3_OnlineExclusive_TitaniumBlue_Lockup_1600x1200.jpg?$product-details-jpg$?$product-details-thumbnail-jpg$",
+        "https://m.media-amazon.com/images/I/61uvELoqSCL._AC_SL1200_.jpg",
+        "https://media.hifi.lu/sys-master/products/9337916489758/1440x1440.51006328_01.webp"
+      ],
+      "updatedAt": "2026-03-30T05:34:48.149Z"
+    },
+    "prod_3_2": {
+      "productId": "prod_3_2",
+      "productName": "Samsung Galaxy Z Fold 5",
+      "query": "Samsung Galaxy Z Fold 5 phones product",
+      "provider": "bing",
+      "images": [
+        "https://m.media-amazon.com/images/I/61A1RYHuSHL._AC_.jpg",
+        "https://images.samsung.com/uk/smartphones/galaxy-z-fold5/buy/02-Carousel/Exclusive/06-Hero/product-kv_mo.jpg",
+        "https://www.dignited.com/wp-content/uploads/2023/07/zfold-1-1024x576.jpg"
+      ],
+      "updatedAt": "2026-03-30T05:35:02.160Z"
+    },
+    "prod_3_3": {
+      "productId": "prod_3_3",
+      "productName": "Google Pixel 8 Pro",
+      "query": "Google Pixel 8 Pro phones product",
+      "provider": "bing",
+      "images": [
+        "https://m.media-amazon.com/images/I/71XEjCc4yLL._AC_SL1500_.jpg",
+        "https://m.media-amazon.com/images/I/713eEl39eLL.jpg",
+        "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Pixel_Portfolio_Bay_Hazel_vZb6KiW.width-1300.jpg"
+      ],
+      "updatedAt": "2026-03-30T05:35:14.040Z"
+    },
+    "prod_2": {
+      "productId": "prod_2",
+      "productName": "MacBook Pro M3",
+      "query": "MacBook Pro M3 laptops product",
+      "provider": "bing",
+      "images": [
+        "https://cdn.cs.1worldsync.com/b8/88/b888928f-1624-478f-8f97-edcbea7c9dfc.jpg",
+        "https://media.idownloadblog.com/wp-content/uploads/2023/10/Apple-M3-MacBook-Pro.png",
+        "https://www.abcom.in/images/products/1734002068_m3.jpg"
+      ],
+      "updatedAt": "2026-03-30T05:35:30.121Z"
+    },
+    "prod_2_2": {
+      "productId": "prod_2_2",
+      "productName": "MacBook Air M2",
+      "query": "MacBook Air M2 laptops product",
+      "provider": "bing",
+      "images": [
+        "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6534/6534603_sd.jpg",
+        "https://media.cnn.com/api/v1/images/stellar/prod/220715121407-macbook-air-m2-review-1.jpg?c=16x9&q=h_833,w_1480,c_fill",
+        "https://i.pinimg.com/originals/36/2f/47/362f47c55ccd45c5aea11ca12b018e04.jpg"
+      ],
+      "updatedAt": "2026-03-30T05:35:44.380Z"
+    },
+    "prod_2_3": {
+      "productId": "prod_2_3",
+      "productName": "Dell XPS 15",
+      "query": "Dell XPS 15 laptops product",
+      "provider": "bing",
+      "images": [
+        "https://i.dell.com/is/image/DellContent/content/dam/ss2/product-images/dell-client-products/notebooks/xps-notebooks/xps-15-9530/media-gallery/touch-black/notebook-xps-15-9530-t-black-gallery-4.psd?qlt=90,0&op_usm=1.75,0.3,2,0&resMode=sharp&pscan=auto&fmt=png-alpha&hei=500",
+        "https://i.dell.com/is/image/DellContent/content/dam/ss2/product-images/page/franchise/xps/9-2022-update/prod-2366-laptop-xps-15-9520-1920x1440.png?fmt=png-alpha&wid=1920&hei=1440",
+        "https://www.cnet.com/a/img/resize/6142bc80acb94f17055e21153ab4fed384a1b14b/hub/2023/05/04/33c584cf-3dab-4162-beb5-653479dd5ad4/dell-xps-15-2023-1.jpg?auto=webp&fit=crop&height=1200&width=1200"
+      ],
+      "updatedAt": "2026-03-30T05:36:02.228Z"
+    },
+    "prod_2_4": {
+      "productId": "prod_2_4",
+      "productName": "ASUS ROG Zephyrus G14",
+      "query": "ASUS ROG Zephyrus G14 laptops product",
+      "provider": "bing",
+      "images": [
+        "https://dlcdnwebimgs.asus.com/gain/BA146EC2-FF9D-4A8E-A91A-C9F864DE6BBB",
+        "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6535/6535495cv14d.jpg",
+        "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6ddb4b72-8c08-4253-9dfd-dea8db6bd4ca.jpg"
+      ],
+      "updatedAt": "2026-03-30T05:36:16.992Z"
+    },
+    "prod_4": {
+      "productId": "prod_4",
+      "productName": "Sony WH-1000XM5",
+      "query": "Sony WH-1000XM5 audio product",
+      "provider": "bing",
+      "images": [
+        "https://media.johnlewiscontent.com/i/JohnLewis/112526734alt3?fmt=auto&$background-off-white$",
+        "https://sony.scene7.com/is/image/sonyglobalsolutions/right__s?$originalDimensions$&fmt=png-alpha",
+        "https://msldigital.com.my/wp-content/uploads/2022/07/c90a152c6b4d51c7c8a2b6f9d5f79cf5.png"
+      ],
+      "updatedAt": "2026-03-30T05:37:43.111Z"
+    },
+    "prod_5": {
+      "productId": "prod_5",
+      "productName": "AirPods Pro (2nd Gen)",
+      "query": "AirPods Pro (2nd Gen) audio product",
+      "provider": "bing",
+      "images": [
+        "https://sm.pcmag.com/t/pcmag_au/review/a/apple-airp/apple-airpods-pro-2nd-generation_6gby.1920.jpg",
+        "https://www.epic.com.mt/wp-content/uploads/2023/03/AirPods_Pro_2nd-Gen-1.png",
+        "https://www.rollingstone.com/wp-content/uploads/2022/09/Apple-AirPods-Pro-2nd-gen-hero-220907.jpg?w=1600&h=900&crop=1"
+      ],
+      "updatedAt": "2026-03-30T05:37:53.283Z"
+    },
+    "prod_5_2": {
+      "productId": "prod_5_2",
+      "productName": "AirPods Max",
+      "query": "AirPods Max audio product",
+      "provider": "bing",
+      "images": [
+        "https://www.apple.com/v/airpods-max/h/images/overview/product-stories/hifi-sound/modal/audio_bc_microphone__c4kgd4pga3cm_large.png",
+        "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/5ae43c78-09d5-4007-b211-c46cdca2aa57.jpg",
+        "https://www.apple.com/newsroom/images/product/airpods/standard/apple_airpods-max_hero_12082020_big.jpg.large_2x.jpg"
+      ],
+      "updatedAt": "2026-03-30T05:38:03.510Z"
+    },
+    "prod_5_3": {
+      "productId": "prod_5_3",
+      "productName": "Beats Studio Pro",
+      "query": "Beats Studio Pro audio product",
+      "provider": "bing",
+      "images": [
+        "https://m.media-amazon.com/images/I/61GiuI-ebWL._AC_SL1500_.jpg",
+        "https://www.beatsbydre.com/content/dam/beats/web/product/headphones/studiopro-wireless/pdp/studiopro-pdp-p08.png.large.2x.png",
+        "https://www.beatsbydre.com/content/dam/beats/web/product/headphones/studiopro-wireless/pdp/studiopro-pdp-p07.png.large.2x.png"
+      ],
+      "updatedAt": "2026-03-30T05:38:14.129Z"
+    },
+    "prod_5_4": {
+      "productId": "prod_5_4",
+      "productName": "Sony SRS-XG300 Speaker",
+      "query": "Sony SRS-XG300 Speaker audio product",
+      "provider": "bing",
+      "images": [
+        "https://www.sony.ca/content/dam/sony/contents/global/common/all-products/v-s/wireless-speakers/XG2_standard_main_003_rev2.png",
+        "https://www.sony.com/image/84bf8e6550d0b0bada8c0899e4320bf8?fmt=pjpeg&wid=1014&hei=396&bgcolor=F1F5F9&bgc=F1F5F9",
+        "https://thetomorrowtechnology.co.ke/wp-content/uploads/2022/11/in-the-box-large-2-scaled.jpg"
+      ],
+      "updatedAt": "2026-03-30T05:38:26.044Z"
+    },
+    "prod_6": {
+      "productId": "prod_6",
+      "productName": "iPad Pro 12.9 M2",
+      "query": "iPad Pro 12.9 M2 accessories product",
+      "provider": "bing",
+      "images": [
+        "https://images.mobilefun.co.uk/graphics/450pixelp/57955.jpg",
+        "https://i.ytimg.com/vi/x6YvV07YGQI/maxresdefault.jpg",
+        "https://i.ytimg.com/vi/8i5VPNWqVw4/maxresdefault.jpg"
+      ],
+      "updatedAt": "2026-03-30T05:38:34.910Z"
+    },
+    "prod_7": {
+      "productId": "prod_7",
+      "productName": "Apple MagSafe Charger",
+      "query": "Apple MagSafe Charger accessories product",
+      "provider": "bing",
+      "images": [
+        "https://media-cdn.bnn.in.th/290624/Apple-MagSafe-Duo-Charger-5-square_medium.jpg",
+        "https://media.ldlc.com/r1600/ld/products/00/06/17/02/LD0006170282_0006170292.jpg",
+        "https://wise-tech.com.pk/wp-content/uploads/2024/06/Apple-Adopter-1.png"
+      ],
+      "updatedAt": "2026-03-30T05:38:45.752Z"
+    },
+    "prod_8": {
+      "productId": "prod_8",
+      "productName": "iPhone 15 Leather Case",
+      "query": "iPhone 15 Leather Case accessories product",
+      "provider": "bing",
+      "images": [
+        "https://ioshacker.com/wp-content/uploads/2023/10/Casus-Leather-Classic-Cover.jpg",
+        "https://shop.bouletta.com/cdn/shop/files/unveiling-elegance-iphone-15-leather-cases-that-redefine-luxury-40513025474802.jpg?v=1694634457&width=2000",
+        "https://www.mujjo.com/cdn/shop/products/MujjoFullLeatherCaseforiPhone14_1024x1024.jpg?v=1662648557}"
+      ],
+      "updatedAt": "2026-03-30T05:38:56.975Z"
+    },
+    "prod_8_2": {
+      "productId": "prod_8_2",
+      "productName": "Apple AirTag (4 Pack)",
+      "query": "Apple AirTag (4 Pack) accessories product",
+      "provider": "bing",
+      "images": [
+        "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/HRXL2?wid=3786&hei=3786&fmt=jpeg&qlt=95&.v=1729650104153",
+        "https://www.theapplepost.com/wp-content/uploads/2021/04/AirTag-Accessories-The-Apple-Post.jpg",
+        "https://assets.umart.com.au/bdimages/upload1/20230629/iPhone-Accessories-Apple-AirTag-4-Pack-1.jpg"
+      ],
+      "updatedAt": "2026-03-30T05:39:08.645Z"
+    },
+    "prod_8_3": {
+      "productId": "prod_8_3",
+      "productName": "Apple Pencil (2nd Gen)",
+      "query": "Apple Pencil (2nd Gen) accessories product",
+      "provider": "bing",
+      "images": [
+        "https://m.media-amazon.com/images/S/aplus-media-library-service-media/19efa855-5537-4d19-b892-7838c47e151b.__CR0,0,970,600_PT0_SX970_V1___.jpg",
+        "https://m.media-amazon.com/images/S/aplus-media-library-service-media/2451649f-dc03-4da3-be4a-0fbd28630371.__CR0,0,1464,600_PT0_SX1464_V1___.jpg",
+        "https://m.media-amazon.com/images/S/aplus-media-library-service-media/36cd1aa0-899f-4004-9f3c-4a83d36db0ed.__CR0,0,970,600_PT0_SX970_V1___.jpg"
+      ],
+      "updatedAt": "2026-03-30T05:39:18.371Z"
+    },
+    "prod_8_4": {
+      "productId": "prod_8_4",
+      "productName": "Logitech MX Master 3S",
+      "query": "Logitech MX Master 3S accessories product",
+      "provider": "bing",
+      "images": [
+        "https://cdn.cs.1worldsync.com/45/dd/45dd02f1-7d90-4940-87d3-b2c63e801be5.jpg",
+        "https://resource.logitech.com/w_1206,c_limit,q_auto,f_auto,dpr_1.0/d_transparent.gif/content/dam/logitech/en/products/mice/mx-master-3s-business-wireless-mouse/buy/mx-master-3s-business-product-callout.png?v=1",
+        "https://ae01.alicdn.com/kf/S47e7af8ec15f4cf89021f6209ad04bb2G.jpg"
+      ],
+      "updatedAt": "2026-03-30T05:39:28.769Z"
+    },
+    "prod_9": {
+      "productId": "prod_9",
+      "productName": "Apple Watch Ultra 2",
+      "query": "Apple Watch Ultra 2 accessories product",
+      "provider": "bing",
+      "images": [
+        "https://cdn11.bigcommerce.com/s-uv4dd6xvbk/images/stencil/960w/products/346/2432/watch_ultra_49mm_highland_band_hero_black__78803.1688746641.jpg?c=1",
+        "https://m.media-amazon.com/images/I/71VUiAK9JJL._AC_SL1500_.jpg",
+        "https://static0.makeuseofimages.com/wordpress/wp-content/uploads/2023/02/spigen-rugged-armor-for-apple-watch-ultra-49mm-2.jpg"
+      ],
+      "updatedAt": "2026-03-30T05:39:43.297Z"
+    },
+    "prod_10": {
+      "productId": "prod_10",
+      "productName": "Keychron Q3 Mechanical Keyboard",
+      "query": "Keychron Q3 Mechanical Keyboard accessories product",
+      "provider": "bing",
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0599/4977/7066/t/3/assets/keychronq3qmkviamechanicalkeyboardaccessories1-1646215173819-1651816064379_1200x.jpg?v=1651816066",
+        "https://keychron.ca/cdn/shop/products/Keychron-Q3-tkl-qmk-custom-mechanical-keyboard-knob-version-black-red-B.jpg?v=1658034353",
+        "https://cdn.shopify.com/s/files/1/0059/0630/1017/t/5/assets/-1645699229566Keychron-Q3-QMKVIA-mechanical-keyboard-15?v=1645699232"
+      ],
+      "updatedAt": "2026-03-30T05:39:53.835Z"
+    },
+    "prod_11": {
+      "productId": "prod_11",
+      "productName": "Nothing Phone (2)",
+      "query": "Nothing Phone (2) phones product",
+      "provider": "bing",
+      "images": [
+        "https://www.lowyat.net/wp-content/uploads/2023/07/Nothing-Phone-2-now-official-4.jpg",
+        "https://m.media-amazon.com/images/I/519KVc-h8xL.jpg",
+        "https://cdn.shopify.com/s/files/1/0376/5420/0459/files/BA_ALAK_190.1001_eab63397-07f1-4bbf-bb2b-cb1931edc063.png?v=1693208378"
+      ],
+      "updatedAt": "2026-03-30T05:40:07.372Z"
+    },
+    "prod_12": {
+      "productId": "prod_12",
+      "productName": "Lenovo Legion Slim 7",
+      "query": "Lenovo Legion Slim 7 laptops product",
+      "provider": "bing",
+      "images": [
+        "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6455/6455138cv1d.jpg",
+        "https://m.media-amazon.com/images/I/81i0-7HgSmL._AC_.jpg",
+        "https://news.lenovo.com/wp-content/uploads/2023/03/12_Legion_Slim_7i_Gen8_Hero_Colorful_Side_Thermal-e1679343399451.jpg"
+      ],
+      "updatedAt": "2026-03-30T05:40:20.962Z"
+    },
+    "prod_13": {
+      "productId": "prod_13",
+      "productName": "Marshall Stanmore III",
+      "query": "Marshall Stanmore III audio product",
+      "provider": "bing",
+      "images": [
+        "https://images.ctfassets.net/javen7msabdh/5rFG7lcddhUj1hR8DSCeaK/55f28130a2ceeca6f0f8bd69120a489e/stanmore_iii-lifestyle-mobile-8.jpeg?w=2400&fm=jpg&q=85",
+        "https://images.ctfassets.net/javen7msabdh/5LOAFWVpiW6lzYx5Kva89z/16046df6b06376f322bc253117ad4977/stanmore_iii-front-desktop-1.jpeg",
+        "https://images.ctfassets.net/javen7msabdh/5b5mB8fiZ1TXOj4Z3pjxSt/041ece143836f6eb0c1ec8a656e60484/stanmore_iii-front-mobile-1.jpeg"
+      ],
+      "updatedAt": "2026-03-30T05:40:29.873Z"
+    },
+    "prod_14": {
+      "productId": "prod_14",
+      "productName": "Anker 737 Power Bank",
+      "query": "Anker 737 Power Bank accessories product",
+      "provider": "bing",
+      "images": [
+        "https://m.media-amazon.com/images/I/819OKW-GJaL._AC_SL1500_.jpg",
+        "https://cdn.shopify.com/s/files/1/0493/9834/9974/products/A1289011_TD04_V1_3840x.jpg?v=1672388224",
+        "https://i-system.gr/storage/i3commerce/images/a/n/anker_737_power_bank_black_img_04.jpg"
+      ],
+      "updatedAt": "2026-03-30T05:40:38.456Z"
+    },
+    "auto_phone_1": {
+      "productId": "auto_phone_1",
+      "productName": "Samsung Ultra 2025 1",
+      "query": "Samsung Ultra 2025 1 phones product",
+      "provider": "bing",
+      "images": [
+        "https://i.ytimg.com/vi/eWUWiOk_nrI/maxresdefault.jpg",
+        "https://i.ytimg.com/vi/43_EufFqF1w/maxresdefault.jpg",
+        "https://cdn.mos.cms.futurecdn.net/QmGkPhC6ziJeo8Lyn5o5gU.png"
+      ],
+      "updatedAt": "2026-03-30T05:40:47.621Z"
+    },
+    "auto_laptop_1": {
+      "productId": "auto_laptop_1",
+      "productName": "Dell Air 2024 1",
+      "query": "Dell Air 2024 1 laptops product",
+      "provider": "bing",
+      "images": [
+        "https://www.neoshop.co.th/wp-content/uploads/2024/01/podium-for-product-presentation-technology-in-galaxy-wallpaper-with-a-fantastic-bubble-reflection-blue-background-backdrop-pink-colors-smoke-floating-on-water-surface-23-1024x1024.png",
+        "https://tech2.in/wp-content/uploads/2024/01/Dell-2024-02.png",
+        "https://images-cdn.ubuy.co.in/671b336de8220e54707253e9-dell-2024-laptop-inspiron-16-1920-x.jpg"
+      ],
+      "updatedAt": "2026-03-30T05:40:59.313Z"
+    },
+    "auto_audio_1": {
+      "productId": "auto_audio_1",
+      "productName": "Bose Earbuds 2023 1",
+      "query": "Bose Earbuds 2023 1 audio product",
+      "provider": "bing",
+      "images": [
+        "https://sm.pcmag.com/t/pcmag_me/review/b/bose-quiet/bose-quietcomfort-ultra-earbuds_5cw9.1200.jpg",
+        "https://cdn.ecoustics.com/db0/wblob/17BA35E873D594/3239/452D6/3up27aWfAb1Uz2Aj8VU_5tpjV-4-gfVew5BjRUPVneg/bose-earbuds-headphones-2023.jpg",
+        "https://m.media-amazon.com/images/I/512mPubhJdL._AC_SX679_.jpg"
+      ],
+      "updatedAt": "2026-03-30T05:41:09.452Z"
+    },
+    "auto_accessory_1": {
+      "productId": "auto_accessory_1",
+      "productName": "Anker Wireless Charger 2024 1",
+      "query": "Anker Wireless Charger 2024 1 accessories product",
+      "provider": "bing",
+      "images": [
+        "https://preview.redd.it/ces-2024-ankers-first-qi2-chargers-now-available-v0-imrogz5kzbbc1.jpg?width=5000&format=pjpg&auto=webp&s=2c5a2a84f8fbba63071976d3e16ab5c83831e7a7",
+        "https://allears.net/wp-content/uploads/2024/01/2024-amazon-Anker-Magnetic-Portable-Charger-Wireless-Portable-Charger.png",
+        "https://product.indotim.net/wp-content/uploads/2024/06/Anker-PowerCore-10000.webp"
+      ],
+      "updatedAt": "2026-03-30T05:41:21.841Z"
+    },
+    "auto_phone_2": {
+      "productId": "auto_phone_2",
+      "productName": "Google Plus 2026 2",
+      "query": "Google Plus 2026 2 phones product",
+      "provider": "bing",
+      "images": [
+        "https://techecholabs.com/wp-content/uploads/2024/12/image_search_1734762781507-768x432.jpg",
+        "https://www.infos-nantes.fr/wp-content/uploads/2025/11/Meilleurs-smartphones-2026-iPhone-16-Galaxy-S25-et-Google-Pixel-9-au-banc-dessai.jpg",
+        "https://cdn.mos.cms.futurecdn.net/qCXSg6CDkFtaFzNig2a6nX.jpg"
+      ],
+      "updatedAt": "2026-03-30T05:41:43.355Z"
+    },
+    "auto_laptop_2": {
+      "productId": "auto_laptop_2",
+      "productName": "HP XPS 2025 2",
+      "query": "HP XPS 2025 2 laptops product",
+      "provider": "bing",
+      "images": [
+        "https://m.media-amazon.com/images/I/71+kBow2nUL._AC_SL1500_.jpg",
+        "https://m.media-amazon.com/images/I/71dqsOKiWKL._AC_.jpg",
+        "https://m.media-amazon.com/images/I/71Fmd2r1slL._AC_SL1500_.jpg"
+      ],
+      "updatedAt": "2026-03-30T05:41:51.699Z"
+    },
+    "auto_audio_2": {
+      "productId": "auto_audio_2",
+      "productName": "Apple Speaker 2024 2",
+      "query": "Apple Speaker 2024 2 audio product",
+      "provider": "bing",
+      "images": [
+        "https://static1.pocketlintimages.com/wordpress/wp-content/uploads/2024/03/homepod2final.png",
+        "https://jaystechreviews.com/wp-content/uploads/2024/01/Apple-HomePod-2nd-Gen-Speakers-1024x983.jpg",
+        "https://www.gearpatrol.com/wp-content/uploads/sites/2/2024/07/Apple-HomePod-Mini-Midnight-Product-Card-jpg.webp?w=1600"
+      ],
+      "updatedAt": "2026-03-30T05:42:02.342Z"
+    },
+    "auto_accessory_2": {
+      "productId": "auto_accessory_2",
+      "productName": "Logitech Mouse 2025 2",
+      "query": "Logitech Mouse 2025 2 accessories product",
+      "provider": "bing",
+      "images": [
+        "https://cdn.mos.cms.futurecdn.net/qLntSAvRLi3j9QpbUxNLaB.jpg",
+        "http://cdn.shopify.com/s/files/1/0487/1828/2905/files/1500x650_6da87a93-f3bf-4d9e-a36f-8fc8e29c382c_1200x1200.jpg?148073",
+        "https://i.pinimg.com/736x/20/e0/b8/20e0b8e825fd8d477a5c61a8b340d275.jpg"
+      ],
+      "updatedAt": "2026-03-30T05:42:11.952Z"
+    },
+    "auto_phone_3": {
+      "productId": "auto_phone_3",
+      "productName": "OnePlus Max 2024 3",
+      "query": "OnePlus Max 2024 3 phones product",
+      "provider": "bing",
+      "images": [
+        "https://cdn.mos.cms.futurecdn.net/De5wYuotjQowKiALj5Y4TT.jpg",
+        "https://www.techadvisor.com/wp-content/uploads/2024/01/Best-OnePlus-phone.jpg?quality=50&strip=all",
+        "https://static1.pocketnowimages.com/wordpress/wp-content/uploads/2024/01/best-oneplus-phones-2024-by-pocketnow.jpeg"
+      ],
+      "updatedAt": "2026-03-30T05:42:31.707Z"
+    },
+    "auto_laptop_3": {
+      "productId": "auto_laptop_3",
+      "productName": "Lenovo Spectre 2026 3",
+      "query": "Lenovo Spectre 2026 3 laptops product",
+      "provider": "bing",
+      "images": [
+        "https://sm.pcmag.com/t/pcmag_uk/review/l/lenovo-ide/lenovo-ideapad-slim-3x-15_vr4u.640.jpg",
+        "https://cdn.cs.1worldsync.com/f5/59/f5594549-a0e0-4bb4-bd19-9729a5e63c79.jpg",
+        "https://b2c-contenthub.com/wp-content/uploads/2026/01/Lenovo-Legion-Pro-Rollable-at-CES-2026.jpg?quality=50&strip=all&w=1200"
+      ],
+      "updatedAt": "2026-03-30T05:42:43.511Z"
+    },
+    "auto_audio_3": {
+      "productId": "auto_audio_3",
+      "productName": "JBL Soundbar 2025 3",
+      "query": "JBL Soundbar 2025 3 audio product",
+      "provider": "bing",
+      "images": [
+        "https://www.thehoopsnews.com/wp-content/uploads/2025/06/JBLs-2025-Soundbars-960x540.jpg",
+        "https://www.coolesuggesties.nl/wp-content/uploads/2025/06/jbl-soundbar-2025.webp",
+        "https://culturadamusica.com/wp-content/uploads/2023/08/Melhores-Soundbar-JBL-1024x683.jpg"
+      ],
+      "updatedAt": "2026-03-30T05:42:53.178Z"
+    },
+    "auto_accessory_3": {
+      "productId": "auto_accessory_3",
+      "productName": "Samsung Keyboard 2026 3",
+      "query": "Samsung Keyboard 2026 3 accessories product",
+      "provider": "bing",
+      "images": [
+        "https://m.media-amazon.com/images/I/71QnO6JUrrL._AC_SL1500_.jpg",
+        "https://conceptkart.com/cdn/shop/articles/Tecphile_-_X510T.jpg?v=1721722244&width=1280",
+        "https://image-us.samsung.com/SamsungUS/support/solutions/accessories/ACC_Samsung-accessories-Keyboards.jpg"
+      ],
+      "updatedAt": "2026-03-30T05:43:04.168Z"
+    },
+    "auto_phone_4": {
+      "productId": "auto_phone_4",
+      "productName": "Xiaomi Edge 2025 4",
+      "query": "Xiaomi Edge 2025 4 phones product",
+      "provider": "bing",
+      "images": [
+        "https://xiaomiui.net/wp-content/uploads/2025/05/Motorola-Edge-2025.png",
+        "https://media.assettype.com/analyticsinsight/2024-11-12/m666flhq/Xiaomis-comprehensive-2025-roadmap-reflects-the-companys-commit.jpg?w=640&auto=format%2Ccompress",
+        "https://media.assettype.com/analyticsinsight/2024-11-12/guf4hdw3/The-next-generation-Xiaomi-smartphones-will-be-po.jpg?w=640&auto=format%2Ccompress"
+      ],
+      "updatedAt": "2026-03-30T05:43:14.041Z"
+    },
+    "auto_laptop_4": {
+      "productId": "auto_laptop_4",
+      "productName": "ASUS ThinkPad 2023 4",
+      "query": "ASUS ThinkPad 2023 4 laptops product",
+      "provider": "bing",
+      "images": [
+        "https://www.notebookcheck.biz/fileadmin/_processed_/1/a/csm_DSC_0400_70b0f33f19.jpg",
+        "https://static1.xdaimages.com/wordpress/wp-content/uploads/2023/01/20230104102313098_s.jpg",
+        "https://m.media-amazon.com/images/I/710VgU20f2L._AC_SL1500_.jpg"
+      ],
+      "updatedAt": "2026-03-30T05:43:22.893Z"
+    },
+    "auto_accessory_4": {
+      "productId": "auto_accessory_4",
+      "productName": "Belkin Smart Watch 2023 4",
+      "query": "Belkin Smart Watch 2023 4 accessories product",
+      "provider": "bing",
+      "images": [
+        "https://blog.bestbuy.ca/wp-content/uploads/2023/04/Belkin-accessories-main-2.jpg",
+        "https://www.gearpatrol.com/wp-content/uploads/sites/2/2023/12/1698932509-belkin-boostcharge-pro-2-in-1-dock-654287cb2e9f7-jpg.webp?w=1300",
+        "https://www.cultofmac.com/wp-content/uploads/2023/11/Belkin-Apple-Watch-charger.jpg"
+      ],
+      "updatedAt": "2026-03-30T05:43:35.563Z"
+    },
+    "auto_phone_5": {
+      "productId": "auto_phone_5",
+      "productName": "Nothing Neo 2026 5",
+      "query": "Nothing Neo 2026 5 phones product",
+      "provider": "bing",
+      "images": [
+        "https://static.hub.91mobiles.com/wp-content/uploads/sites/9/2026/01/Nothing-phones-to-cost-more-in-2026.png?tr=q-70",
+        "https://techlekh.com/wp-content/uploads/2025/05/nothing-mobiles-price-in-nepal.jpg",
+        "https://cdn1.smartprix.com/rx-iHat9JNPM-w280-h280/nothing-phone-3a-12g.webp"
+      ],
+      "updatedAt": "2026-03-30T05:43:44.874Z"
+    },
+    "auto_laptop_5": {
+      "productId": "auto_laptop_5",
+      "productName": "Acer ROG 2024 5",
+      "query": "Acer ROG 2024 5 laptops product",
+      "provider": "bing",
+      "images": [
+        "https://laptopmedia.com/wp-content/uploads/2023/05/3-42-e1685007309545.jpg",
+        "https://laptopmedia.com/wp-content/uploads/2024/02/10-11-e1708096613807.jpg",
+        "https://rog.asus.com/media/1704422071559.jpg"
+      ],
+      "updatedAt": "2026-03-30T05:43:53.793Z"
+    },
+    "auto_audio_5": {
+      "productId": "auto_audio_5",
+      "productName": "Sennheiser Headphones 2022 5",
+      "query": "Sennheiser Headphones 2022 5 audio product",
+      "provider": "bing",
+      "images": [
+        "https://www.techjunkie.com/wp-content/uploads/2022/05/Best-Sennheiser-Headphones.png",
+        "https://www.headphonesty.com/wp-content/uploads/2022/04/The_best_Sennheiser_headphones-1200x630-cropped.jpg",
+        "https://i.ytimg.com/vi/Zny7xRoqetM/maxresdefault.jpg"
+      ],
+      "updatedAt": "2026-03-30T05:44:03.484Z"
+    },
+    "auto_accessory_5": {
+      "productId": "auto_accessory_5",
+      "productName": "UGREEN USB-C Hub 2024 5",
+      "query": "UGREEN USB-C Hub 2024 5 accessories product",
+      "provider": "bing",
+      "images": [
+        "https://unitedstore.pk/wp-content/uploads/2023/10/Usb-c-hub-4.webp",
+        "https://m.media-amazon.com/images/I/61clpS0XRkL._AC_SL1500_.jpg",
+        "https://down-ph.img.susercontent.com/file/cn-11134207-7ras8-m20w2vmav66jd8"
+      ],
+      "updatedAt": "2026-03-30T05:44:12.342Z"
+    },
+    "auto_phone_6": {
+      "productId": "auto_phone_6",
+      "productName": "Tecno Note 2024 6",
+      "query": "Tecno Note 2024 6 phones product",
+      "provider": "bing",
+      "images": [
+        "https://c76c7bbc41.mjedge.net/wp-content/uploads/tc/2024/08/image-4-768x768.jpg",
+        "https://c76c7bbc41.mjedge.net/wp-content/uploads/tc/2024/08/image-6-768x768.jpg",
+        "https://c76c7bbc41.mjedge.net/wp-content/uploads/tc/2024/08/image-3-300x300.jpg"
+      ],
+      "updatedAt": "2026-03-30T05:44:21.612Z"
+    },
+    "auto_audio_6": {
+      "productId": "auto_audio_6",
+      "productName": "Marshall Earbuds 2023 6",
+      "query": "Marshall Earbuds 2023 6 audio product",
+      "provider": "bing",
+      "images": [
+        "https://cdn.mos.cms.futurecdn.net/mSBSoMozhBXXueQ4jZ4duG.jpg",
+        "https://cdn.vox-cdn.com/thumbor/87td0Zl0mkTYRxt4wp3bym2vTL4=/0x0:2040x1360/1200x628/filters:focal(1020x680:1021x681)/cdn.vox-cdn.com/uploads/chorus_asset/file/24880970/marshall.jpg",
+        "https://m.media-amazon.com/images/I/61wXfV9-x+L.jpg"
+      ],
+      "updatedAt": "2026-03-30T05:44:38.780Z"
+    },
+    "auto_audio_4": {
+      "productId": "auto_audio_4",
+      "productName": "Sony WH-1000XM5 Midnight",
+      "query": "Sony WH-1000XM5 Midnight headphones earbuds speaker audio product photo",
+      "provider": "bing",
+      "images": [
+        "https://down-my.img.susercontent.com/file/my-11134207-7r98q-lybjdlmk12sgd1",
+        "https://media.johnlewiscontent.com/i/JohnLewis/110343999alt4?fmt=auto&$background-off-white$",
+        "https://www.sony.com/image/6145c1d32e6ac8e63a46c912dc33c5bb?fmt=pjpeg&bgcolor=FFFFFF&bgc=FFFFFF&wid=2515&hei=1320"
+      ],
+      "updatedAt": "2026-03-30T07:51:34.166Z"
+    },
+    "auto_laptop_6": {
+      "productId": "auto_laptop_6",
+      "productName": "MacBook Pro 16 M3 Pro 16GB/512GB",
+      "query": "MacBook Pro 16 M3 Pro 16GB/512GB laptop notebook computer product photo",
+      "provider": "bing",
+      "images": [
+        "https://ecostart.co.za/wp-content/uploads/2024/06/macbook_pro_.png",
+        "http://ax.com.kw/app/uploads/2023/12/macbook_pro_16-inch_m3_black_0001_2.jpg",
+        "https://laptopmedia.com/wp-content/uploads/2023/10/16-M3-Pro-B-3-copy-e1698747186923.jpg"
+      ],
+      "updatedAt": "2026-03-30T07:51:41.985Z"
+    },
+    "auto_phone_7": {
+      "productId": "auto_phone_7",
+      "productName": "iPhone 15 Pro 256GB",
+      "query": "iPhone 15 Pro 256GB smartphone mobile phone product photo",
+      "provider": "bing",
+      "images": [
+        "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6525/6525412_sd.jpg",
+        "https://static.skyassets.com/contentstack/assets/blt143e20b03d72047e/blt421b5c5318c15f83/6501b50cdc211726e3c3158c/Sky_Mobile_PDP1_iPhone15Pro_Black_Titanium-PreOrder.png?imageManager=true&impolicy=resize&width=1000",
+        "https://cdncloudcart.com/11178/products/images/34066/apple-iphone-15-pro-256gb-6500cfe06b8b1_600x600.png?1694552607"
+      ],
+      "updatedAt": "2026-03-30T07:51:55.210Z"
+    },
+    "auto_laptop_7": {
+      "productId": "auto_laptop_7",
+      "productName": "MacBook Pro 16 M3 Pro 16GB/1TB",
+      "query": "MacBook Pro 16 M3 Pro 16GB/1TB laptop notebook computer product photo",
+      "provider": "bing",
+      "images": [
+        "https://laptopmedia.com/wp-content/uploads/2023/10/16-M3-Pro-B-3-copy-e1698747186923.jpg",
+        "https://ecostart.co.za/wp-content/uploads/2024/06/macbook_pro_.png",
+        "https://laptoptrieuphat.com/wp-content/uploads/2024/07/macbook-pro-16-M3-max-3.jpg"
+      ],
+      "updatedAt": "2026-03-30T07:52:04.496Z"
+    },
+    "auto_audio_7": {
+      "productId": "auto_audio_7",
+      "productName": "Sony WF-1000XM5 Silver",
+      "query": "Sony WF-1000XM5 Silver headphones earbuds speaker audio product photo",
+      "provider": "bing",
+      "images": [
+        "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6546/6546811cv15d.jpg",
+        "https://m.media-amazon.com/images/I/61qmsGnacvL._AC_.jpg",
+        "https://m.media-amazon.com/images/I/61qmsGnacvL.jpg"
+      ],
+      "updatedAt": "2026-03-30T07:52:13.123Z"
+    },
+    "auto_accessory_7": {
+      "productId": "auto_accessory_7",
+      "productName": "Apple AirTag (4 Pack) Max",
+      "query": "Apple AirTag (4 Pack) Max tech accessory gadget charger keyboard mouse smartwatch product photo",
+      "provider": "bing",
+      "images": [
+        "https://inbox.ph/wp-content/uploads/2021/06/4pck-850x850.jpg",
+        "https://gadgetworld.co.ke/wp-content/uploads/2023/10/APPLE-AIRTAG-4-PACK.jpeg",
+        "https://img01.ztat.net/article/spp-media-p1/6ee2f96da7eb45ebad61e35b65f1233e/84e83f85098e4029951e186104ef1449.jpg?imwidth=762&filter=packshot"
+      ],
+      "updatedAt": "2026-03-30T07:52:22.439Z"
+    },
+    "auto_phone_8": {
+      "productId": "auto_phone_8",
+      "productName": "iPhone 15 Pro 512GB",
+      "query": "iPhone 15 Pro 512GB smartphone mobile phone product photo",
+      "provider": "bing",
+      "images": [
+        "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6525/6525494_sd.jpg",
+        "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6525/6525427_sd.jpg",
+        "https://s13emagst.akamaized.net/products/60458/60457155/images/res_bc44fa0bbdf0de65a3c655809352aba9.jpg"
+      ],
+      "updatedAt": "2026-03-30T07:52:32.928Z"
+    },
+    "auto_laptop_8": {
+      "productId": "auto_laptop_8",
+      "productName": "MacBook Pro 16 M3 Pro 32GB/1TB",
+      "query": "MacBook Pro 16 M3 Pro 32GB/1TB laptop notebook computer product photo",
+      "provider": "bing",
+      "images": [
+        "https://ecostart.co.za/wp-content/uploads/2024/06/macbook_pro_.png",
+        "https://laptopmedia.com/wp-content/uploads/2023/10/16-M3-Pro-B-3-copy-e1698747186923.jpg",
+        "https://laptoptrieuphat.com/wp-content/uploads/2024/07/macbook-pro-16-M3-max-3.jpg"
+      ],
+      "updatedAt": "2026-03-30T07:52:41.348Z"
+    },
+    "auto_audio_8": {
+      "productId": "auto_audio_8",
+      "productName": "Sony WF-1000XM5 White",
+      "query": "Sony WF-1000XM5 White headphones earbuds speaker audio product photo",
+      "provider": "bing",
+      "images": [
+        "https://www.techgoondu.com/wp-content/uploads/2023/08/Sony-WF-1000XM5-1.jpg",
+        "https://ecommerce.datablitz.com.ph/cdn/shop/files/thumbnails_2Flarge_2FAsset_Hierarchy_2FConsumer_Assets_2FAccessories_2FHeadphones_2FEarbuds_2F2023_2FWF-1000XM5_2FeComm_Product_Images_2FSilver_2F04_WF-1000XM5_S_front_png_1600x.jpg?v=1693389586",
+        "https://msldigital.com.my/storage/2024/04/d40b54a29138fb0d8c23736264fddc53.jpeg"
+      ],
+      "updatedAt": "2026-03-30T07:52:52.251Z"
+    },
+    "auto_accessory_8": {
+      "productId": "auto_accessory_8",
+      "productName": "Apple AirTag (4 Pack) Bundle",
+      "query": "Apple AirTag (4 Pack) Bundle tech accessory gadget charger keyboard mouse smartwatch product photo",
+      "provider": "bing",
+      "images": [
+        "https://qvc.scene7.com/is/image/QVC/e/68/e317368.001",
+        "https://i04.hsncdn.com/is/image/HomeShoppingNetwork/prodgrid/apple-airtag-4-pack-bundle-with-cases-keychain-and-lugg-d-20230201111302837~837251_611.jpg",
+        "https://item.tscimg.ca/TSC/7/70/704/0x0/704339_ALTMORE5.jpg?impolicy=XL"
+      ],
+      "updatedAt": "2026-03-30T07:53:02.718Z"
+    },
+    "auto_phone_9": {
+      "productId": "auto_phone_9",
+      "productName": "iPhone 15 Pro 1TB",
+      "query": "iPhone 15 Pro 1TB smartphone mobile phone product photo",
+      "provider": "bing",
+      "images": [
+        "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6525/6525420_sd.jpg",
+        "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6525/6525429_sd.jpg",
+        "https://m.media-amazon.com/images/I/41NGdWgVgdL._AC_SL1500_.jpg"
+      ],
+      "updatedAt": "2026-03-30T07:53:13.231Z"
+    },
+    "auto_laptop_9": {
+      "productId": "auto_laptop_9",
+      "productName": "MacBook Pro 16 M3 Pro 32GB/2TB",
+      "query": "MacBook Pro 16 M3 Pro 32GB/2TB laptop notebook computer product photo",
+      "provider": "bing",
+      "images": [
+        "https://d1tydw6090df56.cloudfront.net/products/1280x960/macbook-pro-16-inch-2023-silver-apple-silicon-0-735bf92.jpg",
+        "https://cdn.mos.cms.futurecdn.net/hreZTxNBvXGQbKFdPXDKkB.jpeg",
+        "https://pcmax.id/wp-content/uploads/2023/11/image-50.png"
+      ],
+      "updatedAt": "2026-03-30T07:53:24.224Z"
+    },
+    "auto_accessory_9": {
+      "productId": "auto_accessory_9",
+      "productName": "Apple Pencil (2nd Gen) Standard",
+      "query": "Apple Pencil (2nd Gen) Standard tech accessory gadget charger keyboard mouse smartwatch product photo",
+      "provider": "bing",
+      "images": [
+        "https://m.media-amazon.com/images/I/51htqJ1f6yL.jpg",
+        "https://www.thetechoutlook.com/wp-content/uploads/2022/11/Untitled-design-8-1.jpg",
+        "https://cdn.shoplightspeed.com/shops/635625/files/50843365/1600x2048x1/apple-pencil-2nd-gen-white.jpg"
+      ],
+      "updatedAt": "2026-03-30T07:53:37.100Z"
+    },
+    "auto_phone_10": {
+      "productId": "auto_phone_10",
+      "productName": "iPhone 15 Pro 12GB+256GB",
+      "query": "iPhone 15 Pro 12GB+256GB smartphone mobile phone product photo",
+      "provider": "bing",
+      "images": [
+        "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6525/6525412_sd.jpg",
+        "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6525/6525410_sd.jpg",
+        "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6525/6525421_sd.jpg"
+      ],
+      "updatedAt": "2026-03-30T07:53:45.929Z"
+    },
+    "auto_laptop_10": {
+      "productId": "auto_laptop_10",
+      "productName": "MacBook Pro 16 M3 Pro 64GB/2TB",
+      "query": "MacBook Pro 16 M3 Pro 64GB/2TB laptop notebook computer product photo",
+      "provider": "bing",
+      "images": [
+        "https://d1tydw6090df56.cloudfront.net/products/1280x960/macbook-pro-16-inch-2023-silver-apple-silicon-0-735bf92.jpg",
+        "https://media.ldlc.com/r1600/ld/products/00/06/07/95/LD0006079551_0006081511.jpg",
+        "https://cdn.tgdd.vn/Products/Images/44/327690/macbook-pro-16-inch-m3-max-64gb-1tb-40gpu-den-1-750x500.jpg"
+      ],
+      "updatedAt": "2026-03-30T07:53:55.373Z"
+    },
+    "auto_audio_10": {
+      "productId": "auto_audio_10",
+      "productName": "Sony WF-1000XM5 Bundle",
+      "query": "Sony WF-1000XM5 Bundle headphones earbuds speaker audio product photo",
+      "provider": "bing",
+      "images": [
+        "https://i5.walmartimages.com/seo/Sony-WF-1000XM5-Noise-Canceling-Wireless-Earbuds-Silver-Bundle-with-2-YR-Warranty_106a4a21-2513-4734-bf4a-21065034c87a.3f39aea9260296f989c8feedfde90cc2.jpeg?odnHeight=640&odnWidth=640&odnBg=FFFFFF",
+        "https://i5.walmartimages.com/seo/Sony-WF-1000XM5-Industry-Leading-Noise-Canceling-Truly-Wireless-Earbuds-Black-Bundle-Deco-Essentials-6-Pairs-In-Ear-Earbud-Tips-S-M-L-Sizes-Microfibe_89d7300a-5544-458a-aac2-e68b1bc534a6.b59401083653b18684c68e178545e4dd.jpeg",
+        "https://m.media-amazon.com/images/I/61YgQ4faTaL._AC_SL1500_.jpg"
+      ],
+      "updatedAt": "2026-03-30T07:54:05.442Z"
+    },
+    "auto_accessory_10": {
+      "productId": "auto_accessory_10",
+      "productName": "Apple Pencil (2nd Gen) Pro",
+      "query": "Apple Pencil (2nd Gen) Pro tech accessory gadget charger keyboard mouse smartwatch product photo",
+      "provider": "bing",
+      "images": [
+        "https://m.media-amazon.com/images/S/aplus-media-library-service-media/96f00961-341f-4c03-8af3-d4a4c02de1be.__CR0,0,970,600_PT0_SX970_V1___.jpg",
+        "https://m.media-amazon.com/images/I/61isbGTObsL.jpg",
+        "https://ae01.alicdn.com/kf/Se63176a5084844a8b14dcc0b5a7994a92/For-Apple-Pencil-2nd-Generations-Wireless-Charger-For-Magnetic-Charging-iPad-Pencil-Charger-Apple-Pencil-Accessories.jpg"
+      ],
+      "updatedAt": "2026-03-30T07:54:14.117Z"
+    },
+    "auto_phone_11": {
+      "productId": "auto_phone_11",
+      "productName": "iPhone 15 Plus 128GB",
+      "query": "iPhone 15 Plus 128GB smartphone mobile phone product photo",
+      "provider": "bing",
+      "images": [
+        "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6525/6525390_sd.jpg",
+        "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6525/6525386_sd.jpg",
+        "https://m.media-amazon.com/images/I/81UKVHM77GL._AC_.jpg"
+      ],
+      "updatedAt": "2026-03-30T07:54:22.871Z"
+    },
+    "auto_laptop_11": {
+      "productId": "auto_laptop_11",
+      "productName": "MacBook Air 13 M2 16GB/512GB",
+      "query": "MacBook Air 13 M2 16GB/512GB laptop notebook computer product photo",
+      "provider": "bing",
+      "images": [
+        "https://cdn.tgdd.vn/Products/Images/44/334787/apple-macbook-air-m2-2022-vang-600x600.jpg",
+        "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/macbookair-og-202402?wid=1200&hei=630&fmt=jpeg&qlt=95&.v=1707414684423",
+        "https://bigbyte.com.np/wp-content/uploads/2023/10/Apple-Laptop-price-in-Nepal-Macbook-Air-and-Pro.jpg"
+      ],
+      "updatedAt": "2026-03-30T07:54:34.033Z"
+    },
+    "auto_audio_11": {
+      "productId": "auto_audio_11",
+      "productName": "AirPods Pro (2nd Gen) Black",
+      "query": "AirPods Pro (2nd Gen) Black headphones earbuds speaker audio product photo",
+      "provider": "bing",
+      "images": [
+        "https://beemart.com.bd/images/products/1727693549.jpg",
+        "https://static-01.daraz.pk/p/4207dfc3c0da5cffa604153f9edc73f4.jpg",
+        "https://shopivate.pk/wp-content/uploads/2023/05/1000119946-800x800.jpg"
+      ],
+      "updatedAt": "2026-03-30T07:54:48.061Z"
+    },
+    "auto_accessory_11": {
+      "productId": "auto_accessory_11",
+      "productName": "Apple Pencil (2nd Gen) Max",
+      "query": "Apple Pencil (2nd Gen) Max tech accessory gadget charger keyboard mouse smartwatch product photo",
+      "provider": "bing",
+      "images": [
+        "https://m.media-amazon.com/images/I/61UUbcTASGL._SL1500_.jpg",
+        "https://m.media-amazon.com/images/S/aplus-media-library-service-media/96f00961-341f-4c03-8af3-d4a4c02de1be.__CR0,0,970,600_PT0_SX970_V1___.jpg",
+        "https://m.media-amazon.com/images/I/61isbGTObsL.jpg"
+      ],
+      "updatedAt": "2026-03-30T07:54:55.942Z"
+    },
+    "auto_phone_12": {
+      "productId": "auto_phone_12",
+      "productName": "iPhone 15 Plus 256GB",
+      "query": "iPhone 15 Plus 256GB smartphone mobile phone product photo",
+      "provider": "bing",
+      "images": [
+        "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6525/6525392_sd.jpg",
+        "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6525/6525392cv11d.jpg",
+        "https://mtndeals.co.za/wp-content/uploads/2023/12/Apple-iPhone-15-Plus-256GB.jpg"
+      ],
+      "updatedAt": "2026-03-30T07:55:08.830Z"
+    },
+    "auto_laptop_12": {
+      "productId": "auto_laptop_12",
+      "productName": "MacBook Air 13 M2 16GB/1TB",
+      "query": "MacBook Air 13 M2 16GB/1TB laptop notebook computer product photo",
+      "provider": "bing",
+      "images": [
+        "https://s13emagst.akamaized.net/products/29370/29369080/images/res_f8dc282dc3b85fcec8725688cc37ae8e.jpg",
+        "https://dam.which.co.uk/IC19565-0842-00-front-800x600.jpg",
+        "https://i.ebayimg.com/images/g/thYAAOSw5Mxkgieq/s-l1600.jpg"
+      ],
+      "updatedAt": "2026-03-30T07:55:18.410Z"
+    },
+    "auto_audio_12": {
+      "productId": "auto_audio_12",
+      "productName": "AirPods Pro (2nd Gen) Silver",
+      "query": "AirPods Pro (2nd Gen) Silver headphones earbuds speaker audio product photo",
+      "provider": "bing",
+      "images": [
+        "https://as2.ae/wp-content/webp-express/webp-images/doc-root/wp-content/uploads/2023/01/AirPods-Pro-2nd-Gen-Silver-GLossy-600x600.jpg.webp",
+        "https://justswitch.com/wp-content/uploads/2023/12/Front-87.png",
+        "https://as2.ae/wp-content/uploads/2023/01/AirPods-Pro-2nd-Gen-Silver-Buds-Glossy.jpg"
+      ],
+      "updatedAt": "2026-03-30T07:55:27.182Z"
+    },
+    "auto_accessory_12": {
+      "productId": "auto_accessory_12",
+      "productName": "Apple Pencil (2nd Gen) Bundle",
+      "query": "Apple Pencil (2nd Gen) Bundle tech accessory gadget charger keyboard mouse smartwatch product photo",
+      "provider": "bing",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2023/12/13/657a06a9e34c30c22b6044d3/m_657a0a3cc5df6c7f8b1b1dae.jpeg",
+        "https://m.media-amazon.com/images/I/61isbGTObsL.jpg",
+        "https://m.media-amazon.com/images/S/aplus-media-library-service-media/96f00961-341f-4c03-8af3-d4a4c02de1be.__CR0,0,970,600_PT0_SX970_V1___.jpg"
+      ],
+      "updatedAt": "2026-03-30T07:55:36.768Z"
+    },
+    "auto_phone_13": {
+      "productId": "auto_phone_13",
+      "productName": "iPhone 15 Plus 512GB",
+      "query": "iPhone 15 Plus 512GB smartphone mobile phone product photo",
+      "provider": "bing",
+      "images": [
+        "https://cdn.jiostore.online/v2/jmd-asp/jdprod/wrkr/products/pictures/item/free/original/kp7UkcWur4-apple-iphone-15-plus-512-gb-black-493839334-i-1-1200wx1200h.jpeg",
+        "https://m.media-amazon.com/images/I/61iWBD9vDYL._AC_SL1146_.jpg",
+        "https://thanhmobile.vn/uploads/plugin/product_items/1075/iphone-15-plus-512gb-iphone-15.jpg"
+      ],
+      "updatedAt": "2026-03-30T07:55:49.914Z"
+    },
+    "auto_laptop_13": {
+      "productId": "auto_laptop_13",
+      "productName": "MacBook Air 13 M2 32GB/1TB",
+      "query": "MacBook Air 13 M2 32GB/1TB laptop notebook computer product photo",
+      "provider": "bing",
+      "images": [
+        "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/macbookair-og-202402?wid=1200&hei=630&fmt=jpeg&qlt=95&.v=1707414684423",
+        "https://5.imimg.com/data5/SELLER/Default/2023/6/315657483/IX/OJ/DY/800983/13-inch-m2-apple-macbook-air-laptop-500x500.png",
+        "https://ctech-store.com/wp-content/uploads/2023/03/macbookairmlxx3lla_6.webp"
+      ],
+      "updatedAt": "2026-03-30T07:56:00.051Z"
+    },
+    "auto_audio_13": {
+      "productId": "auto_audio_13",
+      "productName": "AirPods Pro (2nd Gen) White",
+      "query": "AirPods Pro (2nd Gen) White headphones earbuds speaker audio product photo",
+      "provider": "bing",
+      "images": [
+        "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6447/6447382_sd.jpg",
+        "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/4900/4900964_rd.jpg",
+        "https://90a1c75758623581b3f8-5c119c3de181c9857fcb2784776b17ef.ssl.cf2.rackcdn.com/654290_447920_03_front_zoom.jpg"
+      ],
+      "updatedAt": "2026-03-30T07:56:09.881Z"
+    },
+    "auto_accessory_13": {
+      "productId": "auto_accessory_13",
+      "productName": "Apple Watch Ultra 2 Standard",
+      "query": "Apple Watch Ultra 2 Standard tech accessory gadget charger keyboard mouse smartwatch product photo",
+      "provider": "bing",
+      "images": [
+        "https://static1.pocketlintimages.com/wordpress/wp-content/uploads/wm/2023/09/apple-watch-ultra-2-13.jpg",
+        "https://media.very.co.uk/i/very/W57O6_SQ1_0000000004_BLACK_SLf",
+        "https://media.idownloadblog.com/wp-content/uploads/2024/03/Best-Apple-Watch-Ultra-2-Accessories-1500x1000.jpg"
+      ],
+      "updatedAt": "2026-03-30T07:56:18.789Z"
+    },
+    "auto_phone_14": {
+      "productId": "auto_phone_14",
+      "productName": "iPhone 15 Plus 1TB",
+      "query": "iPhone 15 Plus 1TB smartphone mobile phone product photo",
+      "provider": "bing",
+      "images": [
+        "https://m.media-amazon.com/images/I/81UKVHM77GL._AC_.jpg",
+        "https://dam.which.co.uk/IC20006-0460-00-front-800x600.jpg",
+        "https://m.media-amazon.com/images/I/61b7Ew7kjYL._AC_.jpg"
+      ],
+      "updatedAt": "2026-03-30T07:56:27.326Z"
+    },
+    "auto_audio_14": {
+      "productId": "auto_audio_14",
+      "productName": "AirPods Pro (2nd Gen) Midnight",
+      "query": "AirPods Pro (2nd Gen) Midnight headphones earbuds speaker audio product photo",
+      "provider": "bing",
+      "images": [
+        "https://static-01.daraz.pk/p/4207dfc3c0da5cffa604153f9edc73f4.jpg",
+        "https://m.media-amazon.com/images/G/02/Apple/APlus/GBEN_AirPods_Pro_2_Q424_Web_Marketing_Page_PSD_Bronze_L_02._CB563831800_.jpg",
+        "https://static-01.daraz.pk/p/0c8679ebf1176244d287cf83f380bdc0.png"
+      ],
+      "updatedAt": "2026-03-30T07:56:43.257Z"
+    },
+    "auto_accessory_14": {
+      "productId": "auto_accessory_14",
+      "productName": "Apple Watch Ultra 2 Pro",
+      "query": "Apple Watch Ultra 2 Pro tech accessory gadget charger keyboard mouse smartwatch product photo",
+      "provider": "bing",
+      "images": [
+        "https://static1.pocketlintimages.com/wordpress/wp-content/uploads/wm/2023/09/apple-watch-ultra-2-13.jpg",
+        "https://media.idownloadblog.com/wp-content/uploads/2024/03/Best-Apple-Watch-Ultra-2-Accessories-1500x1000.jpg",
+        "https://i.ytimg.com/vi/b2M9R5EZWo0/maxresdefault.jpg"
+      ],
+      "updatedAt": "2026-03-30T07:56:51.791Z"
+    },
+    "auto_phone_15": {
+      "productId": "auto_phone_15",
+      "productName": "iPhone 15 Plus 12GB+256GB",
+      "query": "iPhone 15 Plus 12GB+256GB smartphone mobile phone product photo",
+      "provider": "bing",
+      "images": [
+        "https://m.media-amazon.com/images/I/51A+nRCJlmL._AC_SL1000_.jpg",
+        "https://media.wishque.com/data/images/products/11445/59180003_663382177551_0.71569300-1708769395.png",
+        "https://cdsassets.apple.com/live/7WUAS350/images/tech-specs/iphone_15_plus_hero.png"
+      ],
+      "updatedAt": "2026-03-30T07:57:07.938Z"
+    },
+    "auto_laptop_15": {
+      "productId": "auto_laptop_15",
+      "productName": "MacBook Air 13 M2 64GB/2TB",
+      "query": "MacBook Air 13 M2 64GB/2TB laptop notebook computer product photo",
+      "provider": "bing",
+      "images": [
+        "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/macbookair-og-202402?wid=1200&hei=630&fmt=jpeg&qlt=95&.v=1707414684423",
+        "https://5.imimg.com/data5/SELLER/Default/2023/6/315657483/IX/OJ/DY/800983/13-inch-m2-apple-macbook-air-laptop-500x500.png",
+        "https://ctech-store.com/wp-content/uploads/2023/03/macbookairmlxx3lla_6.webp"
+      ],
+      "updatedAt": "2026-03-30T07:57:16.334Z"
+    },
+    "auto_audio_15": {
+      "productId": "auto_audio_15",
+      "productName": "AirPods Pro (2nd Gen) Bundle",
+      "query": "AirPods Pro (2nd Gen) Bundle headphones earbuds speaker audio product photo",
+      "provider": "bing",
+      "images": [
+        "https://m.media-amazon.com/images/I/61SUj2aKoEL._AC_.jpg",
+        "https://m.media-amazon.com/images/I/51emillNpWL._AC_SL1500_.jpg",
+        "https://m.media-amazon.com/images/G/02/Apple/APlus/GBEN_AirPods_Pro_2_Q424_Web_Marketing_Page_PSD_Bronze_L_02._CB563831800_.jpg"
+      ],
+      "updatedAt": "2026-03-30T07:57:24.639Z"
+    },
+    "auto_accessory_15": {
+      "productId": "auto_accessory_15",
+      "productName": "Apple Watch Ultra 2 Max",
+      "query": "Apple Watch Ultra 2 Max tech accessory gadget charger keyboard mouse smartwatch product photo",
+      "provider": "bing",
+      "images": [
+        "https://static1.pocketlintimages.com/wordpress/wp-content/uploads/wm/2023/09/apple-watch-ultra-2-13.jpg",
+        "https://i.ytimg.com/vi/b2M9R5EZWo0/maxresdefault.jpg",
+        "https://i.ytimg.com/vi/HBN9zxHhZe4/maxresdefault.jpg"
+      ],
+      "updatedAt": "2026-03-30T07:57:32.194Z"
+    },
+    "auto_phone_16": {
+      "productId": "auto_phone_16",
+      "productName": "iPhone 15 128GB",
+      "query": "iPhone 15 128GB smartphone mobile phone product photo",
+      "provider": "bing",
+      "images": [
+        "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6417/6417993_sd.jpg",
+        "https://s13emagst.akamaized.net/products/60458/60457121/images/res_9e07439d21e460f9570cfe181e6280c2.jpg",
+        "https://mcprod.jumbo.ae/media/catalog/product/i/p/iphone_15_pro_natural_titanium_pdp_image_position-1__en-me.jpg"
+      ],
+      "updatedAt": "2026-03-30T07:57:41.517Z"
+    },
+    "auto_laptop_16": {
+      "productId": "auto_laptop_16",
+      "productName": "MacBook Air 15 M3 16GB/512GB",
+      "query": "MacBook Air 15 M3 16GB/512GB laptop notebook computer product photo",
+      "provider": "bing",
+      "images": [
+        "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6565/6565855_sd.jpg",
+        "https://b2c-contenthub.com/wp-content/uploads/2024/03/m3-macbook-air-overhead.jpg?resize=2048%2C1536&quality=50&strip=all",
+        "https://www.maccenter.vn/App_images/MacBookAir-15-M3-SpaceGray-B.jpg"
+      ],
+      "updatedAt": "2026-03-30T07:57:52.808Z"
+    },
+    "auto_audio_16": {
+      "productId": "auto_audio_16",
+      "productName": "AirPods Max Black",
+      "query": "AirPods Max Black headphones earbuds speaker audio product photo",
+      "provider": "bing",
+      "images": [
+        "https://craftbymerlin.com/cdn/shop/products/airpods_max_black_1.png?v=1658849587&width=1946",
+        "https://www.buykarlo.pk/wp-content/uploads/2024/12/apple_airpods_max_wireless_anc_headphone_black.jpg",
+        "https://gadgetuser.com/wp-content/uploads/2020/12/AirPods-Max-Black-960x600.jpg"
+      ],
+      "updatedAt": "2026-03-30T07:58:02.966Z"
+    },
+    "auto_accessory_16": {
+      "productId": "auto_accessory_16",
+      "productName": "Apple Watch Ultra 2 Bundle",
+      "query": "Apple Watch Ultra 2 Bundle tech accessory gadget charger keyboard mouse smartwatch product photo",
+      "provider": "bing",
+      "images": [
+        "https://static1.pocketlintimages.com/wordpress/wp-content/uploads/wm/2023/09/apple-watch-ultra-2-13.jpg",
+        "https://media.idownloadblog.com/wp-content/uploads/2024/03/Best-Apple-Watch-Ultra-2-Accessories-1500x1000.jpg",
+        "https://i.ytimg.com/vi/MntGtmea4sw/maxresdefault.jpg"
+      ],
+      "updatedAt": "2026-03-30T07:58:10.530Z"
+    },
+    "auto_phone_17": {
+      "productId": "auto_phone_17",
+      "productName": "iPhone 15 256GB",
+      "query": "iPhone 15 256GB smartphone mobile phone product photo",
+      "provider": "bing",
+      "images": [
+        "https://unboxing.id/wp-content/uploads/2024/01/apple-iphone-15-1-570x600.jpg",
+        "https://www.gadgetcraze.ug/web/image/product.template/613/image_1024?unique=67eb1dc",
+        "https://s13emagst.akamaized.net/products/60458/60457121/images/res_9e07439d21e460f9570cfe181e6280c2.jpg"
+      ],
+      "updatedAt": "2026-03-30T07:58:18.038Z"
+    },
+    "auto_laptop_17": {
+      "productId": "auto_laptop_17",
+      "productName": "MacBook Air 15 M3 16GB/1TB",
+      "query": "MacBook Air 15 M3 16GB/1TB laptop notebook computer product photo",
+      "provider": "bing",
+      "images": [
+        "https://www.maccenter.vn/App_images/MacBookAir-15-M3-Silver-A.jpg",
+        "https://b2c-contenthub.com/wp-content/uploads/2024/03/m3-macbook-air-overhead.jpg?resize=2048%2C1536&quality=50&strip=all",
+        "https://b2c-contenthub.com/wp-content/uploads/2024/03/m3-macbook-air-front-angle-left.jpg?resize=2048%2C1365&quality=50&strip=all"
+      ],
+      "updatedAt": "2026-03-30T07:58:28.260Z"
+    },
+    "auto_audio_17": {
+      "productId": "auto_audio_17",
+      "productName": "AirPods Max Silver",
+      "query": "AirPods Max Silver headphones earbuds speaker audio product photo",
+      "provider": "bing",
+      "images": [
+        "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6373/6373463_sd.jpg",
+        "https://exitocol.vtexassets.com/arquivos/ids/11646371/apple-airpods-max-silver.jpg?v=637787197098170000",
+        "https://us03-imgcdn.ymcart.com/98388/2023/12/12/d/0/d09b5ee592660e5e.webp"
+      ],
+      "updatedAt": "2026-03-30T07:58:36.428Z"
+    },
+    "auto_accessory_17": {
+      "productId": "auto_accessory_17",
+      "productName": "Logitech MX Master 3S Standard",
+      "query": "Logitech MX Master 3S Standard tech accessory gadget charger keyboard mouse smartwatch product photo",
+      "provider": "bing",
+      "images": [
+        "https://i5.walmartimages.com/seo/Logitech-K845-Illuminated-Aluminum-Keyboard-MX-Master-3S-Mouse-Zone-Vibe-100-Headphones-Graphite-SS-Desk-Mat-Grey_83526bc9-88cd-42f1-b4df-36e9d095893b.5bd9287c1c64011f7aa6e35f69b802f2.jpeg",
+        "https://ik.imagekit.io/gdgtme/wp-content/uploads/2022/08/Logitech-MX-Master-3S-Review-3-1024x768.jpg",
+        "https://www.wsn.gr/photos/products/large/622.jpg"
+      ],
+      "updatedAt": "2026-03-30T07:58:45.927Z"
+    },
+    "auto_phone_18": {
+      "productId": "auto_phone_18",
+      "productName": "iPhone 15 512GB",
+      "query": "iPhone 15 512GB smartphone mobile phone product photo",
+      "provider": "bing",
+      "images": [
+        "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6525/6525494_sd.jpg",
+        "https://m.media-amazon.com/images/I/81UKVHM77GL.jpg",
+        "https://s13emagst.akamaized.net/products/60458/60457124/images/res_710aa5e925b96dc436201454c55598f8.jpg"
+      ],
+      "updatedAt": "2026-03-30T07:58:55.640Z"
+    },
+    "auto_laptop_18": {
+      "productId": "auto_laptop_18",
+      "productName": "MacBook Air 15 M3 32GB/1TB",
+      "query": "MacBook Air 15 M3 32GB/1TB laptop notebook computer product photo",
+      "provider": "bing",
+      "images": [
+        "https://media.wired.com/photos/65e6155086f5ed6f798704fb/master/w_1600%2Cc_limit/MacBook-Air-M3-15-Inch.jpg",
+        "https://www.digimap.co.id/cdn/shop/files/0788-APPMC9H4ID-A-2.jpg?v=1731569317",
+        "https://b2c-contenthub.com/wp-content/uploads/2024/03/m3-macbook-air-profile-magsafe.jpg?quality=50&strip=all&w=1200"
+      ],
+      "updatedAt": "2026-03-30T07:59:04.719Z"
+    },
+    "auto_audio_18": {
+      "productId": "auto_audio_18",
+      "productName": "AirPods Max White",
+      "query": "AirPods Max White headphones earbuds speaker audio product photo",
+      "provider": "bing",
+      "images": [
+        "https://spacetech.pt/site/wp-content/uploads/2021/10/u_10207226-600x600.jpg",
+        "https://musictech.com/wp-content/uploads/2021/08/Airpods-Max-White@1400x1050.jpg",
+        "https://assets.pawnamerica.com/ProductImages/211afddb-8422-4d18-95eb-ea2a95cc4d6b.JPG"
+      ],
+      "updatedAt": "2026-03-30T07:59:13.090Z"
+    },
+    "auto_accessory_18": {
+      "productId": "auto_accessory_18",
+      "productName": "Logitech MX Master 3S Pro",
+      "query": "Logitech MX Master 3S Pro tech accessory gadget charger keyboard mouse smartwatch product photo",
+      "provider": "bing",
+      "images": [
+        "https://dist.contentdriver.com.au/logitech/MX-MASTER-3S-GRAPHITE-910-006561/images/charge-mobile.jpg",
+        "https://ik.imagekit.io/gdgtme/wp-content/uploads/2022/08/Logitech-MX-Master-3S-Review-3-1024x768.jpg",
+        "https://i5.walmartimages.com/seo/Logitech-K845-Illuminated-Aluminum-Keyboard-MX-Master-3S-Mouse-Zone-Vibe-100-Headphones-Graphite-SS-Desk-Mat-Grey_83526bc9-88cd-42f1-b4df-36e9d095893b.5bd9287c1c64011f7aa6e35f69b802f2.jpeg"
+      ],
+      "updatedAt": "2026-03-30T07:59:20.837Z"
+    },
+    "auto_phone_19": {
+      "productId": "auto_phone_19",
+      "productName": "iPhone 15 1TB",
+      "query": "iPhone 15 1TB smartphone mobile phone product photo",
+      "provider": "bing",
+      "images": [
+        "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6525/6525429_sd.jpg",
+        "https://s13emagst.akamaized.net/products/60458/60457156/images/res_968c9ac33392707226842f4933552b0c.jpg",
+        "https://traidepbaniphone.com/thumbs/760x540x2/upload/product/anyconvcomiphone-15-pro-white-thumbtz-650x650-7222.png"
+      ],
+      "updatedAt": "2026-03-30T07:59:30.456Z"
+    },
+    "auto_laptop_19": {
+      "productId": "auto_laptop_19",
+      "productName": "MacBook Air 15 M3 32GB/2TB",
+      "query": "MacBook Air 15 M3 32GB/2TB laptop notebook computer product photo",
+      "provider": "bing",
+      "images": [
+        "https://b2c-contenthub.com/wp-content/uploads/2024/03/m3-macbook-air-overhead.jpg?resize=2048%2C1536&quality=50&strip=all",
+        "https://www.digimap.co.id/cdn/shop/files/0788-APPMC9H4ID-A-2.jpg?v=1731569317",
+        "https://cdn.mos.cms.futurecdn.net/Ajc3ezCTN4FGz2vF4LpQn9-1200-80.jpg"
+      ],
+      "updatedAt": "2026-03-30T07:59:37.036Z"
+    },
+    "auto_audio_19": {
+      "productId": "auto_audio_19",
+      "productName": "AirPods Max Midnight",
+      "query": "AirPods Max Midnight headphones earbuds speaker audio product photo",
+      "provider": "bing",
+      "images": [
+        "https://media.ldlc.com/r1600/ld/products/00/06/16/68/LD0006166839.jpg",
+        "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/5ae43c78-09d5-4007-b211-c46cdca2aa57.jpg",
+        "https://media.very.co.uk/i/very/W57A1_SQ2_0000000976_MIDNIGHT_SLb?$pdp_300x400_x2$&fmt=jpg"
+      ],
+      "updatedAt": "2026-03-30T07:59:46.207Z"
+    },
+    "auto_accessory_19": {
+      "productId": "auto_accessory_19",
+      "productName": "Logitech MX Master 3S Max",
+      "query": "Logitech MX Master 3S Max tech accessory gadget charger keyboard mouse smartwatch product photo",
+      "provider": "bing",
+      "images": [
+        "https://i5.walmartimages.com/seo/Logitech-K845-Illuminated-Aluminum-Keyboard-MX-Master-3S-Mouse-Zone-Vibe-100-Headphones-Graphite-SS-Desk-Mat-Grey_83526bc9-88cd-42f1-b4df-36e9d095893b.5bd9287c1c64011f7aa6e35f69b802f2.jpeg",
+        "https://ik.imagekit.io/gdgtme/wp-content/uploads/2022/08/Logitech-MX-Master-3S-Review-3-1024x768.jpg",
+        "https://dist.contentdriver.com.au/logitech/MX-MASTER-3S-GRAPHITE-910-006561/images/charge-mobile.jpg"
+      ],
+      "updatedAt": "2026-03-30T07:59:54.121Z"
+    },
+    "auto_phone_20": {
+      "productId": "auto_phone_20",
+      "productName": "iPhone 15 12GB+256GB",
+      "query": "iPhone 15 12GB+256GB smartphone mobile phone product photo",
+      "provider": "bing",
+      "images": [
+        "https://m.media-amazon.com/images/I/61qQCRAQ3sL._AC_SL1500_.jpg",
+        "https://allsetrentals.com.au/sites/default/files/rent_product_ASR/iPhone 15 256GB Black - front n back.png",
+        "https://www.gadgetcraze.ug/web/image/product.template/613/image_1024?unique=67eb1dc"
+      ],
+      "updatedAt": "2026-03-30T08:00:02.860Z"
+    },
+    "auto_laptop_20": {
+      "productId": "auto_laptop_20",
+      "productName": "MacBook Air 15 M3 64GB/2TB",
+      "query": "MacBook Air 15 M3 64GB/2TB laptop notebook computer product photo",
+      "provider": "bing",
+      "images": [
+        "https://b2c-contenthub.com/wp-content/uploads/2024/03/m3-macbook-air-front-angle-left.jpg?resize=2048%2C1365&quality=50&strip=all",
+        "https://b2c-contenthub.com/wp-content/uploads/2024/03/m3-macbook-air-profile-magsafe.jpg?quality=50&strip=all&w=1200",
+        "https://media.wired.com/photos/65e6155086f5ed6f798704fb/master/w_1600%2Cc_limit/MacBook-Air-M3-15-Inch.jpg"
+      ],
+      "updatedAt": "2026-03-30T08:00:09.230Z"
+    },
+    "auto_audio_20": {
+      "productId": "auto_audio_20",
+      "productName": "AirPods Max Bundle",
+      "query": "AirPods Max Bundle headphones earbuds speaker audio product photo",
+      "provider": "bing",
+      "images": [
+        "https://dam.ee.co.uk/image/786263124743/image_49nbit409p0ef0j9dft90vfl0b/-S992x992-FWEBP",
+        "https://www.apple.com/v/airpods-max/g/images/overview/product-stories/hifi-sound/modal/audio_bc_distortionless_playback__bupsn9el6tde_large.png",
+        "https://pakistanstore.pk/wp-content/uploads/2024/11/AirPods-Max.jpg"
+      ],
+      "updatedAt": "2026-03-30T08:00:17.550Z"
+    },
+    "auto_accessory_20": {
+      "productId": "auto_accessory_20",
+      "productName": "Logitech MX Master 3S Bundle",
+      "query": "Logitech MX Master 3S Bundle tech accessory gadget charger keyboard mouse smartwatch product photo",
+      "provider": "bing",
+      "images": [
+        "https://i5.walmartimages.com/seo/Logitech-K845-Illuminated-Aluminum-Keyboard-MX-Master-3S-Mouse-Zone-Vibe-100-Headphones-Graphite-SS-Desk-Mat-Grey_83526bc9-88cd-42f1-b4df-36e9d095893b.5bd9287c1c64011f7aa6e35f69b802f2.jpeg",
+        "https://i5.walmartimages.com/asr/49c59cf2-fd27-4ae9-a6b5-253c4160176b.c6dfce9ab1199eae9b687652937ebb27.jpeg?odnHeight=640&odnWidth=640&odnBg=FFFFFF",
+        "https://simplesparkimpact.com/wp-content/uploads/2023/12/71sWjgq1SuL._AC_SL1500_.jpg"
+      ],
+      "updatedAt": "2026-03-30T08:00:27.694Z"
+    },
+    "auto_phone_21": {
+      "productId": "auto_phone_21",
+      "productName": "Samsung Galaxy S24 Ultra 128GB",
+      "query": "Samsung Galaxy S24 Ultra 128GB smartphone mobile phone product photo",
+      "provider": "bing",
+      "images": [
+        "https://i.ytimg.com/vi/EIb6jfzYXCo/maxresdefault.jpg",
+        "https://www.monpetitforfait.com/wp-content/uploads/2024/01/GalaxyS24Ultra.png",
+        "https://www.01net.com/app/uploads/2024/01/Samsung-Galaxy-S24-Ultra-1.jpg"
+      ],
+      "updatedAt": "2026-03-30T08:00:36.138Z"
+    },
+    "auto_laptop_21": {
+      "productId": "auto_laptop_21",
+      "productName": "Dell XPS 13 16GB/512GB",
+      "query": "Dell XPS 13 16GB/512GB laptop notebook computer product photo",
+      "provider": "bing",
+      "images": [
+        "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6520/6520770cv1d.jpg",
+        "https://s13emagst.akamaized.net/products/48378/48377281/images/res_29af904c29c48a2e95b5ebe4e35b09e8.jpg",
+        "https://i.dell.com/sites/csimages/Video_Imagery/all/xps-9350-silver-thumb.png"
+      ],
+      "updatedAt": "2026-03-30T08:00:46.258Z"
+    },
+    "auto_audio_21": {
+      "productId": "auto_audio_21",
+      "productName": "Beats Studio Pro Black",
+      "query": "Beats Studio Pro Black headphones earbuds speaker audio product photo",
+      "provider": "bing",
+      "images": [
+        "https://www.beatsbydre.com/content/dam/beats/web/product/headphones/studiopro-wireless/pdp/studiopro-pdp-p07.png.large.2x.png",
+        "https://www.beatsbydre.com/content/dam/beats/web/product/headphones/studiopro-wireless/pdp/studiopro-pdp-p08.png.large.2x.png",
+        "https://www.beatsbydre.com/content/dam/beats/web/product/headphones/studiopro-wireless/pdp/studiopro-pdp-p13.png.large.2x.png"
+      ],
+      "updatedAt": "2026-03-30T08:00:54.154Z"
+    },
+    "auto_accessory_21": {
+      "productId": "auto_accessory_21",
+      "productName": "Keychron Q3 Standard",
+      "query": "Keychron Q3 Standard tech accessory gadget charger keyboard mouse smartwatch product photo",
+      "provider": "bing",
+      "images": [
+        "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/1a5cc920-a26f-47d4-907f-c87f06e24b72.jpg",
+        "https://cdn.mos.cms.futurecdn.net/rQYEGtRDBUzXvC3xSmXrsZ.jpg",
+        "https://basic-tutorials.de/wp-content/uploads/2023/02/keychron-q3-rgb.jpg"
+      ],
+      "updatedAt": "2026-03-30T08:01:02.424Z"
+    },
+    "auto_phone_22": {
+      "productId": "auto_phone_22",
+      "productName": "Samsung Galaxy S24 Ultra 256GB",
+      "query": "Samsung Galaxy S24 Ultra 256GB smartphone mobile phone product photo",
+      "provider": "bing",
+      "images": [
+        "https://image-us.samsung.com/us/smartphones/galaxy-s24/all-gallery/01_E3_TitaniumBlack_Lockup_1600x1200.jpg?$product-details-jpg$?$product-details-thumbnail-jpg$",
+        "https://m.media-amazon.com/images/I/71ZoDT7a2wL._AC_SL1500_.jpg",
+        "https://media.hifi.lu/sys-master/products/9337882542110/1440x1440.51006326_01.webp"
+      ],
+      "updatedAt": "2026-03-30T08:01:11.914Z"
+    },
+    "auto_laptop_22": {
+      "productId": "auto_laptop_22",
+      "productName": "Dell XPS 13 16GB/1TB",
+      "query": "Dell XPS 13 16GB/1TB laptop notebook computer product photo",
+      "provider": "bing",
+      "images": [
+        "https://laptopmedia.com/wp-content/uploads/2022/12/2-13-scaled.jpg",
+        "https://i.dell.com/is/image/DellContent/content/dam/ss2/product-images/dell-client-products/notebooks/xps-notebooks/xps-13-9350/media-gallery/platinum/notebook-xps-13-9350-t-oled-sl-gallery-5.psd?fmt=png-alpha&pscan=auto&scl=1&hei=804&wid=1362&qlt=100,1&resMode=sharp2&size=1362,804&chrss=full",
+        "https://i.dell.com/sites/csimages/Video_Imagery/all/xps-9350-silver-thumb.png"
+      ],
+      "updatedAt": "2026-03-30T08:01:19.690Z"
+    },
+    "auto_audio_22": {
+      "productId": "auto_audio_22",
+      "productName": "Beats Studio Pro Silver",
+      "query": "Beats Studio Pro Silver headphones earbuds speaker audio product photo",
+      "provider": "bing",
+      "images": [
+        "https://m.media-amazon.com/images/G/01/apple/Desktop-ENUS_01._CB578899683_.jpg",
+        "https://www.beatsbydre.com/content/dam/beats-support/global/images/product-hero/support-studiopro-hero.png.large.2x.png",
+        "https://www.beatsbydre.com/content/dam/beats/web/product/headphones/studiopro-wireless/pdp/studiopro-pdp-p16.jpg.large.2x.jpg"
+      ],
+      "updatedAt": "2026-03-30T08:01:27.398Z"
+    },
+    "auto_accessory_22": {
+      "productId": "auto_accessory_22",
+      "productName": "Keychron Q3 Pro",
+      "query": "Keychron Q3 Pro tech accessory gadget charger keyboard mouse smartwatch product photo",
+      "provider": "bing",
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0599/4977/7066/files/Q3-Pro-1.jpg?v=1697273726",
+        "https://cdn.shopify.com/s/files/1/0059/0630/1017/files/Q3-Pro-4.jpg?v=1695197628",
+        "https://cdn.shopify.com/s/files/1/0059/0630/1017/files/Keychron-Q3-Pro-QMK-Wireless-Mechanical-Keyboard-Special-Edition-Carbon-Black-3.jpg?v=1683596357"
+      ],
+      "updatedAt": "2026-03-30T08:01:34.901Z"
+    },
+    "auto_phone_23": {
+      "productId": "auto_phone_23",
+      "productName": "Samsung Galaxy S24 Ultra 512GB",
+      "query": "Samsung Galaxy S24 Ultra 512GB smartphone mobile phone product photo",
+      "provider": "bing",
+      "images": [
+        "https://m.media-amazon.com/images/I/81vxWpPpgNL.jpg",
+        "https://media.hifi.lu/sys-master/products/9337916489758/1440x1440.51006328_01.webp",
+        "https://image-us.samsung.com/us/smartphones/galaxy-s24/all-gallery/01_E3_OnlineExclusive_TitaniumGreen_Lockup_1600x1200.jpg?$product-details-jpg$?$product-details-thumbnail-jpg$"
+      ],
+      "updatedAt": "2026-03-30T08:01:47.221Z"
+    },
+    "auto_laptop_23": {
+      "productId": "auto_laptop_23",
+      "productName": "Dell XPS 13 32GB/1TB",
+      "query": "Dell XPS 13 32GB/1TB laptop notebook computer product photo",
+      "provider": "bing",
+      "images": [
+        "https://tech.co.za/wp-content/uploads/2024/12/XPS-13-9350-a.png",
+        "https://www.laptopsatcost.co.za/wp-content/uploads/2023/06/dell-xps-9320-3.png",
+        "https://tech.co.za/wp-content/uploads/2024/05/XPS-13-9340-Platinum-a.png"
+      ],
+      "updatedAt": "2026-03-30T08:01:55.117Z"
+    },
+    "auto_audio_23": {
+      "productId": "auto_audio_23",
+      "productName": "Beats Studio Pro White",
+      "query": "Beats Studio Pro White headphones earbuds speaker audio product photo",
+      "provider": "bing",
+      "images": [
+        "https://m.media-amazon.com/images/I/51Xqu8JrqeL._AC_SL1500_.jpg",
+        "https://m.media-amazon.com/images/G/02/Apple/CompCharts/Beats_Studio_Buds_Plus._CB603603708_.png",
+        "https://m.media-amazon.com/images/G/01/apple/Desktop-ENUS_01._CB578899683_.jpg"
+      ],
+      "updatedAt": "2026-03-30T08:02:02.105Z"
+    },
+    "auto_accessory_23": {
+      "productId": "auto_accessory_23",
+      "productName": "Keychron Q3 Max",
+      "query": "Keychron Q3 Max tech accessory gadget charger keyboard mouse smartwatch product photo",
+      "provider": "bing",
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0059/0630/1017/files/Q3-max-page3_7a0e9bf3-dd18-43a7-bcff-b03e91184bd5.jpg?v=1705044287",
+        "https://cdn.shopify.com/s/files/1/0549/6284/7873/files/Q3-Max-page.jpg?v=1705049726",
+        "https://cdn.shopify.com/s/files/1/0059/0630/1017/files/Q3-Max-page3.jpg?v=1703143722"
+      ],
+      "updatedAt": "2026-03-30T08:02:09.500Z"
+    },
+    "auto_phone_24": {
+      "productId": "auto_phone_24",
+      "productName": "Samsung Galaxy S24 Ultra 1TB",
+      "query": "Samsung Galaxy S24 Ultra 1TB smartphone mobile phone product photo",
+      "provider": "bing",
+      "images": [
+        "https://image-us.samsung.com/us/smartphones/galaxy-s24/all-gallery/01_E3_OnlineExclusive_TitaniumBlue_Lockup_1600x1200.jpg?$product-details-jpg$?$product-details-thumbnail-jpg$",
+        "https://image-us.samsung.com/us/smartphones/galaxy-s24/all-gallery/01_E3_TitaniumBlack_Lockup_1600x1200.jpg?$product-details-jpg$?$product-details-thumbnail-jpg$",
+        "https://images.hindustantimes.com/tech/htmobile4/samsung-galaxy-s24-ultra-5g/colors/titanium black/samsung-galaxy-s24-ultra-5g-titanium black-3.jpg?width=263&height=263"
+      ],
+      "updatedAt": "2026-03-30T08:02:21.032Z"
+    },
+    "auto_laptop_24": {
+      "productId": "auto_laptop_24",
+      "productName": "Dell XPS 13 32GB/2TB",
+      "query": "Dell XPS 13 32GB/2TB laptop notebook computer product photo",
+      "provider": "bing",
+      "images": [
+        "https://i.dell.com/sites/csimages/Video_Imagery/all/xps-9350-silver-thumb.png",
+        "https://mcprod.jumbo.ae/media/catalog/product/x/p/xps13-9320-gry-_1__1.jpg",
+        "https://i.dell.com/is/image/DellContent/content/dam/ss2/product-images/dell-client-products/notebooks/xps-notebooks/13-9340/media-gallery/silver/touch-oled/notebook-xps-13-9340-t-oled-sl-gallery-3.psd?fmt=png-alpha&pscan=auto&scl=1&hei=804&wid=1355&qlt=100,1&resMode=sharp2&size=1355,804&chrss=full"
+      ],
+      "updatedAt": "2026-03-30T08:02:30.459Z"
+    },
+    "auto_audio_24": {
+      "productId": "auto_audio_24",
+      "productName": "Beats Studio Pro Midnight",
+      "query": "Beats Studio Pro Midnight headphones earbuds speaker audio product photo",
+      "provider": "bing",
+      "images": [
+        "https://www.beatsbydre.com/content/dam/beats/web/product/headphones/studiopro-wireless/pdp/studiopro-pdp-p08.png.large.2x.png",
+        "https://pdbimg.choice.com.au/beats-studio-pro_3_large.jpg",
+        "https://www.beatsbydre.com/content/dam/beats/web/product/headphones/studiopro-wireless/pdp/studiopro-pdp-p16.jpg.large.2x.jpg"
+      ],
+      "updatedAt": "2026-03-30T08:02:38.358Z"
+    },
+    "auto_accessory_24": {
+      "productId": "auto_accessory_24",
+      "productName": "Keychron Q3 Bundle",
+      "query": "Keychron Q3 Bundle tech accessory gadget charger keyboard mouse smartwatch product photo",
+      "provider": "bing",
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0059/0630/1017/files/Keychron-Q3-HE-page5.jpg?v=1724214064",
+        "https://cdn.mos.cms.futurecdn.net/rQYEGtRDBUzXvC3xSmXrsZ-1200-80.jpg",
+        "https://m.media-amazon.com/images/S/aplus-media-library-service-media/b704ff53-eeea-48aa-afd8-de1c579eb674.__CR0,0,970,600_PT0_SX970_V1___.jpg"
+      ],
+      "updatedAt": "2026-03-30T08:02:46.186Z"
+    },
+    "auto_phone_25": {
+      "productId": "auto_phone_25",
+      "productName": "Samsung Galaxy S24 Ultra 12GB+256GB",
+      "query": "Samsung Galaxy S24 Ultra 12GB+256GB smartphone mobile phone product photo",
+      "provider": "bing",
+      "images": [
+        "https://m.media-amazon.com/images/I/81vxWpPpgNL.jpg",
+        "https://m.media-amazon.com/images/I/71O4BgyFEcL.jpg",
+        "https://m.media-amazon.com/images/I/71lD7eGdW-L._AC_.jpg"
+      ],
+      "updatedAt": "2026-03-30T08:02:54.286Z"
+    },
+    "auto_laptop_25": {
+      "productId": "auto_laptop_25",
+      "productName": "Dell XPS 13 64GB/2TB",
+      "query": "Dell XPS 13 64GB/2TB laptop notebook computer product photo",
+      "provider": "bing",
+      "images": [
+        "https://i.dell.com/sites/csimages/Video_Imagery/all/xps-9350-silver-thumb.png",
+        "https://i.dell.com/is/image/DellContent/content/dam/ss2/product-images/dell-client-products/notebooks/xps-notebooks/xps-13-9350/media-gallery/platinum/notebook-xps-13-9350-t-oled-sl-gallery-5.psd?fmt=png-alpha&pscan=auto&scl=1&hei=804&wid=1362&qlt=100,1&resMode=sharp2&size=1362,804&chrss=full",
+        "https://sc04.alicdn.com/kf/Hdea922935d634f20b5947d9e3f8d7b28K/274790416/Hdea922935d634f20b5947d9e3f8d7b28K.jpg"
+      ],
+      "updatedAt": "2026-03-30T08:03:02.023Z"
+    },
+    "auto_audio_25": {
+      "productId": "auto_audio_25",
+      "productName": "Beats Studio Pro Bundle",
+      "query": "Beats Studio Pro Bundle headphones earbuds speaker audio product photo",
+      "provider": "bing",
+      "images": [
+        "https://m.media-amazon.com/images/G/15/video-games/Nintendo/Buds_Pro_Desktop-ENG_-_US_01._CB579271356_.jpg",
+        "https://www.beatsbydre.com/content/dam/beats/web/product/headphones/studiopro-wireless/pdp/studiopro-pdp-p13.png.large.2x.png",
+        "https://www.beatsbydre.com/content/dam/beats/web/product/headphones/studiopro-wireless/pdp/studiopro-pdp-p16.jpg.large.2x.jpg"
+      ],
+      "updatedAt": "2026-03-30T08:03:08.996Z"
+    },
+    "auto_accessory_25": {
+      "productId": "auto_accessory_25",
+      "productName": "Anker 737 Power Bank Standard",
+      "query": "Anker 737 Power Bank Standard tech accessory gadget charger keyboard mouse smartwatch product photo",
+      "provider": "bing",
+      "images": [
+        "https://m.media-amazon.com/images/I/71Linf+GHuL.jpg",
+        "https://www.droidmen.com/wp-content/uploads/2023/08/Anker-737-Power-Bank.webp",
+        "https://m.media-amazon.com/images/I/71lFE25WhZL._AC_.jpg"
+      ],
+      "updatedAt": "2026-03-30T08:03:16.782Z"
+    },
+    "auto_phone_26": {
+      "productId": "auto_phone_26",
+      "productName": "Samsung Galaxy S24+ 128GB",
+      "query": "Samsung Galaxy S24+ 128GB smartphone mobile phone product photo",
+      "provider": "bing",
+      "images": [
+        "https://image-us.samsung.com/us/smartphones/galaxy-s24/all-gallery/01_E1_OynxBlack_Lockup_1600x1200.jpg?$product-details-jpg$?$product-details-thumbnail-jpg$",
+        "https://image-us.samsung.com/us/smartphones/galaxy-s24/all-gallery/01_E2_OnlineExclusive_SandstoneOrange_Lockup_1600x1200.jpg?$product-details-jpg$?$product-details-thumbnail-jpg$",
+        "https://media.hifi.lu/sys-master/products/9337850953758/1440x1440.51006299_001.webp"
+      ],
+      "updatedAt": "2026-03-30T08:03:26.741Z"
+    },
+    "auto_laptop_26": {
+      "productId": "auto_laptop_26",
+      "productName": "Dell XPS 15 16GB/512GB",
+      "query": "Dell XPS 15 16GB/512GB laptop notebook computer product photo",
+      "provider": "bing",
+      "images": [
+        "https://www.laptopsdirect.co.uk/Images/JJ8CV_6_Supersize.png?v=3",
+        "https://laptopmedia.com/wp-content/uploads/2023/03/3-3-scaled-e1677767775836.jpg",
+        "https://maytinhcdc.vn/media/product/7822_xps_15__01_.jpg"
+      ],
+      "updatedAt": "2026-03-30T08:03:35.729Z"
+    },
+    "auto_audio_26": {
+      "productId": "auto_audio_26",
+      "productName": "Beats Fit Pro Black",
+      "query": "Beats Fit Pro Black headphones earbuds speaker audio product photo",
+      "provider": "bing",
+      "images": [
+        "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6397/6397391cv14d.jpg",
+        "https://www.beatsbydre.com/content/dam/beats/web/product/earbuds/beats-fit-pro/pdp/fitpro-beats-black-pdp-p01.jpg.large.2x.jpg",
+        "https://m.media-amazon.com/images/G/02/Apple/BeatsFitPro-Desktop_06._CB568694268_.jpg"
+      ],
+      "updatedAt": "2026-03-30T08:03:44.069Z"
+    },
+    "auto_accessory_26": {
+      "productId": "auto_accessory_26",
+      "productName": "Anker 737 Power Bank Pro",
+      "query": "Anker 737 Power Bank Pro tech accessory gadget charger keyboard mouse smartwatch product photo",
+      "provider": "bing",
+      "images": [
+        "https://m.media-amazon.com/images/I/71Linf+GHuL.jpg",
+        "https://www.droidmen.com/wp-content/uploads/2023/08/Anker-737-Power-Bank.webp",
+        "https://techsmart.ph/wp-content/uploads/2023/10/c000a46a1cdcf9ed355749f8cc97cdbc.png"
+      ],
+      "updatedAt": "2026-03-30T08:03:52.352Z"
+    },
+    "auto_phone_27": {
+      "productId": "auto_phone_27",
+      "productName": "Samsung Galaxy S24+ 256GB",
+      "query": "Samsung Galaxy S24+ 256GB smartphone mobile phone product photo",
+      "provider": "bing",
+      "images": [
+        "https://m.media-amazon.com/images/I/71ZoDT7a2wL._AC_SL1500_.jpg",
+        "https://m.media-amazon.com/images/I/71qeTVe5d1L._AC_SL1500_.jpg",
+        "https://image-us.samsung.com/us/smartphones/galaxy-s24/all-gallery/01_E1_OynxBlack_Lockup_1600x1200.jpg?$product-details-jpg$?$product-details-thumbnail-jpg$"
+      ],
+      "updatedAt": "2026-03-30T08:03:59.663Z"
+    },
+    "auto_laptop_27": {
+      "productId": "auto_laptop_27",
+      "productName": "Dell XPS 15 16GB/1TB",
+      "query": "Dell XPS 15 16GB/1TB laptop notebook computer product photo",
+      "provider": "bing",
+      "images": [
+        "https://pctech.co.in/image/cache/catalog/Laptops/DELL/dell-xps-15-9530-laptop-03-1200x900w.jpg",
+        "https://images-na.ssl-images-amazon.com/images/I/61ya0e9d-XL._AC_SL1280_.jpg",
+        "https://cdn.media.amplience.net/i/xcite/544946-01"
+      ],
+      "updatedAt": "2026-03-30T08:04:07.935Z"
+    },
+    "auto_audio_27": {
+      "productId": "auto_audio_27",
+      "productName": "Beats Fit Pro Silver",
+      "query": "Beats Fit Pro Silver headphones earbuds speaker audio product photo",
+      "provider": "bing",
+      "images": [
+        "https://www.beatsbydre.com/content/dam/beats/web/product/earbuds/beats-fit-pro/pdp/fitpro-pdp-p14.png.large.2x.png",
+        "https://www.beatsbydre.com/content/dam/beats/web/product/earbuds/beats-fit-pro/global/menu/mobile-nav-card-fitpro.png",
+        "https://www.beatsbydre.com/content/dam/beats/web/product/earbuds/beats-fit-pro/pdp/fitpro-pdp-p08.jpg.large.2x.jpg"
+      ],
+      "updatedAt": "2026-03-30T08:04:16.569Z"
+    },
+    "auto_accessory_27": {
+      "productId": "auto_accessory_27",
+      "productName": "Anker 737 Power Bank Max",
+      "query": "Anker 737 Power Bank Max tech accessory gadget charger keyboard mouse smartwatch product photo",
+      "provider": "bing",
+      "images": [
+        "https://www.droidmen.com/wp-content/uploads/2023/08/Anker-737-Power-Bank.webp",
+        "https://m.media-amazon.com/images/I/71Linf+GHuL.jpg",
+        "https://techsmart.ph/wp-content/uploads/2023/10/c000a46a1cdcf9ed355749f8cc97cdbc.png"
+      ],
+      "updatedAt": "2026-03-30T08:04:23.892Z"
+    },
+    "auto_phone_28": {
+      "productId": "auto_phone_28",
+      "productName": "Samsung Galaxy S24+ 512GB",
+      "query": "Samsung Galaxy S24+ 512GB smartphone mobile phone product photo",
+      "provider": "bing",
+      "images": [
+        "https://image-us.samsung.com/us/smartphones/galaxy-s24/all-gallery/01_E3_OnlineExclusive_TitaniumBlue_Lockup_1600x1200.jpg?$product-details-jpg$?$product-details-thumbnail-jpg$",
+        "https://media.hifi.lu/sys-master/products/9337916489758/1440x1440.51006328_01.webp",
+        "https://i5.walmartimages.com/seo/Samsung-Galaxy-S24-SM-S926U-512-GB-Smartphone-6-7-Dynamic-AMOLED-2X-Full-HD-Plus-1440-x-3120-Octa-core-Cortex-X4Single-core-1-Core-3-39-GHz-Cortex-A7_24722fe7-52b4-4a3f-9a8e-c3bd0f1c25ed.9ff776ed702167a7fdc8003e22bb5a40.jpeg"
+      ],
+      "updatedAt": "2026-03-30T08:04:32.407Z"
+    },
+    "auto_laptop_28": {
+      "productId": "auto_laptop_28",
+      "productName": "Dell XPS 15 32GB/1TB",
+      "query": "Dell XPS 15 32GB/1TB laptop notebook computer product photo",
+      "provider": "bing",
+      "images": [
+        "https://tech.co.za/wp-content/uploads/2023/06/XPS15-9530a.png",
+        "https://media.bechtle.com/is/180712/1c4b3d4ee288fc9434f5175bf56070570/c3/gallery/faa72893f3124b6b90ad6ef85cbe6b39?version=0",
+        "https://cdn.media.amplience.net/i/xcite/542664-03?img404=default&w=2048&qlt=75&fmt=auto"
+      ],
+      "updatedAt": "2026-03-30T08:04:39.519Z"
+    },
+    "auto_audio_28": {
+      "productId": "auto_audio_28",
+      "productName": "Beats Fit Pro White",
+      "query": "Beats Fit Pro White headphones earbuds speaker audio product photo",
+      "provider": "bing",
+      "images": [
+        "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6397/6397392_rd.jpg",
+        "https://www.beatsbydre.com/content/dam/beats/web/product/earbuds/beats-fit-pro/plp/plp-fitpro-white.jpg.large.2x.jpg",
+        "http://www.machines.com.my/cdn/shop/products/MK2G3.png?v=1705410076"
+      ],
+      "updatedAt": "2026-03-30T08:04:48.960Z"
+    },
+    "auto_accessory_28": {
+      "productId": "auto_accessory_28",
+      "productName": "Anker 737 Power Bank Bundle",
+      "query": "Anker 737 Power Bank Bundle tech accessory gadget charger keyboard mouse smartwatch product photo",
+      "provider": "bing",
+      "images": [
+        "https://www.technary.com/wp-content/uploads/2023/04/ANKER-Imp.jpg",
+        "https://www.droidmen.com/wp-content/uploads/2023/08/Anker-737-Power-Bank.webp",
+        "https://m.media-amazon.com/images/I/71Linf+GHuL._AC_.jpg"
+      ],
+      "updatedAt": "2026-03-30T08:04:56.453Z"
+    },
+    "auto_phone_29": {
+      "productId": "auto_phone_29",
+      "productName": "Samsung Galaxy S24+ 1TB",
+      "query": "Samsung Galaxy S24+ 1TB smartphone mobile phone product photo",
+      "provider": "bing",
+      "images": [
+        "https://www.laptopsdirect.co.uk/Images/SM-S928BZKGEUB_7_Supersize.jpg?v=3",
+        "https://celltronics.lk/wp-content/uploads/2024/01/Untitled-design-1.png",
+        "https://www.laptopsdirect.co.uk/Images/SM-S928BZKPEUB_9_Supersize.png?v=3"
+      ],
+      "updatedAt": "2026-03-30T08:05:08.563Z"
+    },
+    "auto_laptop_29": {
+      "productId": "auto_laptop_29",
+      "productName": "Dell XPS 15 32GB/2TB",
+      "query": "Dell XPS 15 32GB/2TB laptop notebook computer product photo",
+      "provider": "bing",
+      "images": [
+        "https://laptopmedia.com/wp-content/uploads/2022/04/3-14-scaled.jpg",
+        "https://www.laptopsatcost.co.za/wp-content/uploads/2022/09/dell-xps-9510.png",
+        "https://i.dell.com/is/image/DellContent/content/dam/ss2/product-images/dell-client-products/notebooks/xps-notebooks/xps-15-9530/pdp/pdp-images/notebook-xps-15-9530-pdp-mod-hero-image.psd?qlt=95&fit=constrain,1&hei=506&wid=500&fmt=jpg&wid=570&hei=400"
+      ],
+      "updatedAt": "2026-03-30T08:05:16.287Z"
+    },
+    "auto_audio_29": {
+      "productId": "auto_audio_29",
+      "productName": "Beats Fit Pro Midnight",
+      "query": "Beats Fit Pro Midnight headphones earbuds speaker audio product photo",
+      "provider": "bing",
+      "images": [
+        "https://www.beatsbydre.com/content/dam/beats/web/product/earbuds/beats-fit-pro/pdp/fitpro-beats-black-pdp-p01.jpg",
+        "https://www.beatsbydre.com/content/dam/beats/web/product/earbuds/beats-fit-pro/pdp/fitpro-pdp-p14.png.large.2x.png",
+        "https://m.media-amazon.com/images/G/02/Apple/BeatsFitPro-Desktop_06._CB568694268_.jpg"
+      ],
+      "updatedAt": "2026-03-30T08:05:24.200Z"
+    },
+    "auto_accessory_29": {
+      "productId": "auto_accessory_29",
+      "productName": "Anker Prime 250W Charging Station Standard",
+      "query": "Anker Prime 250W Charging Station Standard tech accessory gadget charger keyboard mouse smartwatch product photo",
+      "provider": "bing",
+      "images": [
+        "https://anker.com.sg/cdn/shop/files/A2345141_Richimage_TD01_UK_2400x2400px_V1.png?v=1730002984",
+        "https://cdn.shopify.com/s/files/1/0491/8460/4324/files/A2345141_Richimage_TD02_US_1600x2000px_V1.jpg?v=1722240879",
+        "https://m.media-amazon.com/images/I/712oJFMAcLL._AC_.jpg"
+      ],
+      "updatedAt": "2026-03-30T08:05:32.732Z"
+    },
+    "auto_phone_30": {
+      "productId": "auto_phone_30",
+      "productName": "Samsung Galaxy S24+ 12GB+256GB",
+      "query": "Samsung Galaxy S24+ 12GB+256GB smartphone mobile phone product photo",
+      "provider": "bing",
+      "images": [
+        "https://m.media-amazon.com/images/I/81vxWpPpgNL.jpg",
+        "https://m.media-amazon.com/images/I/71O4BgyFEcL.jpg",
+        "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6570/6570983_sd.jpg"
+      ],
+      "updatedAt": "2026-03-30T08:05:44.972Z"
+    },
+    "auto_audio_30": {
+      "productId": "auto_audio_30",
+      "productName": "Beats Fit Pro Bundle",
+      "query": "Beats Fit Pro Bundle headphones earbuds speaker audio product photo",
+      "provider": "bing",
+      "images": [
+        "https://www.beatsbydre.com/content/dam/beats/web/product/earbuds/beats-fit-pro/pdp/fitpro-beats-black-pdp-p01.jpg",
+        "https://www.beatsbydre.com/content/dam/beats/web/product/earbuds/beats-fit-pro/plp/plp-fitpro-white.jpg.large.2x.jpg",
+        "https://www.beatsbydre.com/content/dam/beats/web/product/earbuds/beats-fit-pro/pdp/fitpro-pdp-p14.png.large.2x.png"
+      ],
+      "updatedAt": "2026-03-30T08:05:54.673Z"
+    },
+    "auto_phone_31": {
+      "productId": "auto_phone_31",
+      "productName": "Samsung Galaxy S24 128GB",
+      "query": "Samsung Galaxy S24 128GB smartphone mobile phone product photo",
+      "provider": "bing",
+      "images": [
+        "https://image-us.samsung.com/us/smartphones/galaxy-s24/all-gallery/01_E1_OynxBlack_Lockup_1600x1200.jpg?$product-details-jpg$?$product-details-thumbnail-jpg$",
+        "https://image-us.samsung.com/us/smartphones/galaxy-s24/all-gallery/01_E2_OnlineExclusive_SandstoneOrange_Lockup_1600x1200.jpg?$product-details-jpg$?$product-details-thumbnail-jpg$",
+        "https://media.hifi.lu/sys-master/products/9337850953758/1440x1440.51006299_001.webp"
+      ],
+      "updatedAt": "2026-03-30T08:06:06.313Z"
+    },
+    "auto_laptop_31": {
+      "productId": "auto_laptop_31",
+      "productName": "HP Spectre x360 14 16GB/512GB",
+      "query": "HP Spectre x360 14 16GB/512GB laptop notebook computer product photo",
+      "provider": "bing",
+      "images": [
+        "https://technohubdigitalsolutions.co.ke/wp-content/uploads/2023/03/NBKHNB150000__4-1.jpg",
+        "https://m.media-amazon.com/images/I/61pGP4mAS6L.jpg",
+        "https://www.rundatech.co.ke/wp-content/uploads/2024/01/HP-Spectre-14-x360-Convertible-Core-i7-11th-Gen-16GB-RAM-512GB-SSD-GEM-Cut-14″-FHD-Touch.webp"
+      ],
+      "updatedAt": "2026-03-30T08:06:14.590Z"
+    },
+    "auto_audio_31": {
+      "productId": "auto_audio_31",
+      "productName": "Bose QuietComfort Ultra Headphones Black",
+      "query": "Bose QuietComfort Ultra Headphones Black headphones earbuds speaker audio product photo",
+      "provider": "bing",
+      "images": [
+        "https://m.media-amazon.com/images/I/51ZR4lyxBHL.jpg",
+        "https://assets.bose.com/content/dam/cloudassets/Bose_DAM/Web/consumer_electronics/global/products/headphones/qcue-headphonein/product_silo_images/AEM_PDP_GALLERY_BLACK-2.jpg/jcr:content/renditions/cq5dam.web.1280.1280.jpeg",
+        "https://assets.bose.com/content/dam/cloudassets/Bose_DAM/Web/consumer_electronics/global/products/headphones/QCUH-HEADPHONEARN/product_silo_images/AEM_PDP_GALLERY_BLACK-1.png/jcr:content/renditions/cq5dam.web.1280.1280.png"
+      ],
+      "updatedAt": "2026-03-30T08:06:21.991Z"
+    },
+    "auto_accessory_31": {
+      "productId": "auto_accessory_31",
+      "productName": "Anker Prime 250W Charging Station Max",
+      "query": "Anker Prime 250W Charging Station Max tech accessory gadget charger keyboard mouse smartwatch product photo",
+      "provider": "bing",
+      "images": [
+        "http://anker.com.sg/cdn/shop/files/A2345141_Richimage_TD01_UK_2400x2400px_V1.png?v=1730002984",
+        "https://m.media-amazon.com/images/I/712oJFMAcLL._AC_.jpg",
+        "https://cdn.shopify.com/s/files/1/0491/8460/4324/files/A2345141_Richimage_TD02_US_1600x2000px_V1.jpg?v=1722240879"
+      ],
+      "updatedAt": "2026-03-30T08:06:28.756Z"
+    },
+    "auto_phone_32": {
+      "productId": "auto_phone_32",
+      "productName": "Samsung Galaxy S24 256GB",
+      "query": "Samsung Galaxy S24 256GB smartphone mobile phone product photo",
+      "provider": "bing",
+      "images": [
+        "https://image-us.samsung.com/us/smartphones/galaxy-s24/all-gallery/01_E3_OnlineExclusive_TitaniumBlue_Lockup_1600x1200.jpg?$product-details-jpg$?$product-details-thumbnail-jpg$",
+        "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6570/6570983_sd.jpg",
+        "https://image-us.samsung.com/us/smartphones/galaxy-s24/all-gallery/01_E2_OnlineExclusive_SandstoneOrange_Lockup_1600x1200.jpg?$product-details-jpg$?$product-details-thumbnail-jpg$"
+      ],
+      "updatedAt": "2026-03-30T08:06:36.904Z"
+    },
+    "auto_laptop_32": {
+      "productId": "auto_laptop_32",
+      "productName": "HP Spectre x360 14 16GB/1TB",
+      "query": "HP Spectre x360 14 16GB/1TB laptop notebook computer product photo",
+      "provider": "bing",
+      "images": [
+        "https://www.digitaltrends.com/wp-content/uploads/2021/01/hp-spectre-x360-14-front.jpg?p=1",
+        "https://cdn.mos.cms.futurecdn.net/yF22kh5kVxM2dt2npcp8BG.jpg",
+        "https://cdn.mos.cms.futurecdn.net/5MqZAzh6LWxHEzNCEcnWx3.jpg"
+      ],
+      "updatedAt": "2026-03-30T08:06:46.685Z"
+    },
+    "auto_audio_32": {
+      "productId": "auto_audio_32",
+      "productName": "Bose QuietComfort Ultra Headphones Silver",
+      "query": "Bose QuietComfort Ultra Headphones Silver headphones earbuds speaker audio product photo",
+      "provider": "bing",
+      "images": [
+        "https://assets.bose.com/content/dam/cloudassets/Bose_DAM/Web/consumer_electronics/global/products/headphones/qcuh2-headphonearn/product-silo/QCUHII26-WhiteSmoke_AEM_PDP_E-Comm_Gallery_1_1200x1022.png/jcr:content/renditions/cq5dam.web.1280.1280.png",
+        "https://assets.bose.com/content/dam/cloudassets/Bose_DAM/Web/consumer_electronics/global/products/headphones/qcue-headphonein/product_silo_images/AEM_PDP_GALLERY_WHITE-2.jpg/jcr:content/renditions/cq5dam.web.1280.1280.jpeg",
+        "https://static1.anpoimages.com/wordpress/wp-content/uploads/2023/09/bose-quietcomfort-earbuds-ultra-silver-square-1.jpg"
+      ],
+      "updatedAt": "2026-03-30T08:06:53.735Z"
+    },
+    "auto_accessory_32": {
+      "productId": "auto_accessory_32",
+      "productName": "Anker Prime 250W Charging Station Bundle",
+      "query": "Anker Prime 250W Charging Station Bundle tech accessory gadget charger keyboard mouse smartwatch product photo",
+      "provider": "bing",
+      "images": [
+        "https://m.media-amazon.com/images/I/81nIFsA+r9L._AC_.jpg",
+        "https://cdn.shopify.com/s/files/1/0491/8460/4324/files/A2345141_Richimage_TD02_US_1600x2000px_V1.jpg?v=1722240879",
+        "https://m.media-amazon.com/images/I/712oJFMAcLL._AC_.jpg"
+      ],
+      "updatedAt": "2026-03-30T08:07:01.016Z"
+    },
+    "auto_phone_33": {
+      "productId": "auto_phone_33",
+      "productName": "Samsung Galaxy S24 512GB",
+      "query": "Samsung Galaxy S24 512GB smartphone mobile phone product photo",
+      "provider": "bing",
+      "images": [
+        "https://m.media-amazon.com/images/I/81vxWpPpgNL.jpg",
+        "https://media.hifi.lu/sys-master/products/9337916489758/1440x1440.51006328_01.webp",
+        "https://image-us.samsung.com/us/smartphones/galaxy-s24/all-gallery/01_E3_OnlineExclusive_TitaniumGreen_Lockup_1600x1200.jpg?$product-details-jpg$?$product-details-thumbnail-jpg$"
+      ],
+      "updatedAt": "2026-03-30T08:07:10.035Z"
+    },
+    "auto_laptop_33": {
+      "productId": "auto_laptop_33",
+      "productName": "HP Spectre x360 14 32GB/1TB",
+      "query": "HP Spectre x360 14 32GB/1TB laptop notebook computer product photo",
+      "provider": "bing",
+      "images": [
+        "https://www.digitaltrends.com/wp-content/uploads/2021/01/hp-spectre-x360-14-front.jpg?p=1",
+        "https://cdn.mos.cms.futurecdn.net/yF22kh5kVxM2dt2npcp8BG.jpg",
+        "https://m.media-amazon.com/images/I/71KUB4lqByL._AC_.jpg"
+      ],
+      "updatedAt": "2026-03-30T08:07:18.067Z"
+    },
+    "auto_audio_33": {
+      "productId": "auto_audio_33",
+      "productName": "Bose QuietComfort Ultra Headphones White",
+      "query": "Bose QuietComfort Ultra Headphones White headphones earbuds speaker audio product photo",
+      "provider": "bing",
+      "images": [
+        "https://assets.bose.com/content/dam/cloudassets/Bose_DAM/Web/consumer_electronics/global/products/headphones/QCUH-HEADPHONEARN/product_silo_images/AEM_PDP_GALLERY_WHITE-6.png/jcr:content/renditions/cq5dam.web.1280.1280.png",
+        "https://assets.bose.com/content/dam/cloudassets/Bose_DAM/Web/consumer_electronics/global/products/headphones/qcuh2-headphonearn/product-silo/QCUHII26-WhiteSmoke_AEM_PDP_E-Comm_Gallery_1_1200x1022.png/jcr:content/renditions/cq5dam.web.1280.1280.png",
+        "https://www.worldwidestereo.com/cdn/shop/files/180247_WWS5.jpg?v=1704320704&width=1445"
+      ],
+      "updatedAt": "2026-03-30T08:07:26.726Z"
+    },
+    "auto_accessory_33": {
+      "productId": "auto_accessory_33",
+      "productName": "Belkin BoostCharge Pro 3-in-1 Standard",
+      "query": "Belkin BoostCharge Pro 3-in-1 Standard tech accessory gadget charger keyboard mouse smartwatch product photo",
+      "provider": "bing",
+      "images": [
+        "https://m.media-amazon.com/images/I/71H3HVGdZ2L._AC_SL1500_.jpg",
+        "https://shop.theclub.com.hk/media/catalog/product/cache/2fcb0be76f5f36e732067d937460935a/1/3/139612314_wiz017-blk_3in1wirelesschargingdock_hero_web.png",
+        "https://as2.ae/wp-content/uploads/2024/01/Belkin-BoostCharge-PRO-3-in-1-Wireless-Charger-with-MagSafe.jpg"
+      ],
+      "updatedAt": "2026-03-30T08:07:35.736Z"
+    },
+    "auto_phone_34": {
+      "productId": "auto_phone_34",
+      "productName": "Samsung Galaxy S24 1TB",
+      "query": "Samsung Galaxy S24 1TB smartphone mobile phone product photo",
+      "provider": "bing",
+      "images": [
+        "https://www.laptopsdirect.co.uk/Images/SM-S928BZKGEUB_7_Supersize.jpg?v=3",
+        "https://celltronics.lk/wp-content/uploads/2024/01/Untitled-design-1.png",
+        "https://www.laptopsdirect.co.uk/Images/SM-S928BZKPEUB_9_Supersize.png?v=3"
+      ],
+      "updatedAt": "2026-03-30T08:07:45.475Z"
+    },
+    "auto_laptop_34": {
+      "productId": "auto_laptop_34",
+      "productName": "HP Spectre x360 14 32GB/2TB",
+      "query": "HP Spectre x360 14 32GB/2TB laptop notebook computer product photo",
+      "provider": "bing",
+      "images": [
+        "https://m.media-amazon.com/images/I/61wdZ89-JWL._AC_SL1013_.jpg",
+        "https://c1.neweggimages.com/productimage/nb640/V0F3D2501040QY4WB24.jpg",
+        "https://m.media-amazon.com/images/I/61k-ad08k0L._AC_SL1094_.jpg"
+      ],
+      "updatedAt": "2026-03-30T08:07:53.784Z"
+    },
+    "auto_audio_34": {
+      "productId": "auto_audio_34",
+      "productName": "Bose QuietComfort Ultra Headphones Midnight",
+      "query": "Bose QuietComfort Ultra Headphones Midnight headphones earbuds speaker audio product photo",
+      "provider": "bing",
+      "images": [
+        "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/b859d1a4-fb61-4080-a5f0-c5b87948664c.jpg",
+        "https://assets.bose.com/content/dam/cloudassets/Bose_DAM/Web/consumer_electronics/global/products/headphones/qcue2-headphonein/product_silo_images/QCUEBII26-Black_AEM_EcommGallery_4_1200x1022.jpg/jcr:content/renditions/cq5dam.web.1280.1280.jpeg",
+        "https://images.crutchfieldonline.com/products/2025/34/018/g018QCUE2MV-o_other7.jpg"
+      ],
+      "updatedAt": "2026-03-30T08:08:01.456Z"
+    },
+    "auto_accessory_34": {
+      "productId": "auto_accessory_34",
+      "productName": "Belkin BoostCharge Pro 3-in-1 Pro",
+      "query": "Belkin BoostCharge Pro 3-in-1 Pro tech accessory gadget charger keyboard mouse smartwatch product photo",
+      "provider": "bing",
+      "images": [
+        "https://m.media-amazon.com/images/I/71H3HVGdZ2L._AC_SL1500_.jpg",
+        "https://shop.theclub.com.hk/media/catalog/product/cache/2fcb0be76f5f36e732067d937460935a/1/3/139612314_wiz017-blk_3in1wirelesschargingdock_hero_web.png",
+        "https://live.staticflickr.com/65535/52374048405_6a96d57a51_o.jpg"
+      ],
+      "updatedAt": "2026-03-30T08:08:09.185Z"
+    },
+    "auto_phone_35": {
+      "productId": "auto_phone_35",
+      "productName": "Samsung Galaxy S24 12GB+256GB",
+      "query": "Samsung Galaxy S24 12GB+256GB smartphone mobile phone product photo",
+      "provider": "bing",
+      "images": [
+        "https://m.media-amazon.com/images/I/81vxWpPpgNL.jpg",
+        "https://m.media-amazon.com/images/I/71O4BgyFEcL.jpg",
+        "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6570/6570983_sd.jpg"
+      ],
+      "updatedAt": "2026-03-30T08:08:20.070Z"
+    },
+    "auto_laptop_35": {
+      "productId": "auto_laptop_35",
+      "productName": "HP Spectre x360 14 64GB/2TB",
+      "query": "HP Spectre x360 14 64GB/2TB laptop notebook computer product photo",
+      "provider": "bing",
+      "images": [
+        "https://www.digitaltrends.com/wp-content/uploads/2021/01/hp-spectre-x360-14-front.jpg?p=1",
+        "https://cdn.mos.cms.futurecdn.net/yF22kh5kVxM2dt2npcp8BG.jpg",
+        "https://cdn.mos.cms.futurecdn.net/5MqZAzh6LWxHEzNCEcnWx3.jpg"
+      ],
+      "updatedAt": "2026-03-30T08:08:28.505Z"
+    },
+    "auto_audio_35": {
+      "productId": "auto_audio_35",
+      "productName": "Bose QuietComfort Ultra Headphones Bundle",
+      "query": "Bose QuietComfort Ultra Headphones Bundle headphones earbuds speaker audio product photo",
+      "provider": "bing",
+      "images": [
+        "https://assets.bose.com/content/dam/cloudassets/Bose_DAM/Web/consumer_electronics/global/products/headphones/qcuh2-headphonearn/product-silo/QCUHII26-BoseBlack_AEM_PDP_E-Comm_Gallery_4_1200x1022.png/jcr:content/renditions/cq5dam.web.1280.1280.png",
+        "https://assets.bose.com/content/dam/cloudassets/Bose_DAM/Web/consumer_electronics/global/products/headphones/QCUH-HEADPHONEARN/images/AEM_PDP_IMG-9.jpg/jcr:content/renditions/cq5dam.web.1920.1920.jpeg",
+        "https://assets.bosecreative.com/transform/05afb9cf-b896-4f03-a219-0cfd6d4c3176/QCUHLE24_PDP_GALLERY_SF_01?quality=100&io=width:816,height:592,transform:fit&io=width:816,height:592,transform:fit"
+      ],
+      "updatedAt": "2026-03-30T08:08:36.066Z"
+    },
+    "auto_accessory_35": {
+      "productId": "auto_accessory_35",
+      "productName": "Belkin BoostCharge Pro 3-in-1 Max",
+      "query": "Belkin BoostCharge Pro 3-in-1 Max tech accessory gadget charger keyboard mouse smartwatch product photo",
+      "provider": "bing",
+      "images": [
+        "https://shop.theclub.com.hk/media/catalog/product/cache/2fcb0be76f5f36e732067d937460935a/1/3/139612314_wiz017-blk_3in1wirelesschargingdock_hero_web.png",
+        "https://live.staticflickr.com/65535/52374048405_6a96d57a51_o.jpg",
+        "https://m.media-amazon.com/images/I/71H3HVGdZ2L._AC_SL1500_.jpg"
+      ],
+      "updatedAt": "2026-03-30T08:08:43.696Z"
+    },
+    "auto_phone_36": {
+      "productId": "auto_phone_36",
+      "productName": "Samsung Galaxy Z Fold 5 128GB",
+      "query": "Samsung Galaxy Z Fold 5 128GB smartphone mobile phone product photo",
+      "provider": "bing",
+      "images": [
+        "https://static.independent.co.uk/2023/07/25/15/samsung .jpg",
+        "https://www.computers.co.ug/wp-content/uploads/2024/04/Fold5-.webp",
+        "https://gadgetcentral.co.ke/wp-content/uploads/2023/07/Samsung-Galaxy-Z-Fold-5.jpg"
+      ],
+      "updatedAt": "2026-03-30T08:08:52.416Z"
+    },
+    "auto_audio_36": {
+      "productId": "auto_audio_36",
+      "productName": "Bose QuietComfort Ultra Earbuds Black",
+      "query": "Bose QuietComfort Ultra Earbuds Black headphones earbuds speaker audio product photo",
+      "provider": "bing",
+      "images": [
+        "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6554/6554465_rd.jpg",
+        "https://assets.bose.com/content/dam/cloudassets/Bose_DAM/Web/consumer_electronics/global/products/headphones/qcue-headphonein/product_silo_images/AEM_PDP_GALLERY_BLACK-1.png/jcr:content/renditions/cq5dam.web.1920.1920.png",
+        "https://assets.bose.com/content/dam/cloudassets/Bose_DAM/Web/consumer_electronics/global/products/headphones/qcue2-headphonein/product_silo_images/QCUEBII26-Black_AEM_EcommGallery_4_1200x1022.jpg/jcr:content/renditions/cq5dam.web.1280.1280.jpeg"
+      ],
+      "updatedAt": "2026-03-30T08:13:46.075Z"
+    },
+    "auto_phone_52": {
+      "productId": "auto_phone_52",
+      "productName": "Google Pixel 8 256GB",
+      "query": "Google Pixel 8 256GB smartphone mobile phone product photo",
+      "provider": "bing",
+      "images": [
+        "https://m.media-amazon.com/images/I/81Mya-dPIOL._AC_SL1500_.jpg",
+        "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6559/6559249_sd.jpg",
+        "https://m.media-amazon.com/images/I/71h9zq4viSL._AC_SL1500_.jpg"
+      ],
+      "updatedAt": "2026-03-30T08:14:50.015Z"
+    },
+    "auto_laptop_55": {
+      "productId": "auto_laptop_55",
+      "productName": "ASUS ROG Zephyrus G14 64GB/2TB",
+      "query": "ASUS ROG Zephyrus G14 64GB/2TB laptop notebook computer product photo",
+      "provider": "bing",
+      "images": [
+        "https://static01.galaxus.com/productimages/2/3/3/5/5/5/3/5/0/2/4/1/3/6/4/4/2/3/3/0199d5e1-c363-7e11-9b58-9c97823b8a1f_sea.jpeg",
+        "https://in.store.asus.com/media/catalog/product/1/_/1._ga403wr-qs123ws__main.jpg",
+        "https://static01.galaxus.com/productimages/3/1/9/5/6/4/7/9/7/8/9/4/8/9/8/0/1/3/2/019933db-ab3f-7b65-a73a-4155552c8a07_720.jpeg"
+      ],
+      "updatedAt": "2026-03-30T08:20:30.940Z"
+    }
+  }
+}

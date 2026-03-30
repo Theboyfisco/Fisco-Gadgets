@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "scrape:images": "tsx scripts/scrape-product-images.ts",
     "postinstall": "prisma generate"
   },
   "dependencies": {
@@ -28,6 +29,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
+    "playwright": "^1.58.2",
     "prisma": "^6.2.1",
     "tailwindcss": "^4",
     "tsx": "^4.21.0",
