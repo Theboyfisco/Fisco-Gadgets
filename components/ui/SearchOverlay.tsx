@@ -166,6 +166,7 @@ export function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; onClose: (
                         key={product.id}
                         href={`/product/${product.id}`}
                         onClick={onClose}
+                        onMouseEnter={() => setActiveIndex(index)}
                         className={`interactive-focus group flex items-center gap-4 rounded-xl border p-3 transition-colors ${
                           active ? "border-primary/40 bg-primary/10" : "border-transparent hover:border-[var(--interactive-border-strong)] hover:bg-[var(--surface-card)]"
                         }`}

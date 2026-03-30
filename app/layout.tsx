@@ -6,6 +6,7 @@ import "./globals.css";
 import { CartProvider } from "@/components/cart/CartProvider";
 import { CompareProvider } from "@/components/product/CompareProvider";
 import { WishlistProvider } from "@/components/product/WishlistProvider";
+import { ToastProvider } from "@/components/ui/ToastProvider";
 import { Navbar } from "@/components/ui/Navbar";
 import { CartWrapper } from "@/components/cart/CartWrapper";
 import { Footer } from "@/components/ui/Footer";
@@ -62,17 +63,27 @@ export default async function RootLayout({
       <body
         className={`${manrope.variable} ${spaceGrotesk.variable} flex min-h-screen flex-col antialiased selection:bg-primary/20 selection:text-[var(--foreground)]`}
       >
-        <CompareProvider>
-          <WishlistProvider>
-            <CartProvider>
-              <Navbar categories={categories} />
-              {children}
-              <Footer categories={categories} />
-              <CartWrapper />
-              <CompareFloatingBar />
-            </CartProvider>
-          </WishlistProvider>
-        </CompareProvider>
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-6 focus:top-6 focus:z-[200] focus:rounded-full focus:bg-[var(--panel-bg)] focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-[var(--foreground)] focus:shadow-xl"
+        >
+          Skip to content
+        </a>
+        <ToastProvider>
+          <CompareProvider>
+            <WishlistProvider>
+              <CartProvider>
+                <Navbar categories={categories} />
+                <div id="main-content" className="flex min-h-screen flex-col">
+                  {children}
+                </div>
+                <Footer categories={categories} />
+                <CartWrapper />
+                <CompareFloatingBar />
+              </CartProvider>
+            </WishlistProvider>
+          </CompareProvider>
+        </ToastProvider>
       </body>
     </html>
   );

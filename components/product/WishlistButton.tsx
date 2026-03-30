@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Heart } from "lucide-react";
 import type { Product } from "@/components/product/BentoProductCard";
 import { useWishlist } from "./WishlistProvider";
+import { useToast } from "@/components/ui/ToastProvider";
 
 interface WishlistButtonProps {
   product: Product;
@@ -13,12 +14,18 @@ interface WishlistButtonProps {
 
 export function WishlistButton({ product, className = "", showLabel = false }: WishlistButtonProps) {
   const { toggleWishlist, isInWishlist } = useWishlist();
+  const { pushToast } = useToast();
   const active = isInWishlist(product.id);
 
   const handleToggle = (event: React.MouseEvent) => {
     event.preventDefault();
     event.stopPropagation();
     toggleWishlist(product);
+    pushToast({
+      title: active ? "Removed from wishlist" : "Saved to wishlist",
+      description: product.name,
+      variant: active ? "info" : "success",
+    });
   };
 
   return (

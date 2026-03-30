@@ -1,22 +1,25 @@
 "use client";
 
 import { useCompare } from "./CompareProvider";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Scale, X, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { MOTION } from "@/lib/motion";
 
 export function CompareFloatingBar() {
     const { compareItems, removeFromCompare, clearCompare } = useCompare();
+    const prefersReducedMotion = useReducedMotion();
 
     if (compareItems.length === 0) return null;
 
     return (
         <AnimatePresence>
             <motion.div
-                initial={{ y: 100, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ y: 100, opacity: 0 }}
+                initial={prefersReducedMotion ? { opacity: 0 } : { y: 100, opacity: 0 }}
+                animate={prefersReducedMotion ? { opacity: 1 } : { y: 0, opacity: 1 }}
+                exit={prefersReducedMotion ? { opacity: 0 } : { y: 100, opacity: 0 }}
+                transition={{ duration: MOTION.duration.base, ease: MOTION.ease.standard }}
                 className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-2xl"
             >
                 <div className="flex items-center justify-between gap-4 rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card-strong)] p-4 shadow-2xl backdrop-blur-xl">

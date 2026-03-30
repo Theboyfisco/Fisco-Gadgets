@@ -3,6 +3,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import type { Product } from "@/components/product/BentoProductCard";
+import { useToast } from "@/components/ui/ToastProvider";
 
 interface CartContextType {
     cartItems: Product[];
@@ -19,6 +20,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     const [cartItems, setCartItems] = useState<Product[]>([]);
     const [isCartOpen, setIsCartOpen] = useState(false);
     const [mounted, setMounted] = useState(false);
+    const { pushToast } = useToast();
 
     // Load from local storage
     useEffect(() => {
@@ -45,13 +47,33 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         // Optimistic UI update
         setCartItems(prev => [...prev, product]);
         setIsCartOpen(true);
+        pushToast({
+            title: "Added to cart",
+            description: product.name,
+            variant: "success",
+        });
     };
 
     const removeFromCart = (productId: string) => {
-        setCartItems(prev => prev.filter(item => item.id !== productId));
+        setCartItems(prev => {
+            const next = prev.filter(item => item.id !== productId);
+            return next;
+        });
+        pushToast({
+            title: "Removed from cart",
+            description: "Item removed from your cart.",
+            variant: "info",
+        });
     };
 
-    const clearCart = () => setCartItems([]);
+    const clearCart = () => {
+        setCartItems([]);
+        pushToast({
+            title: "Cart cleared",
+            description: "Your cart is now empty.",
+            variant: "warning",
+        });
+    };
 
     const toggleCart = () => setIsCartOpen(!isCartOpen);
 

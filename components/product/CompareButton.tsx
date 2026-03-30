@@ -4,6 +4,7 @@ import { useCompare } from "./CompareProvider";
 import type { Product } from "./BentoProductCard";
 import { Scale } from "lucide-react";
 import { motion } from "framer-motion";
+import { useToast } from "@/components/ui/ToastProvider";
 
 interface CompareButtonProps {
     product: Product;
@@ -13,6 +14,7 @@ interface CompareButtonProps {
 
 export function CompareButton({ product, className = "", showLabel = false }: CompareButtonProps) {
     const { addToCompare, removeFromCompare, isInCompare } = useCompare();
+    const { pushToast } = useToast();
     const active = isInCompare(product.id);
 
     const toggleCompare = (e: React.MouseEvent) => {
@@ -20,8 +22,18 @@ export function CompareButton({ product, className = "", showLabel = false }: Co
         e.stopPropagation();
         if (active) {
             removeFromCompare(product.id);
+            pushToast({
+                title: "Removed from compare",
+                description: product.name,
+                variant: "info",
+            });
         } else {
             addToCompare(product);
+            pushToast({
+                title: "Added to compare",
+                description: product.name,
+                variant: "success",
+            });
         }
     };
 
