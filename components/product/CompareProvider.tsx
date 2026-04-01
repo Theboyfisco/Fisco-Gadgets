@@ -13,24 +13,27 @@ interface CompareContextType {
 
 const CompareContext = createContext<CompareContextType | undefined>(undefined);
 
-function readInitialCompareItems(): Product[] {
-  if (typeof window === "undefined") return [];
-  try {
-    const stored = localStorage.getItem("fisco_compare_v1");
-    return stored ? (JSON.parse(stored) as Product[]) : [];
-  } catch (error) {
-    console.error("Failed to load comparison list", error);
-    return [];
-  }
-}
-
 export function CompareProvider({ children }: { children: React.ReactNode }) {
-  const [compareItems, setCompareItems] = useState<Product[]>(readInitialCompareItems);
+  const [compareItems, setCompareItems] = useState<Product[]>([]);
+  const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    try {
+      const stored = localStorage.getItem("fisco_compare_v1");
+      if (stored) {
+        setCompareItems(JSON.parse(stored) as Product[]);
+      }
+    } catch (error) {
+      console.error("Failed to load comparison list", error);
+    } finally {
+      setHydrated(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!hydrated) return;
     localStorage.setItem("fisco_compare_v1", JSON.stringify(compareItems));
-  }, [compareItems]);
+  }, [compareItems, hydrated]);
 
   const addToCompare = (product: Product) => {
     setCompareItems((prev) => {

@@ -27,21 +27,23 @@ export default function ContactPage() {
 
   return (
     <div className="container mx-auto px-4 py-8 md:py-16 flex-1">
-      <Link href="/" className="group mb-8 inline-flex items-center gap-2 text-secondary transition-colors hover:text-[var(--foreground)]">
+      <Link href="/" className="group mb-8 inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-2 text-secondary transition-colors hover:text-[var(--foreground)]">
         <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
         Back to Home
       </Link>
       <Reveal>
-        <h1 className="mb-6 text-4xl font-extrabold tracking-tight text-[var(--foreground)] md:text-5xl">Contact Us</h1>
-        <p className="text-secondary text-lg mb-12 max-w-2xl">
-          Experiencing issues with an order or just want to chat gadgets? Drop us a line and our dedicated team will get back to you as soon as possible.
-        </p>
+        <div className="mb-12 max-w-3xl rounded-[2rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] p-8 shadow-[0_18px_50px_rgba(8,18,38,0.08)]">
+          <h1 className="mb-6 text-4xl font-extrabold tracking-tight text-[var(--foreground)] md:text-5xl">Contact Us</h1>
+          <p className="text-secondary text-lg">
+            Experiencing issues with an order or just want to chat gadgets? Drop us a line and our dedicated team will get back to you as soon as possible.
+          </p>
+        </div>
       </Reveal>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
         <div className="space-y-8">
           <Reveal>
-            <div className="flex items-start gap-4">
+            <div className="flex items-start gap-4 rounded-[1.5rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] p-5">
             <div className="shrink-0 rounded-full bg-[var(--surface-card)] p-3 text-primary"><MapPin /></div>
             <div>
               <h3 className="text-lg font-bold text-[var(--foreground)]">HQ Office</h3>
@@ -50,7 +52,7 @@ export default function ContactPage() {
           </div>
           </Reveal>
           <Reveal delay={0.05}>
-            <div className="flex items-start gap-4">
+            <div className="flex items-start gap-4 rounded-[1.5rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] p-5">
             <div className="shrink-0 rounded-full bg-[var(--surface-card)] p-3 text-primary"><Phone /></div>
             <div>
               <h3 className="text-lg font-bold text-[var(--foreground)]">Phone & WhatsApp</h3>
@@ -59,7 +61,7 @@ export default function ContactPage() {
           </div>
           </Reveal>
           <Reveal delay={0.1}>
-            <div className="flex items-start gap-4">
+            <div className="flex items-start gap-4 rounded-[1.5rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] p-5">
             <div className="shrink-0 rounded-full bg-[var(--surface-card)] p-3 text-primary"><Mail /></div>
             <div>
               <h3 className="text-lg font-bold text-[var(--foreground)]">Email Support</h3>
@@ -68,7 +70,7 @@ export default function ContactPage() {
           </div>
           </Reveal>
           <Reveal delay={0.15}>
-            <div className="flex items-start gap-4">
+            <div className="flex items-start gap-4 rounded-[1.5rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] p-5">
             <div className="shrink-0 rounded-full bg-[var(--surface-card)] p-3 text-primary"><Clock /></div>
             <div>
               <h3 className="text-lg font-bold text-[var(--foreground)]">Operating Hours</h3>
@@ -79,7 +81,7 @@ export default function ContactPage() {
         </div>
 
         <Reveal delay={0.1}>
-          <div className="rounded-standard border border-border-subtle bg-[var(--surface-card)] p-8 shadow-glass/40">
+          <div className="rounded-[2rem] border border-border-subtle bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] p-8 shadow-glass/40">
           <h3 className="mb-6 text-2xl font-bold text-[var(--foreground)]">Send a Message</h3>
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
@@ -91,7 +93,7 @@ export default function ContactPage() {
                 value={form.name}
                 onChange={handleChange}
                 required
-                className="w-full rounded-md border border-border-subtle bg-[var(--surface-card)] px-4 py-3 text-[var(--foreground)] transition-colors focus:border-primary focus:outline-none"
+                className="w-full rounded-xl border border-border-subtle bg-[var(--surface-card)] px-4 py-3 text-[var(--foreground)] transition-colors focus:border-primary focus:outline-none"
                 placeholder="John Doe"
               />
             </div>
@@ -104,7 +106,7 @@ export default function ContactPage() {
                 value={form.email}
                 onChange={handleChange}
                 required
-                className="w-full rounded-md border border-border-subtle bg-[var(--surface-card)] px-4 py-3 text-[var(--foreground)] transition-colors focus:border-primary focus:outline-none"
+                className="w-full rounded-xl border border-border-subtle bg-[var(--surface-card)] px-4 py-3 text-[var(--foreground)] transition-colors focus:border-primary focus:outline-none"
                 placeholder="john@example.com"
               />
             </div>
@@ -117,11 +119,11 @@ export default function ContactPage() {
                 value={form.message}
                 onChange={handleChange}
                 required
-                className="w-full rounded-md border border-border-subtle bg-[var(--surface-card)] px-4 py-3 text-[var(--foreground)] transition-colors focus:border-primary focus:outline-none"
+                className="w-full rounded-xl border border-border-subtle bg-[var(--surface-card)] px-4 py-3 text-[var(--foreground)] transition-colors focus:border-primary focus:outline-none"
                 placeholder="How can we help?"
               ></textarea>
             </div>
-            <button type="submit" className="w-full bg-primary text-[var(--primary-contrast)] hover:bg-[var(--primary-hover)] text-base py-3 rounded-md font-bold transition-colors mt-4 inline-flex items-center justify-center gap-2">
+            <button type="submit" className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary py-3 text-base font-bold text-[var(--primary-contrast)] transition-colors hover:bg-[var(--primary-hover)]">
               <Send size={18} />
               Send Message
             </button>

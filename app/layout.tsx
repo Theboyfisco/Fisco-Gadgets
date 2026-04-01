@@ -17,6 +17,7 @@ import { PageShell } from "@/components/ui/PageShell";
 
 import prisma from "@/lib/db";
 import { fallbackCategories } from "@/lib/fallback-data";
+import { shouldUseDatabase } from "@/lib/should-use-database";
 
 export const metadata: Metadata = {
   title: "Fisco Gadgets — Premium Tech Store",
@@ -43,7 +44,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const categories = process.env.DATABASE_URL
+  const categories = shouldUseDatabase()
     ? await prisma.category
         .findMany({ select: { id: true, name: true } })
         .catch(() => fallbackCategories.map((category) => ({ id: category.id, name: category.name })))

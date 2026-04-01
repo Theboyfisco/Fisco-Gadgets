@@ -40,12 +40,14 @@ export function CompareButton({ product, className = "", showLabel = false }: Co
     return (
         <button
             onClick={toggleCompare}
+            aria-pressed={active}
+            aria-label={active ? `Remove ${product.name} from comparison` : `Add ${product.name} to comparison`}
             className={`flex items-center gap-2 transition-all duration-300 ${active ? "text-primary" : "text-secondary hover:text-[var(--foreground)]"} ${className}`}
             title={active ? "Remove from comparison" : "Add to comparison"}
         >
             <motion.div
                 whileTap={{ scale: 0.8 }}
-                className={`rounded-full border p-2 ${active ? "border-primary/30 bg-primary/20" : "border-[var(--border-subtle)] bg-[var(--surface-card)]"}`}
+                className={`rounded-full border p-2 shadow-[0_12px_30px_rgba(8,18,38,0.12)] ${active ? "border-primary/30 bg-primary/20" : "border-[var(--border-subtle)] bg-[var(--surface-card)]"}`}
             >
                 <Scale size={18} />
             </motion.div>

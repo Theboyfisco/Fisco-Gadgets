@@ -37,7 +37,12 @@ export function WishlistButton({ product, className = "", showLabel = false }: W
       } ${className}`}
       title={active ? "Remove from wishlist" : "Add to wishlist"}
     >
-      <motion.div whileTap={{ scale: 0.85 }} className={`rounded-full border p-2 ${active ? "border-primary/30 bg-primary/20" : "border-[var(--border-subtle)] bg-[var(--surface-card)]"}`}>
+      <motion.div
+        whileTap={{ scale: 0.85 }}
+        className={`rounded-full border p-2 shadow-[0_12px_30px_rgba(8,18,38,0.12)] ${
+          active ? "border-primary/30 bg-primary/20" : "border-[var(--border-subtle)] bg-[var(--surface-card)]"
+        }`}
+      >
         <Heart size={18} className={active ? "fill-current" : ""} />
       </motion.div>
       {showLabel && <span className="text-sm font-medium">{active ? "Wishlisted" : "Wishlist"}</span>}

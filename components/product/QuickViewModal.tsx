@@ -85,7 +85,7 @@ export function QuickViewModal({ product, isOpen, onClose }: QuickViewModalProps
             animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1 }}
             exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 24, scale: 0.98 }}
             transition={{ duration: MOTION.duration.slow, ease: MOTION.ease.standard }}
-            className="fixed left-1/2 top-1/2 z-[100] w-[92vw] max-w-4xl -translate-x-1/2 -translate-y-1/2 rounded-3xl border border-[var(--border-subtle)] bg-[var(--panel-bg)] shadow-2xl"
+            className="fixed left-1/2 top-1/2 z-[100] w-[92vw] max-w-4xl -translate-x-1/2 -translate-y-1/2 rounded-[2rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--panel-bg),var(--surface-card))] shadow-2xl backdrop-blur-2xl"
             role="dialog"
             aria-modal="true"
             aria-labelledby={`quick-view-${product.id}`}
@@ -93,11 +93,11 @@ export function QuickViewModal({ product, isOpen, onClose }: QuickViewModalProps
             ref={dialogRef}
           >
             <div className="grid gap-6 p-6 md:grid-cols-[1.1fr_0.9fr]">
-              <div className="relative overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)]">
+              <div className="relative overflow-hidden rounded-[1.75rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[0_24px_80px_rgba(8,18,38,0.16)]">
                 {product.image && (
                   <Image src={product.image} alt={product.name} fill className="object-cover" sizes="(max-width: 768px) 90vw, 50vw" />
                 )}
-                <div className="absolute left-4 top-4 rounded-full bg-[var(--surface-card)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-secondary">
+                <div className="absolute left-4 top-4 rounded-full border border-white/15 bg-black/20 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-white/88 backdrop-blur-md">
                   Quick view
                 </div>
               </div>
@@ -122,7 +122,7 @@ export function QuickViewModal({ product, isOpen, onClose }: QuickViewModalProps
                 </div>
 
                 {specs.length > 0 && (
-                  <div className="mt-6 space-y-3 rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
+                  <div className="mt-6 space-y-3 rounded-[1.5rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4 shadow-[0_16px_34px_rgba(8,18,38,0.08)]">
                     {specs.map(([key, value]) => (
                       <div key={key} className="flex items-center justify-between text-sm">
                         <span className="text-secondary">{key.replace(/([A-Z])/g, " $1").trim()}</span>
@@ -133,10 +133,10 @@ export function QuickViewModal({ product, isOpen, onClose }: QuickViewModalProps
                 )}
 
                 <div className="mt-6 grid gap-3 sm:grid-cols-2">
-                  <AddToCartButton product={product} className="rounded-standard bg-primary py-3 text-sm font-semibold text-[var(--primary-contrast)] transition-colors hover:bg-[var(--primary-hover)]" />
+                  <AddToCartButton product={product} className="rounded-full bg-primary py-3 text-sm font-semibold text-[var(--primary-contrast)] transition-colors hover:bg-[var(--primary-hover)]" />
                   <Link
                     href={`/product/${product.id}`}
-                    className="rounded-standard border border-[var(--border-subtle)] bg-[var(--surface-card)] py-3 text-center text-sm font-semibold text-[var(--foreground)] transition-colors hover:bg-[var(--surface-cta)]"
+                    className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] py-3 text-center text-sm font-semibold text-[var(--foreground)] transition-colors hover:bg-[var(--surface-cta)]"
                   >
                     View details
                   </Link>

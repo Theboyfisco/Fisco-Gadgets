@@ -20,12 +20,12 @@ export default function ComparePage() {
     if (compareItems.length === 0) {
         return (
             <div className="container mx-auto px-4 py-32 text-center">
-                <div className="mb-8 flex justify-center text-secondary/40">
+                <div className="mx-auto mb-8 flex h-28 w-28 items-center justify-center rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] text-secondary/40 shadow-[0_18px_50px_rgba(8,18,38,0.1)]">
                     <ShoppingCart size={80} />
                 </div>
                 <h1 className="mb-4 text-4xl font-extrabold text-[var(--foreground)]">Comparison List is Empty</h1>
                 <p className="text-secondary mb-12">Add some products to see them compared side-by-side.</p>
-                <Link href="/" className="bg-primary text-[var(--primary-contrast)] hover:bg-[var(--primary-hover)] text-base px-8 py-4 rounded-xl font-bold transition-all shadow-glow">
+                <Link href="/" className="rounded-full bg-primary px-8 py-4 text-base font-bold text-[var(--primary-contrast)] shadow-glow transition-all hover:bg-[var(--primary-hover)]">
                     Browse Products
                 </Link>
             </div>
@@ -34,9 +34,9 @@ export default function ComparePage() {
 
     return (
         <div className="container mx-auto px-4 py-8 md:py-16 flex-1">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
+            <div className="mb-12 flex flex-col justify-between gap-6 md:flex-row md:items-center">
                 <div>
-                    <Link href="/" className="group mb-4 inline-flex items-center gap-2 text-secondary transition-colors hover:text-[var(--foreground)]">
+                    <Link href="/" className="group mb-4 inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-2 text-secondary transition-colors hover:text-[var(--foreground)]">
                         <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
                         Continue Shopping
                     </Link>
@@ -44,7 +44,7 @@ export default function ComparePage() {
                 </div>
                 <button
                     onClick={clearCompare}
-                    className="flex items-center gap-2 text-error hover:text-error/80 transition-colors py-2 px-4 rounded-lg bg-error/10 border border-error/20 w-fit"
+                    className="flex w-fit items-center gap-2 rounded-full border border-error/20 bg-error/10 px-4 py-2 text-error transition-colors hover:text-error/80"
                 >
                     <Trash2 size={18} />
                     Clear List
@@ -62,7 +62,7 @@ export default function ComparePage() {
                                 initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, scale: 0.98 }}
                                 animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, scale: 1 }}
                                 transition={{ duration: MOTION.duration.base, ease: MOTION.ease.standard }}
-                                className="h-fit overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-surface/50 shadow-glass backdrop-blur-md"
+                                className="h-fit overflow-hidden rounded-[1.8rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card-strong),var(--surface-card))] shadow-glass backdrop-blur-xl"
                             >
                                 <div className="relative h-48 sm:h-64 w-full">
                                     <Image
@@ -83,13 +83,13 @@ export default function ComparePage() {
                                     <h3 className="mb-2 h-14 line-clamp-2 text-xl font-bold text-[var(--foreground)]">
                                         {product.name}
                                     </h3>
-                                    <p className="text-2xl font-black text-primary mb-6">
+                                    <p className="mb-6 text-2xl font-black text-primary">
                                         {new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN' }).format(product.price)}
                                     </p>
 
-                                    <div className="space-y-4 mb-8">
+                                    <div className="mb-8 space-y-3">
                                         {specs.map((spec) => (
-                                            <div key={spec} className="border-b border-[var(--border-subtle)] pb-3">
+                                            <div key={spec} className="rounded-[1rem] border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-3">
                                                 <p className="text-[10px] uppercase tracking-widest text-secondary mb-1 font-bold">
                                                     {spec.replace(/([A-Z])/g, ' $1').trim()}
                                                 </p>
@@ -103,13 +103,13 @@ export default function ComparePage() {
                                     <div className="flex flex-col gap-2">
                                         <button
                                             onClick={() => addToCart(product)}
-                                            className="w-full rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] py-3 text-sm font-bold text-[var(--foreground)] transition-all hover:bg-[var(--surface-cta)] active:scale-95"
+                                            className="w-full rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] py-3 text-sm font-bold text-[var(--foreground)] transition-all hover:bg-[var(--surface-cta)] active:scale-95"
                                         >
                                             Add to Cart
                                         </button>
                                         <a
                                             href={`https://wa.me/2348000000000?text=${encodeURIComponent(`Hi, I'm comparing products and I'm interested in the ${product.name}`)}`}
-                                            className="w-full bg-primary/10 hover:bg-primary/20 text-primary rounded-xl py-3 text-sm font-bold flex items-center justify-center gap-2 transition-all border border-primary/20"
+                                            className="flex w-full items-center justify-center gap-2 rounded-full border border-primary/20 bg-primary/10 py-3 text-sm font-bold text-primary transition-all hover:bg-primary/20"
                                         >
                                             <MessageCircle size={16} />
                                             Enquire
@@ -123,7 +123,7 @@ export default function ComparePage() {
             </div>
 
             {compareItems.length < 4 && (
-                <div className="mt-12 rounded-2xl border-2 border-dashed border-[var(--border-subtle)] p-8 text-center">
+                <div className="mt-12 rounded-[1.8rem] border-2 border-dashed border-[var(--border-subtle)] bg-[var(--surface-soft)] p-8 text-center">
                     <p className="text-secondary">You can add {4 - compareItems.length} more products to compare.</p>
                 </div>
             )}

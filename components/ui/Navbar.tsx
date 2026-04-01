@@ -72,6 +72,7 @@ export function Navbar({ categories = [] }: NavbarProps) {
   const showMegaMenu = categoryLinks.length > visibleCategories.length;
 
   const renderSearchOverlay = typeof document !== "undefined";
+  const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
     <>
@@ -86,7 +87,7 @@ export function Navbar({ categories = [] }: NavbarProps) {
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
           <div className="flex items-center gap-3 sm:gap-4">
             <button
-              className="interactive-focus -ml-2 rounded-lg p-2 text-secondary transition-colors hover:bg-[var(--interactive-hover)] hover:text-[var(--foreground)] lg:hidden"
+              className="interactive-focus -ml-2 rounded-xl p-2 text-secondary transition-colors hover:bg-[var(--interactive-hover)] hover:text-[var(--foreground)] lg:hidden"
               onClick={() => setIsMobileMenuOpen(true)}
               aria-label="Open menu"
               aria-expanded={isMobileMenuOpen}
@@ -96,7 +97,7 @@ export function Navbar({ categories = [] }: NavbarProps) {
             </button>
 
             {!isHome ? (
-              <Link href="/" className="interactive-focus group rounded-lg px-1 py-1 text-secondary transition-colors hover:text-[var(--foreground)]">
+              <Link href="/" className="interactive-focus group rounded-xl px-2 py-1.5 text-secondary transition-colors hover:bg-[var(--interactive-hover)] hover:text-[var(--foreground)]">
                 <ArrowLeft size={20} className="transition-transform group-hover:-translate-x-1" />
                 <span className="hidden font-medium sm:inline">Back</span>
               </Link>
@@ -105,7 +106,7 @@ export function Navbar({ categories = [] }: NavbarProps) {
             )}
           </div>
 
-          <nav className="hidden items-center gap-2 rounded-full border border-[var(--interactive-border)] bg-[var(--interactive-bg-soft)] px-3 py-1 lg:flex">
+          <nav className="hidden items-center gap-2 rounded-full border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--interactive-bg-soft),var(--surface-soft))] px-3 py-1 shadow-[0_16px_44px_rgba(8,18,38,0.08)] lg:flex">
             {navLinks.map((link) => {
               const active = pathname === link.href;
               return (
@@ -128,7 +129,7 @@ export function Navbar({ categories = [] }: NavbarProps) {
                 <summary className="interactive-focus list-none rounded-full px-3 py-1.5 text-sm font-medium text-secondary transition-colors hover:bg-[var(--interactive-hover)] hover:text-[var(--interactive-fg)] [&::-webkit-details-marker]:hidden">
                   Browse
                 </summary>
-                <div className="absolute right-0 top-12 z-50 w-[560px] rounded-2xl border border-[var(--interactive-border)] bg-[var(--panel-bg-soft)] p-4 shadow-2xl">
+                <div className="absolute right-0 top-12 z-50 w-[560px] rounded-[1.75rem] border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--panel-bg-soft),var(--surface-card))] p-4 shadow-2xl backdrop-blur-2xl">
                   <div className="grid gap-4 md:grid-cols-3">
                     <div className="md:col-span-2">
                       <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--text-soft)]">Categories</p>
@@ -156,14 +157,14 @@ export function Navbar({ categories = [] }: NavbarProps) {
                     <div className="space-y-3">
                       <Link
                         href="/compare"
-                        className="block rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-4 text-sm font-semibold text-[var(--foreground)] transition-colors hover:bg-[var(--interactive-hover)]"
+                        className="block rounded-[1.5rem] border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-4 text-sm font-semibold text-[var(--foreground)] transition-colors hover:bg-[var(--interactive-hover)]"
                       >
                         Compare devices
                         <p className="mt-2 text-xs font-normal text-secondary">Line up specs side by side.</p>
                       </Link>
                       <Link
                         href="/#featured"
-                        className="block rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-4 text-sm font-semibold text-[var(--foreground)] transition-colors hover:bg-[var(--interactive-hover)]"
+                        className="block rounded-[1.5rem] border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-4 text-sm font-semibold text-[var(--foreground)] transition-colors hover:bg-[var(--interactive-hover)]"
                       >
                         Featured drops
                         <p className="mt-2 text-xs font-normal text-secondary">Curated deals this week.</p>
@@ -178,7 +179,7 @@ export function Navbar({ categories = [] }: NavbarProps) {
           <div className="flex max-w-sm flex-1 items-center justify-end gap-2 sm:gap-3 lg:max-w-md">
             <button
               onClick={() => setIsSearchOpen(true)}
-              className="interactive-focus group hidden flex-1 items-center gap-3 rounded-xl border border-[var(--interactive-border)] bg-[var(--interactive-bg-soft)] px-4 py-2 text-sm text-secondary transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:bg-[var(--interactive-active)] hover:text-[var(--interactive-fg)] lg:flex"
+              className="interactive-focus group hidden flex-1 items-center gap-3 rounded-full border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--interactive-bg-soft),var(--surface-soft))] px-4 py-2 text-sm text-secondary shadow-[0_16px_40px_rgba(8,18,38,0.06)] transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:bg-[var(--interactive-active)] hover:text-[var(--interactive-fg)] lg:flex"
               aria-label="Open search"
             >
               <Search size={17} className="transition-colors group-hover:text-primary" />
@@ -190,7 +191,7 @@ export function Navbar({ categories = [] }: NavbarProps) {
 
             <button
               onClick={() => setIsSearchOpen(true)}
-              className="interactive-focus rounded-lg p-2 text-secondary transition-colors hover:bg-[var(--interactive-hover)] hover:text-[var(--foreground)] lg:hidden"
+              className="interactive-focus rounded-xl p-2 text-secondary transition-colors hover:bg-[var(--interactive-hover)] hover:text-[var(--foreground)] lg:hidden"
               aria-label="Open search"
             >
               <Search size={22} />
@@ -199,7 +200,7 @@ export function Navbar({ categories = [] }: NavbarProps) {
             <ThemeSwitcher />
             <button
               onClick={toggleWishlistDrawer}
-              className="interactive-focus relative rounded-xl p-2 text-secondary transition-colors hover:bg-[var(--interactive-active)] hover:text-[var(--interactive-fg)]"
+              className="interactive-focus relative rounded-xl border border-transparent p-2 text-secondary transition-colors hover:border-[var(--interactive-border)] hover:bg-[var(--interactive-active)] hover:text-[var(--interactive-fg)]"
               aria-label="View wishlist"
               aria-expanded={isWishlistOpen}
               aria-controls="wishlist-drawer"
@@ -216,7 +217,7 @@ export function Navbar({ categories = [] }: NavbarProps) {
             </button>
             <button
               onClick={toggleCart}
-              className="interactive-focus relative rounded-xl p-2 text-secondary transition-colors hover:bg-[var(--interactive-active)] hover:text-[var(--interactive-fg)]"
+              className="interactive-focus relative rounded-xl border border-transparent p-2 text-secondary transition-colors hover:border-[var(--interactive-border)] hover:bg-[var(--interactive-active)] hover:text-[var(--interactive-fg)]"
               aria-label="Open cart"
               aria-expanded={cartItems.length > 0}
               aria-controls="cart-drawer"
@@ -225,10 +226,10 @@ export function Navbar({ categories = [] }: NavbarProps) {
               <span
                 suppressHydrationWarning
                 className={`absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full border border-[var(--background)] bg-primary text-[10px] font-bold text-[var(--primary-contrast)] transition-opacity duration-[var(--motion-base)] ease-[var(--ease-standard)] ${
-                  cartItems.length > 0 ? "opacity-100" : "opacity-0"
+                  cartCount > 0 ? "opacity-100" : "opacity-0"
                 }`}
               >
-                {cartItems.reduce((sum, item) => sum + item.quantity, 0)}
+                {cartCount}
               </span>
             </button>
           </div>
@@ -255,21 +256,24 @@ export function Navbar({ categories = [] }: NavbarProps) {
                   animate={{ x: 0 }}
                   exit={{ x: "-100%" }}
                   transition={{ type: "spring", bounce: 0, duration: MOTION.duration.slow }}
-                  className="fixed bottom-0 left-0 top-0 z-[60] flex w-[290px] flex-col border-r border-[var(--interactive-border)] bg-[var(--mobile-drawer-bg)] p-6 shadow-2xl lg:hidden"
+                  className="fixed bottom-0 left-0 top-0 z-[60] flex w-[320px] max-w-[86vw] flex-col border-r border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--mobile-drawer-bg),var(--surface-card))] p-6 shadow-2xl backdrop-blur-2xl lg:hidden"
                   id="mobile-menu"
                 >
-                  <div className="mb-10 flex items-center justify-between">
+                  <div className="mb-8 flex items-center justify-between">
                     <BrandLogo onClick={() => setIsMobileMenuOpen(false)} />
                     <button
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className="interactive-focus -mr-2 rounded-lg p-2 text-secondary transition-colors hover:bg-[var(--interactive-hover)] hover:text-[var(--foreground)]"
+                      className="interactive-focus -mr-2 rounded-xl p-2 text-secondary transition-colors hover:bg-[var(--interactive-hover)] hover:text-[var(--foreground)]"
                       aria-label="Close menu"
                     >
                       <X size={24} />
                     </button>
                   </div>
 
-                  <p className="text-soft mb-4 text-[10px] font-bold uppercase tracking-[0.2em]">Navigation</p>
+                  <div className="mb-6 rounded-[1.5rem] border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-4">
+                    <p className="text-soft text-[10px] font-bold uppercase tracking-[0.2em]">Navigation</p>
+                    <p className="mt-2 text-sm text-secondary">Browse categories, compare devices, or jump back into your saved items.</p>
+                  </div>
                   <nav className="flex flex-col gap-1.5">
                     {navLinks.map((link) => {
                       const active = pathname === link.href;
@@ -294,12 +298,35 @@ export function Navbar({ categories = [] }: NavbarProps) {
                     })}
                   </nav>
 
+                  <div className="mt-6 grid grid-cols-2 gap-3">
+                    <button
+                      onClick={() => {
+                        setIsMobileMenuOpen(false);
+                        toggleWishlistDrawer();
+                      }}
+                      className="interactive-focus rounded-[1.25rem] border border-[var(--border-subtle)] bg-[var(--surface-soft)] px-4 py-3 text-left"
+                    >
+                      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-soft)]">Wishlist</p>
+                      <p className="mt-1 text-lg font-semibold text-[var(--foreground)]">{wishlistItems.length}</p>
+                    </button>
+                    <button
+                      onClick={() => {
+                        setIsMobileMenuOpen(false);
+                        toggleCart();
+                      }}
+                      className="interactive-focus rounded-[1.25rem] border border-[var(--border-subtle)] bg-[var(--surface-soft)] px-4 py-3 text-left"
+                    >
+                      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-soft)]">Cart</p>
+                      <p className="mt-1 text-lg font-semibold text-[var(--foreground)]">{cartCount}</p>
+                    </button>
+                  </div>
+
                   <div className="mt-auto border-t border-[var(--border-subtle)] pt-7">
                     <p className="mb-4 text-sm text-secondary">Support available every day via WhatsApp concierge.</p>
                     <Link
                       href="/contact"
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className="interactive-focus primary-action block w-full rounded-xl py-3 text-center text-sm font-semibold transition-colors"
+                      className="interactive-focus primary-action block w-full rounded-full py-3 text-center text-sm font-semibold transition-colors"
                     >
                       WhatsApp Support
                     </Link>

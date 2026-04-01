@@ -4,19 +4,25 @@ import { motion } from "framer-motion";
 import { BentoProductCard } from "@/components/product/BentoProductCard";
 import { MOTION } from "@/lib/motion";
 
-type FeaturedProduct = {
+type GridProduct = {
   id: string;
   name: string;
   price: number;
   image: string;
   categoryId: string;
   technicalSpecs: Record<string, unknown>;
+  brandId?: string;
 };
 
-export function FeaturedProductsGrid({ products }: { products: FeaturedProduct[] }) {
+interface ProductGridMotionProps {
+  products: GridProduct[];
+  className?: string;
+}
+
+export function ProductGridMotion({ products, className = "" }: ProductGridMotionProps) {
   return (
     <motion.div
-      className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
+      className={`grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 ${className}`}
       initial="hidden"
       animate="show"
       variants={{
@@ -24,16 +30,15 @@ export function FeaturedProductsGrid({ products }: { products: FeaturedProduct[]
         show: { transition: { staggerChildren: 0.08 } },
       }}
     >
-      {products.map((product, index) => (
+      {products.map((product) => (
         <motion.div
           key={product.id}
           variants={{
             hidden: { opacity: 0, y: 14 },
             show: { opacity: 1, y: 0, transition: { duration: MOTION.duration.base, ease: MOTION.ease.standard } },
           }}
-          className={index === 0 ? "md:col-span-2 lg:col-span-2" : ""}
         >
-          <BentoProductCard product={product as any} featured={index === 0} href={`/product/${product.id}`} />
+          <BentoProductCard product={product as any} href={`/product/${product.id}`} />
         </motion.div>
       ))}
     </motion.div>

@@ -39,7 +39,7 @@ export function CategoryFilters({ initialMin, initialMax }: { initialMin?: numbe
   const hasFilter = Boolean(min) || Boolean(max);
 
   return (
-    <div className="flex flex-wrap items-center gap-2">
+    <div className="flex flex-wrap items-center gap-2 rounded-[1.5rem] border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-2">
       {FILTERS.map((filter) => {
         const active = isActive(filter.min, filter.max);
         return (
@@ -61,7 +61,7 @@ export function CategoryFilters({ initialMin, initialMax }: { initialMin?: numbe
         <button
           type="button"
           onClick={() => handleSelect(undefined, undefined)}
-          className="rounded-full border border-[var(--border-subtle)] px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-secondary transition-colors hover:border-[var(--interactive-border-strong)] hover:text-[var(--foreground)]"
+          className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-secondary transition-colors hover:border-[var(--interactive-border-strong)] hover:text-[var(--foreground)]"
         >
           Clear
         </button>

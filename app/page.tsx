@@ -7,9 +7,11 @@ import Link from "next/link";
 import Image from "next/image";
 import prisma from "@/lib/db";
 import { fallbackCategories, fallbackFeaturedProducts } from "@/lib/fallback-data";
+import { getPrimaryImage, normalizeTechnicalSpecs } from "@/lib/normalize-product";
+import { shouldUseDatabase } from "@/lib/should-use-database";
 
 export default async function Home() {
-  const [dbProducts, dbCategories] = process.env.DATABASE_URL
+  const [dbProducts, dbCategories] = shouldUseDatabase()
     ? await Promise.all([
         prisma.product
           .findMany({
@@ -28,16 +30,16 @@ export default async function Home() {
           id: p.id,
           name: p.name,
           price: p.price,
-          image: p.images[0],
+          image: getPrimaryImage(p.images),
           categoryId: p.categoryId,
-          technicalSpecs: p.technicalSpecs as any,
+          technicalSpecs: normalizeTechnicalSpecs(p.technicalSpecs),
         }))
       : fallbackFeaturedProducts;
 
   return (
     <div className="min-h-screen pb-24">
       <main className="container relative mx-auto overflow-hidden px-4 pt-6 sm:pt-10">
-        <section className="relative mb-16 overflow-hidden rounded-[2rem] border border-[var(--hero-border)] bg-[var(--hero-surface)] p-6 shadow-[var(--hero-shadow)] sm:p-8 lg:mb-24 lg:p-12">
+        <section className="relative mb-16 overflow-hidden rounded-[2.4rem] border border-[var(--hero-border)] bg-[var(--hero-surface)] p-6 shadow-[var(--hero-shadow)] backdrop-blur-2xl sm:p-8 lg:mb-24 lg:p-12">
           <div className="pointer-events-none absolute -left-16 top-0 h-48 w-48 rounded-full bg-[var(--brand-tint-primary)] blur-3xl" />
           <div className="pointer-events-none absolute bottom-0 right-0 h-56 w-56 rounded-full bg-[var(--brand-tint-secondary)] blur-3xl" />
           <div className="absolute inset-0 bg-[linear-gradient(135deg,var(--bg-secondary)_0%,var(--hero-surface)_45%,var(--bg-tertiary)_100%)]" />
@@ -50,8 +52,8 @@ export default async function Home() {
 
           <div className="relative z-10 grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
             <Reveal>
-              <div className="max-w-2xl rounded-[2rem] border border-[var(--interactive-border)] bg-[var(--surface-secondary)] p-5 shadow-[0_20px_50px_rgba(15,23,42,0.08)] backdrop-blur-xl sm:p-7">
-                <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-[var(--interactive-border)] bg-[var(--surface-primary)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--hero-foreground)]">
+              <div className="max-w-2xl rounded-[2rem] border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--surface-secondary),var(--surface-primary))] p-5 shadow-[0_24px_80px_rgba(15,23,42,0.1)] backdrop-blur-2xl sm:p-7">
+                <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-[var(--interactive-border)] bg-[var(--surface-primary)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--hero-foreground)] shadow-[0_10px_30px_rgba(15,23,42,0.08)]">
                   Built for modern shopping in Nigeria
                 </p>
                 <h1 className="mb-6 max-w-xl text-3xl font-extrabold leading-tight tracking-tight text-[var(--hero-foreground)] sm:text-5xl lg:text-6xl">
@@ -61,15 +63,15 @@ export default async function Home() {
                   Curated drops, verified originals, and concierge-level checkout built for Nigeria.
                 </p>
                 <div className="mb-8 grid max-w-xl grid-cols-3 gap-3">
-                  <div className="rounded-2xl border border-[var(--interactive-border)] bg-[var(--surface-primary)] px-4 py-3 backdrop-blur-md">
+                  <div className="rounded-[1.35rem] border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--surface-primary),var(--surface-soft))] px-4 py-3 backdrop-blur-md">
                     <p className="text-[10px] uppercase tracking-[0.22em] text-[var(--hero-foreground-soft)]">Brands</p>
                     <p className="mt-2 text-lg font-semibold text-[var(--hero-foreground)]">Apple</p>
                   </div>
-                  <div className="rounded-2xl border border-[var(--interactive-border)] bg-[var(--surface-primary)] px-4 py-3 backdrop-blur-md">
+                  <div className="rounded-[1.35rem] border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--surface-primary),var(--surface-soft))] px-4 py-3 backdrop-blur-md">
                     <p className="text-[10px] uppercase tracking-[0.22em] text-[var(--hero-foreground-soft)]">Delivery</p>
                     <p className="mt-2 text-lg font-semibold text-[var(--hero-foreground)]">1-3 days</p>
                   </div>
-                  <div className="rounded-2xl border border-[var(--interactive-border)] bg-[var(--surface-primary)] px-4 py-3 backdrop-blur-md">
+                  <div className="rounded-[1.35rem] border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--surface-primary),var(--surface-soft))] px-4 py-3 backdrop-blur-md">
                     <p className="text-[10px] uppercase tracking-[0.22em] text-[var(--hero-foreground-soft)]">Support</p>
                     <p className="mt-2 text-lg font-semibold text-[var(--hero-foreground)]">Live help</p>
                   </div>
@@ -77,7 +79,7 @@ export default async function Home() {
                 <div className="flex flex-col gap-3 sm:flex-row">
                   <Link
                     href="#featured"
-                    className="inline-flex items-center justify-center gap-2 rounded-standard bg-primary px-8 py-3 text-sm font-semibold text-[var(--primary-contrast)] transition-all hover:scale-[1.02] hover:bg-[var(--primary-hover)] relative overflow-hidden"
+                    className="relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full bg-primary px-8 py-3 text-sm font-semibold text-[var(--primary-contrast)] shadow-[0_18px_40px_rgba(63,107,253,0.28)] transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:scale-[1.02] hover:bg-[var(--primary-hover)]"
                   >
                     <span className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.35),transparent_55%)] opacity-0 transition-opacity duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:opacity-100" />
                     Shop Featured
@@ -85,7 +87,7 @@ export default async function Home() {
                   </Link>
                   <Link
                     href="/category/phones"
-                    className="inline-flex items-center justify-center rounded-standard border border-[var(--interactive-border)] bg-[var(--surface-primary)] px-8 py-3 text-sm font-semibold text-[var(--hero-foreground)] transition-colors hover:bg-[var(--interactive-hover)]"
+                    className="inline-flex items-center justify-center rounded-full border border-[var(--interactive-border)] bg-[var(--surface-primary)] px-8 py-3 text-sm font-semibold text-[var(--hero-foreground)] transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:border-[var(--interactive-border-strong)] hover:bg-[var(--interactive-hover)]"
                   >
                     Browse Phones
                   </Link>
@@ -147,7 +149,7 @@ export default async function Home() {
               <Link
                 key={category.id}
                 href={`/category/${category.id}`}
-                className="group relative h-48 overflow-hidden rounded-[28px] border border-[var(--category-card-border)] bg-[var(--category-card-surface)] shadow-[var(--category-card-shadow)] transition duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:-translate-y-1 hover:shadow-[var(--category-card-shadow-hover)]"
+                className="group relative h-52 overflow-hidden rounded-[32px] border border-[var(--category-card-border)] bg-[var(--category-card-surface)] shadow-[var(--category-card-shadow)] transition duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:-translate-y-1.5 hover:shadow-[var(--category-card-shadow-hover)]"
               >
                 <Image
                   src={category.image}
@@ -158,7 +160,7 @@ export default async function Home() {
                   className="object-cover transition duration-[var(--motion-slow)] ease-[var(--ease-standard)] group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-[var(--category-card-overlay)]" />
-                <div className="absolute inset-x-4 bottom-4 rounded-2xl border border-[var(--category-pill-border)] bg-[var(--category-pill-bg)] p-4 backdrop-blur-sm transition duration-[var(--motion-base)] ease-[var(--ease-standard)] group-hover:border-[var(--category-pill-border-hover)] group-hover:-translate-y-1">
+                <div className="absolute inset-x-4 bottom-4 rounded-[1.5rem] border border-[var(--category-pill-border)] bg-[var(--category-pill-bg)] p-4 backdrop-blur-md transition duration-[var(--motion-base)] ease-[var(--ease-standard)] group-hover:border-[var(--category-pill-border-hover)] group-hover:-translate-y-1.5">
                   <p className="text-sm font-semibold uppercase tracking-wide text-[var(--category-pill-title)]">{category.name}</p>
                   <p className="mt-1 text-xs uppercase tracking-[0.3em] text-[var(--category-pill-subtitle)]">Explore collection</p>
                 </div>

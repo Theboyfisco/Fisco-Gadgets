@@ -28,8 +28,8 @@ export default async function SuccessPage({ searchParams }: { searchParams: Prom
     }
 
     return (
-        <div className="container mx-auto px-4 py-24 flex flex-col items-center">
-            <div className="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center text-primary mb-8 animate-in zoom-in duration-700">
+        <div className="container mx-auto flex flex-col items-center px-4 py-24">
+            <div className="mb-8 flex h-24 w-24 items-center justify-center rounded-full border border-primary/20 bg-primary/10 text-primary shadow-[0_18px_50px_rgba(63,107,253,0.18)] animate-in zoom-in duration-700">
                 <CheckCircle2 size={64} />
             </div>
 
@@ -41,16 +41,16 @@ export default async function SuccessPage({ searchParams }: { searchParams: Prom
                 Our team is already preparing your gadgets for dispatch.
             </p>
 
-            <div className="mb-12 w-full max-w-2xl overflow-hidden rounded-3xl border border-border-subtle bg-[var(--surface-card)]">
+            <div className="mb-12 w-full max-w-2xl overflow-hidden rounded-[2rem] border border-border-subtle bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] shadow-[0_24px_80px_rgba(8,18,38,0.12)]">
                 <div className="border-b border-border-subtle bg-[var(--surface-soft)] p-6">
                     <h2 className="flex items-center gap-2 text-xl font-bold text-[var(--foreground)]">
                         <Package className="text-primary" /> Order Summary
                     </h2>
                 </div>
                 
-                <div className="p-6 space-y-4">
+                <div className="space-y-4 p-6">
                     {order.items.map((item: any) => (
-                        <div key={item.id} className="flex gap-4 items-center">
+                        <div key={item.id} className="flex items-center gap-4 rounded-[1.25rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-3">
                             <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)]">
                                 <Image 
                                     src={item.product.images[0]} 
@@ -92,17 +92,17 @@ export default async function SuccessPage({ searchParams }: { searchParams: Prom
                 </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4 w-full max-w-md">
+            <div className="flex w-full max-w-md flex-col gap-4 sm:flex-row">
                 <Link 
                     href="/" 
-                    className="flex-1 bg-primary text-[var(--primary-contrast)] text-base py-4 rounded-standard font-bold hover:bg-[var(--primary-hover)] transition-all text-center flex items-center justify-center gap-2 shadow-glow active:scale-95"
+                    className="flex flex-1 items-center justify-center gap-2 rounded-full bg-primary py-4 text-center text-base font-bold text-[var(--primary-contrast)] shadow-glow transition-all hover:bg-[var(--primary-hover)] active:scale-95"
                 >
                     <ShoppingBag size={20} />
                     Continue Shopping
                 </Link>
                 <Link 
                     href="/contact" 
-                    className="flex-1 rounded-standard border border-[var(--border-subtle)] bg-[var(--surface-card)] py-4 font-bold text-[var(--foreground)] transition-all hover:bg-[var(--surface-cta)] text-center flex items-center justify-center gap-2 active:scale-95"
+                    className="flex flex-1 items-center justify-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] py-4 text-center font-bold text-[var(--foreground)] transition-all hover:bg-[var(--surface-cta)] active:scale-95"
                 >
                     Support
                     <ArrowRight size={20} />

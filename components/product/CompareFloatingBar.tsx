@@ -20,17 +20,17 @@ export function CompareFloatingBar() {
                 animate={prefersReducedMotion ? { opacity: 1 } : { y: 0, opacity: 1 }}
                 exit={prefersReducedMotion ? { opacity: 0 } : { y: 100, opacity: 0 }}
                 transition={{ duration: MOTION.duration.base, ease: MOTION.ease.standard }}
-                className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-2xl"
+                className="fixed bottom-6 left-1/2 z-50 w-[95%] max-w-2xl -translate-x-1/2"
             >
-                <div className="flex items-center justify-between gap-4 rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card-strong)] p-4 shadow-2xl backdrop-blur-xl">
-                    <div className="flex items-center gap-4 flex-1 overflow-hidden">
-                        <div className="hidden sm:flex p-2 bg-primary/20 text-primary rounded-lg shrink-0">
+                <div className="flex items-center justify-between gap-4 rounded-[1.75rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card-strong),var(--surface-card))] p-4 shadow-2xl backdrop-blur-xl">
+                    <div className="flex flex-1 items-center gap-4 overflow-hidden">
+                        <div className="hidden shrink-0 rounded-xl bg-primary/20 p-2 text-primary sm:flex">
                             <Scale size={20} />
                         </div>
                         <div className="flex gap-2 overflow-x-auto no-scrollbar py-1">
                             {compareItems.map((item) => (
                                 <div key={item.id} className="relative group shrink-0">
-                                    <div className="relative h-12 w-12 overflow-hidden rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-card)]">
+                                    <div className="relative h-12 w-12 overflow-hidden rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)]">
                                         <Image src={item.image} alt={item.name} fill className="object-cover" />
                                     </div>
                                     <button
@@ -42,18 +42,18 @@ export function CompareFloatingBar() {
                                 </div>
                             ))}
                             {Array.from({ length: Math.max(0, 2 - compareItems.length) }).map((_, i) => (
-                                <div key={i} className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border-2 border-dashed border-[var(--border-subtle)]">
+                                <div key={i} className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border-2 border-dashed border-[var(--border-subtle)]">
                                     <span className="text-[10px] text-secondary">Add</span>
                                 </div>
                             ))}
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-3 shrink-0">
+                    <div className="flex shrink-0 items-center gap-3">
                         {compareItems.length >= 1 && (
                             <Link
                                 href="/compare"
-                                className="bg-primary text-[var(--primary-contrast)] hover:bg-[var(--primary-hover)] text-base px-6 py-2.5 rounded-xl font-bold flex items-center gap-2 transition-all shadow-glow whitespace-nowrap"
+                                className="flex items-center gap-2 whitespace-nowrap rounded-full bg-primary px-6 py-2.5 text-base font-bold text-[var(--primary-contrast)] shadow-glow transition-all hover:bg-[var(--primary-hover)]"
                             >
                                 Compare {compareItems.length}
                                 <ArrowRight size={18} />
@@ -61,7 +61,7 @@ export function CompareFloatingBar() {
                         )}
                         <button
                             onClick={clearCompare}
-                            className="p-2 text-secondary hover:text-[var(--foreground)]"
+                            className="rounded-full border border-transparent p-2 text-secondary transition-colors hover:border-[var(--border-subtle)] hover:text-[var(--foreground)]"
                             title="Clear all"
                         >
                             <X size={20} />

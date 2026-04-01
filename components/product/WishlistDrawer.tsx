@@ -81,7 +81,7 @@ export function WishlistDrawer({ isOpen, onClose, wishlistItems, onRemove, onCle
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={prefersReducedMotion ? { duration: 0 } : { type: "spring", bounce: 0, duration: MOTION.duration.slow }}
-            className="fixed right-0 top-0 bottom-0 z-50 flex w-full max-w-md flex-col border-l border-border-subtle bg-[var(--panel-bg)] p-6 shadow-2xl"
+            className="fixed right-0 top-0 bottom-0 z-50 flex w-full max-w-md flex-col border-l border-border-subtle bg-[linear-gradient(180deg,var(--panel-bg),var(--surface-card))] p-6 shadow-2xl backdrop-blur-2xl"
             role="dialog"
             aria-modal="true"
             aria-labelledby="wishlist-title"
@@ -89,7 +89,7 @@ export function WishlistDrawer({ isOpen, onClose, wishlistItems, onRemove, onCle
             tabIndex={-1}
             ref={dialogRef}
           >
-            <div className="mb-8 flex items-center justify-between">
+            <div className="mb-8 flex items-center justify-between border-b border-[var(--border-subtle)] pb-5">
               <h2 id="wishlist-title" className="flex items-center gap-2 text-2xl font-bold text-[var(--foreground)]">
                 <Heart /> Wishlist
               </h2>
@@ -104,7 +104,7 @@ export function WishlistDrawer({ isOpen, onClose, wishlistItems, onRemove, onCle
 
             {wishlistItems.length === 0 ? (
               <div className="flex flex-1 flex-col items-center justify-center text-center">
-                <div className="mb-4 flex h-24 w-24 items-center justify-center rounded-full bg-[var(--surface-card)] text-secondary">
+                <div className="mb-4 flex h-24 w-24 items-center justify-center rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] text-secondary shadow-[0_18px_50px_rgba(8,18,38,0.1)]">
                   <Heart size={48} />
                 </div>
                 <p className="text-secondary text-lg">No saved gadgets yet.</p>
@@ -115,7 +115,7 @@ export function WishlistDrawer({ isOpen, onClose, wishlistItems, onRemove, onCle
             ) : (
               <div className="flex-1 space-y-4 overflow-y-auto pr-2">
                 {wishlistItems.map((item) => (
-                  <div key={item.id} className="flex items-center gap-4 rounded-standard border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
+                  <div key={item.id} className="flex items-center gap-4 rounded-[1.5rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card-strong),var(--surface-card))] p-4 shadow-[0_16px_34px_rgba(8,18,38,0.08)]">
                     <div className="relative h-14 w-14 overflow-hidden rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-cta)]">
                       {item.image && <Image src={item.image} alt={item.name} fill className="object-cover" />}
                     </div>
@@ -127,10 +127,10 @@ export function WishlistDrawer({ isOpen, onClose, wishlistItems, onRemove, onCle
                     </div>
                     <button
                       onClick={() => addToCart(item)}
-                      className="rounded-full border border-[var(--border-subtle)] p-2 text-secondary transition-colors hover:border-primary/40 hover:text-primary"
+                      className="rounded-full border border-[var(--border-subtle)] px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-secondary transition-colors hover:border-primary/40 hover:text-primary"
                       aria-label={`Add ${item.name} to cart`}
                     >
-                      +
+                      Add
                     </button>
                     <button
                       onClick={() => onRemove(item.id)}
@@ -149,14 +149,14 @@ export function WishlistDrawer({ isOpen, onClose, wishlistItems, onRemove, onCle
                 <div className="flex gap-3">
                   <button
                     onClick={onClear}
-                    className="flex-1 rounded-standard border border-[var(--border-subtle)] bg-[var(--surface-card)] py-3 text-sm font-semibold text-secondary transition-colors hover:text-[var(--foreground)]"
+                    className="flex-1 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] py-3 text-sm font-semibold text-secondary transition-colors hover:text-[var(--foreground)]"
                   >
                     Clear wishlist
                   </button>
                   <Link
                     href="/wishlist"
                     onClick={onClose}
-                    className="flex-1 bg-primary text-[var(--primary-contrast)] text-base py-3 rounded-standard font-bold hover:bg-[var(--primary-hover)] transition-colors shadow-glow active:scale-95 text-center"
+                    className="flex-1 rounded-full bg-primary py-3 text-center text-base font-bold text-[var(--primary-contrast)] shadow-glow transition-colors hover:bg-[var(--primary-hover)] active:scale-95"
                   >
                     View wishlist
                   </Link>

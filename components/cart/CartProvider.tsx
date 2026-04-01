@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
@@ -44,26 +43,24 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     const [mounted, setMounted] = useState(false);
     const { pushToast } = useToast();
 
-    // Load from local storage
     useEffect(() => {
         try {
             const stored = localStorage.getItem("fisco_cart_v1");
             if (stored) {
                 const parsed = JSON.parse(stored);
                 const normalized = Array.isArray(parsed) ? normalizeStoredCart(parsed) : [];
-                queueMicrotask(() => setCartItems(normalized));
+                setCartItems(normalized);
             }
         } catch (e) {
             console.error("Failed to load cart", e);
+        } finally {
+            setMounted(true);
         }
-        setMounted(true);
     }, []);
 
-    // Sync to local storage
     useEffect(() => {
-        if (mounted) {
-            localStorage.setItem("fisco_cart_v1", JSON.stringify(cartItems));
-        }
+        if (!mounted) return;
+        localStorage.setItem("fisco_cart_v1", JSON.stringify(cartItems));
     }, [cartItems, mounted]);
 
     const addToCart = (product: Product, quantity = 1) => {

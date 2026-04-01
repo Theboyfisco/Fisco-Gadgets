@@ -18,8 +18,9 @@ type RecentlyViewedProduct = {
 
 const STORAGE_KEY = "fisco_recently_viewed_v1";
 const UPDATED_EVENT = "fisco-recently-viewed-updated";
+const EMPTY_ITEMS: RecentlyViewedProduct[] = [];
 let cachedRaw = "";
-let cachedItems: RecentlyViewedProduct[] = [];
+let cachedItems: RecentlyViewedProduct[] = EMPTY_ITEMS;
 const listeners = new Set<() => void>();
 
 function emit() {
@@ -31,7 +32,7 @@ function refreshFromStorage() {
     const stored = localStorage.getItem(STORAGE_KEY) ?? "";
     if (stored === cachedRaw) return;
     cachedRaw = stored;
-    cachedItems = stored ? (JSON.parse(stored) as RecentlyViewedProduct[]) : [];
+    cachedItems = stored ? (JSON.parse(stored) as RecentlyViewedProduct[]) : EMPTY_ITEMS;
     emit();
   } catch {
     // Ignore storage errors; keep last cached value.
@@ -42,6 +43,10 @@ function getSnapshot() {
   return cachedItems;
 }
 
+function getServerSnapshot() {
+  return EMPTY_ITEMS;
+}
+
 function subscribe(callback: () => void) {
   listeners.add(callback);
   return () => {
@@ -50,7 +55,7 @@ function subscribe(callback: () => void) {
 }
 
 export function RecentlyViewedRail() {
-  const items = useSyncExternalStore(subscribe, getSnapshot, () => []);
+  const items = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
   useEffect(() => {
     refreshFromStorage();
@@ -86,8 +91,7 @@ export function RecentlyViewedRail() {
         <motion.div
           className="flex w-max gap-4"
           initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, amount: 0.2 }}
+          animate="show"
           variants={{
             hidden: {},
             show: { transition: { staggerChildren: 0.08 } },

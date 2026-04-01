@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { startTransition, useDeferredValue, useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search as SearchIcon, X, Smartphone, Laptop, Headphones, ArrowRight, Gamepad } from "lucide-react";
 import { searchProducts } from "@/actions/product";
@@ -11,6 +11,7 @@ import { MOTION } from "@/lib/motion";
 import { WishlistButton } from "@/components/product/WishlistButton";
 import { useBodyScrollLock } from "@/lib/useBodyScrollLock";
 import { QuickViewModal } from "@/components/product/QuickViewModal";
+import { getPrimaryImage, normalizeTechnicalSpecs } from "@/lib/normalize-product";
 
 export function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const [query, setQuery] = useState("");
@@ -21,34 +22,45 @@ export function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; onClose: (
   const dialogRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const lastActiveRef = useRef<HTMLElement | null>(null);
+  const deferredQuery = useDeferredValue(query);
 
   useBodyScrollLock(isOpen);
 
   useEffect(() => {
+    if (!isOpen) return;
+
+    let cancelled = false;
+
     const performSearch = async () => {
       try {
-        const dbResults = await searchProducts(query);
+        const dbResults = await searchProducts(deferredQuery);
         const mapped = dbResults.map((product: any) => ({
           id: product.id,
           name: product.name,
           price: product.price,
-          image: product.images[0],
+          image: getPrimaryImage(product.images),
           categoryId: product.categoryId,
-          technicalSpecs: product.technicalSpecs as any,
+          technicalSpecs: normalizeTechnicalSpecs(product.technicalSpecs),
         }));
-        setResults(mapped);
-        setActiveIndex(0);
+        if (cancelled) return;
+        startTransition(() => {
+          setResults(mapped);
+          setActiveIndex(0);
+        });
       } catch (error) {
         console.error("Search failed:", error);
       }
     };
 
     const timer = setTimeout(() => {
-      if (isOpen) performSearch();
+      performSearch();
     }, 300);
 
-    return () => clearTimeout(timer);
-  }, [query, isOpen]);
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [deferredQuery, isOpen]);
 
   useEffect(() => {
     if (quickViewProduct) return;
@@ -111,6 +123,11 @@ export function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; onClose: (
     return () => document.removeEventListener("keydown", handleTabTrap);
   }, [isOpen, quickViewProduct]);
 
+  const goToProduct = (productId: string) => {
+    router.push(`/product/${productId}`);
+    onClose();
+  };
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -165,44 +182,71 @@ export function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; onClose: (
                   <p className="text-muted mb-4 px-2 text-xs font-bold uppercase tracking-widest">
                     {query ? `Found ${results.length} results` : "Trending Now"}
                   </p>
-                  <div className="grid grid-cols-1 gap-2" role="listbox" aria-label="Search results">
+                  <div
+                    className="grid grid-cols-1 gap-2"
+                    role="listbox"
+                    aria-label="Search results"
+                    aria-activedescendant={results[activeIndex] ? `search-result-${activeIndex}` : undefined}
+                  >
                     {results.map((product, index) => {
                       const active = index === activeIndex;
                       return (
-                      <Link
+                      <div
                         key={product.id}
-                        href={`/product/${product.id}`}
-                        onClick={onClose}
                         onMouseEnter={() => setActiveIndex(index)}
-                        className={`interactive-focus group flex items-center gap-4 rounded-xl border p-3 transition-colors ${
-                          active ? "border-primary/40 bg-primary/10" : "border-transparent hover:border-[var(--interactive-border-strong)] hover:bg-[var(--surface-card)]"
+                        className={`group rounded-[1.35rem] border p-3 transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] ${
+                          active
+                            ? "border-primary/40 bg-[linear-gradient(180deg,var(--surface-card-strong),var(--surface-card))] shadow-[0_16px_34px_rgba(8,18,38,0.1)]"
+                            : "border-transparent hover:border-[var(--interactive-border-strong)] hover:bg-[var(--surface-card)]"
                         }`}
-                        role="option"
-                        aria-selected={active}
                       >
-                        <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-[var(--surface-card)]">
-                          <Image src={product.image} alt={product.name} fill className="object-cover" />
-                        </div>
-                        <div className="flex-1">
-                          <h4 className="font-semibold text-[var(--foreground)] transition-colors group-hover:text-primary">{product.name}</h4>
-                          <p className="text-muted text-xs capitalize">
-                            {product.categoryId} • ₦{product.price.toLocaleString()}
-                          </p>
-                        </div>
-                        <button
-                          onClick={(event) => {
-                            event.preventDefault();
-                            event.stopPropagation();
-                            setQuickViewProduct(product);
+                        <div
+                          id={`search-result-${index}`}
+                          className="interactive-focus flex cursor-pointer items-center gap-4 rounded-[1rem]"
+                          onClick={() => goToProduct(product.id)}
+                          role="option"
+                          aria-selected={active}
+                          tabIndex={0}
+                          onKeyDown={(event) => {
+                            if (event.key === "Enter" || event.key === " ") {
+                              event.preventDefault();
+                              goToProduct(product.id);
+                            }
                           }}
-                          className="rounded-full border border-[var(--border-subtle)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-secondary transition-colors hover:border-primary/40 hover:text-primary"
-                          aria-label={`Quick view ${product.name}`}
                         >
-                          Quick
-                        </button>
-                        <WishlistButton product={product} />
-                        <ArrowRight className="-translate-x-2 text-secondary opacity-0 transition-all group-hover:translate-x-0 group-hover:opacity-100" size={18} />
-                      </Link>
+                          <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-[1rem] bg-[var(--surface-card)]">
+                            <Image src={product.image} alt={product.name} fill className="object-cover transition-transform duration-[var(--motion-slow)] ease-[var(--ease-standard)] group-hover:scale-105" />
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <div className="flex items-start justify-between gap-3">
+                              <div className="min-w-0">
+                                <h4 className="truncate font-semibold text-[var(--foreground)] transition-colors group-hover:text-primary">{product.name}</h4>
+                                <p className="text-muted mt-1 text-xs capitalize">
+                                  {product.categoryId} • ₦{product.price.toLocaleString()}
+                                </p>
+                              </div>
+                              <ArrowRight className="-translate-x-1 text-secondary opacity-0 transition-all group-hover:translate-x-0 group-hover:opacity-100" size={18} />
+                            </div>
+                          </div>
+                        </div>
+                        <div className="mt-3 flex items-center justify-end gap-2">
+                          <button
+                            onClick={() => setQuickViewProduct(product)}
+                            className="rounded-full border border-[var(--border-subtle)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-secondary transition-colors hover:border-primary/40 hover:text-primary"
+                            aria-label={`Quick view ${product.name}`}
+                          >
+                            Quick
+                          </button>
+                          <Link
+                            href={`/product/${product.id}`}
+                            onClick={onClose}
+                            className="rounded-full border border-[var(--border-subtle)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-secondary transition-colors hover:border-primary/40 hover:text-primary"
+                          >
+                            Open
+                          </Link>
+                          <WishlistButton product={product} />
+                        </div>
+                      </div>
                       );
                     })}
                   </div>

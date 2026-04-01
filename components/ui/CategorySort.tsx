@@ -20,8 +20,8 @@ export function CategorySort() {
   };
 
   return (
-    <div className="flex items-center gap-2">
-      <label htmlFor="category-sort" className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--text-soft)]">
+    <div className="flex items-center gap-3 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-soft)] px-3 py-1.5">
+      <label htmlFor="category-sort" className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--text-soft)]">
         Sort
       </label>
       <select

@@ -17,25 +17,28 @@ interface WishlistContextType {
 
 const WishlistContext = createContext<WishlistContextType | undefined>(undefined);
 
-function readInitialWishlist(): Product[] {
-  if (typeof window === "undefined") return [];
-  try {
-    const stored = localStorage.getItem("fisco_wishlist_v1");
-    return stored ? (JSON.parse(stored) as Product[]) : [];
-  } catch (error) {
-    console.error("Failed to load wishlist", error);
-    return [];
-  }
-}
-
 export function WishlistProvider({ children }: { children: React.ReactNode }) {
-  const [wishlistItems, setWishlistItems] = useState<Product[]>(readInitialWishlist);
+  const [wishlistItems, setWishlistItems] = useState<Product[]>([]);
   const [isWishlistOpen, setIsWishlistOpen] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    try {
+      const stored = localStorage.getItem("fisco_wishlist_v1");
+      if (stored) {
+        setWishlistItems(JSON.parse(stored) as Product[]);
+      }
+    } catch (error) {
+      console.error("Failed to load wishlist", error);
+    } finally {
+      setHydrated(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!hydrated) return;
     localStorage.setItem("fisco_wishlist_v1", JSON.stringify(wishlistItems));
-  }, [wishlistItems]);
+  }, [wishlistItems, hydrated]);
 
   const addToWishlist = (product: Product) => {
     setWishlistItems((prev) => {

@@ -45,7 +45,11 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
   return (
     <ToastContext.Provider value={value}>
       {children}
-      <div className="pointer-events-none fixed inset-x-4 bottom-6 z-[120] flex flex-col items-center gap-3 sm:inset-auto sm:right-6 sm:bottom-6 sm:items-end" aria-live="polite">
+      <div
+        className="pointer-events-none fixed inset-x-4 bottom-6 z-[120] flex flex-col items-center gap-3 sm:inset-auto sm:right-6 sm:bottom-6 sm:items-end"
+        aria-live="polite"
+        aria-atomic="true"
+      >
         <AnimatePresence>
           {toasts.map((toast) => {
             const Icon = iconForVariant(toast.variant);
@@ -57,6 +61,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
                 exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: -8, scale: 0.98 }}
                 transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
                 className="pointer-events-auto w-full max-w-sm rounded-2xl border border-[var(--border-subtle)] bg-[var(--panel-bg-soft)] px-4 py-3 shadow-xl backdrop-blur-xl"
+                role="status"
               >
                 <div className="flex items-start gap-3">
                   <span className="mt-0.5 rounded-full bg-primary/15 p-2 text-primary">

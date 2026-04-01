@@ -82,7 +82,7 @@ export function CartDrawer({ isOpen, onClose, cartItems, onRemove, onClear, onIn
                         animate={{ x: 0 }}
                         exit={{ x: '100%' }}
                         transition={prefersReducedMotion ? { duration: 0 } : { type: "spring", bounce: 0, duration: MOTION.duration.slow }}
-            className="fixed right-0 top-0 bottom-0 z-50 flex w-full max-w-md flex-col border-l border-border-subtle bg-[var(--panel-bg)] p-6 shadow-2xl"
+            className="fixed right-0 top-0 bottom-0 z-50 flex w-full max-w-md flex-col border-l border-border-subtle bg-[linear-gradient(180deg,var(--panel-bg),var(--surface-card))] p-6 shadow-2xl backdrop-blur-2xl"
             role="dialog"
             aria-modal="true"
             aria-labelledby="cart-title"
@@ -90,7 +90,7 @@ export function CartDrawer({ isOpen, onClose, cartItems, onRemove, onClear, onIn
             tabIndex={-1}
             ref={dialogRef}
           >
-                        <div className="mb-8 flex items-center justify-between">
+                        <div className="mb-8 flex items-center justify-between border-b border-[var(--border-subtle)] pb-5">
                             <h2 id="cart-title" className="flex items-center gap-2 text-2xl font-bold text-[var(--foreground)]">
                                 <ShoppingBag /> Your Cart
                             </h2>
@@ -106,7 +106,7 @@ export function CartDrawer({ isOpen, onClose, cartItems, onRemove, onClear, onIn
                         {/* Cart Items list */}
                         {cartItems.length === 0 ? (
                             <div className="flex flex-1 flex-col items-center justify-center text-center">
-                                <div className="mb-4 flex h-24 w-24 items-center justify-center rounded-full bg-[var(--surface-card)] text-secondary">
+                                <div className="mb-4 flex h-24 w-24 items-center justify-center rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] text-secondary shadow-[0_18px_50px_rgba(8,18,38,0.1)]">
                                     <ShoppingBag size={48} />
                                 </div>
                                 <p className="text-secondary text-lg">Your gadget stash is empty.</p>
@@ -117,7 +117,7 @@ export function CartDrawer({ isOpen, onClose, cartItems, onRemove, onClear, onIn
                         ) : (
                             <div className="flex-1 overflow-y-auto space-y-4 pr-2">
                                 {cartItems.map((item) => (
-                                    <div key={item.product.id} className="flex items-center gap-4 rounded-standard border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
+                                    <div key={item.product.id} className="flex items-center gap-4 rounded-[1.5rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card-strong),var(--surface-card))] p-4 shadow-[0_16px_34px_rgba(8,18,38,0.08)]">
                                         <div className="relative h-14 w-14 overflow-hidden rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-cta)]">
                                             {item.product.image && <Image src={item.product.image} alt={item.product.name} fill className="object-cover" />}
                                         </div>
@@ -164,21 +164,27 @@ export function CartDrawer({ isOpen, onClose, cartItems, onRemove, onClear, onIn
 
                         {cartItems.length > 0 && (
                             <div className="mt-auto space-y-4 border-t border-border-subtle pt-6">
-                                <div className="flex justify-between text-lg font-bold text-[var(--foreground)]">
-                                    <span>Total</span>
-                                    <span>{new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN" }).format(total)}</span>
+                                <div className="rounded-[1.5rem] border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-4">
+                                    <div className="flex justify-between text-sm text-secondary">
+                                        <span>Items</span>
+                                        <span>{cartItems.reduce((acc, item) => acc + item.quantity, 0)}</span>
+                                    </div>
+                                    <div className="mt-2 flex justify-between text-lg font-bold text-[var(--foreground)]">
+                                        <span>Total</span>
+                                        <span>{new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN" }).format(total)}</span>
+                                    </div>
                                 </div>
                                 <div className="flex gap-3">
                                     <button
                                         onClick={onClear}
-                                        className="flex-1 rounded-standard border border-[var(--border-subtle)] bg-[var(--surface-card)] py-3 text-sm font-semibold text-secondary transition-colors hover:text-[var(--foreground)]"
+                                        className="flex-1 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] py-3 text-sm font-semibold text-secondary transition-colors hover:text-[var(--foreground)]"
                                     >
                                         Clear cart
                                     </button>
                                     <Link
                                         href="/checkout"
                                         onClick={onClose}
-                                        className="flex-1 bg-primary text-[var(--primary-contrast)] text-base py-3 rounded-standard font-bold hover:bg-[var(--primary-hover)] transition-colors shadow-glow active:scale-95 text-center flex items-center justify-center"
+                                        className="flex flex-1 items-center justify-center rounded-full bg-primary py-3 text-center text-base font-bold text-[var(--primary-contrast)] shadow-glow transition-colors hover:bg-[var(--primary-hover)] active:scale-95"
                                     >
                                         Secure Checkout
                                     </Link>

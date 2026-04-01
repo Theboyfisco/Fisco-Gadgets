@@ -1,28 +1,50 @@
 "use client";
 
 import { Moon, SunMedium } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 
 const THEME_KEY = "fisco-theme";
+const THEME_CHANGED_EVENT = "fisco-theme-changed";
 
 type Theme = "dark" | "light";
 
-function getInitialTheme(): Theme {
-  if (typeof window === "undefined") {
-    return "dark";
+function getServerSnapshot(): Theme {
+  return "dark";
+}
+
+function getThemeSnapshot(): Theme {
+  if (typeof window === "undefined") return "dark";
+
+  const appliedTheme = document.documentElement.getAttribute("data-theme");
+  if (appliedTheme === "light" || appliedTheme === "dark") {
+    return appliedTheme;
   }
 
   const savedTheme = window.localStorage.getItem(THEME_KEY);
-  return savedTheme === "light" ? "light" : "dark";
+  if (savedTheme === "light") return "light";
+  if (savedTheme === "dark") return "dark";
+
+  return window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+}
+
+function subscribe(callback: () => void) {
+  const handleChange = () => callback();
+  window.addEventListener("storage", handleChange);
+  window.addEventListener(THEME_CHANGED_EVENT, handleChange);
+  return () => {
+    window.removeEventListener("storage", handleChange);
+    window.removeEventListener(THEME_CHANGED_EVENT, handleChange);
+  };
+}
+
+function setTheme(nextTheme: Theme) {
+  document.documentElement.setAttribute("data-theme", nextTheme);
+  window.localStorage.setItem(THEME_KEY, nextTheme);
+  window.dispatchEvent(new Event(THEME_CHANGED_EVENT));
 }
 
 export function ThemeSwitcher() {
-  const [theme, setTheme] = useState<Theme>(getInitialTheme);
-
-  useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
-    window.localStorage.setItem(THEME_KEY, theme);
-  }, [theme]);
+  const theme = useSyncExternalStore(subscribe, getThemeSnapshot, getServerSnapshot);
 
   return (
     <button

@@ -63,6 +63,9 @@ export function LatestProductsCarousel({ products }: LatestProductsCarouselProps
       onMouseLeave={() => setIsPaused(false)}
       onFocusCapture={() => setIsPaused(true)}
       onBlurCapture={() => setIsPaused(false)}
+      role="region"
+      aria-roledescription="carousel"
+      aria-label="Featured products"
     >
       <div className="pointer-events-none absolute -left-14 -top-16 h-44 w-44 rounded-full bg-[var(--carousel-glow-1)] blur-3xl" />
       <div className="pointer-events-none absolute -bottom-16 -right-10 h-48 w-48 rounded-full bg-[var(--carousel-glow-2)] blur-3xl" />
@@ -97,6 +100,7 @@ export function LatestProductsCarousel({ products }: LatestProductsCarouselProps
             <button
               type="button"
               onClick={goPrev}
+              disabled={count <= 1}
               aria-label="Previous product"
               className="flex h-9 w-9 items-center justify-center rounded-full border border-[var(--carousel-control-border)] bg-[var(--carousel-control-bg)] text-[var(--foreground)] backdrop-blur-md transition duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:border-primary/50 hover:text-primary"
             >
@@ -105,6 +109,7 @@ export function LatestProductsCarousel({ products }: LatestProductsCarouselProps
             <button
               type="button"
               onClick={goNext}
+              disabled={count <= 1}
               aria-label="Next product"
               className="flex h-9 w-9 items-center justify-center rounded-full border border-[var(--carousel-control-border)] bg-[var(--carousel-control-bg)] text-[var(--foreground)] backdrop-blur-md transition duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:border-primary/50 hover:text-primary"
             >
@@ -147,6 +152,7 @@ export function LatestProductsCarousel({ products }: LatestProductsCarouselProps
                       type="button"
                       onClick={() => setActiveIndex(index)}
                       aria-label={`Show ${item.name}`}
+                      aria-current={isActive ? "true" : "false"}
                       whileTap={{ scale: 0.9 }}
                       className={`h-2.5 rounded-full transition-all ${isActive ? "w-7 bg-[var(--carousel-dot-active)]" : "w-2.5 bg-[var(--carousel-dot)] hover:bg-[var(--carousel-dot-active)]/70"}`}
                     />

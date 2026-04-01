@@ -10,6 +10,8 @@ interface FooterProps {
   categories?: { id: string; name: string }[];
 }
 
+const COPYRIGHT_YEAR = 2026;
+
 export function Footer({ categories = [] }: FooterProps) {
   const [subscribed, setSubscribed] = useState(false);
   const [email, setEmail] = useState("");
@@ -26,7 +28,7 @@ export function Footer({ categories = [] }: FooterProps) {
   return (
     <footer className="mt-auto w-full border-t border-[var(--border-subtle)] bg-[var(--footer-bg)] pt-14">
       <div className="container mx-auto px-4">
-        <div className="mb-12 rounded-2xl border border-[var(--border-subtle)] bg-[var(--footer-panel)] p-6 md:p-8">
+        <div className="mb-12 rounded-[2rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--footer-panel),var(--surface-soft))] p-6 shadow-[0_24px_80px_rgba(8,18,38,0.12)] backdrop-blur-xl md:p-8">
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
             <div className="lg:col-span-2">
               <BrandLogo className="mb-4" />
@@ -35,9 +37,9 @@ export function Footer({ categories = [] }: FooterProps) {
               </p>
 
               <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
-                <div className="text-muted rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-soft)] px-3 py-2 text-xs">100% Authentic Devices</div>
-                <div className="text-muted rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-soft)] px-3 py-2 text-xs">Fast Nationwide Shipping</div>
-                <div className="text-muted rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-soft)] px-3 py-2 text-xs">Secure Checkout</div>
+                <div className="text-muted rounded-[1rem] border border-[var(--border-subtle)] bg-[var(--surface-soft)] px-3 py-2 text-xs">100% Authentic Devices</div>
+                <div className="text-muted rounded-[1rem] border border-[var(--border-subtle)] bg-[var(--surface-soft)] px-3 py-2 text-xs">Fast Nationwide Shipping</div>
+                <div className="text-muted rounded-[1rem] border border-[var(--border-subtle)] bg-[var(--surface-soft)] px-3 py-2 text-xs">Secure Checkout</div>
               </div>
             </div>
 
@@ -87,19 +89,24 @@ export function Footer({ categories = [] }: FooterProps) {
                     Warranty Information
                   </Link>
                 </li>
+                <li>
+                  <Link href="/admin/products" className="interactive-focus text-muted link-accent text-sm transition-colors">
+                    Admin Console
+                  </Link>
+                </li>
               </ul>
             </div>
           </div>
         </div>
 
         <div className="mb-10 grid grid-cols-1 gap-8 lg:grid-cols-3">
-          <div className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-5">
+          <div className="rounded-[1.75rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-soft),var(--surface-card))] p-5 shadow-[0_18px_44px_rgba(8,18,38,0.08)]">
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-[0.14em] text-[var(--foreground)]">Join Updates</h3>
             {subscribed ? (
               <motion.div
                 initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="flex items-center gap-2 rounded-md border border-primary/20 bg-primary/10 px-3 py-2 text-sm font-medium text-primary"
+                className="flex items-center gap-2 rounded-xl border border-primary/20 bg-primary/10 px-3 py-2 text-sm font-medium text-primary"
               >
                 <CheckCircle2 size={16} />
                 You&apos;re on the list.
@@ -112,11 +119,11 @@ export function Footer({ categories = [] }: FooterProps) {
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
                   placeholder="you@example.com"
-                  className="interactive-focus w-full rounded-md border border-[var(--border-subtle)] bg-[var(--surface-cta)] px-3 py-2 text-sm text-[var(--foreground)] outline-none transition-colors placeholder:text-[var(--text-soft)] focus:border-[var(--interactive-border-strong)]"
+                  className="interactive-focus w-full rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-cta)] px-3 py-2 text-sm text-[var(--foreground)] outline-none transition-colors placeholder:text-[var(--text-soft)] focus:border-[var(--interactive-border-strong)]"
                 />
                 <button
                   type="submit"
-                  className="interactive-focus primary-action rounded-md px-4 py-2 text-sm font-semibold transition-colors"
+                  className="interactive-focus primary-action rounded-full px-4 py-2 text-sm font-semibold transition-colors"
                 >
                   Join
                 </button>
@@ -124,7 +131,7 @@ export function Footer({ categories = [] }: FooterProps) {
             )}
           </div>
 
-          <div className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-5">
+          <div className="rounded-[1.75rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-soft),var(--surface-card))] p-5 shadow-[0_18px_44px_rgba(8,18,38,0.08)]">
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-[0.14em] text-[var(--foreground)]">Contact</h3>
             <ul className="space-y-3">
               <li className="text-muted flex items-start gap-2 text-sm">
@@ -142,7 +149,7 @@ export function Footer({ categories = [] }: FooterProps) {
             </ul>
           </div>
 
-          <div className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-5">
+          <div className="rounded-[1.75rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-soft),var(--surface-card))] p-5 shadow-[0_18px_44px_rgba(8,18,38,0.08)]">
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-[0.14em] text-[var(--foreground)]">Social</h3>
             <div className="flex gap-3">
               <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="interactive-focus rounded-full border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-2 text-secondary transition-all hover:border-[var(--interactive-border-strong)] hover:bg-[var(--interactive-hover)] hover:text-primary">
@@ -159,7 +166,7 @@ export function Footer({ categories = [] }: FooterProps) {
         </div>
 
         <div className="text-muted flex flex-col items-center justify-between gap-4 border-t border-[var(--border-subtle)] py-6 text-sm md:flex-row">
-          <p>© {new Date().getFullYear()} Fisco Gadgets. All rights reserved.</p>
+          <p>© {COPYRIGHT_YEAR} Fisco Gadgets. All rights reserved.</p>
           <div className="flex gap-5">
             <Link href="/privacy" className="interactive-focus transition-colors hover:text-[var(--foreground)]">
               Privacy Policy

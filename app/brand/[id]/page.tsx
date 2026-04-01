@@ -1,8 +1,10 @@
 import prisma from "@/lib/db";
-import { BentoProductCard } from "@/components/product/BentoProductCard";
 import { Reveal } from "@/components/ui/Reveal";
-import Link from "next/link";
+import { ProductGridMotion } from "@/components/ui/ProductGridMotion";
 import Image from "next/image";
+import { fallbackFeaturedProducts } from "@/lib/fallback-data";
+import { getPrimaryImage, normalizeTechnicalSpecs } from "@/lib/normalize-product";
+import { shouldUseDatabase } from "@/lib/should-use-database";
 
 function brandTone(brandId: string) {
   if (brandId.toLowerCase() === "apple") return "from-[var(--tone-apple)]";
@@ -14,26 +16,35 @@ export default async function BrandPage({ params }: { params: Promise<{ id: stri
   const resolvedParams = await params;
   const brandId = resolvedParams.id;
 
-  const dbProducts = await prisma.product.findMany({
-    where: {
-      OR: [
-        { name: { contains: brandId, mode: "insensitive" } },
-        { description: { contains: brandId, mode: "insensitive" } },
-      ],
-    },
-    include: { category: true },
-    orderBy: { createdAt: "desc" },
-  });
+  const dbProducts = shouldUseDatabase()
+    ? await prisma.product
+        .findMany({
+          where: {
+            OR: [
+              { name: { contains: brandId, mode: "insensitive" } },
+              { description: { contains: brandId, mode: "insensitive" } },
+            ],
+          },
+          include: { category: true },
+          orderBy: { createdAt: "desc" },
+        })
+        .catch(() => [])
+    : [];
 
-  const products = dbProducts.map((product: any) => ({
-    id: product.id,
-    name: product.name,
-    price: product.price,
-    image: product.images[0],
-    categoryId: product.categoryId,
-    brandId,
-    technicalSpecs: product.technicalSpecs as any,
-  }));
+  const products =
+    dbProducts.length > 0
+      ? dbProducts.map((product: any) => ({
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          image: getPrimaryImage(product.images),
+          categoryId: product.categoryId,
+          brandId,
+          technicalSpecs: normalizeTechnicalSpecs(product.technicalSpecs),
+        }))
+      : fallbackFeaturedProducts
+          .filter((product) => product.name.toLowerCase().includes(brandId.toLowerCase()))
+          .map((product) => ({ ...product, brandId }));
 
   const brandName = brandId.charAt(0).toUpperCase() + brandId.slice(1);
   const heroImage = products[0]?.image || "https://images.unsplash.com/photo-1546054454-aa26e2b734c7?q=80&w=1400&auto=format&fit=crop";
@@ -57,18 +68,12 @@ export default async function BrandPage({ params }: { params: Promise<{ id: stri
       </Reveal>
 
       {products.length === 0 ? (
-        <div className="rounded-standard border border-border-subtle bg-[var(--surface-card)] p-12 text-center">
+        <div className="rounded-[1.75rem] border border-border-subtle bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] p-12 text-center shadow-[0_18px_50px_rgba(8,18,38,0.08)]">
           <p className="text-lg text-secondary">No products found for this brand.</p>
         </div>
       ) : (
         <Reveal>
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {products.map((product: any) => (
-              <Link href={`/product/${product.id}`} key={product.id}>
-                <BentoProductCard product={product} />
-              </Link>
-            ))}
-          </div>
+          <ProductGridMotion products={products} />
         </Reveal>
       )}
     </div>

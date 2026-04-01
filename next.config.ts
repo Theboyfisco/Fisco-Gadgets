@@ -4,6 +4,14 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: process.cwd(),
   },
+  experimental: {
+    optimizePackageImports: ["lucide-react"],
+  },
+  typescript: {
+    // `tsc --noEmit` runs in the build script so builds stay type-safe
+    // without relying on Next's worker process on this Windows setup.
+    ignoreBuildErrors: true,
+  },
   images: {
     unoptimized: true,
     qualities: [75, 85, 90, 92, 95],
