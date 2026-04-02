@@ -10,8 +10,11 @@ import { MOTION } from "@/lib/motion";
 export interface LatestProduct {
   id: string;
   name: string;
+  slug?: string;
   price: number;
   image: string;
+  stock?: number;
+  brandId?: string;
 }
 
 interface LatestProductsCarouselProps {
@@ -138,7 +141,7 @@ export function LatestProductsCarousel({ products }: LatestProductsCarouselProps
 
             <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-[var(--carousel-control-border)] bg-[var(--carousel-control-bg)] p-3 backdrop-blur-md">
               <Link
-                href={`/product/${activeProduct.id}`}
+                href={`/product/${activeProduct.slug ?? activeProduct.id}`}
                 className="inline-flex items-center justify-center rounded-full border border-[var(--media-card-pill-border)] bg-[var(--surface-card-strong)] px-6 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--foreground)] transition hover:border-primary/40 hover:bg-primary/25"
               >
                 View Product

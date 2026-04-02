@@ -36,12 +36,17 @@ export async function createOrder(input: CreateOrderInput) {
         return {
           productId: item.productId,
           quantity: item.quantity,
-          priceAtPurchase: product.price // kobo
+          priceAtPurchase: product.price // NGN
         };
       });
 
-      const shippingFee = calculateShippingFee(validated.shipping.city);
+      const shippingFee = calculateShippingFee(
+        validated.shipping.city,
+        validated.shipping.state,
+        validated.shipping.shippingType,
+      );
       const totalAmount = itemsTotal + shippingFee;
+      const reservedUntil = new Date(Date.now() + 30 * 60 * 1000);
 
       // 5. Create Order + Items + Shipping Details
       const order = await tx.order.create({
@@ -50,13 +55,14 @@ export async function createOrder(input: CreateOrderInput) {
           phone: validated.phone,
           totalAmount: totalAmount,
           status: "PENDING",
+          reservedUntil,
           items: {
             create: orderItems
           },
           shippingDetails: {
             create: {
               fullName: validated.shipping.fullName,
-              address: validated.shipping.address,
+              address: validated.shipping.address ?? "Local pickup",
               city: validated.shipping.city,
               state: validated.shipping.state,
               shippingType: validated.shipping.shippingType,

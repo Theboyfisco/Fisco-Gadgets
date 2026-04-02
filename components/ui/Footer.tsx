@@ -119,7 +119,7 @@ export function Footer({ categories = [] }: FooterProps) {
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
                   placeholder="you@example.com"
-                  className="interactive-focus w-full rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-cta)] px-3 py-2 text-sm text-[var(--foreground)] outline-none transition-colors placeholder:text-[var(--text-soft)] focus:border-[var(--interactive-border-strong)]"
+                  className="interactive-focus w-full rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-cta)] px-3 py-2 text-sm text-[var(--foreground)] outline-none transition-colors placeholder:text-[var(--text-soft)] focus:border-[var(--interactive-border-strong)] focus-visible:ring-2 focus-visible:ring-primary/25"
                 />
                 <button
                   type="submit"

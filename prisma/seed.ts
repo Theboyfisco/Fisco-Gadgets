@@ -27,6 +27,35 @@ const categories = [
   { id: "accessories", name: "Accessories", image: "https://images.unsplash.com/photo-1625842268584-8f3296236761?q=80&w=400&auto=format&fit=crop" }
 ];
 
+const brands = [
+  { name: "Apple", slug: "apple" },
+  { name: "Samsung", slug: "samsung" },
+  { name: "Sony", slug: "sony" },
+  { name: "Google", slug: "google" },
+  { name: "Lenovo", slug: "lenovo" },
+  { name: "Dell", slug: "dell" },
+  { name: "ASUS", slug: "asus" },
+  { name: "HP", slug: "hp" },
+  { name: "Microsoft", slug: "microsoft" },
+  { name: "Anker", slug: "anker" },
+  { name: "Marshall", slug: "marshall" },
+  { name: "Beats", slug: "beats" },
+  { name: "Bose", slug: "bose" },
+  { name: "JBL", slug: "jbl" },
+  { name: "Sennheiser", slug: "sennheiser" },
+  { name: "Razer", slug: "razer" },
+  { name: "Xiaomi", slug: "xiaomi" },
+  { name: "OnePlus", slug: "oneplus" },
+  { name: "Nothing", slug: "nothing" },
+  { name: "Tecno", slug: "tecno" },
+  { name: "Infinix", slug: "infinix" },
+  { name: "UGREEN", slug: "ugreen" },
+  { name: "Belkin", slug: "belkin" },
+  { name: "Baseus", slug: "baseus" },
+  { name: "Keychron", slug: "keychron" },
+  { name: "Logitech", slug: "logitech" },
+];
+
 const baseProducts = [
   // PHONES
   {
@@ -412,6 +441,7 @@ const upsertProductBatch = async (
     technicalSpecs: Record<string, unknown>
     images: string[]
     categoryId: string
+    brandId?: string | null
   }>
 ) => {
   for (const product of batch) {
@@ -426,7 +456,8 @@ const upsertProductBatch = async (
         condition: product.condition,
         technicalSpecs: product.technicalSpecs as any,
         images: product.images,
-        categoryId: product.categoryId
+        categoryId: product.categoryId,
+        brandId: product.brandId ?? null
       },
       create: product as any
     })
@@ -644,6 +675,45 @@ const buildAutoProducts = () => [
 
 const dummyProducts = [...baseProducts, ...buildAutoProducts()];
 
+const brandMatchers = [
+  { slug: "apple", tokens: ["apple", "iphone", "ipad", "macbook", "airpods", "watch", "pencil", "airtag", "magsafe"] },
+  { slug: "samsung", tokens: ["samsung", "galaxy"] },
+  { slug: "sony", tokens: ["sony"] },
+  { slug: "google", tokens: ["google", "pixel"] },
+  { slug: "lenovo", tokens: ["lenovo"] },
+  { slug: "dell", tokens: ["dell", "xps"] },
+  { slug: "asus", tokens: ["asus", "rog", "zenbook"] },
+  { slug: "hp", tokens: ["hp", "spectre", "envy"] },
+  { slug: "microsoft", tokens: ["microsoft", "surface"] },
+  { slug: "anker", tokens: ["anker", "soundcore"] },
+  { slug: "marshall", tokens: ["marshall"] },
+  { slug: "beats", tokens: ["beats"] },
+  { slug: "bose", tokens: ["bose"] },
+  { slug: "jbl", tokens: ["jbl"] },
+  { slug: "sennheiser", tokens: ["sennheiser"] },
+  { slug: "razer", tokens: ["razer"] },
+  { slug: "xiaomi", tokens: ["xiaomi"] },
+  { slug: "oneplus", tokens: ["oneplus"] },
+  { slug: "nothing", tokens: ["nothing"] },
+  { slug: "tecno", tokens: ["tecno"] },
+  { slug: "infinix", tokens: ["infinix"] },
+  { slug: "ugreen", tokens: ["ugreen"] },
+  { slug: "belkin", tokens: ["belkin"] },
+  { slug: "baseus", tokens: ["baseus"] },
+  { slug: "keychron", tokens: ["keychron"] },
+  { slug: "logitech", tokens: ["logitech", "mx master", "mx keys"] },
+];
+
+const resolveBrandSlug = (name: string) => {
+  const normalized = name.toLowerCase();
+  for (const matcher of brandMatchers) {
+    if (matcher.tokens.some((token) => normalized.includes(token))) {
+      return matcher.slug;
+    }
+  }
+  return null;
+};
+
 
 async function main() {
   console.log('Start seeding...')
@@ -667,7 +737,20 @@ async function main() {
     })
   }
 
-  // 2. Seed Products
+  // 2. Seed Brands
+  const brandRecords = await Promise.all(
+    brands.map((brand) =>
+      prisma.brand.upsert({
+        where: { slug: brand.slug },
+        update: { name: brand.name },
+        create: { name: brand.name, slug: brand.slug },
+        select: { id: true, slug: true },
+      }),
+    ),
+  )
+  const brandIdBySlug = new Map(brandRecords.map((brand) => [brand.slug, brand.id]))
+
+  // 3. Seed Products
   const usedSlugs = new Set<string>()
 
   const productData = await Promise.all(dummyProducts.map(async (prod) => {
@@ -686,6 +769,7 @@ async function main() {
     }
 
     usedSlugs.add(slug)
+    const resolvedBrandSlug = resolveBrandSlug(prod.name)
 
     return {
       id: prod.id,
@@ -701,7 +785,8 @@ async function main() {
         categoryId: prod.categoryId,
         images
       }),
-      categoryId: prod.categoryId
+      categoryId: prod.categoryId,
+      brandId: resolvedBrandSlug ? brandIdBySlug.get(resolvedBrandSlug) ?? null : null
     };
   }));
 

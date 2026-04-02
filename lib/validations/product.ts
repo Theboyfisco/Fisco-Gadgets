@@ -16,6 +16,7 @@ export const ProductMutationSchema = z.object({
   stock: z.number().int().nonnegative("Stock must be zero or more"),
   condition: z.nativeEnum(Condition),
   categoryId: z.string().trim().min(1, "Choose a category"),
+  brandId: z.string().trim().min(1).optional().nullable(),
   images: z.array(z.string().url("Use valid image URLs")).min(1, "Add at least one image"),
   technicalSpecs: technicalSpecsSchema,
 });

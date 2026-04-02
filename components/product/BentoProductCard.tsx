@@ -20,10 +20,12 @@ const QuickViewModal = dynamic(() => import("./QuickViewModal").then((mod) => mo
 export interface Product {
   id: string;
   name: string;
+  slug?: string;
   price: number;
   image: string;
   categoryId: string;
   brandId?: string;
+  stock?: number;
   blurHash?: string;
   technicalSpecs: {
     battery?: string;
@@ -52,6 +54,8 @@ export function BentoProductCard({ product, featured = false, href }: BentoProdu
   const { addToCart } = useCart();
   const [quickViewOpen, setQuickViewOpen] = useState(false);
   const specs = normalizeTechnicalSpecs(product.technicalSpecs);
+  const isOutOfStock = typeof product.stock === "number" && product.stock <= 0;
+  const isLowStock = typeof product.stock === "number" && product.stock > 0 && product.stock <= 5;
   const whatsappMsg = encodeURIComponent(`Hi, I'm interested in the ${product.name} listed for ₦${product.price}`);
   const priceLabel = new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN" }).format(product.price);
   const containerClass = featured
@@ -124,7 +128,7 @@ export function BentoProductCard({ product, featured = false, href }: BentoProdu
             <div className="min-w-0">
               <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--text-soft)]">Premium pick</p>
               {href ? (
-                <Link href={href} className="mt-2 block focus:outline-none">
+                <Link href={href} className="mt-2 block focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/25">
                   <h3 className="line-clamp-2 text-lg font-semibold tracking-[-0.02em] text-[var(--foreground)] transition-colors duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:text-primary md:text-[1.45rem]">
                     {product.name}
                   </h3>
@@ -135,8 +139,16 @@ export function BentoProductCard({ product, featured = false, href }: BentoProdu
                 </h3>
               )}
             </div>
-            <div className="shrink-0 rounded-full border border-[var(--interactive-border)] bg-[var(--surface-card-strong)] px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-primary">
-              New
+            <div
+              className={`shrink-0 rounded-full border px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] ${
+                isOutOfStock
+                  ? "border-[var(--status-error)]/40 bg-[var(--status-error)]/10 text-[var(--status-error)]"
+                  : isLowStock
+                    ? "border-[var(--status-error)]/30 bg-[var(--status-error)]/10 text-[var(--status-error)]"
+                    : "border-[var(--interactive-border)] bg-[var(--surface-card-strong)] text-primary"
+              }`}
+            >
+              {isOutOfStock ? "Out of stock" : isLowStock ? `Only ${product.stock}` : "In stock"}
             </div>
           </div>
           <p className="text-lg font-semibold tracking-[-0.02em] text-[var(--foreground)] md:text-xl">{priceLabel}</p>
@@ -160,13 +172,16 @@ export function BentoProductCard({ product, featured = false, href }: BentoProdu
 
         <div className="absolute right-4 top-4 z-10 flex flex-col gap-2 opacity-0 pointer-events-none translate-y-2 scale-[0.96] blur-[1px] transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] group-hover:opacity-100 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:scale-100 group-hover:blur-0 group-focus-within:opacity-100 group-focus-within:pointer-events-auto group-focus-within:translate-y-0 group-focus-within:scale-100 group-focus-within:blur-0 [transform:translateZ(40px)]">
           <button
-            className="rounded-full border border-primary/20 bg-[var(--surface-contrast)] p-2 text-primary shadow-[0_10px_24px_rgba(0,0,0,0.18)] backdrop-blur-md transition-colors hover:bg-primary/30"
+            className="rounded-full border border-primary/20 bg-[var(--surface-contrast)] p-2 text-primary shadow-[0_10px_24px_rgba(0,0,0,0.18)] backdrop-blur-md transition-colors hover:bg-primary/30 disabled:cursor-not-allowed disabled:opacity-60"
             aria-label={`Add ${product.name} to cart`}
             onClick={(event) => {
               event.stopPropagation();
               event.preventDefault();
-              addToCart(product);
+              if (!isOutOfStock) {
+                addToCart(product);
+              }
             }}
+            disabled={isOutOfStock}
           >
             <ShoppingCart size={20} />
           </button>

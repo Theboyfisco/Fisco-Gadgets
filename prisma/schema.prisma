@@ -29,13 +29,28 @@ model Product {
   technicalSpecs Json
   images         String[]
   categoryId     String
+  brandId        String?
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
   orderItems     OrderItem[]
   category       Category    @relation(fields: [categoryId], references: [id])
+  brand          Brand?      @relation(fields: [brandId], references: [id])
 
   @@index([slug])
   @@index([categoryId])
+  @@index([brandId])
+}
+
+model Brand {
+  id        String    @id @default(cuid())
+  name      String
+  slug      String    @unique
+  image     String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  products  Product[]
+
+  @@index([slug])
 }
 
 model Order {
@@ -45,6 +60,7 @@ model Order {
   status           OrderStatus      @default(PENDING)
   totalAmount      Int
   paymentReference String?          @unique
+  reservedUntil    DateTime?
   createdAt        DateTime         @default(now())
   updatedAt        DateTime         @updatedAt
   items            OrderItem[]
@@ -52,6 +68,7 @@ model Order {
 
   @@index([email])
   @@index([paymentReference])
+  @@index([reservedUntil])
 }
 
 model OrderItem {

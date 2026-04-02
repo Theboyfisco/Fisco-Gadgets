@@ -43,6 +43,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     const [mounted, setMounted] = useState(false);
     const { pushToast } = useToast();
 
+    const getMaxStock = (product: Product) => (typeof product.stock === "number" ? product.stock : Number.POSITIVE_INFINITY);
+
     useEffect(() => {
         try {
             const stored = localStorage.getItem("fisco_cart_v1");
@@ -64,18 +66,37 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }, [cartItems, mounted]);
 
     const addToCart = (product: Product, quantity = 1) => {
+        const maxStock = getMaxStock(product);
+        if (maxStock <= 0) {
+            pushToast({
+                title: "Out of stock",
+                description: product.name,
+                variant: "warning",
+            });
+            return;
+        }
+
         setCartItems((prev) => {
             const existing = prev.find((item) => item.product.id === product.id);
             if (existing) {
+                const nextQty = Math.min(existing.quantity + quantity, maxStock);
                 return prev.map((item) =>
                     item.product.id === product.id
-                        ? { ...item, quantity: item.quantity + quantity }
+                        ? { ...item, quantity: nextQty }
                         : item,
                 );
             }
-            return [...prev, { product, quantity }];
+            return [...prev, { product, quantity: Math.min(quantity, maxStock) }];
         });
         setIsCartOpen(true);
+        if (maxStock !== Number.POSITIVE_INFINITY && quantity >= maxStock) {
+            pushToast({
+                title: "Stock limit reached",
+                description: `Only ${maxStock} available for ${product.name}.`,
+                variant: "warning",
+            });
+            return;
+        }
         pushToast({
             title: "Added to cart",
             description: product.name,
@@ -94,9 +115,19 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
     const increaseQuantity = (productId: string) => {
         setCartItems((prev) =>
-            prev.map((item) =>
-                item.product.id === productId ? { ...item, quantity: item.quantity + 1 } : item,
-            ),
+            prev.map((item) => {
+                if (item.product.id !== productId) return item;
+                const maxStock = getMaxStock(item.product);
+                if (item.quantity >= maxStock) {
+                    pushToast({
+                        title: "Stock limit reached",
+                        description: `Only ${maxStock} available for ${item.product.name}.`,
+                        variant: "warning",
+                    });
+                    return item;
+                }
+                return { ...item, quantity: item.quantity + 1 };
+            }),
         );
     };
 

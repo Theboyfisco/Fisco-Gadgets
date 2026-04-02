@@ -14,10 +14,11 @@ function slugify(input: string) {
     .slice(0, 80);
 }
 
-function revalidateProductPaths(productId: string, categoryId: string) {
+function revalidateProductPaths(productId: string, productSlug: string, categoryId: string) {
   revalidatePath("/");
   revalidatePath("/admin/products");
   revalidatePath(`/product/${productId}`);
+  revalidatePath(`/product/${productSlug}`);
   revalidatePath(`/category/${categoryId}`);
   revalidatePath("/brand/[id]", "page");
 }
@@ -49,6 +50,7 @@ function normalizeProductInput(input: ProductMutationInput): ProductMutationInpu
         .map(([key, value]) => [key.trim(), typeof value === "string" ? value.trim() : value])
         .filter(([key, value]) => key && String(value).trim().length > 0),
     ),
+    brandId: input.brandId ? input.brandId.trim() : null,
   };
 }
 
@@ -61,7 +63,7 @@ export async function createProduct(input: ProductMutationInput) {
       include: { category: true },
     });
 
-    revalidateProductPaths(product.id, product.categoryId);
+    revalidateProductPaths(product.id, product.slug, product.categoryId);
     return { success: true, productId: product.id };
   } catch (error) {
     return { success: false, error: formatActionError(error) };
@@ -72,9 +74,9 @@ export async function updateProduct(productId: string, input: ProductMutationInp
   try {
     const validated = ProductMutationSchema.parse(normalizeProductInput(input));
 
-    const existing = await prisma.product.findUnique({
+  const existing = await prisma.product.findUnique({
       where: { id: productId },
-      select: { categoryId: true },
+      select: { categoryId: true, slug: true },
     });
 
     if (!existing) {
@@ -87,7 +89,7 @@ export async function updateProduct(productId: string, input: ProductMutationInp
       include: { category: true },
     });
 
-    revalidateProductPaths(product.id, product.categoryId);
+    revalidateProductPaths(product.id, product.slug, product.categoryId);
     if (existing.categoryId !== product.categoryId) {
       revalidatePath(`/category/${existing.categoryId}`);
     }
@@ -102,7 +104,7 @@ export async function deleteProduct(productId: string) {
   try {
     const existing = await prisma.product.findUnique({
       where: { id: productId },
-      select: { categoryId: true },
+      select: { categoryId: true, slug: true },
     });
 
     if (!existing) {
@@ -116,6 +118,7 @@ export async function deleteProduct(productId: string) {
     revalidatePath("/");
     revalidatePath("/admin/products");
     revalidatePath(`/product/${productId}`);
+    revalidatePath(`/product/${existing.slug}`);
     revalidatePath(`/category/${existing.categoryId}`);
     revalidatePath("/brand/[id]", "page");
 

@@ -7,11 +7,13 @@ import { MOTION } from "@/lib/motion";
 type GridProduct = {
   id: string;
   name: string;
+  slug?: string;
   price: number;
   image: string;
   categoryId: string;
   technicalSpecs: Record<string, unknown>;
   brandId?: string;
+  stock?: number;
 };
 
 interface ProductGridMotionProps {
@@ -38,7 +40,7 @@ export function ProductGridMotion({ products, className = "" }: ProductGridMotio
             show: { opacity: 1, y: 0, transition: { duration: MOTION.duration.base, ease: MOTION.ease.standard } },
           }}
         >
-          <BentoProductCard product={product as any} href={`/product/${product.id}`} />
+          <BentoProductCard product={product as any} href={`/product/${product.slug ?? product.id}`} />
         </motion.div>
       ))}
     </motion.div>

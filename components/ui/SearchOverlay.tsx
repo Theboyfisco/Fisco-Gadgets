@@ -37,9 +37,12 @@ export function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; onClose: (
         const mapped = dbResults.map((product: any) => ({
           id: product.id,
           name: product.name,
+          slug: product.slug,
           price: product.price,
+          stock: product.stock,
           image: getPrimaryImage(product.images),
           categoryId: product.categoryId,
+          brandId: product.brandId,
           technicalSpecs: normalizeTechnicalSpecs(product.technicalSpecs),
         }));
         if (cancelled) return;
@@ -77,7 +80,7 @@ export function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; onClose: (
       if (event.key === "Enter" && results.length > 0 && query) {
         const selected = results[activeIndex] ?? results[0];
         if (!selected) return;
-        router.push(`/product/${selected.id}`);
+        router.push(`/product/${selected.slug ?? selected.id}`);
         onClose();
       }
     };
@@ -162,7 +165,7 @@ export function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; onClose: (
                 autoFocus
                 type="text"
                 placeholder="Search iPhones, MacBooks, Accessories..."
-                className="interactive-focus flex-1 bg-transparent text-lg font-bold text-[var(--foreground)] placeholder:text-[var(--text-soft)] focus:outline-none sm:text-2xl"
+                className="interactive-focus flex-1 bg-transparent text-lg font-bold text-[var(--foreground)] placeholder:text-[var(--text-soft)] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/25 sm:text-2xl"
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
                 ref={inputRef}
@@ -203,14 +206,14 @@ export function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; onClose: (
                         <div
                           id={`search-result-${index}`}
                           className="interactive-focus flex cursor-pointer items-center gap-4 rounded-[1rem]"
-                          onClick={() => goToProduct(product.id)}
+                          onClick={() => goToProduct(product.slug ?? product.id)}
                           role="option"
                           aria-selected={active}
                           tabIndex={0}
                           onKeyDown={(event) => {
                             if (event.key === "Enter" || event.key === " ") {
                               event.preventDefault();
-                              goToProduct(product.id);
+                              goToProduct(product.slug ?? product.id);
                             }
                           }}
                         >
@@ -238,7 +241,7 @@ export function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; onClose: (
                             Quick
                           </button>
                           <Link
-                            href={`/product/${product.id}`}
+                            href={`/product/${product.slug ?? product.id}`}
                             onClick={onClose}
                             className="rounded-full border border-[var(--border-subtle)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-secondary transition-colors hover:border-primary/40 hover:text-primary"
                           >

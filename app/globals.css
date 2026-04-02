@@ -381,6 +381,24 @@
   button {
     font: inherit;
   }
+
+  input,
+  textarea,
+  select {
+    background-color: var(--surface-card);
+    color: var(--foreground);
+    border-color: var(--border-subtle);
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--text-soft);
+  }
+
+  select option {
+    background-color: var(--panel-bg);
+    color: var(--foreground);
+  }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -506,6 +524,16 @@
 :root[data-theme="light"] textarea,
 :root[data-theme="light"] select {
   color-scheme: light;
+}
+
+:root[data-theme="dark"] select option {
+  background-color: var(--panel-bg);
+  color: var(--foreground);
+}
+
+:root[data-theme="light"] select option {
+  background-color: var(--panel-bg);
+  color: var(--foreground);
 }
 
 .scroll-reveal {

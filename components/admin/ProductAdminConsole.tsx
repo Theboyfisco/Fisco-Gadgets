@@ -13,6 +13,11 @@ type AdminCategory = {
   name: string;
 };
 
+type AdminBrand = {
+  id: string;
+  name: string;
+};
+
 type AdminProduct = {
   id: string;
   name: string;
@@ -23,6 +28,8 @@ type AdminProduct = {
   condition: Condition;
   categoryId: string;
   categoryName: string;
+  brandId?: string;
+  brandName?: string;
   images: string[];
   technicalSpecs: Record<string, string | number | boolean | undefined>;
   updatedAt: string;
@@ -41,6 +48,7 @@ type ProductFormState = {
   stock: string;
   condition: Condition;
   categoryId: string;
+  brandId: string;
   imagesText: string;
   technicalSpecs: SpecField[];
 };
@@ -56,7 +64,7 @@ function slugify(input: string) {
     .slice(0, 80);
 }
 
-function toFormState(product: AdminProduct | null, categories: AdminCategory[]): ProductFormState {
+function toFormState(product: AdminProduct | null, categories: AdminCategory[], brands: AdminBrand[]): ProductFormState {
   if (!product) {
     return {
       name: "",
@@ -66,6 +74,7 @@ function toFormState(product: AdminProduct | null, categories: AdminCategory[]):
       stock: "0",
       condition: "NEW",
       categoryId: categories[0]?.id ?? "",
+      brandId: brands[0]?.id ?? "",
       imagesText: "",
       technicalSpecs: [{ key: "battery", value: "" }, { key: "storage", value: "" }, { key: "ram", value: "" }],
     };
@@ -84,6 +93,7 @@ function toFormState(product: AdminProduct | null, categories: AdminCategory[]):
     stock: String(product.stock),
     condition: product.condition,
     categoryId: product.categoryId,
+    brandId: product.brandId ?? brands[0]?.id ?? "",
     imagesText: product.images.join("\n"),
     technicalSpecs: specs.length > 0 ? specs : [{ key: "battery", value: "" }],
   };
@@ -100,9 +110,11 @@ function formatCondition(value: Condition) {
 export function ProductAdminConsole({
   products,
   categories,
+  brands,
 }: {
   products: AdminProduct[];
   categories: AdminCategory[];
+  brands: AdminBrand[];
 }) {
   const router = useRouter();
   const { pushToast } = useToast();
@@ -111,7 +123,7 @@ export function ProductAdminConsole({
   const deferredQuery = useDeferredValue(query);
   const [selectedId, setSelectedId] = useState<string | null>(products[0]?.id ?? null);
   const [isCreating, setIsCreating] = useState(products.length === 0);
-  const [draft, setDraft] = useState<ProductFormState>(() => toFormState(products[0] ?? null, categories));
+  const [draft, setDraft] = useState<ProductFormState>(() => toFormState(products[0] ?? null, categories, brands));
   const [slugTouched, setSlugTouched] = useState(false);
 
   const filteredProducts = useMemo(() => {
@@ -165,7 +177,7 @@ export function ProductAdminConsole({
   const resetToCreate = () => {
     setIsCreating(true);
     setSelectedId(null);
-    setDraft(toFormState(null, categories));
+    setDraft(toFormState(null, categories, brands));
     setSlugTouched(false);
   };
 
@@ -173,7 +185,7 @@ export function ProductAdminConsole({
     const product = products.find((item) => item.id === productId) ?? null;
     setIsCreating(false);
     setSelectedId(productId);
-    setDraft(toFormState(product, categories));
+    setDraft(toFormState(product, categories, brands));
     setSlugTouched(false);
   };
 
@@ -185,6 +197,7 @@ export function ProductAdminConsole({
     stock: Number(draft.stock),
     condition: draft.condition,
     categoryId: draft.categoryId,
+    brandId: draft.brandId || null,
     images: draft.imagesText
       .split("\n")
       .map((item) => item.trim())
@@ -247,11 +260,11 @@ export function ProductAdminConsole({
         variant: "info",
       });
 
-      const nextProduct = products.find((product) => product.id !== selectedId) ?? null;
-      setSelectedId(nextProduct?.id ?? null);
-      setIsCreating(!nextProduct);
-      setDraft(toFormState(nextProduct, categories));
-      setSlugTouched(false);
+        const nextProduct = products.find((product) => product.id !== selectedId) ?? null;
+        setSelectedId(nextProduct?.id ?? null);
+        setIsCreating(!nextProduct);
+        setDraft(toFormState(nextProduct, categories, brands));
+        setSlugTouched(false);
       router.refresh();
     });
   };
@@ -297,7 +310,7 @@ export function ProductAdminConsole({
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder="Search by name, slug, or category"
-              className="interactive-focus w-full rounded-[1.25rem] border border-[var(--border-subtle)] bg-[var(--surface-soft)] py-3 pl-11 pr-4 text-sm text-[var(--foreground)] outline-none placeholder:text-[var(--text-soft)] focus:border-[var(--interactive-border-strong)]"
+              className="interactive-focus w-full rounded-[1.25rem] border border-[var(--border-subtle)] bg-[var(--surface-soft)] py-3 pl-11 pr-4 text-sm text-[var(--foreground)] outline-none placeholder:text-[var(--text-soft)] focus:border-[var(--interactive-border-strong)] focus-visible:ring-2 focus-visible:ring-primary/25"
             />
           </label>
         </section>
@@ -401,7 +414,7 @@ export function ProductAdminConsole({
                 <input
                   value={draft.name}
                   onChange={(event) => handleFieldChange("name", event.target.value)}
-                  className="interactive-focus w-full rounded-[1rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-sm text-[var(--foreground)] outline-none placeholder:text-[var(--text-soft)]"
+                  className="interactive-focus w-full rounded-[1rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-sm text-[var(--foreground)] outline-none placeholder:text-[var(--text-soft)] focus-visible:ring-2 focus-visible:ring-primary/25"
                   placeholder="iPhone 16 Pro Max"
                 />
               </label>
@@ -413,7 +426,7 @@ export function ProductAdminConsole({
                     setSlugTouched(true);
                     handleFieldChange("slug", event.target.value);
                   }}
-                  className="interactive-focus w-full rounded-[1rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-sm text-[var(--foreground)] outline-none placeholder:text-[var(--text-soft)]"
+                  className="interactive-focus w-full rounded-[1rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-sm text-[var(--foreground)] outline-none placeholder:text-[var(--text-soft)] focus-visible:ring-2 focus-visible:ring-primary/25"
                   placeholder="iphone_16_pro_max"
                 />
               </label>
@@ -425,12 +438,12 @@ export function ProductAdminConsole({
                 value={draft.description}
                 onChange={(event) => handleFieldChange("description", event.target.value)}
                 rows={5}
-                className="interactive-focus w-full rounded-[1rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-sm text-[var(--foreground)] outline-none placeholder:text-[var(--text-soft)]"
+                className="interactive-focus w-full rounded-[1rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-sm text-[var(--foreground)] outline-none placeholder:text-[var(--text-soft)] focus-visible:ring-2 focus-visible:ring-primary/25"
                 placeholder="Premium device with..."
               />
             </label>
 
-            <div className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            <div className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
               <label className="block">
                 <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.16em] text-[var(--text-soft)]">Price</span>
                 <input
@@ -438,7 +451,7 @@ export function ProductAdminConsole({
                   min="0"
                   value={draft.price}
                   onChange={(event) => handleFieldChange("price", event.target.value)}
-                  className="interactive-focus w-full rounded-[1rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-sm text-[var(--foreground)] outline-none"
+                  className="interactive-focus w-full rounded-[1rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-sm text-[var(--foreground)] outline-none focus-visible:ring-2 focus-visible:ring-primary/25"
                 />
               </label>
               <label className="block">
@@ -448,7 +461,7 @@ export function ProductAdminConsole({
                   min="0"
                   value={draft.stock}
                   onChange={(event) => handleFieldChange("stock", event.target.value)}
-                  className="interactive-focus w-full rounded-[1rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-sm text-[var(--foreground)] outline-none"
+                  className="interactive-focus w-full rounded-[1rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-sm text-[var(--foreground)] outline-none focus-visible:ring-2 focus-visible:ring-primary/25"
                 />
               </label>
               <label className="block">
@@ -456,10 +469,10 @@ export function ProductAdminConsole({
                 <select
                   value={draft.condition}
                   onChange={(event) => setDraft((current) => ({ ...current, condition: event.target.value as Condition }))}
-                  className="interactive-focus w-full rounded-[1rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-sm text-[var(--foreground)] outline-none"
+                  className="interactive-focus w-full rounded-[1rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-sm text-[var(--foreground)] outline-none focus-visible:ring-2 focus-visible:ring-primary/25"
                 >
                   {CONDITION_OPTIONS.map((option) => (
-                    <option key={option} value={option}>
+                    <option key={option} value={option} className="bg-[var(--panel-bg)] text-[var(--foreground)]">
                       {formatCondition(option)}
                     </option>
                   ))}
@@ -470,11 +483,25 @@ export function ProductAdminConsole({
                 <select
                   value={draft.categoryId}
                   onChange={(event) => setDraft((current) => ({ ...current, categoryId: event.target.value }))}
-                  className="interactive-focus w-full rounded-[1rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-sm text-[var(--foreground)] outline-none"
+                  className="interactive-focus w-full rounded-[1rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-sm text-[var(--foreground)] outline-none focus-visible:ring-2 focus-visible:ring-primary/25"
                 >
                   {categories.map((category) => (
-                    <option key={category.id} value={category.id}>
+                    <option key={category.id} value={category.id} className="bg-[var(--panel-bg)] text-[var(--foreground)]">
                       {category.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label className="block">
+                <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.16em] text-[var(--text-soft)]">Brand</span>
+                <select
+                  value={draft.brandId}
+                  onChange={(event) => setDraft((current) => ({ ...current, brandId: event.target.value }))}
+                  className="interactive-focus w-full rounded-[1rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-sm text-[var(--foreground)] outline-none focus-visible:ring-2 focus-visible:ring-primary/25"
+                >
+                  {brands.map((brand) => (
+                    <option key={brand.id} value={brand.id} className="bg-[var(--panel-bg)] text-[var(--foreground)]">
+                      {brand.name}
                     </option>
                   ))}
                 </select>
@@ -519,7 +546,7 @@ export function ProductAdminConsole({
               value={draft.imagesText}
               onChange={(event) => handleFieldChange("imagesText", event.target.value)}
               rows={8}
-              className="interactive-focus w-full rounded-[1rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 font-mono text-xs text-[var(--foreground)] outline-none placeholder:text-[var(--text-soft)]"
+              className="interactive-focus w-full rounded-[1rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 font-mono text-xs text-[var(--foreground)] outline-none placeholder:text-[var(--text-soft)] focus-visible:ring-2 focus-visible:ring-primary/25"
               placeholder={"https://...\nhttps://..."}
             />
           </div>
@@ -550,13 +577,13 @@ export function ProductAdminConsole({
                   <input
                     value={item.key}
                     onChange={(event) => handleSpecChange(index, "key", event.target.value)}
-                    className="interactive-focus rounded-[1rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-sm text-[var(--foreground)] outline-none placeholder:text-[var(--text-soft)]"
+                    className="interactive-focus rounded-[1rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-sm text-[var(--foreground)] outline-none placeholder:text-[var(--text-soft)] focus-visible:ring-2 focus-visible:ring-primary/25"
                     placeholder="battery"
                   />
                   <input
                     value={item.value}
                     onChange={(event) => handleSpecChange(index, "value", event.target.value)}
-                    className="interactive-focus rounded-[1rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-sm text-[var(--foreground)] outline-none placeholder:text-[var(--text-soft)]"
+                    className="interactive-focus rounded-[1rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-sm text-[var(--foreground)] outline-none placeholder:text-[var(--text-soft)] focus-visible:ring-2 focus-visible:ring-primary/25"
                     placeholder="4700mAh"
                   />
                   <button

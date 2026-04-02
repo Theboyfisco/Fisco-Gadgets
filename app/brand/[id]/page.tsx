@@ -16,14 +16,19 @@ export default async function BrandPage({ params }: { params: Promise<{ id: stri
   const resolvedParams = await params;
   const brandId = resolvedParams.id;
 
-  const dbProducts = shouldUseDatabase()
+  const brand = shouldUseDatabase()
+    ? await prisma.brand
+        .findFirst({
+          where: { slug: brandId.toLowerCase() },
+        })
+        .catch(() => null)
+    : null;
+
+  const dbProducts = shouldUseDatabase() && brand
     ? await prisma.product
         .findMany({
           where: {
-            OR: [
-              { name: { contains: brandId, mode: "insensitive" } },
-              { description: { contains: brandId, mode: "insensitive" } },
-            ],
+            brandId: brand.id,
           },
           include: { category: true },
           orderBy: { createdAt: "desc" },
@@ -36,7 +41,9 @@ export default async function BrandPage({ params }: { params: Promise<{ id: stri
       ? dbProducts.map((product: any) => ({
           id: product.id,
           name: product.name,
+          slug: product.slug,
           price: product.price,
+          stock: product.stock,
           image: getPrimaryImage(product.images),
           categoryId: product.categoryId,
           brandId,
@@ -46,7 +53,7 @@ export default async function BrandPage({ params }: { params: Promise<{ id: stri
           .filter((product) => product.name.toLowerCase().includes(brandId.toLowerCase()))
           .map((product) => ({ ...product, brandId }));
 
-  const brandName = brandId.charAt(0).toUpperCase() + brandId.slice(1);
+  const brandName = brand?.name ?? (brandId.charAt(0).toUpperCase() + brandId.slice(1));
   const heroImage = products[0]?.image || "https://images.unsplash.com/photo-1546054454-aa26e2b734c7?q=80&w=1400&auto=format&fit=crop";
 
   return (

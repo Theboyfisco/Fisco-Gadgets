@@ -31,7 +31,7 @@ export function CategorySort() {
         className="interactive-focus rounded-full border border-[var(--interactive-border)] bg-[var(--surface-card)] px-3 py-1.5 text-sm font-medium text-[var(--foreground)] transition-colors hover:border-[var(--interactive-border-strong)]"
       >
         {SORT_OPTIONS.map((option) => (
-          <option key={option.value} value={option.value}>
+          <option key={option.value} value={option.value} className="bg-[var(--panel-bg)] text-[var(--foreground)]">
             {option.label}
           </option>
         ))}

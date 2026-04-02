@@ -5,8 +5,10 @@ import { Reveal } from "@/components/ui/Reveal";
 import { ProductAdminConsole } from "@/components/admin/ProductAdminConsole";
 import { shouldUseDatabase } from "@/lib/should-use-database";
 import { normalizeTechnicalSpecs } from "@/lib/normalize-product";
+import { requireAdmin } from "@/lib/admin-auth";
 
 export default async function AdminProductsPage() {
+  await requireAdmin();
   const databaseEnabled = shouldUseDatabase();
 
   if (!databaseEnabled) {
@@ -39,13 +41,17 @@ export default async function AdminProductsPage() {
     );
   }
 
-  const [categories, products] = await Promise.all([
+  const [categories, brands, products] = await Promise.all([
     prisma.category.findMany({
       select: { id: true, name: true },
       orderBy: { name: "asc" },
     }),
+    prisma.brand.findMany({
+      select: { id: true, name: true },
+      orderBy: { name: "asc" },
+    }),
     prisma.product.findMany({
-      include: { category: { select: { name: true } } },
+      include: { category: { select: { name: true } }, brand: { select: { name: true } } },
       orderBy: { updatedAt: "desc" },
     }),
   ]);
@@ -66,6 +72,20 @@ export default async function AdminProductsPage() {
               <p className="mt-4 max-w-2xl text-sm text-[var(--hero-foreground-soft)] sm:text-base">
                 Create new products, edit inventory, update media, and keep catalog data clean without leaving the app.
               </p>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <Link
+                  href="/admin/orders"
+                  className="inline-flex items-center gap-2 rounded-full border border-[var(--interactive-border)] bg-[var(--surface-card)] px-4 py-2 text-sm font-semibold text-[var(--hero-foreground)] transition-colors hover:bg-[var(--interactive-hover)]"
+                >
+                  View orders
+                </Link>
+                <Link
+                  href="/admin/logout"
+                  className="inline-flex items-center gap-2 rounded-full border border-[var(--interactive-border)] bg-[var(--surface-card)] px-4 py-2 text-sm font-semibold text-[var(--hero-foreground)] transition-colors hover:bg-[var(--interactive-hover)]"
+                >
+                  Log out
+                </Link>
+              </div>
             </div>
             <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
               <div className="rounded-[1.5rem] border border-[var(--interactive-border)] bg-[var(--surface-card)] p-4">
@@ -75,6 +95,10 @@ export default async function AdminProductsPage() {
               <div className="rounded-[1.5rem] border border-[var(--interactive-border)] bg-[var(--surface-card)] p-4">
                 <p className="text-[10px] uppercase tracking-[0.2em] text-[var(--text-soft)]">Categories</p>
                 <p className="mt-2 text-2xl font-semibold text-[var(--foreground)]">{categories.length}</p>
+              </div>
+              <div className="rounded-[1.5rem] border border-[var(--interactive-border)] bg-[var(--surface-card)] p-4">
+                <p className="text-[10px] uppercase tracking-[0.2em] text-[var(--text-soft)]">Brands</p>
+                <p className="mt-2 text-2xl font-semibold text-[var(--foreground)]">{brands.length}</p>
               </div>
               <div className="rounded-[1.5rem] border border-[var(--interactive-border)] bg-[var(--surface-card)] p-4">
                 <p className="text-[10px] uppercase tracking-[0.2em] text-[var(--text-soft)]">Scope</p>
@@ -103,6 +127,7 @@ export default async function AdminProductsPage() {
       ) : (
         <ProductAdminConsole
           categories={categories}
+          brands={brands}
           products={products.map((product) => ({
             id: product.id,
             name: product.name,
@@ -113,6 +138,8 @@ export default async function AdminProductsPage() {
             condition: product.condition,
             categoryId: product.categoryId,
             categoryName: product.category.name,
+            brandId: product.brandId ?? undefined,
+            brandName: product.brand?.name ?? undefined,
             images: product.images,
             technicalSpecs: normalizeTechnicalSpecs(product.technicalSpecs),
             updatedAt: product.updatedAt.toISOString(),

@@ -16,6 +16,12 @@ export async function initializePayment(orderId: string) {
     });
 
     if (!order) throw new Error("Order not found");
+    if (order.status !== "PENDING") {
+      throw new Error("Order is not pending");
+    }
+    if (order.reservedUntil && order.reservedUntil.getTime() < Date.now()) {
+      throw new Error("Order reservation expired");
+    }
 
     const response = await fetch("https://api.paystack.co/transaction/initialize", {
       method: "POST",
@@ -25,7 +31,7 @@ export async function initializePayment(orderId: string) {
       },
       body: JSON.stringify({
         email: order.email,
-        amount: order.totalAmount, // amount in kobo
+        amount: order.totalAmount * 100, // amount in kobo
         callback_url: `${process.env.NEXT_PUBLIC_APP_URL}/checkout/success?orderId=${orderId}`,
         metadata: {
           orderId: order.id,

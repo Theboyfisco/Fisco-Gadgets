@@ -11,6 +11,7 @@ import { MOTION } from "@/lib/motion";
 type RecentlyViewedProduct = {
   id: string;
   name: string;
+  slug?: string;
   price: number;
   image: string;
   categoryId: string;
@@ -107,7 +108,7 @@ export function RecentlyViewedRail() {
               className="w-64 shrink-0"
             >
               <Link
-                href={`/product/${item.id}`}
+                href={`/product/${item.slug ?? item.id}`}
                 className="group block overflow-hidden rounded-[1.6rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-3 transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:-translate-y-1 hover:shadow-[0_24px_60px_rgba(8,18,38,0.22)]"
               >
                 <div className="relative mb-3 h-40 overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-cta)]">

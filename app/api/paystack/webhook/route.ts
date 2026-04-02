@@ -64,8 +64,8 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: "Duplicate payment reference mismatch" }, { status: 409 });
       }
 
-      if (order.totalAmount !== amount) {
-        console.error(`Amount mismatch: Order ${orderId} expected ${order.totalAmount}, got ${amount}`);
+      if (order.totalAmount * 100 !== amount) {
+        console.error(`Amount mismatch: Order ${orderId} expected ${order.totalAmount * 100}, got ${amount}`);
         return NextResponse.json({ error: "Validation failed" }, { status: 400 });
       }
 
@@ -74,6 +74,7 @@ export async function POST(req: NextRequest) {
         data: {
           status: "PAID",
           paymentReference: reference,
+          reservedUntil: null,
         },
       });
 

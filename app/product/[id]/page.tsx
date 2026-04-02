@@ -15,9 +15,11 @@ import { getPrimaryImage, normalizeTechnicalSpecs } from "@/lib/normalize-produc
 export default async function ProductPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = await params;
 
-  const dbProduct = await prisma.product.findUnique({
-    where: { id: resolvedParams.id },
-    include: { category: true },
+  const dbProduct = await prisma.product.findFirst({
+    where: {
+      OR: [{ id: resolvedParams.id }, { slug: resolvedParams.id }],
+    },
+    include: { category: true, brand: true },
   });
 
   if (!dbProduct) {
@@ -30,10 +32,12 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
   const product = {
     id: dbProduct.id,
     name: dbProduct.name,
+    slug: dbProduct.slug,
     price: dbProduct.price,
     image: getPrimaryImage(images),
     categoryId: dbProduct.categoryId,
-    brandId: undefined,
+    brandId: dbProduct.brandId ?? undefined,
+    stock: dbProduct.stock,
     technicalSpecs,
   };
 
@@ -66,7 +70,10 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
             <span className="text-[var(--border-strong)]">/</span>
             {dbProduct.category?.name ? (
               <>
-                <Link href={`/category/${dbProduct.categoryId}`} className="transition-colors hover:text-[var(--foreground)]">
+                <Link
+                  href={`/category/${dbProduct.category?.slug ?? dbProduct.categoryId}`}
+                  className="transition-colors hover:text-[var(--foreground)]"
+                >
                   {dbProduct.category.name}
                 </Link>
                 <span className="text-[var(--border-strong)]">/</span>
@@ -86,6 +93,21 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
               <div className="mb-4 flex flex-wrap items-center gap-3">
                 <div className="inline-flex max-w-max items-center rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
                   {condition}
+                </div>
+                <div
+                  className={`inline-flex max-w-max items-center rounded-full border px-3 py-1 text-sm font-medium ${
+                    product.stock !== undefined && product.stock <= 0
+                      ? "border-[var(--status-error)]/40 bg-[var(--status-error)]/10 text-[var(--status-error)]"
+                      : product.stock !== undefined && product.stock <= 5
+                        ? "border-[var(--status-error)]/30 bg-[var(--status-error)]/10 text-[var(--status-error)]"
+                        : "border-[var(--interactive-border)] bg-[var(--surface-soft)] text-secondary"
+                  }`}
+                >
+                  {product.stock !== undefined && product.stock <= 0
+                    ? "Out of stock"
+                    : product.stock !== undefined && product.stock <= 5
+                      ? `Only ${product.stock} left`
+                      : "In stock"}
                 </div>
                 <div className="inline-flex items-center gap-2 rounded-full border border-[var(--interactive-border)] bg-[var(--surface-soft)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-secondary">
                   <Sparkles size={14} className="text-primary" />

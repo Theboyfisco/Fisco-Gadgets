@@ -11,6 +11,7 @@ import { initializePayment } from "@/actions/paystack";
 import { Loader2 } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { MOTION } from "@/lib/motion";
+import { calculateShippingFee } from "@/services/shipping";
 
 export default function CheckoutPage() {
     const { cartItems, clearCart } = useCart();
@@ -20,17 +21,28 @@ export default function CheckoutPage() {
     const prefersReducedMotion = useReducedMotion();
 
     // Form State
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<{
+        fullName: string;
+        email: string;
+        phone: string;
+        address: string;
+        city: string;
+        state: string;
+        shippingType: "LOCAL_PICKUP" | "DELIVERY";
+    }>({
         fullName: "",
         email: "",
         phone: "",
         address: "",
         city: "Asaba",
         state: "Delta",
-        shippingType: "DELIVERY" as const
+        shippingType: "DELIVERY"
     });
 
-    const total = cartItems.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
+    const itemsTotal = cartItems.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
+    const shippingFee = calculateShippingFee(formData.city, formData.state, formData.shippingType);
+    const total = itemsTotal + shippingFee;
+    const hasStockIssue = cartItems.some((item) => typeof item.product.stock === "number" && item.quantity > item.product.stock);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -119,8 +131,13 @@ export default function CheckoutPage() {
                     </div>
 
                     {error && (
-                        <div className="mb-8 flex items-center gap-3 rounded-[1.25rem] border border-red-500/20 bg-red-500/10 p-4 text-red-500">
+                        <div className="mb-8 flex items-center gap-3 rounded-[1.25rem] border border-[var(--status-error)]/20 bg-[var(--status-error)]/10 p-4 text-[var(--status-error)]">
                             <span className="font-medium">{error}</span>
+                        </div>
+                    )}
+                    {hasStockIssue && (
+                        <div className="mb-8 flex items-center gap-3 rounded-[1.25rem] border border-[var(--status-error)]/20 bg-[var(--status-error)]/10 p-4 text-[var(--status-error)]">
+                            <span className="font-medium">Some items exceed available stock. Adjust quantities to continue.</span>
                         </div>
                     )}
 
@@ -140,39 +157,82 @@ export default function CheckoutPage() {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-secondary">Full Name</label>
-                                    <input name="fullName" value={formData.fullName} onChange={handleInputChange} type="text" className="w-full rounded-xl border border-border-subtle bg-[var(--surface-card)] px-4 py-3 text-[var(--foreground)] transition-colors focus:border-primary focus:outline-none" placeholder="John Doe" />
+                                    <input name="fullName" value={formData.fullName} onChange={handleInputChange} type="text" className="w-full rounded-xl border border-border-subtle bg-[var(--surface-card)] px-4 py-3 text-[var(--foreground)] transition-colors placeholder:text-[var(--text-soft)] focus:border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/25" placeholder="John Doe" />
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-secondary">Email Address</label>
-                                    <input name="email" value={formData.email} onChange={handleInputChange} type="email" className="w-full rounded-xl border border-border-subtle bg-[var(--surface-card)] px-4 py-3 text-[var(--foreground)] transition-colors focus:border-primary focus:outline-none" placeholder="john@example.com" />
+                                    <input name="email" value={formData.email} onChange={handleInputChange} type="email" className="w-full rounded-xl border border-border-subtle bg-[var(--surface-card)] px-4 py-3 text-[var(--foreground)] transition-colors placeholder:text-[var(--text-soft)] focus:border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/25" placeholder="john@example.com" />
                                 </div>
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-secondary">Phone Number</label>
-                                    <input name="phone" value={formData.phone} onChange={handleInputChange} type="tel" className="w-full rounded-xl border border-border-subtle bg-[var(--surface-card)] px-4 py-3 text-[var(--foreground)] transition-colors focus:border-primary focus:outline-none" placeholder="080 0000 0000" />
+                                    <input name="phone" value={formData.phone} onChange={handleInputChange} type="tel" className="w-full rounded-xl border border-border-subtle bg-[var(--surface-card)] px-4 py-3 text-[var(--foreground)] transition-colors placeholder:text-[var(--text-soft)] focus:border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/25" placeholder="080 0000 0000" />
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-secondary">City (NG)</label>
-                                    <input name="city" value={formData.city} onChange={handleInputChange} type="text" className="w-full rounded-xl border border-border-subtle bg-[var(--surface-card)] px-4 py-3 text-[var(--foreground)] transition-colors focus:border-primary focus:outline-none" placeholder="Asaba" />
+                                    <input name="city" value={formData.city} onChange={handleInputChange} type="text" className="w-full rounded-xl border border-border-subtle bg-[var(--surface-card)] px-4 py-3 text-[var(--foreground)] transition-colors placeholder:text-[var(--text-soft)] focus:border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/25" placeholder="Asaba" />
                                 </div>
                             </div>
                             <div className="space-y-2">
                                 <label className="text-sm font-medium text-secondary">Shipping Address</label>
-                                <textarea name="address" value={formData.address} onChange={handleInputChange} className="w-full rounded-xl border border-border-subtle bg-[var(--surface-card)] px-4 py-3 text-[var(--foreground)] transition-colors focus:border-primary focus:outline-none" rows={3} placeholder="Street address, Apartment, Estate, etc."></textarea>
+                                <textarea
+                                  name="address"
+                                  value={formData.address}
+                                  onChange={handleInputChange}
+                                  className="w-full rounded-xl border border-border-subtle bg-[var(--surface-card)] px-4 py-3 text-[var(--foreground)] transition-colors placeholder:text-[var(--text-soft)] focus:border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/25"
+                                  rows={3}
+                                  placeholder="Street address, Apartment, Estate, etc."
+                                  disabled={formData.shippingType === "LOCAL_PICKUP"}
+                                ></textarea>
                             </div>
                             <div className="space-y-2">
                                 <label className="text-sm font-medium text-secondary">State</label>
-                                <select name="state" value={formData.state} onChange={handleInputChange} className="w-full appearance-none rounded-xl border border-border-subtle bg-[var(--surface-card)] px-4 py-3 text-[var(--foreground)] transition-colors focus:border-primary focus:outline-none scrollbar-hide">
-                                    <option value="Delta" className="bg-[var(--panel-bg)]">Delta</option>
-                                    <option value="Lagos" className="bg-[var(--panel-bg)]">Lagos</option>
-                                    <option value="Abuja" className="bg-[var(--panel-bg)]">Abuja</option>
-                                    <option value="Anambra" className="bg-[var(--panel-bg)]">Anambra</option>
+                                <select name="state" value={formData.state} onChange={handleInputChange} className="w-full appearance-none rounded-xl border border-border-subtle bg-[var(--surface-card)] px-4 py-3 text-[var(--foreground)] transition-colors focus:border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/25 scrollbar-hide">
+                                    <option value="Delta" className="bg-[var(--panel-bg)] text-[var(--foreground)]">Delta</option>
+                                    <option value="Lagos" className="bg-[var(--panel-bg)] text-[var(--foreground)]">Lagos</option>
+                                    <option value="Abuja" className="bg-[var(--panel-bg)] text-[var(--foreground)]">Abuja</option>
+                                    <option value="Anambra" className="bg-[var(--panel-bg)] text-[var(--foreground)]">Anambra</option>
                                 </select>
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-sm font-medium text-secondary">Shipping Method</label>
+                                <div className="grid gap-3 sm:grid-cols-2">
+                                    <button
+                                      type="button"
+                                      onClick={() => setFormData((prev) => ({ ...prev, shippingType: "DELIVERY" }))}
+                                      className={`rounded-xl border px-4 py-3 text-left transition-colors ${
+                                        formData.shippingType === "DELIVERY"
+                                          ? "border-primary/40 bg-primary/10 text-primary"
+                                          : "border-[var(--border-subtle)] bg-[var(--surface-card)] text-secondary hover:text-[var(--foreground)]"
+                                      }`}
+                                    >
+                                        <p className="text-sm font-semibold">Delivery</p>
+                                        <p className="text-xs">Nationwide drop-off</p>
+                                    </button>
+                                    <button
+                                      type="button"
+                                      onClick={() => setFormData((prev) => ({ ...prev, shippingType: "LOCAL_PICKUP" }))}
+                                      className={`rounded-xl border px-4 py-3 text-left transition-colors ${
+                                        formData.shippingType === "LOCAL_PICKUP"
+                                          ? "border-primary/40 bg-primary/10 text-primary"
+                                          : "border-[var(--border-subtle)] bg-[var(--surface-card)] text-secondary hover:text-[var(--foreground)]"
+                                      }`}
+                                    >
+                                        <p className="text-sm font-semibold">Local pickup</p>
+                                        <p className="text-xs">Collect in person</p>
+                                    </button>
+                                </div>
                             </div>
                             <button 
                                 onClick={() => setStep(2)}
-                                disabled={!formData.fullName || !formData.email || !formData.phone || !formData.address}
+                                disabled={
+                                  !formData.fullName ||
+                                  !formData.email ||
+                                  !formData.phone ||
+                                  (formData.shippingType !== "LOCAL_PICKUP" && !formData.address) ||
+                                  hasStockIssue
+                                }
                                 className="mt-8 w-full rounded-full bg-primary py-4 text-base font-bold text-[var(--primary-contrast)] transition-colors hover:bg-[var(--primary-hover)] disabled:cursor-not-allowed disabled:opacity-50"
                             >
                                 Continue to Payment
@@ -219,7 +279,7 @@ export default function CheckoutPage() {
                                 </button>
                                 <button 
                                     onClick={handleConfirmOrder}
-                                    disabled={isLoading}
+                                    disabled={isLoading || hasStockIssue}
                                     className="flex flex-[2] items-center justify-center gap-2 rounded-full bg-primary py-4 text-base font-bold text-[var(--primary-contrast)] transition-colors hover:bg-[var(--primary-hover)] disabled:opacity-70"
                                 >
                                     {isLoading ? (
@@ -283,11 +343,15 @@ export default function CheckoutPage() {
                         <div className="space-y-2 pt-4 border-t border-border-subtle text-sm">
                             <div className="flex justify-between text-secondary">
                                 <span>Subtotal</span>
-                                <span>{new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN' }).format(total)}</span>
+                                <span>{new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN' }).format(itemsTotal)}</span>
                             </div>
                             <div className="flex justify-between text-secondary">
                                 <span>Shipping Fees</span>
-                                <span className="text-[var(--success)]">Calculated</span>
+                                <span className={shippingFee === 0 ? "text-[var(--success)]" : "text-[var(--foreground)]"}>
+                                  {shippingFee === 0
+                                    ? "FREE"
+                                    : new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN' }).format(shippingFee)}
+                                </span>
                             </div>
                             <div className="flex justify-between pt-2 text-lg font-bold text-[var(--foreground)]">
                                 <span>Total Payable</span>

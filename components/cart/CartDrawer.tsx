@@ -126,6 +126,12 @@ export function CartDrawer({ isOpen, onClose, cartItems, onRemove, onClear, onIn
                                             <p className="text-primary text-sm">
                                                 {new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN" }).format(item.product.price)}
                                             </p>
+                                            {typeof item.product.stock === "number" && item.product.stock <= 0 && (
+                                                <p className="mt-1 text-xs font-semibold text-[var(--status-error)]">Out of stock</p>
+                                            )}
+                                            {typeof item.product.stock === "number" && item.product.stock > 0 && item.product.stock <= 5 && (
+                                                <p className="mt-1 text-xs font-semibold text-[var(--status-error)]">{item.product.stock} left</p>
+                                            )}
                                             <div className="mt-2 inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-cta)] px-2 py-1 text-xs text-secondary">
                                                 <button
                                                     onClick={() => onDecrease(item.product.id)}
@@ -137,7 +143,8 @@ export function CartDrawer({ isOpen, onClose, cartItems, onRemove, onClear, onIn
                                                 <span className="min-w-[2ch] text-center text-sm font-semibold text-[var(--foreground)]">{item.quantity}</span>
                                                 <button
                                                     onClick={() => onIncrease(item.product.id)}
-                                                    className="h-6 w-6 rounded-full border border-[var(--border-subtle)] text-sm font-semibold text-secondary transition-colors hover:border-primary/40 hover:text-primary"
+                                                    disabled={typeof item.product.stock === "number" && item.quantity >= item.product.stock}
+                                                    className="h-6 w-6 rounded-full border border-[var(--border-subtle)] text-sm font-semibold text-secondary transition-colors hover:border-primary/40 hover:text-primary disabled:cursor-not-allowed disabled:opacity-60"
                                                     aria-label={`Increase quantity for ${item.product.name}`}
                                                 >
                                                     +

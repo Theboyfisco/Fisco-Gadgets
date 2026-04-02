@@ -16,7 +16,7 @@ import { MOTION } from "@/lib/motion";
 const SearchOverlay = dynamic(() => import("./SearchOverlay").then((mod) => mod.SearchOverlay), { ssr: false });
 
 interface NavbarProps {
-  categories?: { id: string; name: string }[];
+  categories?: { id: string; name: string; slug?: string }[];
 }
 
 export function Navbar({ categories = [] }: NavbarProps) {
@@ -50,7 +50,7 @@ export function Navbar({ categories = [] }: NavbarProps) {
 
   const categoryLinks = categories.map((category) => ({
     name: category.name,
-    href: `/category/${category.id}`,
+    href: `/category/${category.slug ?? category.id}`,
     icon:
       category.id === "phones"
         ? Smartphone

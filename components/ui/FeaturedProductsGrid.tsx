@@ -7,9 +7,12 @@ import { MOTION } from "@/lib/motion";
 type FeaturedProduct = {
   id: string;
   name: string;
+  slug?: string;
   price: number;
   image: string;
   categoryId: string;
+  stock?: number;
+  brandId?: string;
   technicalSpecs: Record<string, unknown>;
 };
 
@@ -33,7 +36,7 @@ export function FeaturedProductsGrid({ products }: { products: FeaturedProduct[]
           }}
           className={index === 0 ? "md:col-span-2 lg:col-span-2" : ""}
         >
-          <BentoProductCard product={product as any} featured={index === 0} href={`/product/${product.id}`} />
+          <BentoProductCard product={product as any} featured={index === 0} href={`/product/${product.slug ?? product.id}`} />
         </motion.div>
       ))}
     </motion.div>

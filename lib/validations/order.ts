@@ -5,13 +5,25 @@ export const OrderItemSchema = z.object({
   quantity: z.number().int().positive(),
 });
 
-export const ShippingDetailsSchema = z.object({
-  fullName: z.string().min(2, "Full name is required"),
-  address: z.string().min(5, "Address is required"),
-  city: z.string().min(2, "City is required"),
-  state: z.string().min(2, "State is required"),
-  shippingType: z.enum(["LOCAL_PICKUP", "DELIVERY"]),
-});
+export const ShippingDetailsSchema = z
+  .object({
+    fullName: z.string().min(2, "Full name is required"),
+    address: z.string().trim().optional(),
+    city: z.string().min(2, "City is required"),
+    state: z.string().min(2, "State is required"),
+    shippingType: z.enum(["LOCAL_PICKUP", "DELIVERY"]),
+  })
+  .superRefine((data, ctx) => {
+    if (data.shippingType === "DELIVERY") {
+      if (!data.address || data.address.trim().length < 5) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Address is required for delivery",
+          path: ["address"],
+        });
+      }
+    }
+  });
 
 export const CreateOrderSchema = z.object({
   email: z.string().email("Invalid email address"),

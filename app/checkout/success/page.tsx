@@ -1,8 +1,9 @@
 import Link from "next/link";
-import { CheckCircle2, Package, ArrowRight, ShoppingBag } from "lucide-react";
+import { CheckCircle2, Package, ArrowRight, ShoppingBag, Clock, XCircle } from "lucide-react";
 import prisma from "@/lib/db";
 import { notFound } from "next/navigation";
 import Image from "next/image";
+import { ResumePaymentButton } from "@/components/checkout/ResumePaymentButton";
 
 export default async function SuccessPage({ searchParams }: { searchParams: Promise<{ orderId: string }> }) {
     const { orderId } = await searchParams;
@@ -27,18 +28,39 @@ export default async function SuccessPage({ searchParams }: { searchParams: Prom
         notFound();
     }
 
+    const itemsSubtotal = order.items.reduce((sum, item: any) => sum + item.priceAtPurchase * item.quantity, 0);
+    const shippingFee = order.shippingDetails?.shippingFee ?? 0;
+    const totalPaid = order.totalAmount;
+    const isPaid = order.status === "PAID";
+    const isPending = order.status === "PENDING";
+
     return (
         <div className="container mx-auto flex flex-col items-center px-4 py-24">
-            <div className="mb-8 flex h-24 w-24 items-center justify-center rounded-full border border-primary/20 bg-primary/10 text-primary shadow-[0_18px_50px_rgba(63,107,253,0.18)] animate-in zoom-in duration-700">
-                <CheckCircle2 size={64} />
+            <div className={`mb-8 flex h-24 w-24 items-center justify-center rounded-full border shadow-[0_18px_50px_rgba(63,107,253,0.18)] animate-in zoom-in duration-700 ${
+              isPaid
+                ? "border-primary/20 bg-primary/10 text-primary"
+                : isPending
+                  ? "border-[var(--interactive-border)] bg-[var(--surface-soft)] text-secondary"
+                  : "border-[var(--status-error)]/20 bg-[var(--status-error)]/10 text-[var(--status-error)]"
+            }`}>
+                {isPaid ? <CheckCircle2 size={64} /> : isPending ? <Clock size={64} /> : <XCircle size={64} />}
             </div>
 
             <h1 className="mb-4 text-center text-4xl font-extrabold tracking-tight text-[var(--foreground)] md:text-6xl">
-                Payment Received!
+                {isPaid ? "Payment Received!" : isPending ? "Payment Pending" : "Order Cancelled"}
             </h1>
             <p className="text-secondary text-lg mb-12 text-center max-w-2xl">
-                Your order <span className="rounded bg-[var(--surface-card)] px-2 py-1 font-mono text-[var(--foreground)]">#{order.id.slice(-8).toUpperCase()}</span> has been confirmed. 
-                Our team is already preparing your gadgets for dispatch.
+                {isPaid
+                  ? "Your order "
+                  : isPending
+                    ? "Your order "
+                    : "Your order "}
+                <span className="rounded bg-[var(--surface-card)] px-2 py-1 font-mono text-[var(--foreground)]">#{order.id.slice(-8).toUpperCase()}</span>
+                {isPaid
+                  ? " has been confirmed. Our team is already preparing your gadgets for dispatch."
+                  : isPending
+                    ? " is awaiting payment confirmation. Resume payment to complete checkout."
+                    : " was cancelled after the reservation expired. Please create a new order if you still need these items."}
             </p>
 
             <div className="mb-12 w-full max-w-2xl overflow-hidden rounded-[2rem] border border-border-subtle bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] shadow-[0_24px_80px_rgba(8,18,38,0.12)]">
@@ -64,7 +86,7 @@ export default async function SuccessPage({ searchParams }: { searchParams: Prom
                                 <p className="text-sm text-secondary">Qty: {item.quantity}</p>
                             </div>
                             <p className="font-semibold text-[var(--foreground)]">
-                                {new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN' }).format(item.priceAtPurchase)}
+                                {new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN' }).format(item.priceAtPurchase * item.quantity)}
                             </p>
                         </div>
                     ))}
@@ -72,15 +94,19 @@ export default async function SuccessPage({ searchParams }: { searchParams: Prom
                     <div className="space-y-2 border-t border-[var(--border-subtle)] pt-4 text-sm">
                         <div className="flex justify-between text-secondary">
                             <span>Subtotal</span>
-                            <span>{new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN' }).format(order.totalAmount)}</span>
+                            <span>{new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN' }).format(itemsSubtotal)}</span>
                         </div>
                         <div className="flex justify-between text-secondary">
                             <span>Shipping Fee</span>
-                            <span className="text-primary">FREE</span>
+                            <span className={shippingFee === 0 ? "text-primary" : "text-[var(--foreground)]"}>
+                              {shippingFee === 0
+                                ? "FREE"
+                                : new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN' }).format(shippingFee)}
+                            </span>
                         </div>
                         <div className="flex justify-between pt-2 text-xl font-bold text-[var(--foreground)]">
-                            <span>Total Paid</span>
-                            <span>{new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN' }).format(order.totalAmount)}</span>
+                            <span>Total</span>
+                            <span>{new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN' }).format(totalPaid)}</span>
                         </div>
                     </div>
                 </div>
@@ -93,13 +119,17 @@ export default async function SuccessPage({ searchParams }: { searchParams: Prom
             </div>
 
             <div className="flex w-full max-w-md flex-col gap-4 sm:flex-row">
-                <Link 
-                    href="/" 
-                    className="flex flex-1 items-center justify-center gap-2 rounded-full bg-primary py-4 text-center text-base font-bold text-[var(--primary-contrast)] shadow-glow transition-all hover:bg-[var(--primary-hover)] active:scale-95"
-                >
-                    <ShoppingBag size={20} />
-                    Continue Shopping
-                </Link>
+                {isPending ? (
+                  <ResumePaymentButton orderId={order.id} />
+                ) : (
+                  <Link 
+                      href="/" 
+                      className="flex flex-1 items-center justify-center gap-2 rounded-full bg-primary py-4 text-center text-base font-bold text-[var(--primary-contrast)] shadow-glow transition-all hover:bg-[var(--primary-hover)] active:scale-95"
+                  >
+                      <ShoppingBag size={20} />
+                      Continue Shopping
+                  </Link>
+                )}
                 <Link 
                     href="/contact" 
                     className="flex flex-1 items-center justify-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] py-4 text-center font-bold text-[var(--foreground)] transition-all hover:bg-[var(--surface-cta)] active:scale-95"

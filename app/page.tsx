@@ -29,9 +29,12 @@ export default async function Home() {
       ? dbProducts.map((p: any) => ({
           id: p.id,
           name: p.name,
+          slug: p.slug,
           price: p.price,
+          stock: p.stock,
           image: getPrimaryImage(p.images),
           categoryId: p.categoryId,
+          brandId: p.brandId ?? undefined,
           technicalSpecs: normalizeTechnicalSpecs(p.technicalSpecs),
         }))
       : fallbackFeaturedProducts;

@@ -5,6 +5,7 @@ import { useEffect } from "react";
 type RecentlyViewedProduct = {
   id: string;
   name: string;
+  slug?: string;
   price: number;
   image: string;
   categoryId: string;

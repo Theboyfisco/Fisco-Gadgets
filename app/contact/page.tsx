@@ -93,7 +93,7 @@ export default function ContactPage() {
                 value={form.name}
                 onChange={handleChange}
                 required
-                className="w-full rounded-xl border border-border-subtle bg-[var(--surface-card)] px-4 py-3 text-[var(--foreground)] transition-colors focus:border-primary focus:outline-none"
+                className="w-full rounded-xl border border-border-subtle bg-[var(--surface-card)] px-4 py-3 text-[var(--foreground)] transition-colors placeholder:text-[var(--text-soft)] focus:border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/25"
                 placeholder="John Doe"
               />
             </div>
@@ -106,7 +106,7 @@ export default function ContactPage() {
                 value={form.email}
                 onChange={handleChange}
                 required
-                className="w-full rounded-xl border border-border-subtle bg-[var(--surface-card)] px-4 py-3 text-[var(--foreground)] transition-colors focus:border-primary focus:outline-none"
+                className="w-full rounded-xl border border-border-subtle bg-[var(--surface-card)] px-4 py-3 text-[var(--foreground)] transition-colors placeholder:text-[var(--text-soft)] focus:border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/25"
                 placeholder="john@example.com"
               />
             </div>
@@ -119,7 +119,7 @@ export default function ContactPage() {
                 value={form.message}
                 onChange={handleChange}
                 required
-                className="w-full rounded-xl border border-border-subtle bg-[var(--surface-card)] px-4 py-3 text-[var(--foreground)] transition-colors focus:border-primary focus:outline-none"
+                className="w-full rounded-xl border border-border-subtle bg-[var(--surface-card)] px-4 py-3 text-[var(--foreground)] transition-colors placeholder:text-[var(--text-soft)] focus:border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/25"
                 placeholder="How can we help?"
               ></textarea>
             </div>

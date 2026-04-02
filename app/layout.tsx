@@ -46,9 +46,9 @@ export default async function RootLayout({
 }>) {
   const categories = shouldUseDatabase()
     ? await prisma.category
-        .findMany({ select: { id: true, name: true } })
-        .catch(() => fallbackCategories.map((category) => ({ id: category.id, name: category.name })))
-    : fallbackCategories.map((category) => ({ id: category.id, name: category.name }));
+        .findMany({ select: { id: true, name: true, slug: true } })
+        .catch(() => fallbackCategories.map((category) => ({ id: category.id, name: category.name, slug: category.slug ?? category.id })))
+    : fallbackCategories.map((category) => ({ id: category.id, name: category.name, slug: category.slug ?? category.id }));
 
   return (
     <html lang="en" data-theme="dark" suppressHydrationWarning>

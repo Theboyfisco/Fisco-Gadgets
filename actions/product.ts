@@ -12,9 +12,12 @@ export async function searchProducts(query: string) {
             select: {
                 id: true,
                 name: true,
+                slug: true,
                 price: true,
+                stock: true,
                 images: true,
                 categoryId: true,
+                brandId: true,
                 technicalSpecs: true,
             },
         });
@@ -36,9 +39,12 @@ export async function searchProducts(query: string) {
         select: {
             id: true,
             name: true,
+            slug: true,
             price: true,
+            stock: true,
             images: true,
             categoryId: true,
+            brandId: true,
             technicalSpecs: true,
         },
     });
