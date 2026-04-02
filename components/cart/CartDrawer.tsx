@@ -13,13 +13,31 @@ interface CartDrawerProps {
     isOpen: boolean;
     onClose: () => void;
     cartItems: CartItem[];
+    savedForLater: CartItem["product"][];
     onRemove: (productId: string) => void;
     onClear: () => void;
     onIncrease: (productId: string) => void;
     onDecrease: (productId: string) => void;
+    onSaveForLater: (productId: string) => void;
+    onMoveToCart: (productId: string) => void;
+    onRemoveSaved: (productId: string) => void;
+    onClearSaved: () => void;
 }
 
-export function CartDrawer({ isOpen, onClose, cartItems, onRemove, onClear, onIncrease, onDecrease }: CartDrawerProps) {
+export function CartDrawer({
+    isOpen,
+    onClose,
+    cartItems,
+    savedForLater,
+    onRemove,
+    onClear,
+    onIncrease,
+    onDecrease,
+    onSaveForLater,
+    onMoveToCart,
+    onRemoveSaved,
+    onClearSaved,
+}: CartDrawerProps) {
     const total = cartItems.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
     const prefersReducedMotion = useReducedMotion();
     const dialogRef = useRef<HTMLDivElement>(null);
@@ -164,8 +182,51 @@ export function CartDrawer({ isOpen, onClose, cartItems, onRemove, onClear, onIn
                                         >
                                             <Trash2 size={16} />
                                         </button>
+                                        <button
+                                            onClick={() => onSaveForLater(item.product.id)}
+                                            className="rounded-full border border-[var(--border-subtle)] px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-secondary transition-colors hover:border-primary/40 hover:text-primary"
+                                            aria-label={`Save ${item.product.name} for later`}
+                                        >
+                                            Save
+                                        </button>
                                     </div>
                                 ))}
+                            </div>
+                        )}
+
+                        {savedForLater.length > 0 && (
+                            <div className="mt-4 rounded-[1.5rem] border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-4">
+                                <div className="mb-3 flex items-center justify-between">
+                                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--text-soft)]">Saved for later</p>
+                                    <button
+                                        onClick={onClearSaved}
+                                        className="text-xs font-semibold uppercase tracking-[0.16em] text-secondary transition-colors hover:text-[var(--foreground)]"
+                                    >
+                                        Clear
+                                    </button>
+                                </div>
+                                <div className="space-y-2">
+                                    {savedForLater.map((product) => (
+                                        <div key={product.id} className="flex items-center justify-between gap-3 rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] px-3 py-2">
+                                            <p className="line-clamp-1 text-sm font-medium text-[var(--foreground)]">{product.name}</p>
+                                            <div className="flex items-center gap-2">
+                                                <button
+                                                    onClick={() => onMoveToCart(product.id)}
+                                                    className="rounded-full border border-[var(--border-subtle)] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-secondary transition-colors hover:border-primary/40 hover:text-primary"
+                                                >
+                                                    Move
+                                                </button>
+                                                <button
+                                                    onClick={() => onRemoveSaved(product.id)}
+                                                    className="rounded-full border border-[var(--border-subtle)] p-1.5 text-secondary transition-colors hover:border-primary/40 hover:text-primary"
+                                                    aria-label={`Remove ${product.name} from saved for later`}
+                                                >
+                                                    <Trash2 size={14} />
+                                                </button>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
                         )}
 

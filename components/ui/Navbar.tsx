@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ShoppingBag, ArrowLeft, Menu, X, Smartphone, Laptop, Headphones, Search, Info, Mail, Heart } from "lucide-react";
+import { ShoppingBag, ArrowLeft, Menu, X, Smartphone, Laptop, Headphones, Search, Info, Mail, Heart, UserCircle2 } from "lucide-react";
 import { useCart } from "../cart/CartProvider";
 import { useWishlist } from "../product/WishlistProvider";
 import { usePathname } from "next/navigation";
@@ -198,6 +198,13 @@ export function Navbar({ categories = [] }: NavbarProps) {
             </button>
 
             <ThemeSwitcher />
+            <Link
+              href="/account/orders"
+              className="interactive-focus relative rounded-xl border border-transparent p-2 text-secondary transition-colors hover:border-[var(--interactive-border)] hover:bg-[var(--interactive-active)] hover:text-[var(--interactive-fg)]"
+              aria-label="Account"
+            >
+              <UserCircle2 size={22} />
+            </Link>
             <button
               onClick={toggleWishlistDrawer}
               className="interactive-focus relative rounded-xl border border-transparent p-2 text-secondary transition-colors hover:border-[var(--interactive-border)] hover:bg-[var(--interactive-active)] hover:text-[var(--interactive-fg)]"

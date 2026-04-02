@@ -3,7 +3,7 @@
 import { useCart } from "@/components/cart/CartProvider";
 import { CreditCard, User, ArrowLeft, ShieldCheck } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 
 import { createOrder } from "@/actions/order";
@@ -11,13 +11,18 @@ import { initializePayment } from "@/actions/paystack";
 import { Loader2 } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { MOTION } from "@/lib/motion";
-import { calculateShippingFee } from "@/services/shipping";
+import { calculateShippingFee, estimateDeliveryWindow, PICKUP_DETAILS } from "@/services/shipping";
+import { evaluatePromoCode, listPromoRules } from "@/services/promo";
+import { getCustomerViewer } from "@/actions/customer-auth";
 
 export default function CheckoutPage() {
     const { cartItems, clearCart } = useCart();
     const [step, setStep] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [promoCode, setPromoCode] = useState("");
+    const [promoTouched, setPromoTouched] = useState(false);
+    const [promoMessage, setPromoMessage] = useState<string | null>(null);
     const prefersReducedMotion = useReducedMotion();
 
     // Form State
@@ -41,13 +46,49 @@ export default function CheckoutPage() {
 
     const itemsTotal = cartItems.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
     const shippingFee = calculateShippingFee(formData.city, formData.state, formData.shippingType);
-    const total = itemsTotal + shippingFee;
+    const eta = estimateDeliveryWindow(formData.city, formData.state, formData.shippingType);
+    const promoResult = evaluatePromoCode({ code: promoCode, itemsTotal, shippingFee });
+    const appliedPromo = promoTouched && promoResult.applied;
+    const effectiveShippingFee = appliedPromo ? promoResult.adjustedShippingFee : shippingFee;
+    const discountAmount = appliedPromo ? promoResult.discountAmount : 0;
+    const total = itemsTotal + effectiveShippingFee - discountAmount;
     const hasStockIssue = cartItems.some((item) => typeof item.product.stock === "number" && item.quantity > item.product.stock);
+
+    const handleApplyPromo = () => {
+      setPromoTouched(true);
+      if (!promoCode.trim()) {
+        setPromoMessage("Enter a promo code.");
+        return;
+      }
+      if (!promoResult.applied) {
+        setPromoMessage(promoResult.reason || "Promo code is invalid.");
+        return;
+      }
+      setPromoMessage(`Promo ${promoResult.code} applied.`);
+    };
+
+    const handleClearPromo = () => {
+      setPromoTouched(false);
+      setPromoCode("");
+      setPromoMessage(null);
+    };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
     };
+
+    useEffect(() => {
+      (async () => {
+        const viewer = await getCustomerViewer();
+        if (!viewer) return;
+        setFormData((prev) => ({
+          ...prev,
+          email: prev.email || viewer.email,
+          fullName: prev.fullName || viewer.fullName || "",
+        }));
+      })();
+    }, []);
 
     const handleConfirmOrder = async () => {
         setIsLoading(true);
@@ -68,7 +109,8 @@ export default function CheckoutPage() {
                     city: formData.city,
                     state: formData.state,
                     shippingType: formData.shippingType
-                }
+                },
+                promoCode: appliedPromo ? promoCode.trim().toUpperCase() : undefined,
             });
 
             if (!orderResult.success || !orderResult.orderId) {
@@ -223,6 +265,17 @@ export default function CheckoutPage() {
                                         <p className="text-xs">Collect in person</p>
                                     </button>
                                 </div>
+                                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-secondary">
+                                  ETA: {eta.label}
+                                </p>
+                                {formData.shippingType === "LOCAL_PICKUP" ? (
+                                  <div className="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-4 text-sm text-secondary">
+                                    <p className="font-semibold text-[var(--foreground)]">Pickup location</p>
+                                    <p className="mt-1">{PICKUP_DETAILS.address}</p>
+                                    <p className="mt-1">Hours: {PICKUP_DETAILS.hours}</p>
+                                    <p className="mt-1">Contact: {PICKUP_DETAILS.contact}</p>
+                                  </div>
+                                ) : null}
                             </div>
                             <button 
                                 onClick={() => setStep(2)}
@@ -345,13 +398,67 @@ export default function CheckoutPage() {
                                 <span>Subtotal</span>
                                 <span>{new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN' }).format(itemsTotal)}</span>
                             </div>
+                            <div className="rounded-[1rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-3">
+                                <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--text-soft)]">Promo code</p>
+                                <div className="flex gap-2">
+                                  <input
+                                    value={promoCode}
+                                    onChange={(event) => setPromoCode(event.target.value)}
+                                    placeholder="SAVE10"
+                                    className="w-full rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-soft)] px-3 py-2 text-sm text-[var(--foreground)] placeholder:text-[var(--text-soft)] outline-none focus-visible:ring-2 focus-visible:ring-primary/25"
+                                  />
+                                  <button
+                                    type="button"
+                                    onClick={handleApplyPromo}
+                                    className="rounded-full border border-[var(--border-subtle)] px-3 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-secondary transition-colors hover:text-[var(--foreground)]"
+                                  >
+                                    Apply
+                                  </button>
+                                </div>
+                                {promoTouched && promoMessage ? (
+                                  <p className={`mt-2 text-xs ${promoResult.applied ? "text-primary" : "text-[var(--status-error)]"}`}>{promoMessage}</p>
+                                ) : null}
+                                <div className="mt-2 flex flex-wrap gap-2">
+                                  {listPromoRules().map((rule) => (
+                                    <button
+                                      key={rule.code}
+                                      type="button"
+                                      onClick={() => setPromoCode(rule.code)}
+                                      className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-soft)] px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-secondary transition-colors hover:text-[var(--foreground)]"
+                                    >
+                                      {rule.code}
+                                    </button>
+                                  ))}
+                                  {promoTouched && (
+                                    <button
+                                      type="button"
+                                      onClick={handleClearPromo}
+                                      className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-soft)] px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-secondary transition-colors hover:text-[var(--foreground)]"
+                                    >
+                                      Clear
+                                    </button>
+                                  )}
+                                </div>
+                            </div>
                             <div className="flex justify-between text-secondary">
                                 <span>Shipping Fees</span>
-                                <span className={shippingFee === 0 ? "text-[var(--success)]" : "text-[var(--foreground)]"}>
-                                  {shippingFee === 0
+                                <span className={effectiveShippingFee === 0 ? "text-[var(--success)]" : "text-[var(--foreground)]"}>
+                                  {effectiveShippingFee === 0
                                     ? "FREE"
-                                    : new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN' }).format(shippingFee)}
+                                    : new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN' }).format(effectiveShippingFee)}
                                 </span>
+                            </div>
+                            {discountAmount > 0 && (
+                              <div className="flex justify-between text-primary">
+                                <span>Discount</span>
+                                <span>
+                                  -{new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN' }).format(discountAmount)}
+                                </span>
+                              </div>
+                            )}
+                            <div className="flex justify-between text-secondary">
+                              <span>Estimated delivery</span>
+                              <span>{eta.label}</span>
                             </div>
                             <div className="flex justify-between pt-2 text-lg font-bold text-[var(--foreground)]">
                                 <span>Total Payable</span>

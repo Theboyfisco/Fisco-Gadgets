@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import type { Product } from "@/components/product/BentoProductCard";
+import { getCustomerLists, syncCustomerList } from "@/actions/customer-lists";
 
 interface WishlistContextType {
   wishlistItems: Product[];
@@ -38,6 +39,36 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (!hydrated) return;
     localStorage.setItem("fisco_wishlist_v1", JSON.stringify(wishlistItems));
+  }, [wishlistItems, hydrated]);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    let cancelled = false;
+    (async () => {
+      const synced = await getCustomerLists();
+      if (cancelled || !synced.authenticated) return;
+      if (synced.wishlist.length > 0) {
+        setWishlistItems((prev) => {
+          const merged = [...synced.wishlist, ...prev.filter((item) => !synced.wishlist.some((db) => db.id === item.id))];
+          return merged;
+        });
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [hydrated]);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    const timer = setTimeout(() => {
+      syncCustomerList(
+        "WISHLIST",
+        wishlistItems.map((item) => item.id),
+      ).catch(() => null);
+    }, 200);
+
+    return () => clearTimeout(timer);
   }, [wishlistItems, hydrated]);
 
   const addToWishlist = (product: Product) => {

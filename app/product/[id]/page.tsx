@@ -11,6 +11,10 @@ import { ProductDepthGallery } from "@/components/product/ProductDepthGallery";
 import { RecentlyViewedTracker } from "@/components/ui/RecentlyViewedTracker";
 import { RecentlyViewedRail } from "@/components/ui/RecentlyViewedRail";
 import { getPrimaryImage, normalizeTechnicalSpecs } from "@/lib/normalize-product";
+import { ProductGridMotion } from "@/components/ui/ProductGridMotion";
+import { estimateDeliveryWindow, PICKUP_DETAILS } from "@/services/shipping";
+import { FrequentlyBoughtTogether } from "@/components/product/FrequentlyBoughtTogether";
+import { ProductCommunityPanel } from "@/components/product/ProductCommunityPanel";
 
 export default async function ProductPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = await params;
@@ -28,6 +32,68 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
 
   const images = Array.isArray(dbProduct.images) && dbProduct.images.length > 0 ? dbProduct.images : [""];
   const technicalSpecs = normalizeTechnicalSpecs(dbProduct.technicalSpecs);
+  const eta = estimateDeliveryWindow(undefined, undefined, "DELIVERY");
+
+  const [relatedProductsRaw, sourceOrders, reviewsRaw, questionsRaw] = await Promise.all([
+    prisma.product.findMany({
+      where: {
+        categoryId: dbProduct.categoryId,
+        id: { not: dbProduct.id },
+      },
+      take: 6,
+      orderBy: [{ updatedAt: "desc" }],
+      include: { category: true, brand: true },
+    }),
+    prisma.orderItem.findMany({
+      where: {
+        productId: dbProduct.id,
+        order: {
+          status: "PAID",
+        },
+      },
+      select: { orderId: true },
+      take: 120,
+    }),
+    prisma.productReview.findMany({
+      where: { productId: dbProduct.id },
+      include: {
+        customer: {
+          select: { fullName: true, email: true },
+        },
+      },
+      orderBy: { createdAt: "desc" },
+      take: 20,
+    }),
+    prisma.productQuestion.findMany({
+      where: { productId: dbProduct.id },
+      orderBy: { createdAt: "desc" },
+      take: 20,
+    }),
+  ]);
+
+  const sourceOrderIds = Array.from(new Set(sourceOrders.map((item) => item.orderId)));
+
+  const frequentlyBoughtIds =
+    sourceOrderIds.length > 0
+      ? await prisma.orderItem.groupBy({
+          by: ["productId"],
+          where: {
+            orderId: { in: sourceOrderIds },
+            productId: { not: dbProduct.id },
+          },
+          _count: { productId: true },
+          orderBy: { _count: { productId: "desc" } },
+          take: 3,
+        })
+      : [];
+
+  const frequentlyBoughtProductsRaw =
+    frequentlyBoughtIds.length > 0
+      ? await prisma.product.findMany({
+          where: { id: { in: frequentlyBoughtIds.map((item) => item.productId) } },
+          include: { category: true, brand: true },
+        })
+      : [];
 
   const product = {
     id: dbProduct.id,
@@ -40,9 +106,54 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
     stock: dbProduct.stock,
     technicalSpecs,
   };
+  const mapProduct = (entry: any) => ({
+    id: entry.id,
+    name: entry.name,
+    slug: entry.slug,
+    price: entry.price,
+    image: getPrimaryImage(entry.images),
+    categoryId: entry.categoryId,
+    brandId: entry.brandId ?? undefined,
+    stock: entry.stock,
+    technicalSpecs: normalizeTechnicalSpecs(entry.technicalSpecs),
+  });
+  const relatedProducts = relatedProductsRaw.map(mapProduct).slice(0, 4);
+  const frequentlyBoughtProducts = frequentlyBoughtProductsRaw.map(mapProduct);
 
   const condition = String(technicalSpecs.condition || "New");
-  const whatsappMsg = encodeURIComponent(`Hi, I want to buy the ${product.name} for ₦${product.price}`);
+  const whatsappMsg = encodeURIComponent(`Hi, I want to buy ${product.name} (Ref: ${product.id}) for ₦${product.price}.`);
+  const supportMessage = encodeURIComponent(`Hi, I need help with ${product.name} (Ref: ${product.id}).`);
+  const warrantyInfo = String(
+    technicalSpecs.warranty ||
+      technicalSpecs.warrantyCoverage ||
+      (dbProduct.condition === "NEW" ? "12 months" : dbProduct.condition === "OPEN_BOX" ? "6 months" : "3 months"),
+  );
+  const conditionNote = String(
+    technicalSpecs.conditionNotes || technicalSpecs.grade || `${condition} condition with full diagnostic checks completed.`,
+  );
+  const inBoxItems = String(technicalSpecs.inTheBox || technicalSpecs.includes || "")
+    .split(/[,;\n|]/)
+    .map((item) => item.trim())
+    .filter(Boolean);
+  const reviewAverage = reviewsRaw.length > 0 ? reviewsRaw.reduce((sum, item) => sum + item.rating, 0) / reviewsRaw.length : 0;
+  const reviewCount = reviewsRaw.length;
+  const reviewEntries = reviewsRaw.map((item) => ({
+    id: item.id,
+    rating: item.rating,
+    title: item.title,
+    body: item.body,
+    verifiedPurchase: item.verifiedPurchase,
+    createdAt: item.createdAt.toISOString(),
+    author: item.customer.fullName || item.customer.email,
+  }));
+  const questionEntries = questionsRaw.map((item) => ({
+    id: item.id,
+    question: item.question,
+    answer: item.answer,
+    status: item.status,
+    createdAt: item.createdAt.toISOString(),
+    name: item.name || "Customer",
+  }));
   const priceLabel = new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN" }).format(product.price);
   const specEntries = Object.entries(technicalSpecs).filter(
     ([key, value]) => key.toLowerCase() !== "condition" && value !== undefined && value !== null && String(value).trim() !== ""
@@ -151,13 +262,18 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
                 </div>
               ) : null}
 
+              <div className="mb-6 rounded-[1.25rem] border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--text-soft)]">Product overview</p>
+                <p className="mt-2 text-sm leading-relaxed text-secondary">{dbProduct.description}</p>
+              </div>
+
               <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div className="rounded-[1.5rem] border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-4 transition-transform duration-300 hover:-translate-y-1">
                   <div className="flex items-center gap-3">
                     <Truck className="text-secondary" />
                     <div>
                       <p className="text-sm text-secondary">Delivery</p>
-                      <p className="font-medium text-[var(--foreground)]">1-3 Days</p>
+                      <p className="font-medium text-[var(--foreground)]">{eta.label}</p>
                     </div>
                   </div>
                 </div>
@@ -166,7 +282,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
                     <ShieldCheck className="text-secondary" />
                     <div>
                       <p className="text-sm text-secondary">Warranty</p>
-                      <p className="font-medium text-[var(--foreground)]">6 Months</p>
+                      <p className="font-medium text-[var(--foreground)]">{warrantyInfo}</p>
                     </div>
                   </div>
                 </div>
@@ -185,6 +301,13 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
               <div className="mt-4 flex flex-wrap gap-3">
                 <CompareButton product={product} showLabel className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-6 hover:bg-[var(--surface-cta)]" />
                 <WishlistButton product={product} showLabel className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-6 hover:bg-[var(--surface-cta)]" />
+                <a
+                  href={`https://wa.me/2348000000000?text=${supportMessage}`}
+                  className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-6 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-secondary transition-colors hover:text-[var(--foreground)]"
+                >
+                  Support
+                  <ArrowRight size={14} />
+                </a>
                 <Link
                   href="#specs"
                   className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-6 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-secondary transition-colors hover:text-[var(--foreground)]"
@@ -228,7 +351,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--text-soft)]">Why this works</p>
-                    <p className="mt-2 text-sm text-secondary">Fast shipping, verified stock, and a calmer post-purchase experience than a basic storefront flow.</p>
+                    <p className="mt-2 text-sm text-secondary">{conditionNote}</p>
                   </div>
                   <div className="rounded-full bg-[var(--surface-card)] p-2 text-primary">
                     <ArrowRight size={16} />
@@ -276,9 +399,9 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
               <h3 className="mb-3 text-lg font-semibold text-[var(--foreground)]">Included accessories</h3>
               <p className="text-sm text-secondary">Everything is packaged for safe delivery with clear setup guidance.</p>
               <div className="mt-4 space-y-2 text-sm font-medium text-[var(--foreground)]">
-                <p>Device and protective wrap</p>
-                <p>Charging cable and adapter</p>
-                <p>Quick start + warranty card</p>
+                {(inBoxItems.length > 0 ? inBoxItems : ["Device and protective wrap", "Charging cable and adapter", "Quick start + warranty card"]).map((item) => (
+                  <p key={item}>{item}</p>
+                ))}
               </div>
             </div>
             <div className="rounded-[2rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6 shadow-[0_18px_60px_rgba(8,18,38,0.18)]">
@@ -299,7 +422,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
                 Coverage
               </div>
               <h3 className="mb-3 text-lg font-semibold text-[var(--foreground)]">Warranty backed</h3>
-              <p className="text-sm text-secondary">6 months of coverage with localized service guidance.</p>
+              <p className="text-sm text-secondary">{warrantyInfo} of coverage with localized service guidance.</p>
               <Link href="/warranty" className="mt-4 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-secondary hover:text-[var(--foreground)]">
                 View warranty details
                 <ArrowRight size={14} />
@@ -327,14 +450,43 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
               </div>
               <div className="rounded-[1.5rem] border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-4">
                 <h4 className="text-sm font-semibold text-[var(--foreground)]">How fast is delivery?</h4>
-                <p className="mt-2 text-sm text-secondary">Expect 1-3 days for major cities with tracking from the moment it ships.</p>
+                <p className="mt-2 text-sm text-secondary">Expected window: {eta.label}. Pickup is available at our Asaba office.</p>
               </div>
               <div className="rounded-[1.5rem] border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-4">
                 <h4 className="text-sm font-semibold text-[var(--foreground)]">What if I need help?</h4>
-                <p className="mt-2 text-sm text-secondary">Message us any time for setup support or quick troubleshooting.</p>
+                <p className="mt-2 text-sm text-secondary">
+                  Message us any time for setup support or quick troubleshooting. Pickup desk: {PICKUP_DETAILS.hours}.
+                </p>
               </div>
             </div>
           </div>
+        </Reveal>
+
+        {relatedProducts.length > 0 ? (
+          <Reveal className="mx-auto mt-16 max-w-6xl">
+            <div className="mb-5 flex items-end justify-between gap-4">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--text-soft)]">You may also like</p>
+                <h3 className="text-2xl font-bold text-[var(--foreground)]">Related products</h3>
+              </div>
+            </div>
+            <ProductGridMotion products={relatedProducts} />
+          </Reveal>
+        ) : null}
+
+        <Reveal className="mx-auto mt-16 max-w-5xl">
+          <FrequentlyBoughtTogether products={frequentlyBoughtProducts} />
+        </Reveal>
+
+        <Reveal className="mx-auto mt-16 max-w-5xl">
+          <ProductCommunityPanel
+            productId={product.id}
+            stock={product.stock}
+            initialReviews={reviewEntries}
+            initialQuestions={questionEntries}
+            ratingAverage={reviewAverage}
+            ratingCount={reviewCount}
+          />
         </Reveal>
 
         <RecentlyViewedRail />

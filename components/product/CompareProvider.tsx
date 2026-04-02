@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import type { Product } from "@/components/product/BentoProductCard";
+import { getCustomerLists, syncCustomerList } from "@/actions/customer-lists";
 
 interface CompareContextType {
   compareItems: Product[];
@@ -33,6 +34,35 @@ export function CompareProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (!hydrated) return;
     localStorage.setItem("fisco_compare_v1", JSON.stringify(compareItems));
+  }, [compareItems, hydrated]);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    let cancelled = false;
+    (async () => {
+      const synced = await getCustomerLists();
+      if (cancelled || !synced.authenticated) return;
+      if (synced.compare.length > 0) {
+        setCompareItems((prev) => {
+          const merged = [...synced.compare, ...prev.filter((item) => !synced.compare.some((db) => db.id === item.id))];
+          return merged.slice(0, 4);
+        });
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [hydrated]);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    const timer = setTimeout(() => {
+      syncCustomerList(
+        "COMPARE",
+        compareItems.map((item) => item.id),
+      ).catch(() => null);
+    }, 200);
+    return () => clearTimeout(timer);
   }, [compareItems, hydrated]);
 
   const addToCompare = (product: Product) => {

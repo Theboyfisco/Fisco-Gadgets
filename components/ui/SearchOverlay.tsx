@@ -13,9 +13,20 @@ import { useBodyScrollLock } from "@/lib/useBodyScrollLock";
 import { QuickViewModal } from "@/components/product/QuickViewModal";
 import { getPrimaryImage, normalizeTechnicalSpecs } from "@/lib/normalize-product";
 
+const RECENT_SEARCH_KEY = "fisco_recent_searches_v1";
+
 export function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<any[]>([]);
+  const [recentSearches, setRecentSearches] = useState<string[]>(() => {
+    if (typeof window === "undefined") return [];
+    try {
+      const stored = localStorage.getItem(RECENT_SEARCH_KEY);
+      return stored ? (JSON.parse(stored) as string[]) : [];
+    } catch {
+      return [];
+    }
+  });
   const [activeIndex, setActiveIndex] = useState(0);
   const [quickViewProduct, setQuickViewProduct] = useState<any | null>(null);
   const router = useRouter();
@@ -127,9 +138,23 @@ export function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; onClose: (
   }, [isOpen, quickViewProduct]);
 
   const goToProduct = (productId: string) => {
+    if (query.trim()) {
+      try {
+        const normalized = query.trim();
+        const next = [normalized, ...recentSearches.filter((item) => item.toLowerCase() !== normalized.toLowerCase())].slice(0, 6);
+        localStorage.setItem(RECENT_SEARCH_KEY, JSON.stringify(next));
+        setRecentSearches(next);
+      } catch {
+        // Ignore storage issues.
+      }
+    }
     router.push(`/product/${productId}`);
     onClose();
   };
+
+  const hasDirectMatch =
+    query.trim().length > 1 &&
+    results.some((item) => item.name.toLowerCase().includes(query.trim().toLowerCase()));
 
   return (
     <AnimatePresence>
@@ -183,7 +208,11 @@ export function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; onClose: (
               {results.length > 0 ? (
                 <div className="space-y-2">
                   <p className="text-muted mb-4 px-2 text-xs font-bold uppercase tracking-widest">
-                    {query ? `Found ${results.length} results` : "Trending Now"}
+                    {query
+                      ? hasDirectMatch
+                        ? `Found ${results.length} results`
+                        : "No exact match. Showing closest alternatives"
+                      : "Trending Now"}
                   </p>
                   <div
                     className="grid grid-cols-1 gap-2"
@@ -225,7 +254,7 @@ export function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; onClose: (
                               <div className="min-w-0">
                                 <h4 className="truncate font-semibold text-[var(--foreground)] transition-colors group-hover:text-primary">{product.name}</h4>
                                 <p className="text-muted mt-1 text-xs capitalize">
-                                  {product.categoryId} • ₦{product.price.toLocaleString()}
+                                  {product.brand?.name || product.category?.name || product.categoryId} • ₦{product.price.toLocaleString()}
                                 </p>
                               </div>
                               <ArrowRight className="-translate-x-1 text-secondary opacity-0 transition-all group-hover:translate-x-0 group-hover:opacity-100" size={18} />
@@ -264,6 +293,24 @@ export function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; onClose: (
               ) : (
                 <div className="py-8 text-center">
                   <p className="text-muted text-base">Start typing to see the latest drops.</p>
+                </div>
+              )}
+
+              {!query && recentSearches.length > 0 && (
+                <div className="mt-6">
+                  <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--text-soft)]">Recent searches</p>
+                  <div className="flex flex-wrap gap-2">
+                    {recentSearches.map((term) => (
+                      <button
+                        key={term}
+                        type="button"
+                        onClick={() => setQuery(term)}
+                        className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-secondary transition-colors hover:border-primary/40 hover:text-primary"
+                      >
+                        {term}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               )}
 

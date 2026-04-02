@@ -4,6 +4,7 @@ import prisma from "@/lib/db";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import { ResumePaymentButton } from "@/components/checkout/ResumePaymentButton";
+import { PICKUP_DETAILS } from "@/services/shipping";
 
 export default async function SuccessPage({ searchParams }: { searchParams: Promise<{ orderId: string }> }) {
     const { orderId } = await searchParams;
@@ -31,8 +32,11 @@ export default async function SuccessPage({ searchParams }: { searchParams: Prom
     const itemsSubtotal = order.items.reduce((sum, item: any) => sum + item.priceAtPurchase * item.quantity, 0);
     const shippingFee = order.shippingDetails?.shippingFee ?? 0;
     const totalPaid = order.totalAmount;
+    const discountAmount = order.discountAmount ?? 0;
     const isPaid = order.status === "PAID";
     const isPending = order.status === "PENDING";
+    const isPickup = order.shippingDetails?.shippingType === "LOCAL_PICKUP";
+    const supportMessage = encodeURIComponent(`Hi, I need help with order #${order.id.slice(-8).toUpperCase()}. Status: ${order.status}.`);
 
     return (
         <div className="container mx-auto flex flex-col items-center px-4 py-24">
@@ -104,6 +108,12 @@ export default async function SuccessPage({ searchParams }: { searchParams: Prom
                                 : new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN' }).format(shippingFee)}
                             </span>
                         </div>
+                        {discountAmount > 0 && (
+                          <div className="flex justify-between text-primary">
+                            <span>Discount {order.promoCode ? `(${order.promoCode})` : ""}</span>
+                            <span>-{new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN' }).format(discountAmount)}</span>
+                          </div>
+                        )}
                         <div className="flex justify-between pt-2 text-xl font-bold text-[var(--foreground)]">
                             <span>Total</span>
                             <span>{new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN' }).format(totalPaid)}</span>
@@ -112,9 +122,20 @@ export default async function SuccessPage({ searchParams }: { searchParams: Prom
                 </div>
 
                 <div className="border-t border-[var(--border-subtle)] bg-primary/5 p-6">
-                    <h3 className="mb-2 text-sm font-bold uppercase tracking-widest text-primary">Delivery Address</h3>
+                    <h3 className="mb-2 text-sm font-bold uppercase tracking-widest text-primary">
+                      {isPickup ? "Pickup details" : "Delivery Address"}
+                    </h3>
                     <p className="font-medium text-[var(--foreground)]">{order.shippingDetails?.fullName}</p>
-                    <p className="text-secondary text-sm">{order.shippingDetails?.address}, {order.shippingDetails?.city}, {order.shippingDetails?.state}</p>
+                    {isPickup ? (
+                      <div className="text-secondary text-sm">
+                        <p>{PICKUP_DETAILS.address}</p>
+                        <p>Hours: {PICKUP_DETAILS.hours}</p>
+                        <p>Contact: {PICKUP_DETAILS.contact}</p>
+                        <p className="mt-1">{PICKUP_DETAILS.note}</p>
+                      </div>
+                    ) : (
+                      <p className="text-secondary text-sm">{order.shippingDetails?.address}, {order.shippingDetails?.city}, {order.shippingDetails?.state}</p>
+                    )}
                 </div>
             </div>
 
@@ -131,7 +152,7 @@ export default async function SuccessPage({ searchParams }: { searchParams: Prom
                   </Link>
                 )}
                 <Link 
-                    href="/contact" 
+                    href={`https://wa.me/2348000000000?text=${supportMessage}`}
                     className="flex flex-1 items-center justify-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] py-4 text-center font-bold text-[var(--foreground)] transition-all hover:bg-[var(--surface-cta)] active:scale-95"
                 >
                     Support

@@ -1,5 +1,5 @@
 import prisma from "@/lib/db";
-import type { Prisma } from "@prisma/client";
+import type { Prisma, Condition } from "@prisma/client";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -18,12 +18,27 @@ function categoryTone(categoryId: string) {
   return "from-[var(--tone-generic)]";
 }
 
+function normalizeSpec(value: unknown) {
+  return String(value ?? "")
+    .trim()
+    .toLowerCase();
+}
+
 export default async function CategoryPage({
   params,
   searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams?: Promise<{ sort?: string; min?: string; max?: string }>;
+  searchParams?: Promise<{
+    sort?: string;
+    min?: string;
+    max?: string;
+    brand?: string;
+    condition?: string;
+    stock?: string;
+    ram?: string;
+    storage?: string;
+  }>;
 }) {
   const resolvedParams = await params;
   const resolvedSearchParams = searchParams ? await searchParams : undefined;
@@ -31,8 +46,15 @@ export default async function CategoryPage({
   const sort = resolvedSearchParams?.sort ?? "newest";
   const min = resolvedSearchParams?.min ? Number(resolvedSearchParams.min) : undefined;
   const max = resolvedSearchParams?.max ? Number(resolvedSearchParams.max) : undefined;
+  const brand = resolvedSearchParams?.brand ?? "";
+  const condition = resolvedSearchParams?.condition ?? "";
+  const stock = resolvedSearchParams?.stock ?? "";
+  const ramFilter = normalizeSpec(resolvedSearchParams?.ram);
+  const storageFilter = normalizeSpec(resolvedSearchParams?.storage);
   const minValue = Number.isFinite(min) ? (min as number) : undefined;
   const maxValue = Number.isFinite(max) ? (max as number) : undefined;
+  const validCondition = ["NEW", "OPEN_BOX", "REFURBISHED"].includes(condition) ? (condition as Condition) : undefined;
+  const useDatabase = shouldUseDatabase();
 
   const orderBy: Prisma.ProductOrderByWithRelationInput =
     sort === "price-asc"
@@ -41,7 +63,7 @@ export default async function CategoryPage({
         ? { price: "desc" }
         : { createdAt: "desc" };
 
-  const category = shouldUseDatabase()
+  const category = useDatabase
     ? await prisma.category
         .findFirst({
           where: {
@@ -55,11 +77,18 @@ export default async function CategoryPage({
     notFound();
   }
 
-  const dbProducts = shouldUseDatabase()
+  const dbProducts = useDatabase
     ? await prisma.product
         .findMany({
           where: {
             categoryId: category.id,
+            ...(brand ? { brandId: brand } : {}),
+            ...(validCondition ? { condition: validCondition } : {}),
+            ...(stock === "in"
+              ? { stock: { gt: 0 } }
+              : stock === "low"
+                ? { stock: { gt: 0, lte: 5 } }
+                : {}),
             ...(Number.isFinite(minValue) || Number.isFinite(maxValue)
               ? {
                   price: {
@@ -70,13 +99,13 @@ export default async function CategoryPage({
               : {}),
           },
           orderBy,
-          include: { category: true },
+          include: { category: true, brand: true },
         })
         .catch(() => [])
     : [];
 
-  const products =
-    dbProducts.length > 0
+  const rawProducts =
+    useDatabase
       ? dbProducts.map((product: any) => ({
           id: product.id,
           name: product.name,
@@ -86,9 +115,34 @@ export default async function CategoryPage({
           image: getPrimaryImage(product.images, category.image),
           categoryId: product.categoryId,
           brandId: product.brandId ?? undefined,
+          condition: product.condition,
           technicalSpecs: normalizeTechnicalSpecs(product.technicalSpecs),
         }))
       : fallbackFeaturedProducts.filter((product) => product.categoryId === category.id);
+
+  const products = rawProducts.filter((product: any) => {
+    if (ramFilter && normalizeSpec(product.technicalSpecs?.ram) !== ramFilter) {
+      return false;
+    }
+    if (storageFilter && normalizeSpec(product.technicalSpecs?.storage) !== storageFilter) {
+      return false;
+    }
+    return true;
+  });
+
+  const brandOptions = Array.from(
+    new Map(
+      dbProducts
+        .filter((item: any) => item.brand?.id && item.brand?.name)
+        .map((item: any) => [item.brand.id, { id: item.brand.id, name: item.brand.name }]),
+    ).values(),
+  );
+  const ramOptions = Array.from(
+    new Set(rawProducts.map((item: any) => String(item.technicalSpecs?.ram || "").trim()).filter(Boolean)),
+  );
+  const storageOptions = Array.from(
+    new Set(rawProducts.map((item: any) => String(item.technicalSpecs?.storage || "").trim()).filter(Boolean)),
+  );
 
   const heroImage = products[0]?.image || category.image || fallbackFeaturedProducts[0]?.image || "/hero-brand-scene.svg";
 
@@ -116,7 +170,13 @@ export default async function CategoryPage({
             <p className="text-sm text-secondary">{products.length} items</p>
             <CategorySort />
           </div>
-          <CategoryFiltersServer min={minValue} max={maxValue} />
+          <CategoryFiltersServer
+            min={minValue}
+            max={maxValue}
+            brandOptions={brandOptions}
+            ramOptions={ramOptions}
+            storageOptions={storageOptions}
+          />
         </div>
 
         {products.length === 0 ? (

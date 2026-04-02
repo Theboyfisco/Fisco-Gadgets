@@ -3,10 +3,13 @@
 import prisma from "@/lib/db";
 import { CreateOrderSchema, type CreateOrderInput } from "@/lib/validations/order";
 import { calculateShippingFee } from "@/services/shipping";
+import { evaluatePromoCode } from "@/services/promo";
+import { getCurrentCustomer } from "@/lib/customer-auth";
 
 export async function createOrder(input: CreateOrderInput) {
   // 1. Validate Input
   const validated = CreateOrderSchema.parse(input);
+  const customer = await getCurrentCustomer();
   
   try {
     // 2. Start Transaction
@@ -45,15 +48,29 @@ export async function createOrder(input: CreateOrderInput) {
         validated.shipping.state,
         validated.shipping.shippingType,
       );
-      const totalAmount = itemsTotal + shippingFee;
+      const promoResult = evaluatePromoCode({
+        code: validated.promoCode,
+        itemsTotal,
+        shippingFee,
+      });
+      if (validated.promoCode && !promoResult.applied) {
+        throw new Error(promoResult.reason || "Promo code is invalid.");
+      }
+
+      const adjustedShippingFee = promoResult.adjustedShippingFee;
+      const discountAmount = promoResult.discountAmount;
+      const totalAmount = itemsTotal + adjustedShippingFee - discountAmount;
       const reservedUntil = new Date(Date.now() + 30 * 60 * 1000);
 
       // 5. Create Order + Items + Shipping Details
       const order = await tx.order.create({
         data: {
+          customerId: customer?.id,
           email: validated.email,
           phone: validated.phone,
           totalAmount: totalAmount,
+          discountAmount,
+          promoCode: promoResult.applied ? promoResult.code : null,
           status: "PENDING",
           reservedUntil,
           items: {
@@ -66,7 +83,7 @@ export async function createOrder(input: CreateOrderInput) {
               city: validated.shipping.city,
               state: validated.shipping.state,
               shippingType: validated.shipping.shippingType,
-              shippingFee: shippingFee
+              shippingFee: adjustedShippingFee
             }
           }
         }

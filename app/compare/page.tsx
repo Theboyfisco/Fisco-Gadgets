@@ -16,6 +16,14 @@ export default function ComparePage() {
     const specs = Array.from(new Set(
         compareItems.flatMap(item => Object.keys(item.technicalSpecs))
     ));
+    const specMeta = new Map(
+        specs.map((spec) => {
+            const values = compareItems.map((item) => String(item.technicalSpecs[spec] || "-"));
+            const nonEmpty = values.filter((value) => value !== "-");
+            const distinct = new Set(nonEmpty);
+            return [spec, { differs: distinct.size > 1 || nonEmpty.length !== values.length }];
+        }),
+    );
 
     if (compareItems.length === 0) {
         return (
@@ -89,12 +97,19 @@ export default function ComparePage() {
 
                                     <div className="mb-8 space-y-3">
                                         {specs.map((spec) => (
-                                            <div key={spec} className="rounded-[1rem] border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-3">
+                                            <div
+                                                key={spec}
+                                                className={`rounded-[1rem] border p-3 ${
+                                                    specMeta.get(spec)?.differs
+                                                        ? "border-primary/30 bg-primary/10"
+                                                        : "border-[var(--border-subtle)] bg-[var(--surface-soft)]"
+                                                }`}
+                                            >
                                                 <p className="text-[10px] uppercase tracking-widest text-secondary mb-1 font-bold">
                                                     {spec.replace(/([A-Z])/g, ' $1').trim()}
                                                 </p>
-                                                <p className="text-sm font-medium text-[var(--foreground)]">
-                                                    {String(product.technicalSpecs[spec] || "-")}
+                                                <p className={`text-sm font-medium ${product.technicalSpecs[spec] ? "text-[var(--foreground)]" : "text-[var(--status-error)]"}`}>
+                                                    {String(product.technicalSpecs[spec] || "Missing")}
                                                 </p>
                                             </div>
                                         ))}

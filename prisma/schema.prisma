@@ -33,6 +33,10 @@ model Product {
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
   orderItems     OrderItem[]
+  reviews        ProductReview[]
+  questions      ProductQuestion[]
+  alerts         BackInStockAlert[]
+  listItems      CustomerProductListItem[]
   category       Category    @relation(fields: [categoryId], references: [id])
   brand          Brand?      @relation(fields: [brandId], references: [id])
 
@@ -53,19 +57,139 @@ model Brand {
   @@index([slug])
 }
 
+model Customer {
+  id         String                    @id @default(cuid())
+  email      String                    @unique
+  fullName   String?
+  passwordHash String
+  createdAt  DateTime                  @default(now())
+  updatedAt  DateTime                  @updatedAt
+  sessions   CustomerSession[]
+  listItems  CustomerProductListItem[]
+  reviews    ProductReview[]
+  questions  ProductQuestion[]
+  alerts     BackInStockAlert[]
+  orders     Order[]
+
+  @@index([createdAt])
+}
+
+model CustomerSession {
+  id               String   @id @default(cuid())
+  customerId       String
+  sessionTokenHash String   @unique
+  expiresAt        DateTime
+  createdAt        DateTime @default(now())
+  customer         Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  @@index([customerId])
+  @@index([expiresAt])
+}
+
+model CustomerProductListItem {
+  id         String           @id @default(cuid())
+  customerId String
+  productId  String
+  listType   CustomerListType
+  rank       Int?
+  quantity   Int?
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
+  customer   Customer         @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  product    Product          @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([customerId, productId, listType])
+  @@index([customerId, listType, updatedAt])
+  @@index([productId, listType])
+}
+
+model ProductReview {
+  id               String   @id @default(cuid())
+  productId        String
+  customerId       String
+  rating           Int
+  title            String?
+  body             String
+  verifiedPurchase Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  product          Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  customer         Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  @@unique([productId, customerId])
+  @@index([productId, createdAt])
+  @@index([customerId, createdAt])
+}
+
+model ProductQuestion {
+  id         String         @id @default(cuid())
+  productId  String
+  customerId String?
+  name       String?
+  email      String?
+  question   String
+  answer     String?
+  status     QuestionStatus @default(OPEN)
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+  answeredAt DateTime?
+  product    Product        @relation(fields: [productId], references: [id], onDelete: Cascade)
+  customer   Customer?      @relation(fields: [customerId], references: [id], onDelete: SetNull)
+
+  @@index([productId, createdAt])
+  @@index([status, createdAt])
+}
+
+model BackInStockAlert {
+  id         String    @id @default(cuid())
+  productId  String
+  customerId String?
+  email      String
+  createdAt  DateTime  @default(now())
+  notifiedAt DateTime?
+  product    Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  customer   Customer? @relation(fields: [customerId], references: [id], onDelete: SetNull)
+
+  @@unique([productId, email])
+  @@index([productId, notifiedAt])
+}
+
+model PromoCode {
+  id          String    @id @default(cuid())
+  code        String    @unique
+  description String?
+  kind        PromoKind
+  amount      Int
+  minOrder    Int?
+  active      Boolean   @default(true)
+  startsAt    DateTime?
+  endsAt      DateTime?
+  maxUses     Int?
+  usedCount   Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([code, active])
+}
+
 model Order {
   id               String           @id @default(cuid())
+  customerId       String?
   email            String
   phone            String
   status           OrderStatus      @default(PENDING)
   totalAmount      Int
+  discountAmount   Int              @default(0)
+  promoCode        String?
   paymentReference String?          @unique
   reservedUntil    DateTime?
   createdAt        DateTime         @default(now())
   updatedAt        DateTime         @updatedAt
   items            OrderItem[]
   shippingDetails  ShippingDetails?
+  customer         Customer?        @relation(fields: [customerId], references: [id], onDelete: SetNull)
 
+  @@index([customerId])
   @@index([email])
   @@index([paymentReference])
   @@index([reservedUntil])
@@ -114,4 +238,23 @@ enum OrderStatus {
 enum ShippingType {
   LOCAL_PICKUP
   DELIVERY
+}
+
+enum CustomerListType {
+  CART
+  WISHLIST
+  COMPARE
+  RECENT
+  SAVE_FOR_LATER
+}
+
+enum QuestionStatus {
+  OPEN
+  ANSWERED
+}
+
+enum PromoKind {
+  PERCENT
+  FIXED
+  FREE_SHIPPING
 }

@@ -7,6 +7,7 @@ import { Clock3, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { Reveal } from "./Reveal";
 import { MOTION } from "@/lib/motion";
+import { getCustomerLists } from "@/actions/customer-lists";
 
 type RecentlyViewedProduct = {
   id: string;
@@ -63,6 +64,13 @@ export function RecentlyViewedRail() {
     const handler = () => refreshFromStorage();
     window.addEventListener("storage", handler);
     window.addEventListener(UPDATED_EVENT, handler);
+    (async () => {
+      const synced = await getCustomerLists();
+      if (!synced.authenticated || synced.recent.length === 0) return;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(synced.recent.slice(0, 8)));
+      refreshFromStorage();
+      window.dispatchEvent(new Event(UPDATED_EVENT));
+    })();
     return () => {
       window.removeEventListener("storage", handler);
       window.removeEventListener(UPDATED_EVENT, handler);

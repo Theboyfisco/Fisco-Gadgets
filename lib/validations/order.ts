@@ -30,6 +30,7 @@ export const CreateOrderSchema = z.object({
   phone: z.string().min(10, "Invalid phone number"),
   items: z.array(OrderItemSchema).min(1, "Cart cannot be empty"),
   shipping: ShippingDetailsSchema,
+  promoCode: z.string().trim().max(32).optional(),
 });
 
 export type CreateOrderInput = z.infer<typeof CreateOrderSchema>;

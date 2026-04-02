@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import type { Product } from "@/components/product/BentoProductCard";
 import { useToast } from "@/components/ui/ToastProvider";
+import { getCustomerLists, syncCustomerCart, syncCustomerList } from "@/actions/customer-lists";
 
 export interface CartItem {
     product: Product;
@@ -11,12 +12,17 @@ export interface CartItem {
 
 interface CartContextType {
     cartItems: CartItem[];
+    savedForLater: Product[];
     isCartOpen: boolean;
     addToCart: (product: Product, quantity?: number) => void;
     removeFromCart: (productId: string) => void;
+    moveToSavedForLater: (productId: string) => void;
+    moveSavedToCart: (productId: string) => void;
+    removeFromSavedForLater: (productId: string) => void;
     increaseQuantity: (productId: string) => void;
     decreaseQuantity: (productId: string) => void;
     clearCart: () => void;
+    clearSavedForLater: () => void;
     toggleCart: () => void;
 }
 
@@ -39,6 +45,7 @@ function normalizeStoredCart(items: any[]): CartItem[] {
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
+    const [savedForLater, setSavedForLater] = useState<Product[]>([]);
     const [isCartOpen, setIsCartOpen] = useState(false);
     const [mounted, setMounted] = useState(false);
     const { pushToast } = useToast();
@@ -53,6 +60,14 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
                 const normalized = Array.isArray(parsed) ? normalizeStoredCart(parsed) : [];
                 setCartItems(normalized);
             }
+
+            const saved = localStorage.getItem("fisco_saved_for_later_v1");
+            if (saved) {
+                const parsedSaved = JSON.parse(saved);
+                if (Array.isArray(parsedSaved)) {
+                    setSavedForLater(parsedSaved as Product[]);
+                }
+            }
         } catch (e) {
             console.error("Failed to load cart", e);
         } finally {
@@ -64,6 +79,59 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         if (!mounted) return;
         localStorage.setItem("fisco_cart_v1", JSON.stringify(cartItems));
     }, [cartItems, mounted]);
+
+    useEffect(() => {
+        if (!mounted) return;
+        localStorage.setItem("fisco_saved_for_later_v1", JSON.stringify(savedForLater));
+    }, [savedForLater, mounted]);
+
+    useEffect(() => {
+        if (!mounted) return;
+        let cancelled = false;
+        (async () => {
+            const synced = await getCustomerLists();
+            if (cancelled || !synced.authenticated) return;
+            if (synced.cart.length > 0) {
+                setCartItems((prev) => {
+                    const merged = [...synced.cart, ...prev.filter((item) => !synced.cart.some((db) => db.product.id === item.product.id))];
+                    return merged;
+                });
+            }
+            if (synced.savedForLater.length > 0) {
+                setSavedForLater((prev) => [
+                    ...synced.savedForLater,
+                    ...prev.filter((item) => !synced.savedForLater.some((db) => db.id === item.id)),
+                ]);
+            }
+        })();
+        return () => {
+            cancelled = true;
+        };
+    }, [mounted]);
+
+    useEffect(() => {
+        if (!mounted) return;
+        const timer = setTimeout(() => {
+            syncCustomerCart(
+                cartItems.map((item) => ({
+                    productId: item.product.id,
+                    quantity: item.quantity,
+                })),
+            ).catch(() => null);
+        }, 220);
+        return () => clearTimeout(timer);
+    }, [cartItems, mounted]);
+
+    useEffect(() => {
+        if (!mounted) return;
+        const timer = setTimeout(() => {
+            syncCustomerList(
+                "SAVE_FOR_LATER",
+                savedForLater.map((item) => item.id),
+            ).catch(() => null);
+        }, 220);
+        return () => clearTimeout(timer);
+    }, [savedForLater, mounted]);
 
     const addToCart = (product: Product, quantity = 1) => {
         const maxStock = getMaxStock(product);
@@ -131,6 +199,35 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         );
     };
 
+    const moveToSavedForLater = (productId: string) => {
+        setCartItems((prev) => {
+            const target = prev.find((item) => item.product.id === productId);
+            if (target) {
+                setSavedForLater((savedPrev) => {
+                    if (savedPrev.some((item) => item.id === target.product.id)) return savedPrev;
+                    return [target.product, ...savedPrev];
+                });
+            }
+            return prev.filter((item) => item.product.id !== productId);
+        });
+        pushToast({
+            title: "Saved for later",
+            description: "Item moved out of checkout list.",
+            variant: "info",
+        });
+    };
+
+    const moveSavedToCart = (productId: string) => {
+        const product = savedForLater.find((item) => item.id === productId);
+        if (!product) return;
+        addToCart(product, 1);
+        setSavedForLater((prev) => prev.filter((item) => item.id !== productId));
+    };
+
+    const removeFromSavedForLater = (productId: string) => {
+        setSavedForLater((prev) => prev.filter((item) => item.id !== productId));
+    };
+
     const decreaseQuantity = (productId: string) => {
         setCartItems((prev) =>
             prev
@@ -150,18 +247,27 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         });
     };
 
+    const clearSavedForLater = () => {
+        setSavedForLater([]);
+    };
+
     const toggleCart = () => setIsCartOpen(!isCartOpen);
 
     return (
         <CartContext.Provider
             value={{
                 cartItems,
+                savedForLater,
                 isCartOpen,
                 addToCart,
                 removeFromCart,
+                moveToSavedForLater,
+                moveSavedToCart,
+                removeFromSavedForLater,
                 increaseQuantity,
                 decreaseQuantity,
                 clearCart,
+                clearSavedForLater,
                 toggleCart,
             }}
         >
