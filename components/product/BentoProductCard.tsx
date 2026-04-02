@@ -140,7 +140,7 @@ export function BentoProductCard({ product, featured = false, href }: BentoProdu
             <div className={`absolute right-3 top-3 rounded-full border px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] backdrop-blur-md ${stockClass}`}>
               {stockLabel}
             </div>
-            <div className="pointer-events-none absolute inset-x-3 bottom-3 flex translate-y-2 items-end justify-between opacity-0 transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] group-hover:translate-y-0 group-hover:opacity-100">
+            <div className="pointer-events-none absolute inset-x-3 bottom-3 flex translate-y-2 items-end justify-between opacity-0 transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] group-hover:translate-y-0 group-hover:opacity-100 md:group-hover:translate-y-3 md:group-hover:opacity-0">
               <div className="rounded-full border border-[var(--media-overlay-border)] bg-[var(--media-overlay-bg)] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--media-overlay-soft-text)] backdrop-blur-md">
                 Verified stock
               </div>
@@ -148,18 +148,54 @@ export function BentoProductCard({ product, featured = false, href }: BentoProdu
                 Fast delivery
               </div>
             </div>
-            <button
-              className="interactive-focus absolute bottom-4 left-1/2 z-20 inline-flex -translate-x-1/2 items-center gap-2 rounded-full border border-primary/35 bg-[var(--panel-bg-soft)] px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--foreground)] shadow-[0_14px_30px_rgba(8,18,38,0.24)] backdrop-blur-xl transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:border-primary/55 hover:bg-[var(--interactive-active)] hover:text-primary md:pointer-events-none md:translate-y-2 md:opacity-0 md:group-hover:pointer-events-auto md:group-hover:translate-y-0 md:group-hover:opacity-100"
-              aria-label={`Quick preview ${product.name}`}
-              onClick={(event) => {
-                event.stopPropagation();
-                event.preventDefault();
-                setQuickViewOpen(true);
-              }}
-            >
-              <Eye size={14} />
-              Quick Preview
-            </button>
+            <div className="pointer-events-none absolute inset-x-3 bottom-3 z-20 hidden translate-y-3 opacity-0 transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:translate-y-0 group-focus-within:opacity-100 md:block">
+              <div className="pointer-events-auto flex items-center justify-center rounded-[1rem] border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--panel-bg-soft),var(--surface-card))] p-2 shadow-[0_18px_45px_rgba(8,18,38,0.28)] backdrop-blur-xl">
+                <button
+                  className="inline-flex h-10 min-w-[8.75rem] items-center justify-center gap-2 rounded-xl border border-primary/30 bg-primary/12 px-4 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--foreground)] transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:border-primary/50 hover:bg-primary/18 hover:text-primary"
+                  aria-label={`Quick preview ${product.name}`}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    event.preventDefault();
+                    setQuickViewOpen(true);
+                  }}
+                >
+                  <Eye size={16} />
+                  Preview
+                </button>
+                <button
+                  className="ml-2 flex h-10 w-10 items-center justify-center rounded-xl border border-primary/25 bg-primary/12 text-primary shadow-[0_10px_24px_rgba(63,107,253,0.2)] transition-colors hover:border-primary/40 hover:bg-primary/22 disabled:cursor-not-allowed disabled:opacity-60"
+                  aria-label={`Add ${product.name} to cart`}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    event.preventDefault();
+                    if (!isOutOfStock) {
+                      addToCart(product);
+                    }
+                  }}
+                  disabled={isOutOfStock}
+                >
+                  <ShoppingCart size={18} />
+                </button>
+                <div className="ml-2" onClick={(event) => event.stopPropagation()}>
+                  <WishlistButton product={product} variant="dock" />
+                </div>
+                <button
+                  type="button"
+                  className="ml-2 flex h-10 w-10 items-center justify-center rounded-xl border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] text-[var(--foreground)] shadow-[0_10px_24px_rgba(8,18,38,0.2)] transition-colors hover:border-[var(--interactive-border-strong)] hover:bg-[var(--interactive-active)]"
+                  aria-label={`Message about ${product.name} on WhatsApp`}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    const url = `https://wa.me/2348000000000?text=${whatsappMsg}`;
+                    window.open(url, "_blank", "noopener,noreferrer");
+                  }}
+                >
+                  <MessageCircle size={18} />
+                </button>
+                <div className="ml-2" onClick={(event) => event.stopPropagation()}>
+                  <CompareButton product={product} variant="dock" />
+                </div>
+              </div>
+            </div>
           </div>
 
           <div className="mb-3 flex items-start justify-between gap-3">
@@ -228,41 +264,6 @@ export function BentoProductCard({ product, featured = false, href }: BentoProdu
           </button>
           <div className="shrink-0" onClick={(event) => event.stopPropagation()}>
             <WishlistButton product={product} variant="dock" />
-          </div>
-        </div>
-
-        <div className="absolute right-4 top-1/2 z-20 hidden -translate-y-1/2 translate-x-2 flex-col items-center gap-2 rounded-2xl border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--panel-bg-soft),var(--surface-card))] p-2 shadow-[0_16px_45px_rgba(8,18,38,0.28)] backdrop-blur-xl opacity-0 pointer-events-none transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] group-hover:translate-x-0 group-hover:opacity-100 group-hover:pointer-events-auto group-focus-within:translate-x-0 group-focus-within:opacity-100 group-focus-within:pointer-events-auto md:flex [transform:translateZ(40px)]">
-          <button
-            className="flex h-10 w-10 items-center justify-center rounded-xl border border-primary/25 bg-primary/12 text-primary shadow-[0_10px_24px_rgba(63,107,253,0.2)] transition-colors hover:border-primary/40 hover:bg-primary/22 disabled:cursor-not-allowed disabled:opacity-60"
-            aria-label={`Add ${product.name} to cart`}
-            onClick={(event) => {
-              event.stopPropagation();
-              event.preventDefault();
-              if (!isOutOfStock) {
-                addToCart(product);
-              }
-            }}
-            disabled={isOutOfStock}
-          >
-            <ShoppingCart size={18} />
-          </button>
-          <div onClick={(event) => event.stopPropagation()}>
-            <WishlistButton product={product} variant="dock" />
-          </div>
-          <button
-            type="button"
-            className="flex h-10 w-10 items-center justify-center rounded-xl border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] text-[var(--foreground)] shadow-[0_10px_24px_rgba(8,18,38,0.2)] transition-colors hover:border-[var(--interactive-border-strong)] hover:bg-[var(--interactive-active)]"
-            aria-label={`Message about ${product.name} on WhatsApp`}
-            onClick={(event) => {
-              event.stopPropagation();
-              const url = `https://wa.me/2348000000000?text=${whatsappMsg}`;
-              window.open(url, "_blank", "noopener,noreferrer");
-            }}
-          >
-            <MessageCircle size={18} />
-          </button>
-          <div onClick={(event) => event.stopPropagation()}>
-            <CompareButton product={product} variant="dock" />
           </div>
         </div>
 
