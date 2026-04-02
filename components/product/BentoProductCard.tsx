@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import { MessageCircle, ShoppingCart, Eye } from "lucide-react";
+import { ArrowUpRight, Eye, MessageCircle, ShoppingCart } from "lucide-react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useState } from "react";
@@ -46,8 +46,17 @@ function categoryTint() {
   return "from-primary/20";
 }
 
+function categoryToneValue(categoryId: string) {
+  if (categoryId.includes("phone")) return "var(--tone-phones)";
+  if (categoryId.includes("laptop") || categoryId.includes("macbook")) return "var(--tone-laptops)";
+  if (categoryId.includes("audio") || categoryId.includes("headphone")) return "var(--tone-audio)";
+  return "var(--tone-generic)";
+}
+
 function formatCategoryLabel(categoryId: string) {
-  return categoryId.replace(/_/g, " ");
+  return categoryId
+    .replace(/_/g, " ")
+    .replace(/\b\w/g, (char) => char.toUpperCase());
 }
 
 export function BentoProductCard({ product, featured = false, href }: BentoProductCardProps) {
@@ -61,9 +70,16 @@ export function BentoProductCard({ product, featured = false, href }: BentoProdu
   const isLowStock = typeof product.stock === "number" && product.stock > 0 && product.stock <= 5;
   const whatsappMsg = encodeURIComponent(`Hi, I'm interested in the ${product.name} listed for ₦${product.price}`);
   const priceLabel = new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN" }).format(product.price);
+  const toneValue = categoryToneValue(product.categoryId);
+  const stockLabel = isOutOfStock ? "Out of stock" : isLowStock ? `Only ${product.stock}` : "In stock";
+  const stockClass = isOutOfStock
+    ? "border-[var(--status-error)]/45 bg-[var(--status-error)]/12 text-[var(--status-error)]"
+    : isLowStock
+      ? "border-[var(--status-error)]/35 bg-[var(--status-error)]/10 text-[var(--status-error)]"
+      : "border-[var(--interactive-border)] bg-[var(--surface-card-strong)] text-primary";
   const containerClass = featured
-    ? "relative group overflow-hidden rounded-[24px] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card-strong),var(--surface-card))] p-4 shadow-[0_24px_70px_rgba(8,18,38,0.18)] backdrop-blur-xl transition-all duration-[var(--motion-slow)] ease-[var(--ease-standard)] hover:-translate-y-1.5 hover:border-[var(--interactive-border-strong)] hover:shadow-[0_36px_100px_rgba(8,18,38,0.28)] md:p-5"
-    : "relative group overflow-hidden rounded-[22px] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] p-4 shadow-[0_18px_46px_rgba(8,18,38,0.12)] backdrop-blur-xl transition-all duration-[var(--motion-slow)] ease-[var(--ease-standard)] hover:-translate-y-1 hover:border-[var(--interactive-border-strong)] hover:shadow-[0_28px_70px_rgba(8,18,38,0.2)]";
+    ? "relative isolate group flex h-full flex-col overflow-hidden rounded-[26px] border border-[var(--interactive-border)] bg-[linear-gradient(155deg,var(--surface-card-strong),var(--surface-card)_48%,var(--surface-soft))] p-4 shadow-[0_30px_100px_rgba(8,18,38,0.18)] backdrop-blur-xl transition-all duration-[var(--motion-slow)] ease-[var(--ease-standard)] hover:-translate-y-1.5 hover:border-[var(--interactive-border-strong)] hover:shadow-[0_42px_115px_rgba(8,18,38,0.25)] md:p-5"
+    : "relative isolate group flex h-full flex-col overflow-hidden rounded-[24px] border border-[var(--border-subtle)] bg-[linear-gradient(155deg,var(--surface-card),var(--surface-soft)_56%,var(--surface-card))] p-4 shadow-[0_18px_52px_rgba(8,18,38,0.12)] backdrop-blur-xl transition-all duration-[var(--motion-slow)] ease-[var(--ease-standard)] hover:-translate-y-1 hover:border-[var(--interactive-border-strong)] hover:shadow-[0_30px_86px_rgba(8,18,38,0.2)]";
 
   return (
     <Tilt3D className="h-full" maxTilt={featured ? 8 : 10}>
@@ -72,11 +88,15 @@ export function BentoProductCard({ product, featured = false, href }: BentoProdu
         transition={{ duration: MOTION.duration.base, ease: MOTION.ease.standard }}
         className={containerClass}
       >
-        <div className="pointer-events-none absolute -left-12 -top-12 h-36 w-36 rounded-full bg-primary/12 blur-3xl transition-opacity duration-[var(--motion-slow)] ease-[var(--ease-standard)] group-hover:opacity-90" />
-        <div className="pointer-events-none absolute inset-x-6 bottom-0 h-24 rounded-full bg-primary/8 blur-3xl transition-opacity duration-[var(--motion-slow)] ease-[var(--ease-standard)] group-hover:opacity-100" />
+        <div
+          className="pointer-events-none absolute -left-12 -top-16 h-40 w-40 rounded-full blur-3xl transition-opacity duration-[var(--motion-slow)] ease-[var(--ease-standard)] group-hover:opacity-95"
+          style={{ background: toneValue, opacity: 0.32 }}
+        />
+        <div className="pointer-events-none absolute inset-x-8 bottom-0 h-24 rounded-full bg-primary/8 blur-3xl transition-opacity duration-[var(--motion-slow)] ease-[var(--ease-standard)] group-hover:opacity-100" />
+        <div className="pointer-events-none absolute inset-0 rounded-[inherit] bg-[linear-gradient(180deg,transparent,rgba(8,18,38,0.06))] opacity-60" />
 
         <div className="[transform:translateZ(28px)]">
-          <div className="relative mb-4 w-full overflow-hidden rounded-[18px] border border-[var(--border-subtle)] transition-all duration-[var(--motion-slow)] ease-[var(--ease-standard)] group-hover:border-[var(--interactive-border-strong)]">
+          <div className="relative mb-4 w-full overflow-hidden rounded-[20px] border border-[var(--interactive-border)] transition-all duration-[var(--motion-slow)] ease-[var(--ease-standard)] group-hover:border-[var(--interactive-border-strong)]">
             {href ? (
               <Link href={href} className="group/image block h-full w-full" aria-label={`View ${product.name}`}>
                 <div className={`relative ${featured ? "h-[clamp(14rem,26vw,18.5rem)]" : "h-[clamp(12rem,22vw,15rem)]"} w-full`}>
@@ -88,7 +108,7 @@ export function BentoProductCard({ product, featured = false, href }: BentoProdu
                     quality={92}
                     loading="lazy"
                     className={`object-cover transition-transform duration-[620ms] ease-[var(--ease-standard)] will-change-transform [transform:translateZ(36px)_scale(1.02)] ${
-                      prefersReducedMotion ? "" : "group-hover/image:scale-[1.08]"
+                      prefersReducedMotion ? "" : "group-hover/image:scale-[1.1]"
                     }`}
                     placeholder={product.blurHash ? "blur" : "empty"}
                     blurDataURL={product.blurHash}
@@ -105,7 +125,7 @@ export function BentoProductCard({ product, featured = false, href }: BentoProdu
                   quality={92}
                   loading="lazy"
                   className={`object-cover transition-transform duration-[620ms] ease-[var(--ease-standard)] will-change-transform [transform:translateZ(36px)_scale(1.02)] ${
-                    prefersReducedMotion ? "" : "group-hover:scale-[1.08]"
+                    prefersReducedMotion ? "" : "group-hover:scale-[1.1]"
                   }`}
                   placeholder={product.blurHash ? "blur" : "empty"}
                   blurDataURL={product.blurHash}
@@ -117,6 +137,9 @@ export function BentoProductCard({ product, featured = false, href }: BentoProdu
             <div className="absolute left-3 top-3 inline-flex items-center rounded-full border border-[var(--media-overlay-border)] bg-[var(--media-overlay-bg)] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--media-overlay-text)] backdrop-blur-md">
               {formatCategoryLabel(product.categoryId)}
             </div>
+            <div className={`absolute right-3 top-3 rounded-full border px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] backdrop-blur-md ${stockClass}`}>
+              {stockLabel}
+            </div>
             <div className="pointer-events-none absolute inset-x-3 bottom-3 flex translate-y-2 items-end justify-between opacity-0 transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] group-hover:translate-y-0 group-hover:opacity-100">
               <div className="rounded-full border border-[var(--media-overlay-border)] bg-[var(--media-overlay-bg)] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--media-overlay-soft-text)] backdrop-blur-md">
                 Verified stock
@@ -125,11 +148,23 @@ export function BentoProductCard({ product, featured = false, href }: BentoProdu
                 Fast delivery
               </div>
             </div>
+            <button
+              className="interactive-focus absolute bottom-4 left-1/2 z-20 inline-flex -translate-x-1/2 items-center gap-2 rounded-full border border-primary/35 bg-[var(--panel-bg-soft)] px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--foreground)] shadow-[0_14px_30px_rgba(8,18,38,0.24)] backdrop-blur-xl transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:border-primary/55 hover:bg-[var(--interactive-active)] hover:text-primary md:pointer-events-none md:translate-y-2 md:opacity-0 md:group-hover:pointer-events-auto md:group-hover:translate-y-0 md:group-hover:opacity-100"
+              aria-label={`Quick preview ${product.name}`}
+              onClick={(event) => {
+                event.stopPropagation();
+                event.preventDefault();
+                setQuickViewOpen(true);
+              }}
+            >
+              <Eye size={14} />
+              Quick Preview
+            </button>
           </div>
 
           <div className="mb-3 flex items-start justify-between gap-3">
             <div className="min-w-0">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--text-soft)]">Premium pick</p>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--text-soft)]">NOX Signature</p>
               {href ? (
                 <Link href={href} className="mt-2 block focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/25">
                   <h3 className="line-clamp-2 text-lg font-semibold tracking-[-0.02em] text-[var(--foreground)] transition-colors duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:text-primary md:text-[1.45rem]">
@@ -142,40 +177,43 @@ export function BentoProductCard({ product, featured = false, href }: BentoProdu
                 </h3>
               )}
             </div>
-            <div
-              className={`shrink-0 rounded-full border px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] ${
-                isOutOfStock
-                  ? "border-[var(--status-error)]/40 bg-[var(--status-error)]/10 text-[var(--status-error)]"
-                  : isLowStock
-                    ? "border-[var(--status-error)]/30 bg-[var(--status-error)]/10 text-[var(--status-error)]"
-                    : "border-[var(--interactive-border)] bg-[var(--surface-card-strong)] text-primary"
-              }`}
-            >
-              {isOutOfStock ? "Out of stock" : isLowStock ? `Only ${product.stock}` : "In stock"}
+            <div className="shrink-0 rounded-full border border-[var(--interactive-border)] bg-[var(--surface-soft)] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--text-soft)]">
+              Premium
             </div>
           </div>
-          <p className="text-lg font-semibold tracking-[-0.02em] text-[var(--foreground)] md:text-xl">{priceLabel}</p>
-          <p className="mt-1 text-sm text-secondary">Concierge checkout and warranty-backed delivery.</p>
+          <div className="flex items-end justify-between gap-3">
+            <p className="text-lg font-semibold tracking-[-0.02em] text-[var(--foreground)] md:text-xl">{priceLabel}</p>
+            {href ? (
+              <Link
+                href={href}
+                className="interactive-focus inline-flex items-center gap-1.5 rounded-full border border-[var(--interactive-border)] bg-[var(--surface-soft)] px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-secondary transition-colors hover:text-[var(--foreground)]"
+              >
+                Details
+                <ArrowUpRight size={12} />
+              </Link>
+            ) : null}
+          </div>
+          <p className="mt-1 text-sm text-secondary">Concierge checkout, verified originals, and warranty-backed delivery.</p>
         </div>
 
-        <div className="mt-4 grid grid-cols-3 gap-2 [transform:translateZ(18px)]">
-          <div className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-soft)] px-3 py-2">
+        <div className="mt-4 grid grid-cols-3 gap-2.5 [transform:translateZ(18px)]">
+          <div className="rounded-2xl border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--surface-soft),var(--surface-card))] px-3 py-2.5">
             <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-soft)]">Battery</p>
-            <p className="mt-1 font-mono text-xs text-[var(--foreground)]">{specs.battery || "4500mAh"}</p>
+            <p className="mt-1 font-mono text-xs font-semibold text-[var(--foreground)]">{specs.battery || "4500mAh"}</p>
           </div>
-          <div className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-soft)] px-3 py-2">
+          <div className="rounded-2xl border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--surface-soft),var(--surface-card))] px-3 py-2.5">
             <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-soft)]">Storage</p>
-            <p className="mt-1 font-mono text-xs text-[var(--foreground)]">{specs.storage || "128GB"}</p>
+            <p className="mt-1 font-mono text-xs font-semibold text-[var(--foreground)]">{specs.storage || "128GB"}</p>
           </div>
-          <div className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-soft)] px-3 py-2">
+          <div className="rounded-2xl border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--surface-soft),var(--surface-card))] px-3 py-2.5">
             <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-soft)]">Memory</p>
-            <p className="mt-1 font-mono text-xs text-[var(--foreground)]">{specs.ram || "8GB"}</p>
+            <p className="mt-1 font-mono text-xs font-semibold text-[var(--foreground)]">{specs.ram || "8GB"}</p>
           </div>
         </div>
 
-        <div className="absolute right-4 top-4 z-10 flex flex-col gap-2 opacity-0 pointer-events-none translate-y-2 scale-[0.96] blur-[1px] transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] group-hover:opacity-100 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:scale-100 group-hover:blur-0 group-focus-within:opacity-100 group-focus-within:pointer-events-auto group-focus-within:translate-y-0 group-focus-within:scale-100 group-focus-within:blur-0 [transform:translateZ(40px)]">
+        <div className="mt-4 flex items-center gap-2 [transform:translateZ(20px)] md:hidden">
           <button
-            className="rounded-full border border-primary/20 bg-[var(--surface-contrast)] p-2 text-primary shadow-[0_10px_24px_rgba(0,0,0,0.18)] backdrop-blur-md transition-colors hover:bg-primary/30 disabled:cursor-not-allowed disabled:opacity-60"
+            className="flex-1 rounded-full border border-primary/25 bg-primary px-4 py-2.5 text-sm font-semibold text-[var(--primary-contrast)] shadow-[0_16px_36px_rgba(63,107,253,0.22)] transition-colors hover:bg-[var(--primary-hover)] disabled:cursor-not-allowed disabled:opacity-60"
             aria-label={`Add ${product.name} to cart`}
             onClick={(event) => {
               event.stopPropagation();
@@ -186,25 +224,34 @@ export function BentoProductCard({ product, featured = false, href }: BentoProdu
             }}
             disabled={isOutOfStock}
           >
-            <ShoppingCart size={20} />
+            Add to cart
           </button>
+          <div className="shrink-0" onClick={(event) => event.stopPropagation()}>
+            <WishlistButton product={product} variant="dock" />
+          </div>
+        </div>
+
+        <div className="absolute right-4 top-1/2 z-20 hidden -translate-y-1/2 translate-x-2 flex-col items-center gap-2 rounded-2xl border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--panel-bg-soft),var(--surface-card))] p-2 shadow-[0_16px_45px_rgba(8,18,38,0.28)] backdrop-blur-xl opacity-0 pointer-events-none transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] group-hover:translate-x-0 group-hover:opacity-100 group-hover:pointer-events-auto group-focus-within:translate-x-0 group-focus-within:opacity-100 group-focus-within:pointer-events-auto md:flex [transform:translateZ(40px)]">
           <button
-            className="rounded-full border border-primary/20 bg-[var(--surface-contrast)] p-2 text-primary shadow-[0_10px_24px_rgba(0,0,0,0.18)] backdrop-blur-md transition-colors hover:bg-primary/30"
-            aria-label={`Quick view ${product.name}`}
+            className="flex h-10 w-10 items-center justify-center rounded-xl border border-primary/25 bg-primary/12 text-primary shadow-[0_10px_24px_rgba(63,107,253,0.2)] transition-colors hover:border-primary/40 hover:bg-primary/22 disabled:cursor-not-allowed disabled:opacity-60"
+            aria-label={`Add ${product.name} to cart`}
             onClick={(event) => {
               event.stopPropagation();
               event.preventDefault();
-              setQuickViewOpen(true);
+              if (!isOutOfStock) {
+                addToCart(product);
+              }
             }}
+            disabled={isOutOfStock}
           >
-            <Eye size={20} />
+            <ShoppingCart size={18} />
           </button>
           <div onClick={(event) => event.stopPropagation()}>
-            <WishlistButton product={product} />
+            <WishlistButton product={product} variant="dock" />
           </div>
           <button
             type="button"
-            className="rounded-full border border-primary/20 bg-[var(--surface-contrast)] p-2 text-primary shadow-[0_10px_24px_rgba(0,0,0,0.18)] backdrop-blur-md transition-colors hover:bg-primary/30"
+            className="flex h-10 w-10 items-center justify-center rounded-xl border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] text-[var(--foreground)] shadow-[0_10px_24px_rgba(8,18,38,0.2)] transition-colors hover:border-[var(--interactive-border-strong)] hover:bg-[var(--interactive-active)]"
             aria-label={`Message about ${product.name} on WhatsApp`}
             onClick={(event) => {
               event.stopPropagation();
@@ -212,10 +259,10 @@ export function BentoProductCard({ product, featured = false, href }: BentoProdu
               window.open(url, "_blank", "noopener,noreferrer");
             }}
           >
-            <MessageCircle size={20} />
+            <MessageCircle size={18} />
           </button>
           <div onClick={(event) => event.stopPropagation()}>
-            <CompareButton product={product} />
+            <CompareButton product={product} variant="dock" />
           </div>
         </div>
 
