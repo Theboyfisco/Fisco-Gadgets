@@ -90,7 +90,7 @@ export default async function Home() {
           <div className="absolute inset-y-0 left-0 w-full bg-[linear-gradient(90deg,var(--hero-surface)_0%,rgba(255,255,255,0.08)_56%,transparent_100%)] lg:w-[64%]" />
 
           <div className="relative z-10 grid items-center gap-[clamp(1.25rem,3vw,3rem)] xl:grid-cols-2">
-            <Reveal>
+            <Reveal className="order-2 xl:order-1">
               <div className="max-w-[58rem] rounded-[clamp(1.2rem,2vw,2rem)] border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--surface-secondary),var(--surface-primary))] p-[clamp(1rem,1.8vw,1.8rem)] shadow-[0_24px_80px_rgba(15,23,42,0.1)] backdrop-blur-2xl">
                 <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-[var(--interactive-border)] bg-[var(--surface-primary)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--hero-foreground)] shadow-[0_10px_30px_rgba(15,23,42,0.08)]">
                   Built for modern shopping in Nigeria
@@ -134,7 +134,7 @@ export default async function Home() {
               </div>
             </Reveal>
 
-            <Reveal delay={0.1} className="mx-auto w-full max-w-[min(100%,44rem)] xl:mx-0">
+            <Reveal delay={0.1} className="order-1 mx-auto w-full max-w-[min(100%,44rem)] xl:order-2 xl:mx-0">
               <LatestProductsCarousel products={featuredProducts} />
             </Reveal>
           </div>
