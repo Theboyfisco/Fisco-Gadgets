@@ -74,8 +74,11 @@ export default async function RootLayout({
             try {
               const saved = localStorage.getItem('noxtech-theme');
               const preferred = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-              const theme = saved || preferred;
+              const theme = saved === 'light' || saved === 'dark' ? saved : preferred;
               document.documentElement.setAttribute('data-theme', theme);
+              document.documentElement.classList.toggle('dark-theme', theme === 'dark');
+              document.documentElement.classList.toggle('light-theme', theme === 'light');
+              document.documentElement.style.colorScheme = theme;
             } catch {}
           })();`}
         </Script>

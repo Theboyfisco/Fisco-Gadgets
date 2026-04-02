@@ -77,8 +77,8 @@ export default async function Home() {
 
   return (
     <div className="min-h-screen pb-[clamp(4rem,8vw,6.5rem)]">
-      <main className="container relative mx-auto overflow-hidden pt-[clamp(1rem,2.8vw,2.8rem)]">
-        <section className="relative mb-[var(--section-gap)] overflow-hidden rounded-[clamp(1.6rem,3vw,2.6rem)] border border-[var(--hero-border)] bg-[var(--hero-surface)] p-[clamp(1rem,2.2vw,2.8rem)] shadow-[var(--hero-shadow)] backdrop-blur-2xl">
+      <main className="container relative mx-auto overflow-hidden pt-[clamp(1.4rem,3.2vw,3.5rem)]">
+        <section className="relative mb-[var(--section-gap)] mt-1 overflow-hidden rounded-[clamp(1.6rem,3vw,2.6rem)] border border-[var(--hero-border)] bg-[var(--hero-surface)] p-[clamp(1rem,2.2vw,2.8rem)] shadow-[var(--hero-shadow)] backdrop-blur-2xl sm:mt-2">
           <div className="pointer-events-none absolute -left-16 top-0 h-48 w-48 rounded-full bg-[var(--brand-tint-primary)] blur-3xl" />
           <div className="pointer-events-none absolute bottom-0 right-0 h-56 w-56 rounded-full bg-[var(--brand-tint-secondary)] blur-3xl" />
           <div className="absolute inset-0 bg-[linear-gradient(135deg,var(--bg-secondary)_0%,var(--hero-surface)_45%,var(--bg-tertiary)_100%)]" />

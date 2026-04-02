@@ -113,15 +113,15 @@ export function BentoProductCard({ product, featured = false, href }: BentoProdu
               </div>
             )}
             <div className={`pointer-events-none absolute inset-0 bg-gradient-to-b ${categoryTint()} via-transparent to-[var(--surface-contrast)]`} />
-            <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),transparent_38%,rgba(3,7,18,0.62))]" />
-            <div className="absolute left-3 top-3 inline-flex items-center rounded-full border border-white/15 bg-black/20 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/88 backdrop-blur-md">
+            <div className="pointer-events-none absolute inset-0 bg-[image:var(--media-overlay-gradient)]" />
+            <div className="absolute left-3 top-3 inline-flex items-center rounded-full border border-[var(--media-overlay-border)] bg-[var(--media-overlay-bg)] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--media-overlay-text)] backdrop-blur-md">
               {formatCategoryLabel(product.categoryId)}
             </div>
             <div className="pointer-events-none absolute inset-x-3 bottom-3 flex translate-y-2 items-end justify-between opacity-0 transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] group-hover:translate-y-0 group-hover:opacity-100">
-              <div className="rounded-full border border-white/15 bg-black/25 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/82 backdrop-blur-md">
+              <div className="rounded-full border border-[var(--media-overlay-border)] bg-[var(--media-overlay-bg)] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--media-overlay-soft-text)] backdrop-blur-md">
                 Verified stock
               </div>
-              <div className="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/82 backdrop-blur-md">
+              <div className="rounded-full border border-[var(--media-overlay-border)] bg-[var(--media-overlay-action-bg)] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--media-overlay-soft-text)] backdrop-blur-md">
                 Fast delivery
               </div>
             </div>

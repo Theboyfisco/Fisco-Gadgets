@@ -82,12 +82,12 @@ export function Navbar({ categories = [] }: NavbarProps) {
         className="sticky top-0 z-40 w-full border-b border-[var(--border-subtle)] backdrop-blur-2xl transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)]"
         style={{
           backgroundColor: scrolled ? "var(--nav-bg-scrolled)" : "var(--nav-bg)",
-          paddingTop: scrolled ? "0.2rem" : "0.55rem",
-          paddingBottom: scrolled ? "0.2rem" : "0.55rem",
+          paddingTop: scrolled ? "0.35rem" : "0.85rem",
+          paddingBottom: scrolled ? "0.35rem" : "0.85rem",
         }}
       >
-        <div className="container mx-auto flex h-16 items-center justify-between px-4">
-          <div className="flex items-center gap-3 sm:gap-4">
+        <div className="container mx-auto flex h-[4.25rem] items-center justify-between gap-2 px-4 sm:px-5 xl:h-[4.5rem] xl:gap-4">
+          <div className="flex shrink-0 items-center gap-3 sm:gap-4">
             <button
               className="interactive-focus -ml-2 rounded-xl p-2 text-secondary transition-colors hover:bg-[var(--interactive-hover)] hover:text-[var(--foreground)] xl:hidden"
               onClick={() => setIsMobileMenuOpen(true)}
@@ -108,15 +108,17 @@ export function Navbar({ categories = [] }: NavbarProps) {
             )}
           </div>
 
-          <nav className="hidden items-center gap-2 rounded-full border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--interactive-bg-soft),var(--surface-soft))] px-3 py-1 shadow-[0_16px_44px_rgba(8,18,38,0.08)] xl:flex">
-            {navLinks.map((link) => {
+          <nav className="hidden min-w-0 flex-1 items-center gap-2 overflow-x-auto rounded-full border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--interactive-bg-soft),var(--surface-soft))] px-3 py-1.5 shadow-[0_16px_44px_rgba(8,18,38,0.08)] no-scrollbar xl:flex">
+            {navLinks.map((link, index) => {
               const active = pathname === link.href;
               return (
                 <Link
                   key={link.name}
                   href={link.href}
                   aria-current={active ? "page" : undefined}
-                  className={`rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
+                  className={`shrink-0 whitespace-nowrap rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
+                    index === 3 || index === 5 ? "xl:hidden 2xl:inline-flex" : ""
+                  } ${
                     active
                       ? "interactive-focus bg-[var(--interactive-active)] text-[var(--interactive-fg)]"
                       : "interactive-focus text-secondary hover:bg-[var(--interactive-hover)] hover:text-[var(--interactive-fg)]"
@@ -127,7 +129,7 @@ export function Navbar({ categories = [] }: NavbarProps) {
               );
             })}
             {showMegaMenu && (
-              <details className="group relative">
+              <details className="group relative shrink-0">
                 <summary className="interactive-focus list-none rounded-full px-3 py-1.5 text-sm font-medium text-secondary transition-colors hover:bg-[var(--interactive-hover)] hover:text-[var(--interactive-fg)] [&::-webkit-details-marker]:hidden">
                   Browse
                 </summary>
@@ -178,10 +180,10 @@ export function Navbar({ categories = [] }: NavbarProps) {
             )}
           </nav>
 
-          <div className="flex min-w-0 flex-1 items-center justify-end gap-1.5 sm:gap-2.5 xl:max-w-[34rem]">
+          <div className="flex shrink-0 items-center justify-end gap-2 sm:gap-2.5 xl:ml-2">
             <button
               onClick={() => setIsSearchOpen(true)}
-              className="interactive-focus group hidden min-w-[16rem] flex-1 items-center gap-3 rounded-full border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--interactive-bg-soft),var(--surface-soft))] px-4 py-2 text-sm text-secondary shadow-[0_16px_40px_rgba(8,18,38,0.06)] transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:bg-[var(--interactive-active)] hover:text-[var(--interactive-fg)] xl:flex"
+              className="interactive-focus group hidden w-[clamp(12rem,17vw,15.5rem)] items-center gap-3 rounded-full border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--interactive-bg-soft),var(--surface-soft))] px-4 py-2 text-sm text-secondary shadow-[0_16px_40px_rgba(8,18,38,0.06)] transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:bg-[var(--interactive-active)] hover:text-[var(--interactive-fg)] xl:flex"
               aria-label="Open search"
             >
               <Search size={17} className="transition-colors group-hover:text-primary" />
@@ -202,14 +204,14 @@ export function Navbar({ categories = [] }: NavbarProps) {
             <ThemeSwitcher />
             <Link
               href="/account/orders"
-              className="interactive-focus relative rounded-xl border border-transparent p-2 text-secondary transition-colors hover:border-[var(--interactive-border)] hover:bg-[var(--interactive-active)] hover:text-[var(--interactive-fg)]"
+              className="interactive-focus relative rounded-xl border border-transparent p-2.5 text-secondary transition-colors hover:border-[var(--interactive-border)] hover:bg-[var(--interactive-active)] hover:text-[var(--interactive-fg)]"
               aria-label="Account"
             >
               <UserCircle2 size={22} />
             </Link>
             <button
               onClick={toggleWishlistDrawer}
-              className="interactive-focus relative rounded-xl border border-transparent p-2 text-secondary transition-colors hover:border-[var(--interactive-border)] hover:bg-[var(--interactive-active)] hover:text-[var(--interactive-fg)]"
+              className="interactive-focus relative rounded-xl border border-transparent p-2.5 text-secondary transition-colors hover:border-[var(--interactive-border)] hover:bg-[var(--interactive-active)] hover:text-[var(--interactive-fg)]"
               aria-label="View wishlist"
               aria-expanded={isWishlistOpen}
               aria-controls="wishlist-drawer"
@@ -226,7 +228,7 @@ export function Navbar({ categories = [] }: NavbarProps) {
             </button>
             <button
               onClick={toggleCart}
-              className="interactive-focus relative rounded-xl border border-transparent p-2 text-secondary transition-colors hover:border-[var(--interactive-border)] hover:bg-[var(--interactive-active)] hover:text-[var(--interactive-fg)]"
+              className="interactive-focus relative rounded-xl border border-transparent p-2.5 text-secondary transition-colors hover:border-[var(--interactive-border)] hover:bg-[var(--interactive-active)] hover:text-[var(--interactive-fg)]"
               aria-label="Open cart"
               aria-expanded={cartItems.length > 0}
               aria-controls="cart-drawer"

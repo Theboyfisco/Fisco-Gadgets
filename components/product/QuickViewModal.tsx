@@ -98,7 +98,7 @@ export function QuickViewModal({ product, isOpen, onClose }: QuickViewModalProps
                 {product.image && (
                   <SafeImage src={product.image} alt={product.name} fill className="object-cover" sizes="(max-width: 768px) 90vw, 50vw" />
                 )}
-                <div className="absolute left-4 top-4 rounded-full border border-white/15 bg-black/20 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-white/88 backdrop-blur-md">
+                <div className="absolute left-4 top-4 rounded-full border border-[var(--media-overlay-border)] bg-[var(--media-overlay-bg)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--media-overlay-text)] backdrop-blur-md">
                   Quick view
                 </div>
               </div>

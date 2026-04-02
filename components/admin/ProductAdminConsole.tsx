@@ -941,15 +941,15 @@ export function ProductAdminConsole({
               className="relative h-full min-h-56 bg-cover bg-center"
               style={{ backgroundImage: draft.imagesText.split("\n").find(Boolean) ? `url(${draft.imagesText.split("\n").find(Boolean)})` : undefined }}
             >
-              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,8,18,0.12),rgba(5,8,18,0.7))]" />
+              <div className="absolute inset-0 bg-[image:var(--media-overlay-strong-gradient)]" />
               <div className="relative z-10 flex h-full flex-col justify-between p-4">
-                <div className="inline-flex max-w-max items-center gap-2 rounded-full border border-white/10 bg-black/20 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/85 backdrop-blur-md">
+                <div className="inline-flex max-w-max items-center gap-2 rounded-full border border-[var(--media-overlay-border)] bg-[var(--media-overlay-bg)] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--media-overlay-text)] backdrop-blur-md">
                   <Boxes size={12} />
                   Live preview
                 </div>
                 <div>
-                  <p className="text-lg font-semibold text-white">{draft.name || "Product title"}</p>
-                  <p className="mt-1 text-sm text-white/75">
+                  <p className="text-lg font-semibold text-[var(--media-overlay-text)]">{draft.name || "Product title"}</p>
+                  <p className="mt-1 text-sm text-[var(--media-overlay-soft-text)]">
                     {draft.price ? formatCurrency(Number(draft.price) || 0) : "Add price"} • {formatCondition(draft.condition)}
                   </p>
                 </div>
@@ -1005,11 +1005,11 @@ export function ProductAdminConsole({
                   {mediaAssets.map((asset) => (
                     <div key={asset.id || asset.url} className="group relative h-20 overflow-hidden rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)]">
                       <SafeImage src={asset.url} alt={asset.filename} fill className="object-cover" sizes="120px" />
-                      <div className="absolute inset-0 flex items-end justify-between gap-1 bg-[linear-gradient(180deg,transparent,rgba(5,8,18,0.85))] p-1 opacity-0 transition-opacity group-hover:opacity-100">
+                      <div className="absolute inset-0 flex items-end justify-between gap-1 bg-[image:var(--media-overlay-strong-gradient)] p-1 opacity-0 transition-opacity group-hover:opacity-100">
                         <button
                           type="button"
                           onClick={() => insertImageUrl(asset.url)}
-                          className="rounded-full bg-white/20 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-white"
+                          className="rounded-full bg-[var(--media-overlay-action-bg)] px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--media-overlay-text)]"
                         >
                           Use
                         </button>
@@ -1017,7 +1017,7 @@ export function ProductAdminConsole({
                           <button
                             type="button"
                             onClick={() => handleDeleteMediaAsset(asset)}
-                            className="rounded-full bg-[var(--status-error)]/70 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-white"
+                            className="rounded-full bg-[var(--status-error)]/70 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--media-overlay-text)]"
                           >
                             Del
                           </button>

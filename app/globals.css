@@ -180,6 +180,13 @@
     --media-card-pill-text: rgba(255, 255, 255, 0.8);
     --media-card-line-bg: rgba(255, 255, 255, 0.2);
     --media-card-line-fill: rgba(255, 255, 255, 0.7);
+    --media-overlay-bg: rgba(0, 0, 0, 0.24);
+    --media-overlay-border: rgba(255, 255, 255, 0.16);
+    --media-overlay-text: rgba(255, 255, 255, 0.9);
+    --media-overlay-soft-text: rgba(255, 255, 255, 0.82);
+    --media-overlay-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 38%, rgba(3, 7, 18, 0.62));
+    --media-overlay-strong-gradient: linear-gradient(180deg, transparent, rgba(5, 8, 18, 0.85));
+    --media-overlay-action-bg: rgba(255, 255, 255, 0.2);
     --category-card-surface: rgba(0, 0, 0, 0.3);
     --category-card-border: rgba(255, 255, 255, 0.1);
     --category-card-shadow: 0 20px 60px rgba(3, 7, 18, 0.4);
@@ -337,6 +344,13 @@
     --media-card-pill-text: rgba(255, 255, 255, 0.94);
     --media-card-line-bg: rgba(255, 255, 255, 0.28);
     --media-card-line-fill: rgba(255, 255, 255, 0.95);
+    --media-overlay-bg: rgba(13, 24, 44, 0.2);
+    --media-overlay-border: rgba(255, 255, 255, 0.34);
+    --media-overlay-text: rgba(245, 249, 255, 0.95);
+    --media-overlay-soft-text: rgba(234, 243, 255, 0.86);
+    --media-overlay-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.2), transparent 40%, rgba(10, 20, 42, 0.55));
+    --media-overlay-strong-gradient: linear-gradient(180deg, transparent, rgba(10, 20, 42, 0.72));
+    --media-overlay-action-bg: rgba(255, 255, 255, 0.32);
     --category-card-surface: rgba(255, 255, 255, 0.6);
     --category-card-border: rgba(15, 23, 42, 0.08);
     --category-card-shadow: 0 20px 60px rgba(15, 23, 42, 0.1);
@@ -356,7 +370,7 @@
 
   html {
     scroll-behavior: smooth;
-    color-scheme: light dark;
+    color-scheme: dark;
   }
 
   body {
@@ -412,16 +426,14 @@
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    color-scheme: dark;
-  }
+:root[data-theme="dark"],
+:root.dark-theme {
+  color-scheme: dark;
 }
 
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme="dark"]) {
-    color-scheme: light;
-  }
+:root[data-theme="light"],
+:root.light-theme {
+  color-scheme: light;
 }
 
 @layer components {
