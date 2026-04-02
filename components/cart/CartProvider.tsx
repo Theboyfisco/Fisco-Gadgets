@@ -28,6 +28,8 @@ interface CartContextType {
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
+const CART_KEY = "noxtech_cart_v1";
+const SAVED_FOR_LATER_KEY = "noxtech_saved_for_later_v1";
 
 function normalizeStoredCart(items: any[]): CartItem[] {
     return items
@@ -55,14 +57,14 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
     useEffect(() => {
         try {
-            const stored = localStorage.getItem("fisco_cart_v1");
+            const stored = localStorage.getItem(CART_KEY);
             if (stored) {
                 const parsed = JSON.parse(stored);
                 const normalized = Array.isArray(parsed) ? normalizeStoredCart(parsed) : [];
                 setCartItems(normalized);
             }
 
-            const saved = localStorage.getItem("fisco_saved_for_later_v1");
+            const saved = localStorage.getItem(SAVED_FOR_LATER_KEY);
             if (saved) {
                 const parsedSaved = JSON.parse(saved);
                 if (Array.isArray(parsedSaved)) {
@@ -78,12 +80,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
     useEffect(() => {
         if (!mounted) return;
-        localStorage.setItem("fisco_cart_v1", JSON.stringify(cartItems));
+        localStorage.setItem(CART_KEY, JSON.stringify(cartItems));
     }, [cartItems, mounted]);
 
     useEffect(() => {
         if (!mounted) return;
-        localStorage.setItem("fisco_saved_for_later_v1", JSON.stringify(savedForLater));
+        localStorage.setItem(SAVED_FOR_LATER_KEY, JSON.stringify(savedForLater));
     }, [savedForLater, mounted]);
 
     useEffect(() => {

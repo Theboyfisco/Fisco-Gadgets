@@ -1,4 +1,4 @@
-export const SITE_NAME = "Fisco Gadgets";
+export const SITE_NAME = "NOXTECH";
 
 export function getBaseUrl() {
   const configured = process.env.NEXT_PUBLIC_APP_URL?.trim();

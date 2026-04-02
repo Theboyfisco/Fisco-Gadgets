@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/db";
 
-const CUSTOMER_COOKIE = "fisco_customer_session_v1";
+const CUSTOMER_COOKIE = "noxtech_customer_session_v1";
 const SESSION_TTL_MS = 1000 * 60 * 60 * 24 * 30;
 
 function hashToken(token: string) {

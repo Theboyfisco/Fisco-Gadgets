@@ -39,9 +39,9 @@ export const metadata: Metadata = {
     type: "website",
   },
   icons: {
-    icon: "/brand-mark.svg",
-    shortcut: "/brand-mark.svg",
-    apple: "/brand-mark.svg",
+    icon: "/brand-mark.png",
+    shortcut: "/brand-mark.png",
+    apple: "/brand-mark.png",
   },
 };
 
@@ -72,7 +72,7 @@ export default async function RootLayout({
         <Script id="theme-init" strategy="beforeInteractive">
           {`(() => {
             try {
-              const saved = localStorage.getItem('fisco-theme');
+              const saved = localStorage.getItem('noxtech-theme');
               const preferred = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
               const theme = saved || preferred;
               document.documentElement.setAttribute('data-theme', theme);

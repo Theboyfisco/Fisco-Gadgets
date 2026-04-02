@@ -17,6 +17,7 @@ interface WishlistContextType {
 }
 
 const WishlistContext = createContext<WishlistContextType | undefined>(undefined);
+const WISHLIST_KEY = "noxtech_wishlist_v1";
 
 export function WishlistProvider({ children }: { children: React.ReactNode }) {
   const [wishlistItems, setWishlistItems] = useState<Product[]>([]);
@@ -25,7 +26,7 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     try {
-      const stored = localStorage.getItem("fisco_wishlist_v1");
+      const stored = localStorage.getItem(WISHLIST_KEY);
       if (stored) {
         setWishlistItems(JSON.parse(stored) as Product[]);
       }
@@ -38,7 +39,7 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (!hydrated) return;
-    localStorage.setItem("fisco_wishlist_v1", JSON.stringify(wishlistItems));
+    localStorage.setItem(WISHLIST_KEY, JSON.stringify(wishlistItems));
   }, [wishlistItems, hydrated]);
 
   useEffect(() => {

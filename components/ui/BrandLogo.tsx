@@ -12,9 +12,9 @@ interface BrandLogoProps {
 
 export function BrandLogo({ href = "/", compact = false, className = "", onClick }: BrandLogoProps) {
   const content = compact ? (
-    <Image src="/brand-mark.svg" alt="Fisco Gadgets" width={42} height={42} className="h-10 w-10" />
+    <Image src="/brand-mark.png" alt="NOXTECH" width={42} height={42} className="h-10 w-10" />
   ) : (
-    <Image src="/brand-logo.svg" alt="Fisco Gadgets" width={220} height={62} className="h-10 w-auto sm:h-11" />
+    <Image src="/brand-logo.png" alt="NOXTECH" width={220} height={62} className="h-10 w-auto sm:h-11" />
   );
 
   return (

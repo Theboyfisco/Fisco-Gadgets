@@ -32,7 +32,7 @@ export default function WarrantyPage() {
         <Reveal delay={0.05}>
           <section className="rounded-[1.5rem] border border-border-subtle bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] p-6 shadow-glass/20">
             <h2 className="mb-3 text-2xl font-bold text-[var(--foreground)]">Store Guarantee</h2>
-            <p className="mb-4">At Fisco Gadgets, we stand by our catalog. In addition to any manufacturer warranty, we offer a 6-month store guarantee on our refurbished units. If an issue arises from regular usage that is not linked to water damage or physical drops, we will repair it for free.</p>
+            <p className="mb-4">At NOXTECH, we stand by our catalog. In addition to any manufacturer warranty, we offer a 6-month store guarantee on our refurbished units. If an issue arises from regular usage that is not linked to water damage or physical drops, we will repair it for free.</p>
           </section>
         </Reveal>
 

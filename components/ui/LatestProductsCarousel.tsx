@@ -7,6 +7,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { MOTION } from "@/lib/motion";
 import { useHydrated } from "@/lib/useHydrated";
+import { DEFAULT_PRODUCT_IMAGE } from "@/lib/normalize-product";
 
 export interface LatestProduct {
   id: string;
@@ -27,10 +28,16 @@ const AUTOPLAY_INTERVAL = 4500;
 export function LatestProductsCarousel({ products }: LatestProductsCarouselProps) {
   const hydrated = useHydrated();
   const reducedMotionPreference = useReducedMotion();
-  const visibleProducts = useMemo(() => products.filter((product) => Boolean(product.image)), [products]);
+  const visibleProducts = useMemo(
+    () =>
+      products.map((product) => ({
+        ...product,
+        image: product.image || DEFAULT_PRODUCT_IMAGE,
+      })),
+    [products],
+  );
   const [activeIndex, setActiveIndex] = useState(0);
   const [hoverPaused, setHoverPaused] = useState(false);
-  const [focusPaused, setFocusPaused] = useState(false);
   const [pageHidden, setPageHidden] = useState(false);
   const prefersReducedMotion = hydrated && reducedMotionPreference;
 
@@ -45,7 +52,7 @@ export function LatestProductsCarousel({ products }: LatestProductsCarouselProps
     return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
   }, []);
 
-  const isPaused = hoverPaused || focusPaused || pageHidden || prefersReducedMotion;
+  const isPaused = hoverPaused || pageHidden;
 
   useEffect(() => {
     if (count <= 1 || isPaused) {
@@ -78,12 +85,6 @@ export function LatestProductsCarousel({ products }: LatestProductsCarouselProps
       className="group relative h-[22rem] w-full max-w-xl overflow-hidden rounded-[2.2rem] border border-[var(--carousel-border)] bg-[var(--carousel-surface)] shadow-[var(--carousel-shadow)] sm:h-[26rem] lg:h-[28rem]"
       onMouseEnter={() => setHoverPaused(true)}
       onMouseLeave={() => setHoverPaused(false)}
-      onFocusCapture={() => setFocusPaused(true)}
-      onBlurCapture={(event) => {
-        const nextTarget = event.relatedTarget;
-        if (nextTarget instanceof Node && event.currentTarget.contains(nextTarget)) return;
-        setFocusPaused(false);
-      }}
       role="region"
       aria-roledescription="carousel"
       aria-label="Featured products"

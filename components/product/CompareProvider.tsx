@@ -13,6 +13,7 @@ interface CompareContextType {
 }
 
 const CompareContext = createContext<CompareContextType | undefined>(undefined);
+const COMPARE_KEY = "noxtech_compare_v1";
 
 export function CompareProvider({ children }: { children: React.ReactNode }) {
   const [compareItems, setCompareItems] = useState<Product[]>([]);
@@ -20,7 +21,7 @@ export function CompareProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     try {
-      const stored = localStorage.getItem("fisco_compare_v1");
+      const stored = localStorage.getItem(COMPARE_KEY);
       if (stored) {
         setCompareItems(JSON.parse(stored) as Product[]);
       }
@@ -33,7 +34,7 @@ export function CompareProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (!hydrated) return;
-    localStorage.setItem("fisco_compare_v1", JSON.stringify(compareItems));
+    localStorage.setItem(COMPARE_KEY, JSON.stringify(compareItems));
   }, [compareItems, hydrated]);
 
   useEffect(() => {

@@ -144,7 +144,7 @@ export function Footer({ categories = [] }: FooterProps) {
               </li>
               <li className="text-muted flex items-center gap-2 text-sm">
                 <Mail size={16} className="shrink-0 text-primary" />
-                <span>support@fiscogadgets.com.ng</span>
+                <span>support@noxtech.com.ng</span>
               </li>
             </ul>
           </div>
@@ -166,7 +166,7 @@ export function Footer({ categories = [] }: FooterProps) {
         </div>
 
         <div className="text-muted flex flex-col items-center justify-between gap-4 border-t border-[var(--border-subtle)] py-6 text-sm md:flex-row">
-          <p>© {COPYRIGHT_YEAR} Fisco Gadgets. All rights reserved.</p>
+          <p>© {COPYRIGHT_YEAR} NOXTECH. All rights reserved.</p>
           <div className="flex gap-5">
             <Link href="/privacy" className="interactive-focus transition-colors hover:text-[var(--foreground)]">
               Privacy Policy

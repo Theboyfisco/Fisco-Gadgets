@@ -28,7 +28,7 @@ export default function TermsPage() {
         <Reveal>
           <section className="rounded-[1.5rem] border border-border-subtle bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] p-6 shadow-glass/20">
             <h2 className="mb-3 text-2xl font-bold text-[var(--foreground)]">1. Acceptance of Terms</h2>
-            <p>By accessing or using Fisco Gadgets, you agree to be bound by these terms. If you disagree, you may not access our store and services.</p>
+            <p>By accessing or using NOXTECH, you agree to be bound by these terms. If you disagree, you may not access our store and services.</p>
           </section>
         </Reveal>
 
@@ -42,7 +42,7 @@ export default function TermsPage() {
         <Reveal delay={0.1}>
           <section className="rounded-[1.5rem] border border-border-subtle bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] p-6 shadow-glass/20">
             <h2 className="mb-3 text-2xl font-bold text-[var(--foreground)]">3. Fraud Prevention</h2>
-            <p>Fisco Gadgets reserves the right to cancel orders flagged as high risk by our payment partners. In such cases, full refunds are issued to the source account.</p>
+            <p>NOXTECH reserves the right to cancel orders flagged as high risk by our payment partners. In such cases, full refunds are issued to the source account.</p>
           </section>
         </Reveal>
 

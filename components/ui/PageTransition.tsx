@@ -3,10 +3,13 @@
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { MOTION } from "@/lib/motion";
+import { useHydrated } from "@/lib/useHydrated";
 
 export function PageTransition({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const prefersReducedMotion = useReducedMotion();
+  const hydrated = useHydrated();
+  const reducedMotionPreference = useReducedMotion();
+  const prefersReducedMotion = hydrated && reducedMotionPreference;
 
   return (
     <AnimatePresence mode="wait">

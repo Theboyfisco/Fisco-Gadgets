@@ -18,8 +18,8 @@ type RecentlyViewedProduct = {
   categoryId: string;
 };
 
-const STORAGE_KEY = "fisco_recently_viewed_v1";
-const UPDATED_EVENT = "fisco-recently-viewed-updated";
+const STORAGE_KEY = "noxtech_recently_viewed_v1";
+const UPDATED_EVENT = "noxtech-recently-viewed-updated";
 const EMPTY_ITEMS: RecentlyViewedProduct[] = [];
 let cachedRaw = "";
 let cachedItems: RecentlyViewedProduct[] = EMPTY_ITEMS;

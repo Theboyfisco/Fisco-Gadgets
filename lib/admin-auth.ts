@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import crypto from "crypto";
 import bcrypt from "bcryptjs";
 
-const ADMIN_COOKIE = "fisco_admin_session_v3";
+const ADMIN_COOKIE = "noxtech_admin_session_v1";
 const SESSION_TTL_MS = 1000 * 60 * 60 * 6;
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || "";

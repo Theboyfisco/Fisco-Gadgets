@@ -100,7 +100,7 @@ export default async function AccountOrdersPage() {
                     {order.items.map((item) => (
                       <div key={item.id} className="flex items-center gap-3 rounded-[1rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-3">
                         <div className="relative h-14 w-14 overflow-hidden rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-soft)]">
-                          <Image src={item.product.images[0] || "/icon.svg"} alt={item.product.name} fill className="object-cover" />
+                          <Image src={item.product.images[0] || "/icon.png"} alt={item.product.name} fill className="object-cover" />
                         </div>
                         <div className="flex-1">
                           <p className="line-clamp-1 text-sm font-semibold text-[var(--foreground)]">{item.product.name}</p>

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const ADMIN_COOKIE = "fisco_admin_session_v3";
+const ADMIN_COOKIE = "noxtech_admin_session_v1";
 
 function fromBase64UrlToUtf8(value: string) {
   const normalized = value.replace(/-/g, "+").replace(/_/g, "/");
@@ -63,4 +63,3 @@ export async function proxy(request: NextRequest) {
 export const config = {
   matcher: ["/admin/:path*"],
 };
-

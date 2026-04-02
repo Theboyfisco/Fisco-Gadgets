@@ -7,7 +7,7 @@ type TrackEventInput = {
   payload?: Record<string, unknown>;
 };
 
-const SESSION_KEY = "fisco_analytics_session_v1";
+const SESSION_KEY = "noxtech_analytics_session_v1";
 
 function getSessionId() {
   if (typeof window === "undefined") return "";

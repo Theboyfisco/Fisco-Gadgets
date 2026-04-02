@@ -14,7 +14,7 @@ import { getPrimaryImage, normalizeTechnicalSpecs } from "@/lib/normalize-produc
 import { trackEvent } from "@/lib/analytics-client";
 import { SafeImage } from "@/components/ui/SafeImage";
 
-const RECENT_SEARCH_KEY = "fisco_recent_searches_v1";
+const RECENT_SEARCH_KEY = "noxtech_recent_searches_v1";
 
 export function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const [query, setQuery] = useState("");
@@ -377,7 +377,7 @@ export function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; onClose: (
                   <kbd className="rounded bg-[var(--kbd-bg)] px-1">↵</kbd> to select
                 </span>
               </div>
-              <p className="text-[10px] font-medium italic text-[var(--text-soft)]">Powered by Fisco Search</p>
+              <p className="text-[10px] font-medium italic text-[var(--text-soft)]">Powered by NOXTECH Search</p>
             </div>
           </motion.div>
         </div>

@@ -65,7 +65,7 @@ export function ContactPageClient({ initialMessage = "" }: { initialMessage?: st
             <div className="shrink-0 rounded-full bg-[var(--surface-card)] p-3 text-primary"><Mail /></div>
             <div>
               <h3 className="text-lg font-bold text-[var(--foreground)]">Email Support</h3>
-              <p className="text-secondary">support@fiscogadgets.com.ng<br/>sales@fiscogadgets.com.ng</p>
+              <p className="text-secondary">support@noxtech.com.ng<br/>sales@noxtech.com.ng</p>
             </div>
           </div>
           </Reveal>

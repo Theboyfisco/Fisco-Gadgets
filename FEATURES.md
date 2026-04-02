@@ -1,6 +1,6 @@
 # Features and Architecture
 
-Fisco Gadgets is a full-stack storefront focused on premium gadget shopping UX.
+NOXTECH is a full-stack storefront focused on premium gadget shopping UX.
 
 ## Frontend UX
 

@@ -3,8 +3,8 @@
 import { Moon, SunMedium } from "lucide-react";
 import { useSyncExternalStore } from "react";
 
-const THEME_KEY = "fisco-theme";
-const THEME_CHANGED_EVENT = "fisco-theme-changed";
+const THEME_KEY = "noxtech-theme";
+const THEME_CHANGED_EVENT = "noxtech-theme-changed";
 
 type Theme = "dark" | "light";
 

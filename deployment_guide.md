@@ -1,6 +1,6 @@
 # Deployment Guide (Vercel)
 
-Use this checklist to deploy Fisco Gadgets safely.
+Use this checklist to deploy NOXTECH safely.
 
 ## 1. Push code
 
