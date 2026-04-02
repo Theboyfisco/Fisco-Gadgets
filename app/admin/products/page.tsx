@@ -74,10 +74,22 @@ export default async function AdminProductsPage() {
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
                 <Link
+                  href="/admin/catalog"
+                  className="inline-flex items-center gap-2 rounded-full border border-[var(--interactive-border)] bg-[var(--surface-card)] px-4 py-2 text-sm font-semibold text-[var(--hero-foreground)] transition-colors hover:bg-[var(--interactive-hover)]"
+                >
+                  Manage taxonomy
+                </Link>
+                <Link
                   href="/admin/orders"
                   className="inline-flex items-center gap-2 rounded-full border border-[var(--interactive-border)] bg-[var(--surface-card)] px-4 py-2 text-sm font-semibold text-[var(--hero-foreground)] transition-colors hover:bg-[var(--interactive-hover)]"
                 >
                   View orders
+                </Link>
+                <Link
+                  href="/admin/audit"
+                  className="inline-flex items-center gap-2 rounded-full border border-[var(--interactive-border)] bg-[var(--surface-card)] px-4 py-2 text-sm font-semibold text-[var(--hero-foreground)] transition-colors hover:bg-[var(--interactive-hover)]"
+                >
+                  View audit log
                 </Link>
                 <Link
                   href="/admin/logout"

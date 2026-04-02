@@ -6,6 +6,7 @@ import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { MOTION } from "@/lib/motion";
+import { useHydrated } from "@/lib/useHydrated";
 
 export interface LatestProduct {
   id: string;
@@ -24,26 +25,39 @@ interface LatestProductsCarouselProps {
 const AUTOPLAY_INTERVAL = 4500;
 
 export function LatestProductsCarousel({ products }: LatestProductsCarouselProps) {
+  const hydrated = useHydrated();
+  const reducedMotionPreference = useReducedMotion();
   const visibleProducts = useMemo(() => products.filter((product) => Boolean(product.image)), [products]);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-  const prefersReducedMotion = useReducedMotion();
+  const [hoverPaused, setHoverPaused] = useState(false);
+  const [focusPaused, setFocusPaused] = useState(false);
+  const [pageHidden, setPageHidden] = useState(false);
+  const prefersReducedMotion = hydrated && reducedMotionPreference;
 
   const count = visibleProducts.length;
   const safeIndex = count ? activeIndex % count : 0;
   const activeProduct = visibleProducts[safeIndex] ?? visibleProducts[0];
 
   useEffect(() => {
-    if (count <= 1 || isPaused || prefersReducedMotion) {
+    const handleVisibilityChange = () => setPageHidden(document.visibilityState === "hidden");
+    handleVisibilityChange();
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
+  }, []);
+
+  const isPaused = hoverPaused || focusPaused || pageHidden || prefersReducedMotion;
+
+  useEffect(() => {
+    if (count <= 1 || isPaused) {
       return;
     }
 
-    const timer = setInterval(() => {
+    const timer = window.setInterval(() => {
       setActiveIndex((current) => (current + 1) % count);
     }, AUTOPLAY_INTERVAL);
 
-    return () => clearInterval(timer);
-  }, [count, isPaused, prefersReducedMotion]);
+    return () => window.clearInterval(timer);
+  }, [count, isPaused]);
 
   const goNext = () => setActiveIndex((current) => (count ? (current + 1) % count : 0));
   const goPrev = () => setActiveIndex((current) => (count ? (current - 1 + count) % count : 0));
@@ -62,10 +76,14 @@ export function LatestProductsCarousel({ products }: LatestProductsCarouselProps
   return (
     <div
       className="group relative h-[22rem] w-full max-w-xl overflow-hidden rounded-[2.2rem] border border-[var(--carousel-border)] bg-[var(--carousel-surface)] shadow-[var(--carousel-shadow)] sm:h-[26rem] lg:h-[28rem]"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
-      onFocusCapture={() => setIsPaused(true)}
-      onBlurCapture={() => setIsPaused(false)}
+      onMouseEnter={() => setHoverPaused(true)}
+      onMouseLeave={() => setHoverPaused(false)}
+      onFocusCapture={() => setFocusPaused(true)}
+      onBlurCapture={(event) => {
+        const nextTarget = event.relatedTarget;
+        if (nextTarget instanceof Node && event.currentTarget.contains(nextTarget)) return;
+        setFocusPaused(false);
+      }}
       role="region"
       aria-roledescription="carousel"
       aria-label="Featured products"
@@ -95,7 +113,7 @@ export function LatestProductsCarousel({ products }: LatestProductsCarouselProps
       </AnimatePresence>
 
       <div className="relative z-10 flex h-full flex-col justify-between p-7 sm:p-8">
-        <div className="flex items-start justify-between">
+        <div className="flex items-start justify-between gap-4">
           <div className="inline-flex w-fit items-center gap-2 rounded-full border border-[var(--carousel-control-border)] bg-[var(--carousel-control-bg)] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.32em] text-[var(--foreground)] backdrop-blur-md">
             Featured now
           </div>
@@ -146,7 +164,7 @@ export function LatestProductsCarousel({ products }: LatestProductsCarouselProps
               >
                 View Product
               </Link>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2" aria-label="Carousel slide selector">
                 {visibleProducts.map((item, index) => {
                   const isActive = index === safeIndex;
                   return (
@@ -163,9 +181,18 @@ export function LatestProductsCarousel({ products }: LatestProductsCarouselProps
                 })}
               </div>
             </div>
+            <div className="h-1.5 w-full overflow-hidden rounded-full bg-[var(--carousel-control-border)]/40">
+              <motion.div
+                key={safeIndex}
+                className="h-full rounded-full bg-[var(--carousel-dot-active)]"
+                initial={{ width: 0 }}
+                animate={{ width: "100%" }}
+                transition={{ duration: AUTOPLAY_INTERVAL / 1000, ease: "linear" }}
+              />
+            </div>
           </motion.div>
         </div>
-        </div>
       </div>
+    </div>
   );
 }

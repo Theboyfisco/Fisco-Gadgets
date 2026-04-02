@@ -1,14 +1,50 @@
+import type { Metadata } from "next";
 import { LatestProductsCarousel } from "@/components/ui/LatestProductsCarousel";
 import { FeaturedProductsGrid } from "@/components/ui/FeaturedProductsGrid";
 import { Reveal } from "@/components/ui/Reveal";
 import { RecentlyViewedRail } from "@/components/ui/RecentlyViewedRail";
 import { ShieldCheck, Truck, Clock, CreditCard, ArrowRight } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
+import { SafeImage } from "@/components/ui/SafeImage";
 import prisma from "@/lib/db";
 import { fallbackCategories, fallbackFeaturedProducts } from "@/lib/fallback-data";
 import { getPrimaryImage, normalizeTechnicalSpecs } from "@/lib/normalize-product";
 import { shouldUseDatabase } from "@/lib/should-use-database";
+import { SITE_NAME, truncateDescription, toAbsoluteUrl } from "@/lib/site-config";
+
+export const revalidate = 300;
+
+export async function generateMetadata(): Promise<Metadata> {
+  const useDatabase = shouldUseDatabase();
+  if (!useDatabase) {
+    return {
+      title: `${SITE_NAME} — Premium Tech Store`,
+      description: "Premium Apple, Samsung, and high-end tech accessories in Nigeria.",
+      alternates: { canonical: "/" },
+    };
+  }
+
+  const [productCount, categoryCount] = await Promise.all([
+    prisma.product.count().catch(() => 0),
+    prisma.category.count().catch(() => 0),
+  ]);
+
+  const description = truncateDescription(
+    `Shop ${productCount || "premium"} gadgets across ${categoryCount || "multiple"} curated categories with concierge checkout and nationwide delivery in Nigeria.`,
+  );
+
+  return {
+    title: `${SITE_NAME} — Premium Tech Store`,
+    description,
+    alternates: { canonical: "/" },
+    openGraph: {
+      title: `${SITE_NAME} — Premium Tech Store`,
+      description,
+      url: toAbsoluteUrl("/"),
+      type: "website",
+    },
+  };
+}
 
 export default async function Home() {
   const [dbProducts, dbCategories] = shouldUseDatabase()
@@ -151,11 +187,11 @@ export default async function Home() {
             {dbCategories.map((category: any) => (
               <Link
                 key={category.id}
-                href={`/category/${category.id}`}
+                href={`/category/${category.slug ?? category.id}`}
                 className="group relative h-52 overflow-hidden rounded-[32px] border border-[var(--category-card-border)] bg-[var(--category-card-surface)] shadow-[var(--category-card-shadow)] transition duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:-translate-y-1.5 hover:shadow-[var(--category-card-shadow-hover)]"
               >
-                <Image
-                  src={category.image}
+                <SafeImage
+                  src={category.image ?? ""}
                   alt={category.name}
                   fill
                   sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"

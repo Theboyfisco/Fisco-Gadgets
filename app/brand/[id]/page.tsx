@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import prisma from "@/lib/db";
 import { Reveal } from "@/components/ui/Reveal";
 import { ProductGridMotion } from "@/components/ui/ProductGridMotion";
@@ -5,11 +6,47 @@ import Image from "next/image";
 import { fallbackFeaturedProducts } from "@/lib/fallback-data";
 import { getPrimaryImage, normalizeTechnicalSpecs } from "@/lib/normalize-product";
 import { shouldUseDatabase } from "@/lib/should-use-database";
+import { SITE_NAME, truncateDescription, toAbsoluteUrl } from "@/lib/site-config";
+
+export const revalidate = 300;
 
 function brandTone(brandId: string) {
   if (brandId.toLowerCase() === "apple") return "from-[var(--tone-apple)]";
   if (brandId.toLowerCase() === "samsung") return "from-[var(--tone-samsung)]";
   return "from-[var(--tone-brand)]";
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const resolvedParams = await params;
+  const brandParam = resolvedParams.id.toLowerCase();
+  const useDatabase = shouldUseDatabase();
+
+  const brand = useDatabase
+    ? await prisma.brand
+        .findFirst({
+          where: { OR: [{ id: resolvedParams.id }, { slug: brandParam }] },
+        })
+        .catch(() => null)
+    : null;
+
+  const brandName = brand?.name ?? (resolvedParams.id.charAt(0).toUpperCase() + resolvedParams.id.slice(1));
+  const canonicalPath = `/brand/${brand?.slug ?? brandParam}`;
+  const description = truncateDescription(
+    `Shop authentic ${brandName} gadgets at ${SITE_NAME} with verified warranty and nationwide delivery in Nigeria.`,
+  );
+
+  return {
+    title: `${brandName} Store`,
+    description,
+    alternates: { canonical: canonicalPath },
+    openGraph: {
+      title: `${brandName} Store | ${SITE_NAME}`,
+      description,
+      url: toAbsoluteUrl(canonicalPath),
+      type: "website",
+      images: brand?.image ? [{ url: brand.image }] : undefined,
+    },
+  };
 }
 
 export default async function BrandPage({ params }: { params: Promise<{ id: string }> }) {

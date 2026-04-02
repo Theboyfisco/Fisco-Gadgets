@@ -5,6 +5,8 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import { ResumePaymentButton } from "@/components/checkout/ResumePaymentButton";
 import { PICKUP_DETAILS } from "@/services/shipping";
+import { SuccessEventTracker } from "@/components/checkout/SuccessEventTracker";
+import { getPrimaryImage } from "@/lib/normalize-product";
 
 export default async function SuccessPage({ searchParams }: { searchParams: Promise<{ orderId: string }> }) {
     const { orderId } = await searchParams;
@@ -40,6 +42,7 @@ export default async function SuccessPage({ searchParams }: { searchParams: Prom
 
     return (
         <div className="container mx-auto flex flex-col items-center px-4 py-24">
+            <SuccessEventTracker orderId={order.id} status={order.status} />
             <div className={`mb-8 flex h-24 w-24 items-center justify-center rounded-full border shadow-[0_18px_50px_rgba(63,107,253,0.18)] animate-in zoom-in duration-700 ${
               isPaid
                 ? "border-primary/20 bg-primary/10 text-primary"
@@ -79,7 +82,7 @@ export default async function SuccessPage({ searchParams }: { searchParams: Prom
                         <div key={item.id} className="flex items-center gap-4 rounded-[1.25rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-3">
                             <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)]">
                                 <Image 
-                                    src={item.product.images[0]} 
+                                    src={getPrimaryImage(item.product.images)} 
                                     alt={item.product.name} 
                                     fill 
                                     className="object-cover"

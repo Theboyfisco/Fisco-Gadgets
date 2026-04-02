@@ -5,13 +5,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Search as SearchIcon, X, Smartphone, Laptop, Headphones, ArrowRight, Gamepad } from "lucide-react";
 import { searchProducts } from "@/actions/product";
 import Link from "next/link";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { MOTION } from "@/lib/motion";
 import { WishlistButton } from "@/components/product/WishlistButton";
 import { useBodyScrollLock } from "@/lib/useBodyScrollLock";
 import { QuickViewModal } from "@/components/product/QuickViewModal";
 import { getPrimaryImage, normalizeTechnicalSpecs } from "@/lib/normalize-product";
+import { trackEvent } from "@/lib/analytics-client";
+import { SafeImage } from "@/components/ui/SafeImage";
 
 const RECENT_SEARCH_KEY = "fisco_recent_searches_v1";
 
@@ -61,6 +62,12 @@ export function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; onClose: (
           setResults(mapped);
           setActiveIndex(0);
         });
+        if (deferredQuery.trim().length >= 2) {
+          trackEvent({
+            name: "search_usage",
+            payload: { query: deferredQuery.trim(), resultsCount: mapped.length },
+          });
+        }
       } catch (error) {
         console.error("Search failed:", error);
       }
@@ -138,6 +145,10 @@ export function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; onClose: (
   }, [isOpen, quickViewProduct]);
 
   const goToProduct = (productId: string) => {
+    trackEvent({
+      name: "search_result_click",
+      payload: { query: query.trim(), productId },
+    });
     if (query.trim()) {
       try {
         const normalized = query.trim();
@@ -247,7 +258,13 @@ export function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; onClose: (
                           }}
                         >
                           <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-[1rem] bg-[var(--surface-card)]">
-                            <Image src={product.image} alt={product.name} fill className="object-cover transition-transform duration-[var(--motion-slow)] ease-[var(--ease-standard)] group-hover:scale-105" />
+                            <SafeImage
+                              src={product.image ?? ""}
+                              alt={product.name}
+                              fill
+                              sizes="56px"
+                              className="object-cover transition-transform duration-[var(--motion-slow)] ease-[var(--ease-standard)] group-hover:scale-105"
+                            />
                           </div>
                           <div className="min-w-0 flex-1">
                             <div className="flex items-start justify-between gap-3">
@@ -282,6 +299,21 @@ export function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; onClose: (
                       );
                     })}
                   </div>
+                  {query.trim().length >= 2 ? (
+                    <div className="mt-4 text-right">
+                      <Link
+                        href={`/search?${new URLSearchParams({ q: query.trim() }).toString()}`}
+                        onClick={() => {
+                          trackEvent({ name: "search_view_all_click", payload: { query: query.trim(), resultsCount: results.length } });
+                          onClose();
+                        }}
+                        className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-secondary transition-colors hover:text-[var(--foreground)]"
+                      >
+                        View all results
+                        <ArrowRight size={14} />
+                      </Link>
+                    </div>
+                  ) : null}
                 </div>
               ) : query ? (
                 <div className="py-12 text-center">

@@ -3,6 +3,7 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { type ReactNode } from "react";
 import { MOTION } from "@/lib/motion";
+import { useHydrated } from "@/lib/useHydrated";
 
 interface RevealProps {
   children: ReactNode;
@@ -12,9 +13,11 @@ interface RevealProps {
 }
 
 export function Reveal({ children, className = "", delay = 0, y = 16 }: RevealProps) {
+  const hydrated = useHydrated();
   const reducedMotion = useReducedMotion();
+  const disableMotion = hydrated && reducedMotion;
 
-  if (reducedMotion) {
+  if (disableMotion) {
     return <div className={className}>{children}</div>;
   }
 

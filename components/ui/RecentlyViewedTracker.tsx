@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { trackRecentProduct } from "@/actions/customer-lists";
+import { trackEvent } from "@/lib/analytics-client";
 
 type RecentlyViewedProduct = {
   id: string;
@@ -27,6 +28,14 @@ export function RecentlyViewedTracker({ product }: { product: RecentlyViewedProd
     } catch {
       // Ignore storage failures; tracking is optional.
     }
+    trackEvent({
+      name: "pdp_engagement",
+      payload: {
+        event: "view",
+        productId: product.id,
+        categoryId: product.categoryId,
+      },
+    });
     trackRecentProduct(product.id).catch(() => null);
   }, [product]);
 

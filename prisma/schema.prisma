@@ -222,6 +222,59 @@ model ShippingDetails {
   @@index([orderId])
 }
 
+model AnalyticsEvent {
+  id         String   @id @default(cuid())
+  name       String
+  path       String?
+  userType   String?
+  sessionId  String?
+  payload    Json?
+  createdAt  DateTime @default(now())
+
+  @@index([name, createdAt])
+  @@index([path, createdAt])
+}
+
+model OperationalAlert {
+  id         String   @id @default(cuid())
+  source     String
+  severity   String
+  message    String
+  context    Json?
+  createdAt  DateTime @default(now())
+  resolvedAt DateTime?
+
+  @@index([source, createdAt])
+  @@index([severity, createdAt])
+}
+
+model AdminAuditLog {
+  id         String   @id @default(cuid())
+  actor      String
+  action     String
+  entityType String
+  entityId   String?
+  before     Json?
+  after      Json?
+  createdAt  DateTime @default(now())
+
+  @@index([entityType, createdAt])
+  @@index([actor, createdAt])
+}
+
+model MediaAsset {
+  id         String   @id @default(cuid())
+  filename   String
+  url        String
+  mimeType   String
+  sizeBytes  Int
+  uploadedBy String?
+  createdAt  DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([uploadedBy, createdAt])
+}
+
 enum Condition {
   NEW
   OPEN_BOX

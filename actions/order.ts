@@ -2,13 +2,21 @@
 
 import prisma from "@/lib/db";
 import { CreateOrderSchema, type CreateOrderInput } from "@/lib/validations/order";
-import { calculateShippingFee } from "@/services/shipping";
-import { evaluatePromoCode } from "@/services/promo";
 import { getCurrentCustomer } from "@/lib/customer-auth";
+import { captureOperationalAlert } from "@/lib/monitoring";
+import { buildOrderDraft } from "@/services/order-creation";
 
 export async function createOrder(input: CreateOrderInput) {
   // 1. Validate Input
-  const validated = CreateOrderSchema.parse(input);
+  const parsed = CreateOrderSchema.safeParse(input);
+  if (!parsed.success) {
+    return {
+      success: false,
+      error: parsed.error.issues[0]?.message || "Invalid checkout payload",
+      fieldErrors: parsed.error.flatten().fieldErrors,
+    };
+  }
+  const validated = parsed.data;
   const customer = await getCurrentCustomer();
   
   try {
@@ -24,43 +32,17 @@ export async function createOrder(input: CreateOrderInput) {
         throw new Error("One or more products not found");
       }
 
-      // 4. Calculate Totals (Never trust client prices)
-      let itemsTotal = 0;
-      const orderItems = validated.items.map(item => {
-        const product = dbProducts.find((p: any) => p.id === item.productId)!;
-        
-        if (product.stock < item.quantity) {
-          throw new Error(`Insufficient stock for ${product.name}`);
-        }
-
-        const itemSubtotal = product.price * item.quantity;
-        itemsTotal += itemSubtotal;
-
-        return {
-          productId: item.productId,
-          quantity: item.quantity,
-          priceAtPurchase: product.price // NGN
-        };
+      const orderDraft = buildOrderDraft({
+        items: validated.items,
+        products: dbProducts.map((product: any) => ({
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          stock: product.stock,
+        })),
+        shipping: validated.shipping,
+        promoCode: validated.promoCode,
       });
-
-      const shippingFee = calculateShippingFee(
-        validated.shipping.city,
-        validated.shipping.state,
-        validated.shipping.shippingType,
-      );
-      const promoResult = evaluatePromoCode({
-        code: validated.promoCode,
-        itemsTotal,
-        shippingFee,
-      });
-      if (validated.promoCode && !promoResult.applied) {
-        throw new Error(promoResult.reason || "Promo code is invalid.");
-      }
-
-      const adjustedShippingFee = promoResult.adjustedShippingFee;
-      const discountAmount = promoResult.discountAmount;
-      const totalAmount = itemsTotal + adjustedShippingFee - discountAmount;
-      const reservedUntil = new Date(Date.now() + 30 * 60 * 1000);
 
       // 5. Create Order + Items + Shipping Details
       const order = await tx.order.create({
@@ -68,13 +50,13 @@ export async function createOrder(input: CreateOrderInput) {
           customerId: customer?.id,
           email: validated.email,
           phone: validated.phone,
-          totalAmount: totalAmount,
-          discountAmount,
-          promoCode: promoResult.applied ? promoResult.code : null,
+          totalAmount: orderDraft.totalAmount,
+          discountAmount: orderDraft.discountAmount,
+          promoCode: orderDraft.promoCode,
           status: "PENDING",
-          reservedUntil,
+          reservedUntil: orderDraft.reservedUntil,
           items: {
-            create: orderItems
+            create: orderDraft.orderItems
           },
           shippingDetails: {
             create: {
@@ -83,7 +65,7 @@ export async function createOrder(input: CreateOrderInput) {
               city: validated.shipping.city,
               state: validated.shipping.state,
               shippingType: validated.shipping.shippingType,
-              shippingFee: adjustedShippingFee
+              shippingFee: orderDraft.shippingFee
             }
           }
         }
@@ -111,6 +93,15 @@ export async function createOrder(input: CreateOrderInput) {
 
     return { success: true, orderId: result };
   } catch (error: any) {
+    await captureOperationalAlert({
+      source: "checkout.create_order",
+      severity: "warning",
+      message: error?.message || "Order creation failed",
+      context: {
+        email: validated.email,
+        itemsCount: validated.items.length,
+      },
+    });
     console.error("Order creation failed:", error);
     return { success: false, error: error.message || "Failed to create order" };
   }

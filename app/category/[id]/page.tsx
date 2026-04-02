@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import prisma from "@/lib/db";
 import type { Prisma, Condition } from "@prisma/client";
 import { notFound } from "next/navigation";
@@ -10,6 +11,9 @@ import { CategoryFiltersServer } from "@/components/ui/CategoryFiltersServer";
 import { fallbackCategories, fallbackFeaturedProducts } from "@/lib/fallback-data";
 import { getPrimaryImage, normalizeTechnicalSpecs } from "@/lib/normalize-product";
 import { shouldUseDatabase } from "@/lib/should-use-database";
+import { SITE_NAME, truncateDescription, toAbsoluteUrl } from "@/lib/site-config";
+
+export const revalidate = 300;
 
 function categoryTone(categoryId: string) {
   if (categoryId === "phones") return "from-[var(--tone-phones)]";
@@ -22,6 +26,46 @@ function normalizeSpec(value: unknown) {
   return String(value ?? "")
     .trim()
     .toLowerCase();
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params;
+  const useDatabase = shouldUseDatabase();
+
+  const category = useDatabase
+    ? await prisma.category
+        .findFirst({
+          where: {
+            OR: [{ id }, { slug: id }],
+          },
+        })
+        .catch(() => null)
+    : fallbackCategories.find((entry) => entry.id === id || entry.slug === id) ?? null;
+
+  if (!category) {
+    return {
+      title: `Category Not Found | ${SITE_NAME}`,
+      robots: { index: false, follow: false },
+    };
+  }
+
+  const canonicalPath = `/category/${category.slug ?? category.id}`;
+  const description = truncateDescription(
+    `Shop ${category.name} at ${SITE_NAME}. Verified originals, fast delivery, and secure checkout in Nigeria.`,
+  );
+
+  return {
+    title: `${category.name} Collection`,
+    description,
+    alternates: { canonical: canonicalPath },
+    openGraph: {
+      title: `${category.name} Collection | ${SITE_NAME}`,
+      description,
+      url: toAbsoluteUrl(canonicalPath),
+      type: "website",
+      images: category.image ? [{ url: category.image }] : undefined,
+    },
+  };
 }
 
 export default async function CategoryPage({
@@ -38,6 +82,7 @@ export default async function CategoryPage({
     stock?: string;
     ram?: string;
     storage?: string;
+    page?: string;
   }>;
 }) {
   const resolvedParams = await params;
@@ -51,6 +96,9 @@ export default async function CategoryPage({
   const stock = resolvedSearchParams?.stock ?? "";
   const ramFilter = normalizeSpec(resolvedSearchParams?.ram);
   const storageFilter = normalizeSpec(resolvedSearchParams?.storage);
+  const pageParam = Number(resolvedSearchParams?.page || "1");
+  const currentPage = Number.isFinite(pageParam) && pageParam > 0 ? Math.floor(pageParam) : 1;
+  const PAGE_SIZE = 12;
   const minValue = Number.isFinite(min) ? (min as number) : undefined;
   const maxValue = Number.isFinite(max) ? (max as number) : undefined;
   const validCondition = ["NEW", "OPEN_BOX", "REFURBISHED"].includes(condition) ? (condition as Condition) : undefined;
@@ -129,6 +177,9 @@ export default async function CategoryPage({
     }
     return true;
   });
+  const totalPages = Math.max(1, Math.ceil(products.length / PAGE_SIZE));
+  const safePage = Math.min(currentPage, totalPages);
+  const paginatedProducts = products.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
 
   const brandOptions = Array.from(
     new Map(
@@ -187,7 +238,60 @@ export default async function CategoryPage({
             </Link>
           </div>
         ) : (
-          <ProductGridMotion products={products} />
+          <>
+            <ProductGridMotion products={paginatedProducts} />
+            {totalPages > 1 ? (
+              <div className="mt-8 flex items-center justify-between rounded-[1.25rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--text-soft)]">
+                  Page {safePage} of {totalPages}
+                </p>
+                <div className="flex items-center gap-2">
+                  <Link
+                    href={`/category/${category.slug ?? category.id}?${new URLSearchParams({
+                      ...(resolvedSearchParams?.sort ? { sort: resolvedSearchParams.sort } : {}),
+                      ...(resolvedSearchParams?.min ? { min: resolvedSearchParams.min } : {}),
+                      ...(resolvedSearchParams?.max ? { max: resolvedSearchParams.max } : {}),
+                      ...(resolvedSearchParams?.brand ? { brand: resolvedSearchParams.brand } : {}),
+                      ...(resolvedSearchParams?.condition ? { condition: resolvedSearchParams.condition } : {}),
+                      ...(resolvedSearchParams?.stock ? { stock: resolvedSearchParams.stock } : {}),
+                      ...(resolvedSearchParams?.ram ? { ram: resolvedSearchParams.ram } : {}),
+                      ...(resolvedSearchParams?.storage ? { storage: resolvedSearchParams.storage } : {}),
+                      page: String(Math.max(1, safePage - 1)),
+                    }).toString()}`}
+                    aria-disabled={safePage <= 1}
+                    className={`rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] ${
+                      safePage <= 1
+                        ? "pointer-events-none border-[var(--border-subtle)] text-[var(--text-soft)]"
+                        : "border-[var(--border-subtle)] text-secondary hover:text-[var(--foreground)]"
+                    }`}
+                  >
+                    Previous
+                  </Link>
+                  <Link
+                    href={`/category/${category.slug ?? category.id}?${new URLSearchParams({
+                      ...(resolvedSearchParams?.sort ? { sort: resolvedSearchParams.sort } : {}),
+                      ...(resolvedSearchParams?.min ? { min: resolvedSearchParams.min } : {}),
+                      ...(resolvedSearchParams?.max ? { max: resolvedSearchParams.max } : {}),
+                      ...(resolvedSearchParams?.brand ? { brand: resolvedSearchParams.brand } : {}),
+                      ...(resolvedSearchParams?.condition ? { condition: resolvedSearchParams.condition } : {}),
+                      ...(resolvedSearchParams?.stock ? { stock: resolvedSearchParams.stock } : {}),
+                      ...(resolvedSearchParams?.ram ? { ram: resolvedSearchParams.ram } : {}),
+                      ...(resolvedSearchParams?.storage ? { storage: resolvedSearchParams.storage } : {}),
+                      page: String(Math.min(totalPages, safePage + 1)),
+                    }).toString()}`}
+                    aria-disabled={safePage >= totalPages}
+                    className={`rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] ${
+                      safePage >= totalPages
+                        ? "pointer-events-none border-[var(--border-subtle)] text-[var(--text-soft)]"
+                        : "border-[var(--border-subtle)] text-secondary hover:text-[var(--foreground)]"
+                    }`}
+                  >
+                    Next
+                  </Link>
+                </div>
+              </div>
+            ) : null}
+          </>
         )}
       </Reveal>
     </div>

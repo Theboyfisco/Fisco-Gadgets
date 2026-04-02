@@ -4,8 +4,8 @@ import { useCompare } from "./CompareProvider";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Scale, X, ArrowRight } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
 import { MOTION } from "@/lib/motion";
+import { SafeImage } from "@/components/ui/SafeImage";
 
 export function CompareFloatingBar() {
     const { compareItems, removeFromCompare, clearCompare } = useCompare();
@@ -31,7 +31,7 @@ export function CompareFloatingBar() {
                             {compareItems.map((item) => (
                                 <div key={item.id} className="relative group shrink-0">
                                     <div className="relative h-12 w-12 overflow-hidden rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)]">
-                                        <Image src={item.image} alt={item.name} fill className="object-cover" />
+                                        <SafeImage src={item.image ?? ""} alt={item.name} fill className="object-cover" sizes="48px" />
                                     </div>
                                     <button
                                         onClick={() => removeFromCompare(item.id)}
@@ -53,7 +53,7 @@ export function CompareFloatingBar() {
                         {compareItems.length >= 1 && (
                             <Link
                                 href="/compare"
-                                className="flex items-center gap-2 whitespace-nowrap rounded-full bg-primary px-6 py-2.5 text-base font-bold text-[var(--primary-contrast)] shadow-glow transition-all hover:bg-[var(--primary-hover)]"
+                                className="flex items-center gap-2 whitespace-nowrap rounded-full bg-primary px-4 py-2.5 text-sm font-bold text-[var(--primary-contrast)] shadow-glow transition-all hover:bg-[var(--primary-hover)] sm:px-6 sm:text-base"
                             >
                                 Compare {compareItems.length}
                                 <ArrowRight size={18} />

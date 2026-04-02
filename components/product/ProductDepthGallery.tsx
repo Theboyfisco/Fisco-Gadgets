@@ -1,9 +1,10 @@
 "use client";
 
-import Image from "next/image";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 import { Tilt3D } from "@/components/ui/Tilt3D";
+import { trackEvent } from "@/lib/analytics-client";
+import { SafeImage } from "@/components/ui/SafeImage";
 
 interface ProductDepthGalleryProps {
   name: string;
@@ -21,6 +22,18 @@ export function ProductDepthGallery({ name, images, condition = "New" }: Product
   const activeImage = safeImages[activeIndex] ?? safeImages[0];
   const prefersReducedMotion = useReducedMotion();
 
+  useEffect(() => {
+    if (activeIndex === 0) return;
+    trackEvent({
+      name: "pdp_engagement",
+      payload: {
+        event: "gallery_image_switch",
+        productName: name,
+        imageIndex: activeIndex,
+      },
+    });
+  }, [activeIndex, name]);
+
   return (
     <div className="space-y-5">
       <Tilt3D maxTilt={prefersReducedMotion ? 0 : 8}>
@@ -33,14 +46,14 @@ export function ProductDepthGallery({ name, images, condition = "New" }: Product
           </div>
 
           <div className="absolute inset-0 [transform-style:preserve-3d]">
-            <Image
+            <SafeImage
               src={activeImage}
               alt={`${name} background`}
               fill
               quality={75}
               className="object-cover opacity-20 blur-xl [transform:translateZ(10px)_scale(1.15)]"
             />
-            <Image
+            <SafeImage
               src={activeImage}
               alt={name}
               fill
@@ -74,7 +87,7 @@ export function ProductDepthGallery({ name, images, condition = "New" }: Product
                 }`}
                 aria-label={`Select image ${index + 1}`}
               >
-                <Image src={image} alt={`${name} thumbnail ${index + 1}`} fill quality={70} className="object-cover" />
+                <SafeImage src={image} alt={`${name} thumbnail ${index + 1}`} fill quality={70} className="object-cover" />
               </button>
             );
           })}

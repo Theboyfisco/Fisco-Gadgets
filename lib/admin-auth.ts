@@ -62,6 +62,25 @@ export function verifySessionCookie(value?: string) {
   }
 }
 
+type AdminSessionPayload = { u: string; exp: number };
+
+function parseSessionCookie(value?: string): AdminSessionPayload | null {
+  if (!value || !ADMIN_COOKIE_SECRET) return null;
+  const parts = value.split(".");
+  if (parts.length !== 2) return null;
+  const [payloadB64, signature] = parts;
+  const expected = signPayload(payloadB64);
+  if (signature !== expected) return null;
+
+  try {
+    const payload = JSON.parse(fromBase64Url(payloadB64)) as AdminSessionPayload;
+    if (!payload?.u || !payload?.exp || payload.exp <= Date.now()) return null;
+    return payload;
+  } catch {
+    return null;
+  }
+}
+
 async function supabaseRequest<T>(path: string, init?: RequestInit): Promise<T> {
   assertSupabaseConfigured();
   const url = `${SUPABASE_URL}/rest/v1/${path}`;
@@ -147,6 +166,13 @@ export async function isAdminSessionValid() {
   const cookieStore = await cookies();
   const token = cookieStore.get(ADMIN_COOKIE)?.value;
   return verifySessionCookie(token);
+}
+
+export async function getAdminSessionUsername() {
+  const cookieStore = await cookies();
+  const token = cookieStore.get(ADMIN_COOKIE)?.value;
+  const parsed = parseSessionCookie(token);
+  return parsed?.u ?? null;
 }
 
 export async function requireAdmin() {

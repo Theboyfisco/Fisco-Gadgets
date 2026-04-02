@@ -174,3 +174,56 @@ export async function searchProducts(query: string) {
         category: entry.category,
     }));
 }
+
+export async function searchProductsPaginated(query: string, page = 1, pageSize = 24) {
+    const trimmedQuery = query.trim();
+    const safePage = Number.isFinite(page) && page > 0 ? Math.floor(page) : 1;
+    const safePageSize = Math.min(Math.max(Math.floor(pageSize), 1), 60);
+
+    if (!trimmedQuery || trimmedQuery.length < 2) {
+        return { total: 0, page: safePage, pageSize: safePageSize, items: [] as any[] };
+    }
+
+    const variants = buildQueryVariants(trimmedQuery);
+    const where = {
+        OR: [
+            ...variants.map((term) => ({ name: { contains: term, mode: 'insensitive' as const } })),
+            ...variants.map((term) => ({ description: { contains: term, mode: 'insensitive' as const } })),
+            ...variants.map((term) => ({ category: { name: { contains: term, mode: 'insensitive' as const } } })),
+            ...variants.map((term) => ({ brand: { name: { contains: term, mode: 'insensitive' as const } } })),
+        ],
+    };
+
+    const [total, rows] = await Promise.all([
+        prisma.product.count({ where }),
+        prisma.product.findMany({
+            where,
+            include: {
+                brand: { select: { name: true } },
+                category: { select: { name: true } },
+            },
+            orderBy: [{ updatedAt: "desc" }],
+            skip: (safePage - 1) * safePageSize,
+            take: safePageSize,
+        }),
+    ]);
+
+    return {
+        total,
+        page: safePage,
+        pageSize: safePageSize,
+        items: rows.map((row) => ({
+            id: row.id,
+            name: row.name,
+            slug: row.slug,
+            price: row.price,
+            stock: row.stock,
+            images: row.images,
+            categoryId: row.categoryId,
+            brandId: row.brandId,
+            technicalSpecs: row.technicalSpecs,
+            brand: row.brand,
+            category: row.category,
+        })),
+    };
+}

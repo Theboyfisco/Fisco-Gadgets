@@ -3,8 +3,7 @@
 import { useCart } from "@/components/cart/CartProvider";
 import { CreditCard, User, ArrowLeft, ShieldCheck } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
 
 import { createOrder } from "@/actions/order";
 import { initializePayment } from "@/actions/paystack";
@@ -14,6 +13,33 @@ import { MOTION } from "@/lib/motion";
 import { calculateShippingFee, estimateDeliveryWindow, PICKUP_DETAILS } from "@/services/shipping";
 import { evaluatePromoCode, listPromoRules } from "@/services/promo";
 import { getCustomerViewer } from "@/actions/customer-auth";
+import { trackEvent } from "@/lib/analytics-client";
+import { SafeImage } from "@/components/ui/SafeImage";
+
+type CheckoutFormState = {
+  fullName: string;
+  email: string;
+  phone: string;
+  address: string;
+  city: string;
+  state: string;
+  shippingType: "LOCAL_PICKUP" | "DELIVERY";
+};
+
+function validateCheckoutForm(formData: CheckoutFormState) {
+  const errors: Partial<Record<keyof CheckoutFormState, string>> = {};
+
+  if (formData.fullName.trim().length < 2) errors.fullName = "Enter your full name.";
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) errors.email = "Enter a valid email address.";
+  if (!/^\+?[0-9\s()-]{10,}$/.test(formData.phone.trim())) errors.phone = "Enter a valid phone number.";
+  if (formData.city.trim().length < 2) errors.city = "Enter your city.";
+  if (formData.state.trim().length < 2) errors.state = "Select a valid state.";
+  if (formData.shippingType === "DELIVERY" && formData.address.trim().length < 5) {
+    errors.address = "Delivery address is required.";
+  }
+
+  return errors;
+}
 
 export default function CheckoutPage() {
     const { cartItems, clearCart } = useCart();
@@ -26,15 +52,7 @@ export default function CheckoutPage() {
     const prefersReducedMotion = useReducedMotion();
 
     // Form State
-    const [formData, setFormData] = useState<{
-        fullName: string;
-        email: string;
-        phone: string;
-        address: string;
-        city: string;
-        state: string;
-        shippingType: "LOCAL_PICKUP" | "DELIVERY";
-    }>({
+    const [formData, setFormData] = useState<CheckoutFormState>({
         fullName: "",
         email: "",
         phone: "",
@@ -43,6 +61,8 @@ export default function CheckoutPage() {
         state: "Delta",
         shippingType: "DELIVERY"
     });
+    const [fieldErrors, setFieldErrors] = useState<Partial<Record<keyof CheckoutFormState, string>>>({});
+    const checkoutProgressRef = useRef({ step: 1, itemsCount: 0, total: 0 });
 
     const itemsTotal = cartItems.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
     const shippingFee = calculateShippingFee(formData.city, formData.state, formData.shippingType);
@@ -76,6 +96,7 @@ export default function CheckoutPage() {
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
+        setFieldErrors((prev) => ({ ...prev, [name]: undefined }));
     };
 
     useEffect(() => {
@@ -90,9 +111,63 @@ export default function CheckoutPage() {
       })();
     }, []);
 
+    useEffect(() => {
+      if (cartItems.length === 0) return;
+      trackEvent({
+        name: "checkout_started",
+        payload: { itemsCount: cartItems.length, total },
+      });
+      // fire once per checkout mount
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
+      checkoutProgressRef.current = { step, itemsCount: cartItems.length, total };
+      trackEvent({
+        name: "checkout_step_view",
+        payload: { step, itemsCount: cartItems.length, total },
+      });
+    }, [cartItems.length, step, total]);
+
+    useEffect(
+      () => () => {
+        const progress = checkoutProgressRef.current;
+        if (progress.step < 3 && progress.itemsCount > 0) {
+          trackEvent({
+            name: "checkout_drop_off",
+            payload: progress,
+          });
+        }
+      },
+      [],
+    );
+
+    const handleContinueToPayment = () => {
+      const errors = validateCheckoutForm(formData);
+      setFieldErrors(errors);
+      if (Object.keys(errors).length > 0) return;
+
+      trackEvent({
+        name: "checkout_step_complete",
+        payload: { step: 1, shippingType: formData.shippingType },
+      });
+      setStep(2);
+    };
+
     const handleConfirmOrder = async () => {
+        const errors = validateCheckoutForm(formData);
+        setFieldErrors(errors);
+        if (Object.keys(errors).length > 0) {
+          setStep(1);
+          return;
+        }
+
         setIsLoading(true);
         setError(null);
+        trackEvent({
+          name: "checkout_payment_attempt",
+          payload: { itemsCount: cartItems.length, total },
+        });
 
         try {
             // 1. Create Order in DB
@@ -114,6 +189,13 @@ export default function CheckoutPage() {
             });
 
             if (!orderResult.success || !orderResult.orderId) {
+                if (orderResult.fieldErrors?.shipping) {
+                  setError(String(orderResult.fieldErrors.shipping[0] || orderResult.error || "Checkout details are invalid."));
+                }
+                trackEvent({
+                  name: "checkout_payment_failed",
+                  payload: { stage: "create_order", reason: orderResult.error || "unknown" },
+                });
                 throw new Error(orderResult.error || "Failed to create order");
             }
 
@@ -121,14 +203,26 @@ export default function CheckoutPage() {
             const paymentResult = await initializePayment(orderResult.orderId);
 
             if (!paymentResult.success || !paymentResult.authorization_url) {
+                trackEvent({
+                  name: "checkout_payment_failed",
+                  payload: { stage: "initialize_payment", orderId: orderResult.orderId, reason: paymentResult.error || "unknown" },
+                });
                 throw new Error(paymentResult.error || "Failed to initialize payment");
             }
 
             // 3. Clear Cart and Redirect to Paystack
             clearCart();
+            trackEvent({
+              name: "checkout_payment_redirect",
+              payload: { orderId: orderResult.orderId },
+            });
             window.location.href = paymentResult.authorization_url;
 
         } catch (err: any) {
+            trackEvent({
+              name: "checkout_payment_failed",
+              payload: { stage: "client_catch", reason: err.message || "An unexpected error occurred" },
+            });
             setError(err.message || "An unexpected error occurred");
             setIsLoading(false);
         }
@@ -200,20 +294,24 @@ export default function CheckoutPage() {
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-secondary">Full Name</label>
                                     <input name="fullName" value={formData.fullName} onChange={handleInputChange} type="text" className="w-full rounded-xl border border-border-subtle bg-[var(--surface-card)] px-4 py-3 text-[var(--foreground)] transition-colors placeholder:text-[var(--text-soft)] focus:border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/25" placeholder="John Doe" />
+                                    {fieldErrors.fullName ? <p className="text-xs font-medium text-[var(--status-error)]">{fieldErrors.fullName}</p> : null}
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-secondary">Email Address</label>
                                     <input name="email" value={formData.email} onChange={handleInputChange} type="email" className="w-full rounded-xl border border-border-subtle bg-[var(--surface-card)] px-4 py-3 text-[var(--foreground)] transition-colors placeholder:text-[var(--text-soft)] focus:border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/25" placeholder="john@example.com" />
+                                    {fieldErrors.email ? <p className="text-xs font-medium text-[var(--status-error)]">{fieldErrors.email}</p> : null}
                                 </div>
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-secondary">Phone Number</label>
                                     <input name="phone" value={formData.phone} onChange={handleInputChange} type="tel" className="w-full rounded-xl border border-border-subtle bg-[var(--surface-card)] px-4 py-3 text-[var(--foreground)] transition-colors placeholder:text-[var(--text-soft)] focus:border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/25" placeholder="080 0000 0000" />
+                                    {fieldErrors.phone ? <p className="text-xs font-medium text-[var(--status-error)]">{fieldErrors.phone}</p> : null}
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-secondary">City (NG)</label>
                                     <input name="city" value={formData.city} onChange={handleInputChange} type="text" className="w-full rounded-xl border border-border-subtle bg-[var(--surface-card)] px-4 py-3 text-[var(--foreground)] transition-colors placeholder:text-[var(--text-soft)] focus:border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/25" placeholder="Asaba" />
+                                    {fieldErrors.city ? <p className="text-xs font-medium text-[var(--status-error)]">{fieldErrors.city}</p> : null}
                                 </div>
                             </div>
                             <div className="space-y-2">
@@ -227,6 +325,7 @@ export default function CheckoutPage() {
                                   placeholder="Street address, Apartment, Estate, etc."
                                   disabled={formData.shippingType === "LOCAL_PICKUP"}
                                 ></textarea>
+                                {fieldErrors.address ? <p className="text-xs font-medium text-[var(--status-error)]">{fieldErrors.address}</p> : null}
                             </div>
                             <div className="space-y-2">
                                 <label className="text-sm font-medium text-secondary">State</label>
@@ -236,6 +335,7 @@ export default function CheckoutPage() {
                                     <option value="Abuja" className="bg-[var(--panel-bg)] text-[var(--foreground)]">Abuja</option>
                                     <option value="Anambra" className="bg-[var(--panel-bg)] text-[var(--foreground)]">Anambra</option>
                                 </select>
+                                {fieldErrors.state ? <p className="text-xs font-medium text-[var(--status-error)]">{fieldErrors.state}</p> : null}
                             </div>
                             <div className="space-y-2">
                                 <label className="text-sm font-medium text-secondary">Shipping Method</label>
@@ -278,7 +378,7 @@ export default function CheckoutPage() {
                                 ) : null}
                             </div>
                             <button 
-                                onClick={() => setStep(2)}
+                                onClick={handleContinueToPayment}
                                 disabled={
                                   !formData.fullName ||
                                   !formData.email ||
@@ -378,7 +478,7 @@ export default function CheckoutPage() {
                             {cartItems.map((item) => (
                                 <div key={item.product.id} className="flex gap-4">
                                     <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-[var(--surface-card)]">
-                                        <Image src={item.product.image} alt={item.product.name} fill className="object-cover" />
+                                        <SafeImage src={item.product.image} alt={item.product.name} fill className="object-cover" />
                                     </div>
                                     <div className="flex-1">
                                         <p className="line-clamp-1 text-sm font-medium text-[var(--foreground)]">{item.product.name}</p>

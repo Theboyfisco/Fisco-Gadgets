@@ -83,6 +83,9 @@ DIRECT_URL="postgresql://..."
 PAYSTACK_SECRET_KEY="sk_..."
 PAYSTACK_PUBLIC_KEY="pk_..."
 NEXT_PUBLIC_APP_URL="http://localhost:3000"
+ALERT_WEBHOOK_URL="https://your-alert-endpoint.example/webhook" # optional
+FISCO_FORCE_FALLBACK_DATA="false" # optional
+FISCO_ENABLE_DB_DURING_BUILD="false" # optional
 ```
 
 ### 3) Prepare Prisma
@@ -117,6 +120,10 @@ Open `http://localhost:3000`.
 | `PAYSTACK_SECRET_KEY` | Server-side Paystack secret |
 | `PAYSTACK_PUBLIC_KEY` | Client-side Paystack public key |
 | `NEXT_PUBLIC_APP_URL` | Public base URL for redirects and webhooks |
+| `ALERT_WEBHOOK_URL` | Optional webhook for operational alerts |
+| `FISCO_FORCE_FALLBACK_DATA` | Force fallback mode even when DB exists (`true`/`false`) |
+| `FISCO_ENABLE_DB_DURING_BUILD` | Allow DB reads during Next build phase (`true`/`false`) |
+| `PAYSTACK_MOCK_AUTH_URL` | Optional local/e2e mock redirect URL for payment initialization |
 
 ---
 
@@ -128,6 +135,8 @@ Open `http://localhost:3000`.
 | `npm run build` | Create production build |
 | `npm run start` | Run production server |
 | `npm run lint` | Run ESLint |
+| `npm run test:unit` | Run unit tests (shipping, stock/order logic, validation) |
+| `npm run test:e2e` | Run Playwright end-to-end tests |
 | `npx tsc --noEmit` | Type-check without emitting files |
 | `npm run scrape:images` | Scrape and save product images |
 

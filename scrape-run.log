@@ -1,5 +1,0 @@
-
-> tech-hub@0.1.0 scrape:images
-> tsx scripts/scrape-product-images.ts --limit=1 --refresh
-
-[1] Resolving prod_1: iPhone 15 Pro Max

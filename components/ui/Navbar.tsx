@@ -12,6 +12,7 @@ import { createPortal } from "react-dom";
 import { BrandLogo } from "./BrandLogo";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 import { MOTION } from "@/lib/motion";
+import { useHydrated } from "@/lib/useHydrated";
 
 const SearchOverlay = dynamic(() => import("./SearchOverlay").then((mod) => mod.SearchOverlay), { ssr: false });
 
@@ -25,6 +26,7 @@ export function Navbar({ categories = [] }: NavbarProps) {
   const pathname = usePathname();
   const isHome = pathname === "/";
 
+  const hydrated = useHydrated();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -71,7 +73,7 @@ export function Navbar({ categories = [] }: NavbarProps) {
   const navLinks = [coreLinks[0], ...visibleCategories, ...coreLinks.slice(1)];
   const showMegaMenu = categoryLinks.length > visibleCategories.length;
 
-  const renderSearchOverlay = typeof document !== "undefined";
+  const renderSearchOverlay = hydrated;
   const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   return (

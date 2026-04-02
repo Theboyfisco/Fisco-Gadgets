@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import prisma from "@/lib/db";
 import { notFound } from "next/navigation";
 import { StickyBottomCTA } from "@/components/product/StickyBottomCTA";
@@ -15,6 +16,45 @@ import { ProductGridMotion } from "@/components/ui/ProductGridMotion";
 import { estimateDeliveryWindow, PICKUP_DETAILS } from "@/services/shipping";
 import { FrequentlyBoughtTogether } from "@/components/product/FrequentlyBoughtTogether";
 import { ProductCommunityPanel } from "@/components/product/ProductCommunityPanel";
+import { SITE_NAME, toAbsoluteUrl, truncateDescription } from "@/lib/site-config";
+
+export const revalidate = 300;
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const resolvedParams = await params;
+  const dbProduct = await prisma.product
+    .findFirst({
+      where: {
+        OR: [{ id: resolvedParams.id }, { slug: resolvedParams.id }],
+      },
+      include: { category: true, brand: true },
+    })
+    .catch(() => null);
+
+  if (!dbProduct) {
+    return {
+      title: `Product Not Found | ${SITE_NAME}`,
+      robots: { index: false, follow: false },
+    };
+  }
+
+  const canonicalPath = `/product/${dbProduct.slug || dbProduct.id}`;
+  const image = Array.isArray(dbProduct.images) ? dbProduct.images.find((item) => Boolean(item)) : undefined;
+  const description = truncateDescription(dbProduct.description || `${dbProduct.name} at ${SITE_NAME}`);
+
+  return {
+    title: dbProduct.name,
+    description,
+    alternates: { canonical: canonicalPath },
+    openGraph: {
+      title: `${dbProduct.name} | ${SITE_NAME}`,
+      description,
+      url: toAbsoluteUrl(canonicalPath),
+      type: "website",
+      images: image ? [{ url: image }] : undefined,
+    },
+  };
+}
 
 export default async function ProductPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = await params;
@@ -170,9 +210,79 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
     })
     .slice(0, 6);
 
+  const canonicalPath = `/product/${product.slug ?? product.id}`;
+  const canonicalUrl = toAbsoluteUrl(canonicalPath);
+  const productSchema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    sku: product.id,
+    description: dbProduct.description,
+    category: dbProduct.category?.name,
+    image: images.filter(Boolean).map((entry) => (entry.startsWith("http") ? entry : toAbsoluteUrl(entry))),
+    brand: {
+      "@type": "Brand",
+      name: dbProduct.brand?.name ?? SITE_NAME,
+    },
+    offers: {
+      "@type": "Offer",
+      url: canonicalUrl,
+      priceCurrency: "NGN",
+      price: product.price,
+      itemCondition:
+        dbProduct.condition === "NEW"
+          ? "https://schema.org/NewCondition"
+          : dbProduct.condition === "OPEN_BOX"
+            ? "https://schema.org/UsedCondition"
+            : "https://schema.org/RefurbishedCondition",
+      availability: product.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+      seller: {
+        "@type": "Organization",
+        name: SITE_NAME,
+      },
+    },
+    aggregateRating:
+      reviewCount > 0
+        ? {
+            "@type": "AggregateRating",
+            ratingValue: Number(reviewAverage.toFixed(1)),
+            reviewCount,
+          }
+        : undefined,
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: toAbsoluteUrl("/"),
+      },
+      dbProduct.category
+        ? {
+            "@type": "ListItem",
+            position: 2,
+            name: dbProduct.category.name,
+            item: toAbsoluteUrl(`/category/${dbProduct.category.slug ?? dbProduct.categoryId}`),
+          }
+        : null,
+      {
+        "@type": "ListItem",
+        position: dbProduct.category ? 3 : 2,
+        name: product.name,
+        item: canonicalUrl,
+      },
+    ].filter(Boolean),
+  };
+
   return (
     <div className="min-h-screen bg-transparent pb-24 lg:pb-12">
       <main className="container mx-auto px-4 pt-8">
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
         <Reveal className="mb-8">
           <div className="flex flex-wrap items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--text-soft)]">
             <Link href="/" className="transition-colors hover:text-[var(--foreground)]">

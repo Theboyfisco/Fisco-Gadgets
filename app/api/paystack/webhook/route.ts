@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import prisma from "@/lib/db";
+import { captureOperationalAlert } from "@/lib/monitoring";
+import { recordAnalyticsEvent } from "@/lib/analytics";
 
 const PAYSTACK_SECRET_KEY = process.env.PAYSTACK_SECRET_KEY;
 
@@ -21,6 +23,11 @@ export async function POST(req: NextRequest) {
     const signature = req.headers.get("x-paystack-signature");
 
     if (!signature || !PAYSTACK_SECRET_KEY) {
+      await captureOperationalAlert({
+        source: "paystack.webhook",
+        severity: "critical",
+        message: "Missing webhook signature or Paystack key",
+      });
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -30,6 +37,11 @@ export async function POST(req: NextRequest) {
       .digest("hex");
 
     if (!signaturesMatch(hash, signature)) {
+      await captureOperationalAlert({
+        source: "paystack.webhook",
+        severity: "warning",
+        message: "Invalid webhook signature",
+      });
       return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
     }
 
@@ -37,6 +49,11 @@ export async function POST(req: NextRequest) {
     try {
       event = JSON.parse(body);
     } catch {
+      await captureOperationalAlert({
+        source: "paystack.webhook",
+        severity: "warning",
+        message: "Invalid webhook payload",
+      });
       return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
     }
 
@@ -45,6 +62,12 @@ export async function POST(req: NextRequest) {
       const orderId = metadata?.orderId;
 
       if (!orderId) {
+        await captureOperationalAlert({
+          source: "paystack.webhook",
+          severity: "warning",
+          message: "Missing orderId in webhook metadata",
+          context: { reference },
+        });
         return NextResponse.json({ message: "No orderId in metadata" }, { status: 400 });
       }
 
@@ -53,6 +76,12 @@ export async function POST(req: NextRequest) {
       });
 
       if (!order) {
+        await captureOperationalAlert({
+          source: "paystack.webhook",
+          severity: "warning",
+          message: "Order not found for webhook",
+          context: { orderId, reference },
+        });
         return NextResponse.json({ error: "Order not found" }, { status: 404 });
       }
 
@@ -61,11 +90,23 @@ export async function POST(req: NextRequest) {
       }
 
       if (order.status === "PAID" && order.paymentReference !== reference) {
+        await captureOperationalAlert({
+          source: "paystack.webhook",
+          severity: "warning",
+          message: "Duplicate payment reference mismatch",
+          context: { orderId, existingReference: order.paymentReference, incomingReference: reference },
+        });
         return NextResponse.json({ error: "Duplicate payment reference mismatch" }, { status: 409 });
       }
 
       if (order.totalAmount * 100 !== amount) {
         console.error(`Amount mismatch: Order ${orderId} expected ${order.totalAmount * 100}, got ${amount}`);
+        await captureOperationalAlert({
+          source: "paystack.webhook",
+          severity: "critical",
+          message: "Amount mismatch during webhook validation",
+          context: { orderId, expectedAmount: order.totalAmount * 100, receivedAmount: amount, reference },
+        });
         return NextResponse.json({ error: "Validation failed" }, { status: 400 });
       }
 
@@ -78,11 +119,27 @@ export async function POST(req: NextRequest) {
         },
       });
 
+      await recordAnalyticsEvent({
+        name: "payment_success",
+        path: "/api/paystack/webhook",
+        userType: "system",
+        payload: {
+          orderId,
+          reference,
+          amount,
+        },
+      });
+
       console.log(`Order ${orderId} marked as PAID via reference ${reference}`);
     }
 
     return NextResponse.json({ status: "success" });
   } catch (error: any) {
+    await captureOperationalAlert({
+      source: "paystack.webhook",
+      severity: "critical",
+      message: error?.message || "Webhook handler error",
+    });
     console.error("Webhook handler error:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }

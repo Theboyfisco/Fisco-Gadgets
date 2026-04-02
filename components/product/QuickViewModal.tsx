@@ -2,7 +2,6 @@
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { X } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useRef } from "react";
 import type { Product } from "./BentoProductCard";
@@ -12,6 +11,8 @@ import { CompareButton } from "./CompareButton";
 import { MOTION } from "@/lib/motion";
 import { createPortal } from "react-dom";
 import { useBodyScrollLock } from "@/lib/useBodyScrollLock";
+import { SafeImage } from "@/components/ui/SafeImage";
+import { useHydrated } from "@/lib/useHydrated";
 
 interface QuickViewModalProps {
   product: Product;
@@ -23,7 +24,7 @@ export function QuickViewModal({ product, isOpen, onClose }: QuickViewModalProps
   const prefersReducedMotion = useReducedMotion();
   const dialogRef = useRef<HTMLDivElement>(null);
   const lastActiveRef = useRef<HTMLElement | null>(null);
-  const canPortal = typeof document !== "undefined";
+  const hydrated = useHydrated();
 
   useBodyScrollLock(isOpen);
 
@@ -95,7 +96,7 @@ export function QuickViewModal({ product, isOpen, onClose }: QuickViewModalProps
             <div className="grid gap-6 p-6 md:grid-cols-[1.1fr_0.9fr]">
               <div className="relative overflow-hidden rounded-[1.75rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[0_24px_80px_rgba(8,18,38,0.16)]">
                 {product.image && (
-                  <Image src={product.image} alt={product.name} fill className="object-cover" sizes="(max-width: 768px) 90vw, 50vw" />
+                  <SafeImage src={product.image} alt={product.name} fill className="object-cover" sizes="(max-width: 768px) 90vw, 50vw" />
                 )}
                 <div className="absolute left-4 top-4 rounded-full border border-white/15 bg-black/20 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-white/88 backdrop-blur-md">
                   Quick view
@@ -154,6 +155,6 @@ export function QuickViewModal({ product, isOpen, onClose }: QuickViewModalProps
     </AnimatePresence>
   );
 
-  if (!canPortal) return null;
+  if (!hydrated) return null;
   return createPortal(content, document.body);
 }

@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import type { Product } from "@/components/product/BentoProductCard";
 import { useToast } from "@/components/ui/ToastProvider";
 import { getCustomerLists, syncCustomerCart, syncCustomerList } from "@/actions/customer-lists";
+import { trackEvent } from "@/lib/analytics-client";
 
 export interface CartItem {
     product: Product;
@@ -157,6 +158,14 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
             return [...prev, { product, quantity: Math.min(quantity, maxStock) }];
         });
         setIsCartOpen(true);
+        trackEvent({
+            name: "add_to_cart",
+            payload: {
+                productId: product.id,
+                quantity,
+                cartSize: cartItems.length + 1,
+            },
+        });
         if (maxStock !== Number.POSITIVE_INFINITY && quantity >= maxStock) {
             pushToast({
                 title: "Stock limit reached",

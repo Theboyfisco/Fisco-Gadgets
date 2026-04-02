@@ -18,10 +18,26 @@ import { PageShell } from "@/components/ui/PageShell";
 import prisma from "@/lib/db";
 import { fallbackCategories } from "@/lib/fallback-data";
 import { shouldUseDatabase } from "@/lib/should-use-database";
+import { SITE_NAME, getBaseUrl } from "@/lib/site-config";
 
 export const metadata: Metadata = {
-  title: "Fisco Gadgets — Premium Tech Store",
+  metadataBase: new URL(getBaseUrl()),
+  title: {
+    default: `${SITE_NAME} — Premium Tech Store`,
+    template: `%s | ${SITE_NAME}`,
+  },
   description: "The official home for premium Apple, Samsung, and high-end tech accessories in Nigeria.",
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: `${SITE_NAME} — Premium Tech Store`,
+    description: "The official home for premium Apple, Samsung, and high-end tech accessories in Nigeria.",
+    url: "/",
+    siteName: SITE_NAME,
+    locale: "en_NG",
+    type: "website",
+  },
   icons: {
     icon: "/brand-mark.svg",
     shortcut: "/brand-mark.svg",
@@ -65,7 +81,8 @@ export default async function RootLayout({
         </Script>
       </head>
       <body
-        className={`${manrope.variable} ${spaceGrotesk.variable} flex min-h-screen flex-col antialiased selection:bg-primary/20 selection:text-[var(--foreground)]`}
+        suppressHydrationWarning
+        className={`${manrope.variable} ${spaceGrotesk.variable} flex min-h-screen flex-col overflow-x-hidden antialiased selection:bg-primary/20 selection:text-[var(--foreground)]`}
       >
         <a
           href="#main-content"

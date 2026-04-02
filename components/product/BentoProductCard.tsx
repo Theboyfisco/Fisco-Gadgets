@@ -4,14 +4,15 @@ import { motion, useReducedMotion } from "framer-motion";
 import { MessageCircle, ShoppingCart, Eye } from "lucide-react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import Image from "next/image";
 import { useState } from "react";
 import { CompareButton } from "./CompareButton";
 import { WishlistButton } from "./WishlistButton";
 import { Tilt3D } from "../ui/Tilt3D";
+import { SafeImage } from "@/components/ui/SafeImage";
 import { MOTION } from "@/lib/motion";
 import { normalizeTechnicalSpecs } from "@/lib/normalize-product";
 import { useCart } from "../cart/CartProvider";
+import { useHydrated } from "@/lib/useHydrated";
 
 const QuickViewModal = dynamic(() => import("./QuickViewModal").then((mod) => mod.QuickViewModal), {
   ssr: false,
@@ -50,7 +51,9 @@ function formatCategoryLabel(categoryId: string) {
 }
 
 export function BentoProductCard({ product, featured = false, href }: BentoProductCardProps) {
-  const prefersReducedMotion = useReducedMotion();
+  const hydrated = useHydrated();
+  const reducedMotionPreference = useReducedMotion();
+  const prefersReducedMotion = hydrated && reducedMotionPreference;
   const { addToCart } = useCart();
   const [quickViewOpen, setQuickViewOpen] = useState(false);
   const specs = normalizeTechnicalSpecs(product.technicalSpecs);
@@ -77,7 +80,7 @@ export function BentoProductCard({ product, featured = false, href }: BentoProdu
             {href ? (
               <Link href={href} className="group/image block h-full w-full" aria-label={`View ${product.name}`}>
                 <div className={`relative ${featured ? "h-64" : "h-48"} w-full`}>
-                  <Image
+                  <SafeImage
                     src={product.image}
                     alt={product.name}
                     fill
@@ -94,7 +97,7 @@ export function BentoProductCard({ product, featured = false, href }: BentoProdu
               </Link>
             ) : (
               <div className={`relative ${featured ? "h-64" : "h-48"} w-full`}>
-                <Image
+                <SafeImage
                   src={product.image}
                   alt={product.name}
                   fill

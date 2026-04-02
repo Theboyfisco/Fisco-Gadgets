@@ -1,12 +1,13 @@
 "use client";
 
-import { useDeferredValue, useMemo, useState, useTransition } from "react";
+import { type ChangeEvent, useDeferredValue, useEffect, useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Boxes, ImagePlus, Package2, PencilLine, Plus, Save, Search, Trash2 } from "lucide-react";
 import type { Condition } from "@prisma/client";
-import { createProduct, deleteProduct, updateProduct } from "@/actions/admin-product";
+import { bulkUpsertProducts, createProduct, deleteProduct, updateProduct } from "@/actions/admin-product";
 import { useToast } from "@/components/ui/ToastProvider";
+import { SafeImage } from "@/components/ui/SafeImage";
 
 type AdminCategory = {
   id: string;
@@ -53,7 +54,33 @@ type ProductFormState = {
   technicalSpecs: SpecField[];
 };
 
+type MediaAsset = {
+  id?: string;
+  filename: string;
+  url: string;
+  mimeType: string;
+  sizeBytes: number;
+  uploadedBy?: string | null;
+  createdAt?: string;
+};
+
+type ProductFormErrors = Partial<
+  Record<
+    | "name"
+    | "slug"
+    | "description"
+    | "price"
+    | "stock"
+    | "categoryId"
+    | "brandId"
+    | "imagesText"
+    | "technicalSpecs",
+    string
+  >
+>;
+
 const CONDITION_OPTIONS: Condition[] = ["NEW", "OPEN_BOX", "REFURBISHED"];
+const ADMIN_PRODUCTS_PAGE_SIZE = 12;
 
 function slugify(input: string) {
   return input
@@ -107,6 +134,76 @@ function formatCondition(value: Condition) {
   return value.replace(/_/g, " ");
 }
 
+function isValidUrl(value: string) {
+  try {
+    const parsed = new URL(value);
+    return parsed.protocol === "http:" || parsed.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
+function validateDraft(draft: ProductFormState): ProductFormErrors {
+  const errors: ProductFormErrors = {};
+  if (draft.name.trim().length < 2) errors.name = "Name must be at least 2 characters.";
+  if (slugify(draft.slug || draft.name).length < 2) errors.slug = "Slug is required.";
+  if (draft.description.trim().length < 8) errors.description = "Description must be at least 8 characters.";
+
+  const price = Number(draft.price);
+  if (!Number.isFinite(price) || price < 0) errors.price = "Price must be zero or more.";
+
+  const stock = Number(draft.stock);
+  if (!Number.isFinite(stock) || stock < 0) errors.stock = "Stock must be zero or more.";
+
+  if (!draft.categoryId) errors.categoryId = "Choose a category.";
+  if (!draft.brandId) errors.brandId = "Choose a brand.";
+
+  const images = draft.imagesText
+    .split("\n")
+    .map((item) => item.trim())
+    .filter(Boolean);
+  if (images.length === 0) {
+    errors.imagesText = "Add at least one image.";
+  } else if (images.some((image) => !isValidUrl(image))) {
+    errors.imagesText = "All images must be valid URLs.";
+  }
+
+  const validSpecs = draft.technicalSpecs.filter((item) => item.key.trim() && item.value.trim());
+  if (validSpecs.length === 0) {
+    errors.technicalSpecs = "Add at least one technical specification.";
+  }
+
+  return errors;
+}
+
+function parseCsvRow(row: string) {
+  const columns: string[] = [];
+  let current = "";
+  let inQuotes = false;
+
+  for (let i = 0; i < row.length; i += 1) {
+    const char = row[i];
+    if (char === '"') {
+      if (inQuotes && row[i + 1] === '"') {
+        current += '"';
+        i += 1;
+      } else {
+        inQuotes = !inQuotes;
+      }
+      continue;
+    }
+    if (char === "," && !inQuotes) {
+      columns.push(current.trim());
+      current = "";
+      continue;
+    }
+    current += char;
+  }
+
+  columns.push(current.trim());
+  return columns;
+}
+
 export function ProductAdminConsole({
   products,
   categories,
@@ -125,6 +222,10 @@ export function ProductAdminConsole({
   const [isCreating, setIsCreating] = useState(products.length === 0);
   const [draft, setDraft] = useState<ProductFormState>(() => toFormState(products[0] ?? null, categories, brands));
   const [slugTouched, setSlugTouched] = useState(false);
+  const [validationErrors, setValidationErrors] = useState<ProductFormErrors>({});
+  const [mediaAssets, setMediaAssets] = useState<MediaAsset[]>([]);
+  const [isMediaLoading, setIsMediaLoading] = useState(false);
+  const [isMediaUploading, setIsMediaUploading] = useState(false);
 
   const filteredProducts = useMemo(() => {
     const normalizedQuery = deferredQuery.trim().toLowerCase();
@@ -133,6 +234,7 @@ export function ProductAdminConsole({
       [product.name, product.slug, product.categoryName].some((value) => value.toLowerCase().includes(normalizedQuery)),
     );
   }, [deferredQuery, products]);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const selectedProduct = useMemo(
     () => products.find((product) => product.id === selectedId) ?? null,
@@ -140,6 +242,39 @@ export function ProductAdminConsole({
   );
 
   const totalStock = useMemo(() => products.reduce((sum, product) => sum + product.stock, 0), [products]);
+  const totalPages = Math.max(1, Math.ceil(filteredProducts.length / ADMIN_PRODUCTS_PAGE_SIZE));
+  const paginatedProducts = useMemo(() => {
+    const start = (currentPage - 1) * ADMIN_PRODUCTS_PAGE_SIZE;
+    return filteredProducts.slice(start, start + ADMIN_PRODUCTS_PAGE_SIZE);
+  }, [currentPage, filteredProducts]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [deferredQuery]);
+
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages);
+    }
+  }, [currentPage, totalPages]);
+
+  const loadMediaAssets = async () => {
+    setIsMediaLoading(true);
+    try {
+      const response = await fetch("/api/admin/media/list", { cache: "no-store" });
+      const data = await response.json();
+      if (!data.success) {
+        return;
+      }
+      setMediaAssets(data.assets || []);
+    } finally {
+      setIsMediaLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadMediaAssets().catch(() => null);
+  }, []);
 
   const handleFieldChange = (field: keyof ProductFormState, value: string) => {
     setDraft((current) => {
@@ -149,6 +284,7 @@ export function ProductAdminConsole({
       }
       return next;
     });
+    setValidationErrors((current) => ({ ...current, [field]: undefined }));
   };
 
   const handleSpecChange = (index: number, field: keyof SpecField, value: string) => {
@@ -158,6 +294,7 @@ export function ProductAdminConsole({
         itemIndex === index ? { ...item, [field]: value } : item,
       ),
     }));
+    setValidationErrors((current) => ({ ...current, technicalSpecs: undefined }));
   };
 
   const addSpecRow = () => {
@@ -165,6 +302,7 @@ export function ProductAdminConsole({
       ...current,
       technicalSpecs: [...current.technicalSpecs, { key: "", value: "" }],
     }));
+    setValidationErrors((current) => ({ ...current, technicalSpecs: undefined }));
   };
 
   const removeSpecRow = (index: number) => {
@@ -172,6 +310,7 @@ export function ProductAdminConsole({
       ...current,
       technicalSpecs: current.technicalSpecs.filter((_, itemIndex) => itemIndex !== index),
     }));
+    setValidationErrors((current) => ({ ...current, technicalSpecs: undefined }));
   };
 
   const resetToCreate = () => {
@@ -179,6 +318,7 @@ export function ProductAdminConsole({
     setSelectedId(null);
     setDraft(toFormState(null, categories, brands));
     setSlugTouched(false);
+    setValidationErrors({});
   };
 
   const selectProduct = (productId: string) => {
@@ -187,6 +327,7 @@ export function ProductAdminConsole({
     setSelectedId(productId);
     setDraft(toFormState(product, categories, brands));
     setSlugTouched(false);
+    setValidationErrors({});
   };
 
   const buildPayload = () => ({
@@ -209,7 +350,234 @@ export function ProductAdminConsole({
     ),
   });
 
+  const insertImageUrl = (url: string) => {
+    if (!url.trim()) return;
+    setDraft((current) => {
+      const existing = current.imagesText
+        .split("\n")
+        .map((item) => item.trim())
+        .filter(Boolean);
+      if (existing.includes(url.trim())) return current;
+      return {
+        ...current,
+        imagesText: [...existing, url.trim()].join("\n"),
+      };
+    });
+    setValidationErrors((current) => ({ ...current, imagesText: undefined }));
+  };
+
+  const handleUploadImage = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setIsMediaUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const response = await fetch("/api/admin/media/upload", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await response.json();
+      if (!data.success) {
+        pushToast({
+          title: "Upload failed",
+          description: data.error || "Unable to upload image.",
+          variant: "warning",
+        });
+        return;
+      }
+      if (data.asset?.url) {
+        insertImageUrl(data.asset.url);
+      }
+      pushToast({
+        title: "Image uploaded",
+        description: data.asset?.filename || file.name,
+        variant: "success",
+      });
+      await loadMediaAssets();
+    } catch {
+      pushToast({
+        title: "Upload failed",
+        description: "Unable to upload image.",
+        variant: "warning",
+      });
+    } finally {
+      event.target.value = "";
+      setIsMediaUploading(false);
+    }
+  };
+
+  const handleDeleteMediaAsset = (asset: MediaAsset) => {
+    if (!asset.id) return;
+    if (!window.confirm(`Delete media asset "${asset.filename}"?`)) return;
+    startTransition(async () => {
+      const response = await fetch("/api/admin/media/delete", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: asset.id }),
+      });
+      const data = await response.json();
+      if (!data.success) {
+        pushToast({
+          title: "Delete failed",
+          description: data.error || "Unable to delete media asset.",
+          variant: "warning",
+        });
+        return;
+      }
+      pushToast({
+        title: "Media deleted",
+        description: asset.filename,
+        variant: "info",
+      });
+      await loadMediaAssets();
+    });
+  };
+
+  const handleExportCsv = () => {
+    const headers = [
+      "name",
+      "slug",
+      "description",
+      "price",
+      "stock",
+      "condition",
+      "category",
+      "brand",
+      "images",
+      "technicalSpecs",
+    ];
+    const rows = products.map((product) => {
+      const specs = JSON.stringify(product.technicalSpecs || {});
+      const images = product.images.join("|");
+      const fields = [
+        product.name,
+        product.slug,
+        product.description,
+        String(product.price),
+        String(product.stock),
+        product.condition,
+        product.categoryName,
+        product.brandName || "",
+        images,
+        specs,
+      ];
+      return fields
+        .map((field) => `"${String(field).replace(/"/g, '""')}"`)
+        .join(",");
+    });
+    const csv = [headers.join(","), ...rows].join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `products_${new Date().toISOString().slice(0, 10)}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleImportCsv = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const text = await file.text();
+    const lines = text
+      .split(/\r?\n/)
+      .map((line) => line.trim())
+      .filter(Boolean);
+
+    if (lines.length < 2) {
+      pushToast({
+        title: "Import failed",
+        description: "CSV file has no data rows.",
+        variant: "warning",
+      });
+      event.target.value = "";
+      return;
+    }
+
+    const headers = parseCsvRow(lines[0]).map((header) => header.toLowerCase());
+    const idx = (name: string) => headers.indexOf(name);
+    const required = ["name", "slug", "description", "price", "stock", "condition", "category"];
+    if (required.some((field) => idx(field) === -1)) {
+      pushToast({
+        title: "Import failed",
+        description: "CSV is missing required columns.",
+        variant: "warning",
+      });
+      event.target.value = "";
+      return;
+    }
+
+    const categoriesByName = new Map(categories.map((item) => [item.name.toLowerCase(), item.id]));
+    const brandsByName = new Map(brands.map((item) => [item.name.toLowerCase(), item.id]));
+    const payload = lines.slice(1).map((line) => {
+      const cells = parseCsvRow(line);
+      const categoryName = cells[idx("category")] || "";
+      const brandName = idx("brand") >= 0 ? cells[idx("brand")] || "" : "";
+      const imagesRaw = idx("images") >= 0 ? cells[idx("images")] || "" : "";
+      const specsRaw = idx("technicalspecs") >= 0 ? cells[idx("technicalspecs")] || "" : "{}";
+
+      return {
+        name: cells[idx("name")] || "",
+        slug: cells[idx("slug")] || "",
+        description: cells[idx("description")] || "",
+        price: Number(cells[idx("price")] || 0),
+        stock: Number(cells[idx("stock")] || 0),
+        condition: (cells[idx("condition")] || "NEW").toUpperCase() as Condition,
+        categoryId: categoriesByName.get(categoryName.toLowerCase()) || categoryName,
+        brandId: brandName ? brandsByName.get(brandName.toLowerCase()) || brandName : null,
+        images: imagesRaw
+          .split("|")
+          .map((item) => item.trim())
+          .filter(Boolean),
+        technicalSpecs: (() => {
+          try {
+            const parsed = JSON.parse(specsRaw || "{}") as Record<string, string>;
+            return parsed && typeof parsed === "object" ? parsed : {};
+          } catch {
+            return {};
+          }
+        })(),
+      };
+    });
+
+    startTransition(async () => {
+      const result = await bulkUpsertProducts(payload);
+      if (!result.success) {
+        pushToast({
+          title: "Import failed",
+          description: result.error,
+          variant: "warning",
+        });
+        return;
+      }
+      pushToast({
+        title: "Import complete",
+        description: `Created: ${"created" in result ? result.created : 0}, Updated: ${"updated" in result ? result.updated : 0}`,
+        variant: "success",
+      });
+      router.refresh();
+    });
+
+    event.target.value = "";
+  };
+
   const handleSubmit = () => {
+    const errors = validateDraft(draft);
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors);
+      pushToast({
+        title: "Fix form errors",
+        description: "Some fields are invalid. Check highlighted sections.",
+        variant: "warning",
+      });
+      return;
+    }
+
     const payload = buildPayload();
 
     startTransition(async () => {
@@ -235,6 +603,7 @@ export function ProductAdminConsole({
         setSelectedId(result.productId);
       }
       setSlugTouched(false);
+      setValidationErrors({});
       router.refresh();
     });
   };
@@ -265,6 +634,7 @@ export function ProductAdminConsole({
         setIsCreating(!nextProduct);
         setDraft(toFormState(nextProduct, categories, brands));
         setSlugTouched(false);
+        setValidationErrors({});
       router.refresh();
     });
   };
@@ -278,14 +648,27 @@ export function ProductAdminConsole({
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--text-soft)]">Inventory</p>
               <h2 className="mt-2 text-2xl font-bold text-[var(--foreground)]">Products</h2>
             </div>
-            <button
-              type="button"
-              onClick={resetToCreate}
-              className="interactive-focus inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-[var(--primary-contrast)] shadow-[0_18px_40px_rgba(63,107,253,0.25)] transition-colors hover:bg-[var(--primary-hover)]"
-            >
-              <Plus size={16} />
-              New
-            </button>
+            <div className="flex flex-wrap items-center justify-end gap-2">
+              <label className="interactive-focus inline-flex cursor-pointer items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-soft)] px-3 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-secondary transition-colors hover:text-[var(--foreground)]">
+                Import CSV
+                <input type="file" accept=".csv,text/csv" onChange={handleImportCsv} className="sr-only" />
+              </label>
+              <button
+                type="button"
+                onClick={handleExportCsv}
+                className="interactive-focus inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-soft)] px-3 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-secondary transition-colors hover:text-[var(--foreground)]"
+              >
+                Export CSV
+              </button>
+              <button
+                type="button"
+                onClick={resetToCreate}
+                className="interactive-focus inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-[var(--primary-contrast)] shadow-[0_18px_40px_rgba(63,107,253,0.25)] transition-colors hover:bg-[var(--primary-hover)]"
+              >
+                <Plus size={16} />
+                New
+              </button>
+            </div>
           </div>
 
           <div className="mb-4 grid grid-cols-3 gap-3">
@@ -321,7 +704,7 @@ export function ProductAdminConsole({
               No products match the current search.
             </div>
           ) : (
-            filteredProducts.map((product) => {
+            paginatedProducts.map((product) => {
               const active = !isCreating && product.id === selectedId;
               return (
                 <button
@@ -361,6 +744,31 @@ export function ProductAdminConsole({
               );
             })
           )}
+          {filteredProducts.length > ADMIN_PRODUCTS_PAGE_SIZE ? (
+            <div className="mt-3 flex items-center justify-between rounded-[1.25rem] border border-[var(--border-subtle)] bg-[var(--surface-soft)] px-3 py-2">
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--text-soft)]">
+                Page {currentPage} of {totalPages}
+              </p>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  disabled={currentPage <= 1}
+                  onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+                  className="rounded-full border border-[var(--border-subtle)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-secondary disabled:opacity-50"
+                >
+                  Prev
+                </button>
+                <button
+                  type="button"
+                  disabled={currentPage >= totalPages}
+                  onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
+                  className="rounded-full border border-[var(--border-subtle)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-secondary disabled:opacity-50"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          ) : null}
         </section>
       </div>
 
@@ -417,6 +825,7 @@ export function ProductAdminConsole({
                   className="interactive-focus w-full rounded-[1rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-sm text-[var(--foreground)] outline-none placeholder:text-[var(--text-soft)] focus-visible:ring-2 focus-visible:ring-primary/25"
                   placeholder="iPhone 16 Pro Max"
                 />
+                {validationErrors.name ? <p className="mt-2 text-xs font-medium text-[var(--status-error)]">{validationErrors.name}</p> : null}
               </label>
               <label className="block">
                 <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.16em] text-[var(--text-soft)]">Slug</span>
@@ -429,6 +838,7 @@ export function ProductAdminConsole({
                   className="interactive-focus w-full rounded-[1rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-sm text-[var(--foreground)] outline-none placeholder:text-[var(--text-soft)] focus-visible:ring-2 focus-visible:ring-primary/25"
                   placeholder="iphone_16_pro_max"
                 />
+                {validationErrors.slug ? <p className="mt-2 text-xs font-medium text-[var(--status-error)]">{validationErrors.slug}</p> : null}
               </label>
             </div>
 
@@ -441,6 +851,9 @@ export function ProductAdminConsole({
                 className="interactive-focus w-full rounded-[1rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-sm text-[var(--foreground)] outline-none placeholder:text-[var(--text-soft)] focus-visible:ring-2 focus-visible:ring-primary/25"
                 placeholder="Premium device with..."
               />
+              {validationErrors.description ? (
+                <p className="mt-2 text-xs font-medium text-[var(--status-error)]">{validationErrors.description}</p>
+              ) : null}
             </label>
 
             <div className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
@@ -453,6 +866,7 @@ export function ProductAdminConsole({
                   onChange={(event) => handleFieldChange("price", event.target.value)}
                   className="interactive-focus w-full rounded-[1rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-sm text-[var(--foreground)] outline-none focus-visible:ring-2 focus-visible:ring-primary/25"
                 />
+                {validationErrors.price ? <p className="mt-2 text-xs font-medium text-[var(--status-error)]">{validationErrors.price}</p> : null}
               </label>
               <label className="block">
                 <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.16em] text-[var(--text-soft)]">Stock</span>
@@ -463,6 +877,7 @@ export function ProductAdminConsole({
                   onChange={(event) => handleFieldChange("stock", event.target.value)}
                   className="interactive-focus w-full rounded-[1rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-sm text-[var(--foreground)] outline-none focus-visible:ring-2 focus-visible:ring-primary/25"
                 />
+                {validationErrors.stock ? <p className="mt-2 text-xs font-medium text-[var(--status-error)]">{validationErrors.stock}</p> : null}
               </label>
               <label className="block">
                 <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.16em] text-[var(--text-soft)]">Condition</span>
@@ -482,7 +897,10 @@ export function ProductAdminConsole({
                 <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.16em] text-[var(--text-soft)]">Category</span>
                 <select
                   value={draft.categoryId}
-                  onChange={(event) => setDraft((current) => ({ ...current, categoryId: event.target.value }))}
+                  onChange={(event) => {
+                    setDraft((current) => ({ ...current, categoryId: event.target.value }));
+                    setValidationErrors((current) => ({ ...current, categoryId: undefined }));
+                  }}
                   className="interactive-focus w-full rounded-[1rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-sm text-[var(--foreground)] outline-none focus-visible:ring-2 focus-visible:ring-primary/25"
                 >
                   {categories.map((category) => (
@@ -491,12 +909,18 @@ export function ProductAdminConsole({
                     </option>
                   ))}
                 </select>
+                {validationErrors.categoryId ? (
+                  <p className="mt-2 text-xs font-medium text-[var(--status-error)]">{validationErrors.categoryId}</p>
+                ) : null}
               </label>
               <label className="block">
                 <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.16em] text-[var(--text-soft)]">Brand</span>
                 <select
                   value={draft.brandId}
-                  onChange={(event) => setDraft((current) => ({ ...current, brandId: event.target.value }))}
+                  onChange={(event) => {
+                    setDraft((current) => ({ ...current, brandId: event.target.value }));
+                    setValidationErrors((current) => ({ ...current, brandId: undefined }));
+                  }}
                   className="interactive-focus w-full rounded-[1rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-sm text-[var(--foreground)] outline-none focus-visible:ring-2 focus-visible:ring-primary/25"
                 >
                   {brands.map((brand) => (
@@ -505,6 +929,9 @@ export function ProductAdminConsole({
                     </option>
                   ))}
                 </select>
+                {validationErrors.brandId ? (
+                  <p className="mt-2 text-xs font-medium text-[var(--status-error)]">{validationErrors.brandId}</p>
+                ) : null}
               </label>
             </div>
           </div>
@@ -542,6 +969,25 @@ export function ProductAdminConsole({
                 <p className="text-xs text-secondary">One image URL per line. The first image becomes the main preview.</p>
               </div>
             </div>
+            <div className="mb-3 flex flex-wrap items-center gap-3">
+              <label className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-secondary transition-colors hover:text-[var(--foreground)]">
+                {isMediaUploading ? "Uploading..." : "Upload image"}
+                <input
+                  type="file"
+                  accept="image/png,image/jpeg,image/webp,image/gif,image/svg+xml"
+                  onChange={handleUploadImage}
+                  className="sr-only"
+                  disabled={isMediaUploading}
+                />
+              </label>
+              <button
+                type="button"
+                onClick={() => loadMediaAssets().catch(() => null)}
+                className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-secondary transition-colors hover:text-[var(--foreground)]"
+              >
+                {isMediaLoading ? "Refreshing..." : "Refresh library"}
+              </button>
+            </div>
             <textarea
               value={draft.imagesText}
               onChange={(event) => handleFieldChange("imagesText", event.target.value)}
@@ -549,6 +995,39 @@ export function ProductAdminConsole({
               className="interactive-focus w-full rounded-[1rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 font-mono text-xs text-[var(--foreground)] outline-none placeholder:text-[var(--text-soft)] focus-visible:ring-2 focus-visible:ring-primary/25"
               placeholder={"https://...\nhttps://..."}
             />
+            {validationErrors.imagesText ? (
+              <p className="mt-2 text-xs font-medium text-[var(--status-error)]">{validationErrors.imagesText}</p>
+            ) : null}
+            {mediaAssets.length > 0 ? (
+              <div className="mt-4">
+                <p className="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--text-soft)]">Media library</p>
+                <div className="grid max-h-56 grid-cols-3 gap-2 overflow-y-auto pr-1 sm:grid-cols-4">
+                  {mediaAssets.map((asset) => (
+                    <div key={asset.id || asset.url} className="group relative h-20 overflow-hidden rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)]">
+                      <SafeImage src={asset.url} alt={asset.filename} fill className="object-cover" sizes="120px" />
+                      <div className="absolute inset-0 flex items-end justify-between gap-1 bg-[linear-gradient(180deg,transparent,rgba(5,8,18,0.85))] p-1 opacity-0 transition-opacity group-hover:opacity-100">
+                        <button
+                          type="button"
+                          onClick={() => insertImageUrl(asset.url)}
+                          className="rounded-full bg-white/20 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-white"
+                        >
+                          Use
+                        </button>
+                        {asset.id ? (
+                          <button
+                            type="button"
+                            onClick={() => handleDeleteMediaAsset(asset)}
+                            className="rounded-full bg-[var(--status-error)]/70 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-white"
+                          >
+                            Del
+                          </button>
+                        ) : null}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : null}
           </div>
 
           <div className="rounded-[1.75rem] border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-5">
@@ -597,6 +1076,9 @@ export function ProductAdminConsole({
                 </div>
               ))}
             </div>
+            {validationErrors.technicalSpecs ? (
+              <p className="mt-3 text-xs font-medium text-[var(--status-error)]">{validationErrors.technicalSpecs}</p>
+            ) : null}
           </div>
         </div>
 

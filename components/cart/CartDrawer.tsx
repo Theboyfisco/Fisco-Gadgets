@@ -3,11 +3,11 @@
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { ShoppingBag, X, Trash2 } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
 import { useEffect, useRef } from "react";
 import type { CartItem } from "./CartProvider";
 import { MOTION } from "@/lib/motion";
 import { useBodyScrollLock } from "@/lib/useBodyScrollLock";
+import { SafeImage } from "@/components/ui/SafeImage";
 
 interface CartDrawerProps {
     isOpen: boolean;
@@ -137,7 +137,7 @@ export function CartDrawer({
                                 {cartItems.map((item) => (
                                     <div key={item.product.id} className="flex items-center gap-4 rounded-[1.5rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card-strong),var(--surface-card))] p-4 shadow-[0_16px_34px_rgba(8,18,38,0.08)]">
                                         <div className="relative h-14 w-14 overflow-hidden rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-cta)]">
-                                            {item.product.image && <Image src={item.product.image} alt={item.product.name} fill className="object-cover" />}
+                                            {item.product.image && <SafeImage src={item.product.image} alt={item.product.name} fill className="object-cover" />}
                                         </div>
                                         <div className="flex-1">
                                             <h4 className="font-semibold text-[var(--foreground)]">{item.product.name}</h4>

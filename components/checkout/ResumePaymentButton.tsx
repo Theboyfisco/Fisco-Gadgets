@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { initializePayment } from "@/actions/paystack";
+import { trackEvent } from "@/lib/analytics-client";
 
 export function ResumePaymentButton({ orderId, className }: { orderId: string; className?: string }) {
   const [loading, setLoading] = useState(false);
@@ -9,14 +10,18 @@ export function ResumePaymentButton({ orderId, className }: { orderId: string; c
   const handleResume = async () => {
     if (loading) return;
     setLoading(true);
+    trackEvent({ name: "checkout_resume_payment_attempt", payload: { orderId } });
     try {
       const result = await initializePayment(orderId);
       if (!result.success || !result.authorization_url) {
+        trackEvent({ name: "checkout_resume_payment_failed", payload: { orderId } });
         setLoading(false);
         return;
       }
+      trackEvent({ name: "checkout_resume_payment_redirect", payload: { orderId } });
       window.location.href = result.authorization_url;
     } catch {
+      trackEvent({ name: "checkout_resume_payment_failed", payload: { orderId } });
       setLoading(false);
     }
   };
