@@ -37,7 +37,6 @@ export function LatestProductsCarousel({ products }: LatestProductsCarouselProps
     [products],
   );
   const [activeIndex, setActiveIndex] = useState(0);
-  const [hoverPaused, setHoverPaused] = useState(false);
   const [pageHidden, setPageHidden] = useState(false);
   const prefersReducedMotion = hydrated && reducedMotionPreference;
 
@@ -52,7 +51,7 @@ export function LatestProductsCarousel({ products }: LatestProductsCarouselProps
     return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
   }, []);
 
-  const isPaused = hoverPaused || pageHidden;
+  const isPaused = pageHidden;
 
   useEffect(() => {
     if (count <= 1 || isPaused) {
@@ -82,9 +81,7 @@ export function LatestProductsCarousel({ products }: LatestProductsCarouselProps
 
   return (
     <div
-      className="group relative h-[22rem] w-full max-w-xl overflow-hidden rounded-[2.2rem] border border-[var(--carousel-border)] bg-[var(--carousel-surface)] shadow-[var(--carousel-shadow)] sm:h-[26rem] lg:h-[28rem]"
-      onMouseEnter={() => setHoverPaused(true)}
-      onMouseLeave={() => setHoverPaused(false)}
+      className="group relative h-[clamp(20rem,58vw,28rem)] w-full max-w-[52rem] overflow-hidden rounded-[clamp(1.5rem,2.5vw,2.2rem)] border border-[var(--carousel-border)] bg-[var(--carousel-surface)] shadow-[var(--carousel-shadow)] sm:h-[clamp(22rem,45vw,30rem)] xl:h-[clamp(24rem,33vw,34rem)]"
       role="region"
       aria-roledescription="carousel"
       aria-label="Featured products"
@@ -113,7 +110,7 @@ export function LatestProductsCarousel({ products }: LatestProductsCarouselProps
         </motion.div>
       </AnimatePresence>
 
-      <div className="relative z-10 flex h-full flex-col justify-between p-7 sm:p-8">
+      <div className="relative z-10 flex h-full flex-col justify-between p-[clamp(1rem,2.2vw,2rem)]">
         <div className="flex items-start justify-between gap-4">
           <div className="inline-flex w-fit items-center gap-2 rounded-full border border-[var(--carousel-control-border)] bg-[var(--carousel-control-bg)] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.32em] text-[var(--foreground)] backdrop-blur-md">
             Featured now
@@ -154,8 +151,8 @@ export function LatestProductsCarousel({ products }: LatestProductsCarouselProps
             </div>
 
             <div>
-              <h3 className="text-3xl font-semibold leading-tight sm:text-4xl">{activeProduct.name}</h3>
-              <p className="mt-2 text-lg font-semibold text-primary">{formattedPrice}</p>
+              <h3 className="text-[clamp(1.55rem,3.3vw,2.65rem)] font-semibold leading-tight">{activeProduct.name}</h3>
+              <p className="mt-2 text-[clamp(0.95rem,1.6vw,1.15rem)] font-semibold text-primary">{formattedPrice}</p>
             </div>
 
             <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-[var(--carousel-control-border)] bg-[var(--carousel-control-bg)] p-3 backdrop-blur-md">

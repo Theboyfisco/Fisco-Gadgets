@@ -14,7 +14,10 @@ export function BrandLogo({ href = "/", compact = false, className = "", onClick
   const content = compact ? (
     <Image src="/brand-mark.png" alt="NOXTECH" width={42} height={42} className="h-10 w-10" />
   ) : (
-    <Image src="/brand-logo.png" alt="NOXTECH" width={220} height={62} className="h-10 w-auto sm:h-11" />
+    <>
+      <Image src="/brand-mark.png" alt="NOXTECH" width={42} height={42} className="h-10 w-10 sm:hidden" />
+      <Image src="/brand-logo.png" alt="NOXTECH" width={220} height={62} className="hidden h-10 w-auto sm:block sm:h-11" />
+    </>
   );
 
   return (

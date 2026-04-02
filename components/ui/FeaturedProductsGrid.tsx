@@ -19,7 +19,7 @@ type FeaturedProduct = {
 export function FeaturedProductsGrid({ products }: { products: FeaturedProduct[] }) {
   return (
     <motion.div
-      className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
+      className="grid grid-cols-1 gap-[clamp(1rem,1.7vw,1.8rem)] md:grid-cols-2 2xl:grid-cols-4"
       initial="hidden"
       animate="show"
       variants={{
@@ -34,7 +34,7 @@ export function FeaturedProductsGrid({ products }: { products: FeaturedProduct[]
             hidden: { opacity: 0, y: 14 },
             show: { opacity: 1, y: 0, transition: { duration: MOTION.duration.base, ease: MOTION.ease.standard } },
           }}
-          className={index === 0 ? "md:col-span-2 lg:col-span-2" : ""}
+          className={index === 0 ? "md:col-span-2 2xl:col-span-2" : ""}
         >
           <BentoProductCard product={product as any} featured={index === 0} href={`/product/${product.slug ?? product.id}`} />
         </motion.div>

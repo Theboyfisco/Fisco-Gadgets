@@ -89,7 +89,7 @@ export function Navbar({ categories = [] }: NavbarProps) {
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
           <div className="flex items-center gap-3 sm:gap-4">
             <button
-              className="interactive-focus -ml-2 rounded-xl p-2 text-secondary transition-colors hover:bg-[var(--interactive-hover)] hover:text-[var(--foreground)] lg:hidden"
+              className="interactive-focus -ml-2 rounded-xl p-2 text-secondary transition-colors hover:bg-[var(--interactive-hover)] hover:text-[var(--foreground)] xl:hidden"
               onClick={() => setIsMobileMenuOpen(true)}
               aria-label="Open menu"
               aria-expanded={isMobileMenuOpen}
@@ -108,7 +108,7 @@ export function Navbar({ categories = [] }: NavbarProps) {
             )}
           </div>
 
-          <nav className="hidden items-center gap-2 rounded-full border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--interactive-bg-soft),var(--surface-soft))] px-3 py-1 shadow-[0_16px_44px_rgba(8,18,38,0.08)] lg:flex">
+          <nav className="hidden items-center gap-2 rounded-full border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--interactive-bg-soft),var(--surface-soft))] px-3 py-1 shadow-[0_16px_44px_rgba(8,18,38,0.08)] xl:flex">
             {navLinks.map((link) => {
               const active = pathname === link.href;
               return (
@@ -178,10 +178,10 @@ export function Navbar({ categories = [] }: NavbarProps) {
             )}
           </nav>
 
-          <div className="flex max-w-sm flex-1 items-center justify-end gap-2 sm:gap-3 lg:max-w-md">
+          <div className="flex min-w-0 flex-1 items-center justify-end gap-1.5 sm:gap-2.5 xl:max-w-[34rem]">
             <button
               onClick={() => setIsSearchOpen(true)}
-              className="interactive-focus group hidden flex-1 items-center gap-3 rounded-full border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--interactive-bg-soft),var(--surface-soft))] px-4 py-2 text-sm text-secondary shadow-[0_16px_40px_rgba(8,18,38,0.06)] transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:bg-[var(--interactive-active)] hover:text-[var(--interactive-fg)] lg:flex"
+              className="interactive-focus group hidden min-w-[16rem] flex-1 items-center gap-3 rounded-full border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--interactive-bg-soft),var(--surface-soft))] px-4 py-2 text-sm text-secondary shadow-[0_16px_40px_rgba(8,18,38,0.06)] transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:bg-[var(--interactive-active)] hover:text-[var(--interactive-fg)] xl:flex"
               aria-label="Open search"
             >
               <Search size={17} className="transition-colors group-hover:text-primary" />
@@ -193,7 +193,7 @@ export function Navbar({ categories = [] }: NavbarProps) {
 
             <button
               onClick={() => setIsSearchOpen(true)}
-              className="interactive-focus rounded-xl p-2 text-secondary transition-colors hover:bg-[var(--interactive-hover)] hover:text-[var(--foreground)] lg:hidden"
+              className="interactive-focus rounded-xl p-2 text-secondary transition-colors hover:bg-[var(--interactive-hover)] hover:text-[var(--foreground)] xl:hidden"
               aria-label="Open search"
             >
               <Search size={22} />

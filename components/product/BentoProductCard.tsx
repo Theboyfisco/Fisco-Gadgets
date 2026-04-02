@@ -79,7 +79,7 @@ export function BentoProductCard({ product, featured = false, href }: BentoProdu
           <div className="relative mb-4 w-full overflow-hidden rounded-[18px] border border-[var(--border-subtle)] transition-all duration-[var(--motion-slow)] ease-[var(--ease-standard)] group-hover:border-[var(--interactive-border-strong)]">
             {href ? (
               <Link href={href} className="group/image block h-full w-full" aria-label={`View ${product.name}`}>
-                <div className={`relative ${featured ? "h-64" : "h-48"} w-full`}>
+                <div className={`relative ${featured ? "h-[clamp(14rem,26vw,18.5rem)]" : "h-[clamp(12rem,22vw,15rem)]"} w-full`}>
                   <SafeImage
                     src={product.image}
                     alt={product.name}
@@ -96,7 +96,7 @@ export function BentoProductCard({ product, featured = false, href }: BentoProdu
                 </div>
               </Link>
             ) : (
-              <div className={`relative ${featured ? "h-64" : "h-48"} w-full`}>
+              <div className={`relative ${featured ? "h-[clamp(14rem,26vw,18.5rem)]" : "h-[clamp(12rem,22vw,15rem)]"} w-full`}>
                 <SafeImage
                   src={product.image}
                   alt={product.name}

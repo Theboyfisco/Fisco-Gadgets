@@ -36,6 +36,12 @@
 }
 
 @layer base {
+  :root {
+    --page-max-width: 1680px;
+    --page-gutter: clamp(1rem, 1.5vw, 2.4rem);
+    --section-gap: clamp(3.2rem, 5.6vw, 7rem);
+  }
+
   /* ─── DARK THEME (default) ─── */
   :root,
   :root[data-theme="dark"],
@@ -364,6 +370,11 @@
       0 0,
       0 0;
     color: var(--foreground);
+  }
+
+  .container {
+    width: min(var(--page-max-width), calc(100% - (var(--page-gutter) * 2)));
+    margin-inline: auto;
   }
 
   a {

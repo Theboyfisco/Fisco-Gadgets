@@ -26,10 +26,10 @@ export function Footer({ categories = [] }: FooterProps) {
   };
 
   return (
-    <footer className="mt-auto w-full border-t border-[var(--border-subtle)] bg-[var(--footer-bg)] pt-14">
-      <div className="container mx-auto px-4">
-        <div className="mb-12 rounded-[2rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--footer-panel),var(--surface-soft))] p-6 shadow-[0_24px_80px_rgba(8,18,38,0.12)] backdrop-blur-xl md:p-8">
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
+    <footer className="mt-auto w-full border-t border-[var(--border-subtle)] bg-[var(--footer-bg)] pt-[clamp(2.5rem,5vw,4.5rem)]">
+      <div className="container mx-auto">
+        <div className="mb-[clamp(2rem,3.6vw,3rem)] rounded-[clamp(1.2rem,2vw,2rem)] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--footer-panel),var(--surface-soft))] p-[clamp(1rem,2vw,2rem)] shadow-[0_24px_80px_rgba(8,18,38,0.12)] backdrop-blur-xl">
+          <div className="grid grid-cols-1 gap-[clamp(1rem,2vw,2rem)] md:grid-cols-2 xl:grid-cols-4">
             <div className="lg:col-span-2">
               <BrandLogo className="mb-4" />
               <p className="text-muted max-w-md text-sm leading-relaxed">
@@ -99,7 +99,7 @@ export function Footer({ categories = [] }: FooterProps) {
           </div>
         </div>
 
-        <div className="mb-10 grid grid-cols-1 gap-8 lg:grid-cols-3">
+        <div className="mb-[clamp(1.8rem,3vw,2.5rem)] grid grid-cols-1 gap-[clamp(1rem,2vw,1.8rem)] lg:grid-cols-3">
           <div className="rounded-[1.75rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-soft),var(--surface-card))] p-5 shadow-[0_18px_44px_rgba(8,18,38,0.08)]">
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-[0.14em] text-[var(--foreground)]">Join Updates</h3>
             {subscribed ? (
@@ -112,7 +112,7 @@ export function Footer({ categories = [] }: FooterProps) {
                 You&apos;re on the list.
               </motion.div>
             ) : (
-              <form onSubmit={handleSubscribe} className="flex gap-2">
+              <form onSubmit={handleSubscribe} className="flex flex-col gap-2 sm:flex-row">
                 <input
                   required
                   type="email"
@@ -123,7 +123,7 @@ export function Footer({ categories = [] }: FooterProps) {
                 />
                 <button
                   type="submit"
-                  className="interactive-focus primary-action rounded-full px-4 py-2 text-sm font-semibold transition-colors"
+                  className="interactive-focus primary-action rounded-full px-4 py-2 text-sm font-semibold transition-colors sm:min-w-[7rem]"
                 >
                   Join
                 </button>
@@ -165,7 +165,7 @@ export function Footer({ categories = [] }: FooterProps) {
           </div>
         </div>
 
-        <div className="text-muted flex flex-col items-center justify-between gap-4 border-t border-[var(--border-subtle)] py-6 text-sm md:flex-row">
+        <div className="text-muted flex flex-col items-center justify-between gap-4 border-t border-[var(--border-subtle)] py-6 text-center text-sm md:flex-row md:text-left">
           <p>© {COPYRIGHT_YEAR} NOXTECH. All rights reserved.</p>
           <div className="flex gap-5">
             <Link href="/privacy" className="interactive-focus transition-colors hover:text-[var(--foreground)]">
