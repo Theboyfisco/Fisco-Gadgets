@@ -281,10 +281,10 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
 
   return (
     <div className="min-h-screen bg-transparent pb-24 lg:pb-12">
-      <main className="container mx-auto px-4 pt-8">
+      <main className="container mx-auto px-4 pt-5 sm:pt-7">
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
-        <Reveal className="mb-8">
+        <Reveal className="mb-6 sm:mb-8">
           <div className="flex flex-wrap items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--text-soft)]">
             <Link href="/" className="transition-colors hover:text-[var(--foreground)]">
               Home
@@ -305,19 +305,19 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
           </div>
         </Reveal>
 
-        <div className="mb-16 grid grid-cols-1 gap-12 lg:grid-cols-2">
+        <div className="mb-14 grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12">
           <Reveal>
             <ProductDepthGallery name={product.name} images={images.filter(Boolean)} condition={condition} />
           </Reveal>
 
           <Reveal delay={0.06} className="flex flex-col">
-            <div className="rounded-[2rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card-strong),var(--surface-card))] p-6 shadow-[0_24px_80px_rgba(8,18,38,0.16)] backdrop-blur-2xl">
+            <div className="rounded-[1.7rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card-strong),var(--surface-card))] p-4 shadow-[0_24px_80px_rgba(8,18,38,0.16)] backdrop-blur-2xl sm:rounded-[2rem] sm:p-6">
               <div className="mb-4 flex flex-wrap items-center gap-3">
-                <div className="inline-flex max-w-max items-center rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
+                <div className="inline-flex max-w-max items-center rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-medium text-primary sm:text-sm">
                   {condition}
                 </div>
                 <div
-                  className={`inline-flex max-w-max items-center rounded-full border px-3 py-1 text-sm font-medium ${
+                  className={`inline-flex max-w-max items-center rounded-full border px-3 py-1 text-xs font-medium sm:text-sm ${
                     product.stock !== undefined && product.stock <= 0
                       ? "border-[var(--status-error)]/40 bg-[var(--status-error)]/10 text-[var(--status-error)]"
                       : product.stock !== undefined && product.stock <= 5
@@ -331,24 +331,24 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
                       ? `Only ${product.stock} left`
                       : "In stock"}
                 </div>
-                <div className="inline-flex items-center gap-2 rounded-full border border-[var(--interactive-border)] bg-[var(--surface-soft)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-secondary">
+                <div className="inline-flex items-center gap-2 rounded-full border border-[var(--interactive-border)] bg-[var(--surface-soft)] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-secondary sm:text-xs sm:tracking-[0.18em]">
                   <Sparkles size={14} className="text-primary" />
                   Premium dispatch
                 </div>
-                <div className="inline-flex items-center gap-2 rounded-full border border-[var(--interactive-border)] bg-[var(--surface-soft)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-secondary">
+                <div className="inline-flex items-center gap-2 rounded-full border border-[var(--interactive-border)] bg-[var(--surface-soft)] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-secondary sm:text-xs sm:tracking-[0.18em]">
                   <Star size={14} className="text-primary" />
                   Quality checked
                 </div>
               </div>
 
-              <h1 className="mb-4 text-4xl font-extrabold tracking-[-0.03em] text-[var(--foreground)] lg:text-5xl">{product.name}</h1>
+              <h1 className="mb-4 text-[clamp(2rem,8.2vw,2.8rem)] font-extrabold tracking-[-0.03em] text-[var(--foreground)] lg:text-5xl">{product.name}</h1>
 
               <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
                 <div>
                   <p className="text-3xl font-semibold tracking-[-0.03em] text-[var(--foreground)] lg:text-4xl">{priceLabel}</p>
                   <p className="mt-2 text-sm text-secondary">Verified finish, fresh diagnostics, and concierge delivery support from order to handoff.</p>
                 </div>
-                <div className="rounded-[1.25rem] border border-[var(--border-subtle)] bg-[var(--surface-soft)] px-4 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-secondary">
+                <div className="rounded-[1.25rem] border border-[var(--border-subtle)] bg-[var(--surface-soft)] px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-secondary sm:px-4 sm:py-3 sm:text-xs sm:tracking-[0.2em]">
                   {specEntries.length} specs verified
                 </div>
               </div>
@@ -398,7 +398,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
                   </div>
                 </div>
               </div>
-              <div className="grid gap-3 sm:grid-cols-2">
+              <div className="hidden gap-3 sm:grid sm:grid-cols-2">
                 <AddToCartButton product={product} className="flex-1 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] py-4 font-bold text-[var(--foreground)] outline-none transition-all hover:bg-[var(--surface-cta)] focus:ring-2 focus:ring-[var(--border-strong)] active:scale-95" />
                 <a
                   href={whatsappUrl}
@@ -408,20 +408,23 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
                   Buy via WhatsApp
                 </a>
               </div>
+              <p className="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-soft)] px-3 py-2 text-xs text-secondary sm:hidden">
+                Quick buy actions are pinned at the bottom for easier mobile checkout.
+              </p>
 
-              <div className="mt-4 flex flex-wrap gap-3">
-                <CompareButton product={product} showLabel className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-6 hover:bg-[var(--surface-cta)]" />
-                <WishlistButton product={product} showLabel className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-6 hover:bg-[var(--surface-cta)]" />
+              <div className="mt-4 grid grid-cols-2 gap-2.5 sm:flex sm:flex-wrap sm:gap-3">
+                <CompareButton product={product} className="justify-center rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-3 py-2 text-[10px] tracking-[0.16em] sm:px-6 sm:py-2 sm:text-xs sm:tracking-[0.2em]" />
+                <WishlistButton product={product} className="justify-center rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-3 py-2 text-[10px] tracking-[0.16em] sm:px-6 sm:py-2 sm:text-xs sm:tracking-[0.2em]" />
                 <a
                   href={supportUrl}
-                  className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-6 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-secondary transition-colors hover:text-[var(--foreground)]"
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-secondary transition-colors hover:text-[var(--foreground)] sm:px-6 sm:text-xs sm:tracking-[0.2em]"
                 >
                   Support
                   <ArrowRight size={14} />
                 </a>
                 <Link
                   href="#specs"
-                  className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-6 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-secondary transition-colors hover:text-[var(--foreground)]"
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-secondary transition-colors hover:text-[var(--foreground)] sm:px-6 sm:text-xs sm:tracking-[0.2em]"
                 >
                   Full specs
                   <ArrowRight size={14} />

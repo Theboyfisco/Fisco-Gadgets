@@ -77,8 +77,8 @@ export default async function Home() {
 
   return (
     <div className="min-h-screen pb-[clamp(4rem,8vw,6.5rem)]">
-      <main className="container relative mx-auto overflow-hidden pt-[clamp(1.4rem,3.2vw,3.5rem)]">
-        <section className="relative mb-[var(--section-gap)] mt-1 overflow-hidden rounded-[clamp(1.6rem,3vw,2.6rem)] border border-[var(--hero-border)] bg-[var(--hero-surface)] p-[clamp(1rem,2.2vw,2.8rem)] shadow-[var(--hero-shadow)] backdrop-blur-2xl sm:mt-2">
+      <main className="container relative mx-auto overflow-hidden pt-[clamp(1.1rem,3.2vw,3.5rem)]">
+        <section className="relative mb-[var(--section-gap)] mt-1 overflow-hidden rounded-[clamp(1.45rem,3vw,2.6rem)] border border-[var(--hero-border)] bg-[var(--hero-surface)] p-[clamp(0.85rem,2.2vw,2.8rem)] shadow-[var(--hero-shadow)] backdrop-blur-2xl sm:mt-2">
           <div className="pointer-events-none absolute -left-16 top-0 h-48 w-48 rounded-full bg-[var(--brand-tint-primary)] blur-3xl" />
           <div className="pointer-events-none absolute bottom-0 right-0 h-56 w-56 rounded-full bg-[var(--brand-tint-secondary)] blur-3xl" />
           <div className="absolute inset-0 bg-[linear-gradient(135deg,var(--bg-secondary)_0%,var(--hero-surface)_45%,var(--bg-tertiary)_100%)]" />
@@ -91,17 +91,17 @@ export default async function Home() {
 
           <div className="relative z-10 grid items-center gap-[clamp(1.25rem,3vw,3rem)] xl:grid-cols-2">
             <Reveal className="order-2 xl:order-1">
-              <div className="max-w-[58rem] rounded-[clamp(1.2rem,2vw,2rem)] border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--surface-secondary),var(--surface-primary))] p-[clamp(1rem,1.8vw,1.8rem)] shadow-[0_24px_80px_rgba(15,23,42,0.1)] backdrop-blur-2xl">
-                <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-[var(--interactive-border)] bg-[var(--surface-primary)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--hero-foreground)] shadow-[0_10px_30px_rgba(15,23,42,0.08)]">
+              <div className="max-w-[58rem] rounded-[clamp(1.2rem,2vw,2rem)] border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--surface-secondary),var(--surface-primary))] p-[clamp(0.9rem,1.8vw,1.8rem)] shadow-[0_24px_80px_rgba(15,23,42,0.1)] backdrop-blur-2xl">
+                <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-[var(--interactive-border)] bg-[var(--surface-primary)] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--hero-foreground)] shadow-[0_10px_30px_rgba(15,23,42,0.08)] sm:mb-5 sm:text-xs sm:tracking-[0.16em]">
                   Built for modern shopping in Nigeria
                 </p>
-                <h1 className="mb-6 max-w-3xl text-[clamp(2rem,5vw,4.9rem)] font-extrabold leading-[1.03] tracking-tight text-[var(--hero-foreground)]">
+                <h1 className="mb-5 max-w-3xl text-[clamp(2rem,8.3vw,4.9rem)] font-extrabold leading-[1.03] tracking-tight text-[var(--hero-foreground)] sm:mb-6">
                   Tech you can trust, delivered at the speed of your life.
                 </h1>
-                <p className="mb-8 max-w-2xl text-[clamp(0.95rem,1.5vw,1.22rem)] leading-relaxed text-[var(--hero-foreground-soft)]">
+                <p className="mb-6 max-w-2xl text-[clamp(0.95rem,1.5vw,1.22rem)] leading-relaxed text-[var(--hero-foreground-soft)] sm:mb-8">
                   Curated drops, verified originals, and concierge-level checkout built for Nigeria.
                 </p>
-                <div className="mb-8 grid max-w-2xl grid-cols-1 gap-3 sm:grid-cols-3">
+                <div className="mb-6 grid max-w-2xl grid-cols-1 gap-2.5 sm:mb-8 sm:grid-cols-3 sm:gap-3">
                   <div className="rounded-[1.35rem] border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--surface-primary),var(--surface-soft))] px-4 py-3 backdrop-blur-md">
                     <p className="text-[10px] uppercase tracking-[0.22em] text-[var(--hero-foreground-soft)]">Brands</p>
                     <p className="mt-2 text-[clamp(1rem,2vw,1.2rem)] font-semibold text-[var(--hero-foreground)]">Apple</p>

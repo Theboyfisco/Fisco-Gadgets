@@ -103,6 +103,8 @@ export function Navbar({ categories = [] }: NavbarProps) {
 
   const renderSearchOverlay = hydrated;
   const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  const iconButtonClass =
+    "interactive-focus relative flex h-9 w-9 items-center justify-center rounded-xl border border-transparent text-secondary transition-colors hover:border-[var(--interactive-border)] hover:bg-[var(--interactive-active)] hover:text-[var(--interactive-fg)] sm:h-10 sm:w-10";
 
   return (
     <>
@@ -114,10 +116,10 @@ export function Navbar({ categories = [] }: NavbarProps) {
           paddingBottom: scrolled ? "0.2rem" : "0.4rem",
         }}
       >
-        <div className="container mx-auto flex h-16 items-center justify-between gap-2 px-3 sm:px-4 xl:h-[4.1rem] xl:gap-3 2xl:gap-4">
-          <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+        <div className="container mx-auto flex h-14 items-center justify-between gap-2 px-3 sm:h-16 sm:gap-2.5 sm:px-4 xl:h-[4.1rem] xl:gap-3">
+          <div className="flex shrink-0 items-center gap-1.5 sm:gap-3">
             <button
-              className="interactive-focus -ml-2 rounded-xl p-2 text-secondary transition-colors hover:bg-[var(--interactive-hover)] hover:text-[var(--foreground)] xl:hidden"
+              className="interactive-focus -ml-0.5 rounded-xl p-1.5 text-secondary transition-colors hover:bg-[var(--interactive-hover)] hover:text-[var(--foreground)] max-[380px]:p-1 sm:-ml-1 sm:p-2 xl:hidden"
               onClick={() => setIsMobileMenuOpen(true)}
               aria-label="Open menu"
               aria-expanded={isMobileMenuOpen}
@@ -230,10 +232,10 @@ export function Navbar({ categories = [] }: NavbarProps) {
             )}
           </nav>
 
-          <div className="flex shrink-0 items-center justify-end gap-2 sm:gap-2.5 xl:ml-2">
+          <div className="flex shrink-0 items-center justify-end gap-1 sm:gap-1.5 xl:ml-2 xl:gap-2">
             <button
               onClick={() => setIsSearchOpen(true)}
-              className="interactive-focus group hidden w-[clamp(11rem,15vw,14.25rem)] items-center gap-3 rounded-full border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--interactive-bg-soft),var(--surface-soft))] px-4 py-2 text-sm text-secondary shadow-[0_16px_40px_rgba(8,18,38,0.06)] transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:bg-[var(--interactive-active)] hover:text-[var(--interactive-fg)] 2xl:flex"
+              className="interactive-focus group hidden w-[clamp(10rem,14vw,13rem)] items-center gap-3 rounded-full border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--interactive-bg-soft),var(--surface-soft))] px-3.5 py-2 text-sm text-secondary shadow-[0_16px_40px_rgba(8,18,38,0.06)] transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:bg-[var(--interactive-active)] hover:text-[var(--interactive-fg)] xl:flex"
               aria-label="Open search"
             >
               <Search size={17} className="transition-colors group-hover:text-primary" />
@@ -245,28 +247,28 @@ export function Navbar({ categories = [] }: NavbarProps) {
 
             <button
               onClick={() => setIsSearchOpen(true)}
-              className="interactive-focus rounded-xl p-2 text-secondary transition-colors hover:bg-[var(--interactive-hover)] hover:text-[var(--foreground)] 2xl:hidden"
+              className="interactive-focus flex h-9 w-9 items-center justify-center rounded-xl text-secondary transition-colors hover:bg-[var(--interactive-hover)] hover:text-[var(--foreground)] sm:h-10 sm:w-10 xl:hidden"
               aria-label="Open search"
             >
-              <Search size={22} />
+              <Search size={20} />
             </button>
 
             <ThemeSwitcher />
             <Link
               href="/account/orders"
-              className="interactive-focus relative rounded-xl border border-transparent p-2.5 text-secondary transition-colors hover:border-[var(--interactive-border)] hover:bg-[var(--interactive-active)] hover:text-[var(--interactive-fg)]"
+              className={iconButtonClass}
               aria-label="Account"
             >
-              <UserCircle2 size={22} />
+              <UserCircle2 size={20} />
             </Link>
             <button
               onClick={toggleWishlistDrawer}
-              className="interactive-focus relative rounded-xl border border-transparent p-2.5 text-secondary transition-colors hover:border-[var(--interactive-border)] hover:bg-[var(--interactive-active)] hover:text-[var(--interactive-fg)]"
+              className={iconButtonClass}
               aria-label="View wishlist"
               aria-expanded={isWishlistOpen}
               aria-controls="wishlist-drawer"
             >
-              <Heart size={22} />
+              <Heart size={20} />
               <span
                 suppressHydrationWarning
                 className={`absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full border border-[var(--background)] bg-primary text-[10px] font-bold text-[var(--primary-contrast)] transition-opacity duration-[var(--motion-base)] ease-[var(--ease-standard)] ${
@@ -278,12 +280,12 @@ export function Navbar({ categories = [] }: NavbarProps) {
             </button>
             <button
               onClick={toggleCart}
-              className="interactive-focus relative rounded-xl border border-transparent p-2.5 text-secondary transition-colors hover:border-[var(--interactive-border)] hover:bg-[var(--interactive-active)] hover:text-[var(--interactive-fg)]"
+              className={iconButtonClass}
               aria-label="Open cart"
               aria-expanded={cartItems.length > 0}
               aria-controls="cart-drawer"
             >
-              <ShoppingBag size={23} />
+              <ShoppingBag size={20} />
               <span
                 suppressHydrationWarning
                 className={`absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full border border-[var(--background)] bg-primary text-[10px] font-bold text-[var(--primary-contrast)] transition-opacity duration-[var(--motion-base)] ease-[var(--ease-standard)] ${
@@ -317,7 +319,7 @@ export function Navbar({ categories = [] }: NavbarProps) {
                   animate={{ x: 0 }}
                   exit={{ x: "-100%" }}
                   transition={{ type: "spring", bounce: 0, duration: MOTION.duration.slow }}
-                  className="fixed bottom-0 left-0 top-0 z-[60] flex w-[320px] max-w-[86vw] flex-col border-r border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--mobile-drawer-bg),var(--surface-card))] p-6 shadow-2xl backdrop-blur-2xl lg:hidden"
+                  className="fixed bottom-0 left-0 top-0 z-[60] flex w-[304px] max-w-[86vw] flex-col border-r border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--mobile-drawer-bg),var(--surface-card))] p-5 shadow-2xl backdrop-blur-2xl lg:hidden sm:w-[320px] sm:p-6"
                   id="mobile-menu"
                 >
                   <div className="mb-8 flex items-center justify-between">

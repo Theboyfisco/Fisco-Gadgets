@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import { Manrope, Space_Grotesk } from "next/font/google";
 import "./globals.css";
@@ -15,6 +15,8 @@ import { WishlistWrapper } from "@/components/product/WishlistWrapper";
 import { ScrollProgress } from "@/components/ui/ScrollProgress";
 import { PageShell } from "@/components/ui/PageShell";
 import { SupportSpeedDial } from "@/components/ui/SupportSpeedDial";
+import { PWARegistration } from "@/components/pwa/PWARegistration";
+import { PWAInstallPrompt } from "@/components/pwa/PWAInstallPrompt";
 
 import prisma from "@/lib/db";
 import { fallbackCategories } from "@/lib/fallback-data";
@@ -23,10 +25,12 @@ import { SITE_NAME, getBaseUrl } from "@/lib/site-config";
 
 export const metadata: Metadata = {
   metadataBase: new URL(getBaseUrl()),
+  applicationName: SITE_NAME,
   title: {
     default: `${SITE_NAME} — Premium Tech Store`,
     template: `%s | ${SITE_NAME}`,
   },
+  manifest: "/manifest.webmanifest",
   description: "The official home for premium Apple, Samsung, and high-end tech accessories in Nigeria.",
   alternates: {
     canonical: "/",
@@ -40,10 +44,26 @@ export const metadata: Metadata = {
     type: "website",
   },
   icons: {
-    icon: "/brand-mark.png",
+    icon: [
+      { url: "/brand-mark.png", sizes: "256x256", type: "image/png" },
+      { url: "/pwa-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/pwa-512.png", sizes: "512x512", type: "image/png" },
+    ],
     shortcut: "/brand-mark.png",
-    apple: "/brand-mark.png",
+    apple: [{ url: "/pwa-192.png", sizes: "192x192", type: "image/png" }],
   },
+  appleWebApp: {
+    capable: true,
+    title: SITE_NAME,
+    statusBarStyle: "black-translucent",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f4f7ff" },
+    { media: "(prefers-color-scheme: dark)", color: "#070b18" },
+  ],
 };
 
 const manrope = Manrope({
@@ -108,6 +128,8 @@ export default async function RootLayout({
                 <WishlistWrapper />
                 <CompareFloatingBar />
                 <SupportSpeedDial />
+                <PWAInstallPrompt />
+                <PWARegistration />
               </CartProvider>
             </WishlistProvider>
           </CompareProvider>

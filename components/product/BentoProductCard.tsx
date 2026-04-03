@@ -95,8 +95,8 @@ export function BentoProductCard({
       ? "border-[var(--status-error)]/35 bg-[var(--status-error)]/10 text-[var(--status-error)]"
       : "border-[var(--interactive-border)] bg-[var(--surface-card-strong)] text-primary";
   const containerClass = featured
-    ? "relative isolate group flex h-full flex-col overflow-hidden rounded-[26px] border border-[var(--interactive-border)] bg-[linear-gradient(155deg,var(--surface-card-strong),var(--surface-card)_48%,var(--surface-soft))] p-4 shadow-[0_30px_100px_rgba(8,18,38,0.18)] backdrop-blur-xl transition-all duration-[var(--motion-slow)] ease-[var(--ease-standard)] hover:-translate-y-1.5 hover:border-[var(--interactive-border-strong)] hover:shadow-[0_42px_115px_rgba(8,18,38,0.25)] md:p-5"
-    : "relative isolate group flex h-full flex-col overflow-hidden rounded-[24px] border border-[var(--border-subtle)] bg-[linear-gradient(155deg,var(--surface-card),var(--surface-soft)_56%,var(--surface-card))] p-4 shadow-[0_18px_52px_rgba(8,18,38,0.12)] backdrop-blur-xl transition-all duration-[var(--motion-slow)] ease-[var(--ease-standard)] hover:-translate-y-1 hover:border-[var(--interactive-border-strong)] hover:shadow-[0_30px_86px_rgba(8,18,38,0.2)]";
+    ? "relative isolate group flex h-full flex-col overflow-hidden rounded-[24px] border border-[var(--interactive-border)] bg-[linear-gradient(155deg,var(--surface-card-strong),var(--surface-card)_48%,var(--surface-soft))] p-3.5 shadow-[0_30px_100px_rgba(8,18,38,0.18)] backdrop-blur-xl transition-all duration-[var(--motion-slow)] ease-[var(--ease-standard)] hover:-translate-y-1.5 hover:border-[var(--interactive-border-strong)] hover:shadow-[0_42px_115px_rgba(8,18,38,0.25)] sm:p-4 md:rounded-[26px] md:p-5"
+    : "relative isolate group flex h-full flex-col overflow-hidden rounded-[22px] border border-[var(--border-subtle)] bg-[linear-gradient(155deg,var(--surface-card),var(--surface-soft)_56%,var(--surface-card))] p-3.5 shadow-[0_18px_52px_rgba(8,18,38,0.12)] backdrop-blur-xl transition-all duration-[var(--motion-slow)] ease-[var(--ease-standard)] hover:-translate-y-1 hover:border-[var(--interactive-border-strong)] hover:shadow-[0_30px_86px_rgba(8,18,38,0.2)] sm:p-4 md:rounded-[24px]";
 
   return (
     <Tilt3D className="h-full" maxTilt={featured ? 8 : 10}>
@@ -116,7 +116,7 @@ export function BentoProductCard({
         <div className="pointer-events-none absolute inset-0 rounded-[inherit] bg-[linear-gradient(180deg,transparent,rgba(8,18,38,0.06))] opacity-60" />
 
         <div className="[transform:translateZ(28px)]">
-          <div className="relative mb-4 w-full overflow-hidden rounded-[20px] border border-[var(--interactive-border)] transition-all duration-[var(--motion-slow)] ease-[var(--ease-standard)] group-hover:border-[var(--interactive-border-strong)]">
+          <div className="relative mb-3.5 w-full overflow-hidden rounded-[18px] border border-[var(--interactive-border)] transition-all duration-[var(--motion-slow)] ease-[var(--ease-standard)] group-hover:border-[var(--interactive-border-strong)] sm:mb-4 sm:rounded-[20px]">
             {href ? (
               <Link
                 href={href}
@@ -124,7 +124,7 @@ export function BentoProductCard({
                 aria-label={`View ${product.name}`}
               >
                 <div
-                  className={`relative ${featured ? "h-[clamp(14rem,26vw,18.5rem)]" : "h-[clamp(12rem,22vw,15rem)]"} w-full`}
+                  className={`relative ${featured ? "h-[clamp(12.2rem,56vw,18.5rem)]" : "h-[clamp(10.8rem,52vw,15rem)]"} w-full`}
                 >
                   <SafeImage
                     src={product.image}
@@ -145,7 +145,7 @@ export function BentoProductCard({
               </Link>
             ) : (
               <div
-                className={`relative ${featured ? "h-[clamp(14rem,26vw,18.5rem)]" : "h-[clamp(12rem,22vw,15rem)]"} w-full`}
+                className={`relative ${featured ? "h-[clamp(12.2rem,56vw,18.5rem)]" : "h-[clamp(10.8rem,52vw,15rem)]"} w-full`}
               >
                 <SafeImage
                   src={product.image}
@@ -166,11 +166,11 @@ export function BentoProductCard({
               className={`pointer-events-none absolute inset-0 bg-gradient-to-b ${categoryTint()} via-transparent to-[var(--surface-contrast)]`}
             />
             <div className="pointer-events-none absolute inset-0 bg-[image:var(--media-overlay-gradient)]" />
-            <div className="absolute left-3 top-3 inline-flex items-center rounded-full border border-[var(--media-overlay-border)] bg-[var(--media-overlay-bg)] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--media-overlay-text)] backdrop-blur-md">
+            <div className="absolute left-2.5 top-2.5 inline-flex items-center rounded-full border border-[var(--media-overlay-border)] bg-[var(--media-overlay-bg)] px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.2em] text-[var(--media-overlay-text)] backdrop-blur-md sm:left-3 sm:top-3 sm:px-3 sm:text-[10px] sm:tracking-[0.22em]">
               {formatCategoryLabel(product.categoryId)}
             </div>
             <div
-              className={`absolute right-3 top-3 rounded-full border px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] backdrop-blur-md ${stockClass}`}
+              className={`absolute right-2.5 top-2.5 rounded-full border px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.15em] backdrop-blur-md sm:right-3 sm:top-3 sm:px-3 sm:text-[10px] ${stockClass}`}
             >
               {stockLabel}
             </div>
@@ -220,7 +220,7 @@ export function BentoProductCard({
             </div>
           </div>
 
-          <div className="mb-3 flex items-start justify-between gap-3">
+          <div className="mb-2.5 flex items-start justify-between gap-2.5 sm:mb-3 sm:gap-3">
             <div className="min-w-0">
               <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--text-soft)]">
                 NOX Signature
@@ -230,41 +230,41 @@ export function BentoProductCard({
                   href={href}
                   className="mt-2 block focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/25"
                 >
-                  <h3 className="line-clamp-2 text-lg font-semibold tracking-[-0.02em] text-[var(--foreground)] transition-colors duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:text-primary md:text-[1.45rem]">
+                  <h3 className="line-clamp-2 text-[1.2rem] font-semibold tracking-[-0.02em] text-[var(--foreground)] transition-colors duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:text-primary sm:text-lg md:text-[1.45rem]">
                     {product.name}
                   </h3>
                 </Link>
               ) : (
-                <h3 className="mt-2 line-clamp-2 text-lg font-semibold tracking-[-0.02em] text-[var(--foreground)] md:text-[1.45rem]">
+                <h3 className="mt-2 line-clamp-2 text-[1.2rem] font-semibold tracking-[-0.02em] text-[var(--foreground)] sm:text-lg md:text-[1.45rem]">
                   {product.name}
                 </h3>
               )}
             </div>
-            <div className="shrink-0 rounded-full border border-[var(--interactive-border)] bg-[var(--surface-soft)] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--text-soft)]">
+            <div className="shrink-0 rounded-full border border-[var(--interactive-border)] bg-[var(--surface-soft)] px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.16em] text-[var(--text-soft)] sm:px-3 sm:py-1.5 sm:text-[10px] sm:tracking-[0.2em]">
               Premium
             </div>
           </div>
-          <div className="flex items-end justify-between gap-3">
-            <p className="text-lg font-semibold tracking-[-0.02em] text-[var(--foreground)] md:text-xl">
+          <div className="flex items-end justify-between gap-2.5 sm:gap-3">
+            <p className="text-[1.28rem] font-semibold tracking-[-0.02em] text-[var(--foreground)] sm:text-lg md:text-xl">
               {priceLabel}
             </p>
             {href ? (
               <Link
                 href={href}
-                className="interactive-focus inline-flex items-center gap-1.5 rounded-full border border-[var(--interactive-border)] bg-[var(--surface-soft)] px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-secondary transition-colors hover:text-[var(--foreground)]"
+                className="interactive-focus inline-flex items-center gap-1.5 rounded-full border border-[var(--interactive-border)] bg-[var(--surface-soft)] px-2.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-secondary transition-colors hover:text-[var(--foreground)] sm:px-3 sm:text-xs sm:tracking-[0.18em]"
               >
                 Details
                 <ArrowUpRight size={12} />
               </Link>
             ) : null}
           </div>
-          <p className="mt-1 text-sm text-secondary">
+          <p className="mt-1 text-[0.84rem] leading-[1.4] text-secondary sm:text-sm">
             Concierge checkout, verified originals, and warranty-backed
             delivery.
           </p>
         </div>
 
-        <div className="mt-4 grid grid-cols-3 gap-2.5 [transform:translateZ(18px)]">
+        <div className="mt-3.5 grid grid-cols-2 gap-2 [transform:translateZ(18px)] sm:mt-4 sm:grid-cols-3 sm:gap-2.5">
           <div className="rounded-2xl border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--surface-soft),var(--surface-card))] px-3 py-2.5">
             <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-soft)]">
               Battery
@@ -281,7 +281,7 @@ export function BentoProductCard({
               {specs.storage || "128GB"}
             </p>
           </div>
-          <div className="rounded-2xl border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--surface-soft),var(--surface-card))] px-3 py-2.5">
+          <div className="col-span-2 rounded-2xl border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--surface-soft),var(--surface-card))] px-3 py-2.5 sm:col-span-1">
             <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-soft)]">
               Memory
             </p>
@@ -291,7 +291,7 @@ export function BentoProductCard({
           </div>
         </div>
 
-        <div className="mt-4 flex items-center gap-2 [transform:translateZ(20px)] md:hidden">
+        <div className="mt-3.5 flex items-center gap-2 [transform:translateZ(20px)] md:hidden">
           <button
             className="flex-1 rounded-full border border-primary/25 bg-primary px-4 py-2.5 text-sm font-semibold text-[var(--primary-contrast)] shadow-[0_16px_36px_rgba(63,107,253,0.22)] transition-colors hover:bg-[var(--primary-hover)] disabled:cursor-not-allowed disabled:opacity-60"
             aria-label={`Add ${product.name} to cart`}

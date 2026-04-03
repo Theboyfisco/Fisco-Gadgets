@@ -4,6 +4,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { CircleHelp, Mail, MessageCircle, Send, X } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import { MOTION } from "@/lib/motion";
 import { useToast } from "@/components/ui/ToastProvider";
 import { SUPPORT_EMAIL, buildWhatsAppLink } from "@/lib/support-config";
@@ -23,12 +24,14 @@ const INITIAL_FORM: SupportFormState = {
 };
 
 export function SupportSpeedDial() {
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [form, setForm] = useState<SupportFormState>(INITIAL_FORM);
   const rootRef = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = useReducedMotion();
   const { pushToast } = useToast();
+  const onProductPage = pathname?.startsWith("/product/");
 
   useEffect(() => {
     const handlePointerDown = (event: PointerEvent) => {
@@ -143,7 +146,11 @@ export function SupportSpeedDial() {
   return (
     <div
       ref={rootRef}
-      className="fixed right-[max(1rem,env(safe-area-inset-right))] bottom-[max(5.25rem,env(safe-area-inset-bottom))] z-[80] sm:right-6 sm:bottom-6"
+      className={`fixed right-[max(0.75rem,env(safe-area-inset-right))] z-[80] sm:right-6 ${
+        onProductPage
+          ? "bottom-[max(5.7rem,calc(env(safe-area-inset-bottom)+4.7rem))] sm:bottom-6"
+          : "bottom-[max(0.95rem,calc(env(safe-area-inset-bottom)+0.55rem))] sm:bottom-6"
+      }`}
     >
       <AnimatePresence>
         {isOpen && (
@@ -281,14 +288,14 @@ export function SupportSpeedDial() {
         whileTap={prefersReducedMotion ? undefined : { scale: 0.94 }}
         animate={isOpen && !prefersReducedMotion ? { rotate: 12 } : { rotate: 0 }}
         transition={{ duration: MOTION.duration.base, ease: MOTION.ease.standard }}
-        className="interactive-focus flex h-12 w-12 items-center justify-center rounded-full border text-[var(--support-fab-foreground)] max-[380px]:h-11 max-[380px]:w-11 sm:h-14 sm:w-14"
+        className="interactive-focus flex h-11 w-11 items-center justify-center rounded-full border text-[var(--support-fab-foreground)] max-[380px]:h-10 max-[380px]:w-10 sm:h-14 sm:w-14"
         style={{
           background: "var(--support-fab-bg)",
           borderColor: "var(--support-fab-border)",
           boxShadow: "var(--support-fab-shadow)",
         }}
       >
-        <MessageCircle size={22} />
+        <MessageCircle size={20} className="sm:h-[22px] sm:w-[22px]" />
       </motion.button>
     </div>
   );

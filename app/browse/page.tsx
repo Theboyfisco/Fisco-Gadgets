@@ -179,9 +179,9 @@ export default async function BrowsePage({
 
   return (
     <div className="min-h-screen pb-16">
-      <main className="container mx-auto px-4 py-8 xl:py-10">
+      <main className="container mx-auto px-4 py-6 sm:py-8 xl:py-10">
         <Reveal className="mb-6">
-          <section className="overflow-hidden rounded-[2rem] border border-[var(--hero-border)] bg-[var(--hero-surface)] p-5 shadow-[var(--hero-shadow)] sm:p-6 xl:p-8">
+          <section className="overflow-hidden rounded-[1.6rem] border border-[var(--hero-border)] bg-[var(--hero-surface)] p-4 shadow-[var(--hero-shadow)] sm:rounded-[2rem] sm:p-6 xl:p-8">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--text-soft)]">Browse Catalog</p>
             <h1 className="mt-2 text-3xl font-bold tracking-[-0.03em] text-[var(--hero-foreground)] sm:text-4xl">
               Discover products by category, brand, and value.
@@ -211,7 +211,7 @@ export default async function BrowsePage({
             <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--text-soft)]">Categories</p>
-                <div className="mt-2 flex flex-wrap gap-2">
+                <div className="mt-2 -mx-1 flex gap-2 overflow-x-auto pb-1 pl-1 no-scrollbar md:mx-0 md:flex-wrap md:overflow-visible md:pb-0 md:pl-0">
                   <Link
                     href={buildHref({ brand: activeBrand || undefined, sort })}
                     className={`rounded-full border px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] transition-colors ${
@@ -247,7 +247,7 @@ export default async function BrowsePage({
 
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--text-soft)]">Brands</p>
-                <div className="mt-2 flex max-w-full flex-wrap gap-2">
+                <div className="mt-2 -mx-1 flex max-w-full gap-2 overflow-x-auto pb-1 pl-1 no-scrollbar md:mx-0 md:flex-wrap md:overflow-visible md:pb-0 md:pl-0">
                   <Link
                     href={buildHref({ category: activeCategory || undefined, sort })}
                     className={`rounded-full border px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] transition-colors ${
@@ -282,10 +282,10 @@ export default async function BrowsePage({
               </div>
             </div>
 
-            <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+            <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--text-soft)]">
                 Sort:
-                <div className="flex flex-wrap gap-2">
+                <div className="flex max-w-full gap-2 overflow-x-auto pb-1 no-scrollbar sm:flex-wrap sm:overflow-visible sm:pb-0">
                   {SORT_OPTIONS.map((option) => {
                     const selected = option.value === sort;
                     return (

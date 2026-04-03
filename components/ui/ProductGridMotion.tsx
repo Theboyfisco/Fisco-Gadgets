@@ -24,7 +24,7 @@ interface ProductGridMotionProps {
 export function ProductGridMotion({ products, className = "" }: ProductGridMotionProps) {
   return (
     <motion.div
-      className={`grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 ${className}`}
+      className={`grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-5 xl:grid-cols-3 2xl:grid-cols-4 ${className}`}
       initial="hidden"
       animate="show"
       variants={{

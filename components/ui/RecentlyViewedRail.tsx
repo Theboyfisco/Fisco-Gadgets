@@ -80,8 +80,8 @@ export function RecentlyViewedRail() {
   if (items.length === 0) return null;
 
   return (
-    <Reveal className="mb-20 lg:mb-24">
-      <div className="mb-6 flex items-center justify-between gap-4">
+    <Reveal className="mb-16 lg:mb-24">
+      <div className="mb-5 flex flex-col gap-3 sm:mb-6 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--text-soft)]">Resume browsing</p>
           <h2 className="text-2xl font-bold text-[var(--foreground)]">Recently viewed</h2>
@@ -89,16 +89,16 @@ export function RecentlyViewedRail() {
         </div>
         <Link
           href="/compare"
-          className="inline-flex items-center gap-2 rounded-full border border-[var(--interactive-border)] bg-[var(--surface-card)] px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-secondary transition-colors hover:text-[var(--foreground)]"
+          className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-[var(--interactive-border)] bg-[var(--surface-card)] px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-secondary transition-colors hover:text-[var(--foreground)] sm:w-auto sm:tracking-[0.2em]"
         >
           Compare products
           <ArrowRight size={14} />
         </Link>
       </div>
 
-      <div className="overflow-x-auto pb-2">
+      <div className="-mx-1 overflow-x-auto pb-2 pl-1">
         <motion.div
-          className="flex w-max gap-4"
+          className="flex w-max snap-x snap-mandatory gap-3 sm:gap-4"
           initial="hidden"
           animate="show"
           variants={{
@@ -113,7 +113,7 @@ export function RecentlyViewedRail() {
                 hidden: { opacity: 0, y: 12 },
                 show: { opacity: 1, y: 0, transition: { duration: MOTION.duration.base, ease: MOTION.ease.standard } },
               }}
-              className="w-64 shrink-0"
+              className="w-[min(84vw,18rem)] shrink-0 snap-start sm:w-64"
             >
               <Link
                 href={`/product/${item.slug ?? item.id}`}

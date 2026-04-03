@@ -81,7 +81,7 @@ export function LatestProductsCarousel({ products }: LatestProductsCarouselProps
 
   return (
     <div
-      className="group relative h-[clamp(20rem,58vw,28rem)] w-full max-w-[52rem] overflow-hidden rounded-[clamp(1.5rem,2.5vw,2.2rem)] border border-[var(--carousel-border)] bg-[var(--carousel-surface)] shadow-[var(--carousel-shadow)] sm:h-[clamp(22rem,45vw,30rem)] xl:h-[clamp(24rem,33vw,34rem)]"
+      className="group relative h-[clamp(17.5rem,72vw,23rem)] w-full max-w-[52rem] overflow-hidden rounded-[clamp(1.35rem,2.5vw,2.2rem)] border border-[var(--carousel-border)] bg-[var(--carousel-surface)] shadow-[var(--carousel-shadow)] sm:h-[clamp(22rem,45vw,30rem)] xl:h-[clamp(24rem,33vw,34rem)]"
       role="region"
       aria-roledescription="carousel"
       aria-label="Featured products"
@@ -110,12 +110,12 @@ export function LatestProductsCarousel({ products }: LatestProductsCarouselProps
         </motion.div>
       </AnimatePresence>
 
-      <div className="relative z-10 flex h-full flex-col justify-between p-[clamp(1rem,2.2vw,2rem)]">
-        <div className="flex items-start justify-between gap-4">
-          <div className="inline-flex w-fit items-center gap-2 rounded-full border border-[var(--carousel-control-border)] bg-[var(--carousel-control-bg)] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.32em] text-[var(--foreground)] backdrop-blur-md">
+      <div className="relative z-10 flex h-full flex-col justify-between p-[clamp(0.9rem,2.2vw,2rem)] sm:p-[clamp(1rem,2.2vw,2rem)]">
+        <div className="flex items-start justify-between gap-3 sm:gap-4">
+          <div className="inline-flex w-fit items-center gap-2 rounded-full border border-[var(--carousel-control-border)] bg-[var(--carousel-control-bg)] px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.28em] text-[var(--foreground)] backdrop-blur-md sm:px-3 sm:text-[10px] sm:tracking-[0.32em]">
             Featured now
           </div>
-          <div className="hidden items-center gap-2 sm:flex">
+          <div className="hidden items-center gap-2 md:flex">
             <button
               type="button"
               onClick={goPrev}
@@ -137,32 +137,36 @@ export function LatestProductsCarousel({ products }: LatestProductsCarouselProps
           </div>
         </div>
 
-        <div className="space-y-6 text-[var(--media-card-foreground)]">
+        <div className="space-y-3 text-[var(--media-card-foreground)] sm:space-y-6">
           <motion.div
             key={`${activeProduct.id}-content`}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: MOTION.duration.base, ease: MOTION.ease.standard }}
-            className="space-y-6"
+            className="space-y-3 sm:space-y-6"
           >
-            <div className="inline-flex w-fit items-center gap-2 rounded-full border border-[var(--media-card-pill-border)] bg-[var(--media-card-pill-bg)] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.35em] text-[var(--media-card-pill-text)]">
+            <div className="inline-flex w-fit items-center gap-2 rounded-full border border-[var(--media-card-pill-border)] bg-[var(--media-card-pill-bg)] px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.25em] text-[var(--media-card-pill-text)] sm:px-3 sm:text-[10px] sm:tracking-[0.35em]">
               Latest drops
             </div>
 
             <div>
-              <h3 className="text-[clamp(1.55rem,3.3vw,2.65rem)] font-semibold leading-tight">{activeProduct.name}</h3>
-              <p className="mt-2 text-[clamp(0.95rem,1.6vw,1.15rem)] font-semibold text-primary">{formattedPrice}</p>
+              <h3 className="line-clamp-2 max-w-[18ch] text-[clamp(1.55rem,8.2vw,2.65rem)] font-semibold leading-[1.08] sm:max-w-[22ch] sm:leading-tight">
+                {activeProduct.name}
+              </h3>
+              <p className="mt-1.5 text-[clamp(1rem,4.6vw,1.15rem)] font-semibold text-primary sm:mt-2 sm:text-[clamp(0.95rem,1.6vw,1.15rem)]">
+                {formattedPrice}
+              </p>
             </div>
 
-            <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-[var(--carousel-control-border)] bg-[var(--carousel-control-bg)] p-3 backdrop-blur-md">
+            <div className="flex flex-col gap-2.5 rounded-2xl border border-[var(--carousel-control-border)] bg-[var(--carousel-control-bg)] p-2.5 backdrop-blur-md sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:p-3">
               <Link
                 href={`/product/${activeProduct.slug ?? activeProduct.id}`}
-                className="inline-flex items-center justify-center rounded-full border border-[var(--media-card-pill-border)] bg-[var(--surface-card-strong)] px-6 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--foreground)] transition hover:border-primary/40 hover:bg-primary/25"
+                className="inline-flex w-full items-center justify-center rounded-full border border-[var(--media-card-pill-border)] bg-[var(--surface-card-strong)] px-5 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--foreground)] transition hover:border-primary/40 hover:bg-primary/25 sm:w-auto sm:px-6 sm:text-xs sm:tracking-[0.22em]"
               >
                 View Product
               </Link>
-              <div className="flex items-center gap-2" aria-label="Carousel slide selector">
+              <div className="flex items-center justify-center gap-2 sm:justify-start" aria-label="Carousel slide selector">
                 {visibleProducts.map((item, index) => {
                   const isActive = index === safeIndex;
                   return (
@@ -173,13 +177,13 @@ export function LatestProductsCarousel({ products }: LatestProductsCarouselProps
                       aria-label={`Show ${item.name}`}
                       aria-current={isActive ? "true" : "false"}
                       whileTap={{ scale: 0.9 }}
-                      className={`h-2.5 rounded-full transition-all ${isActive ? "w-7 bg-[var(--carousel-dot-active)]" : "w-2.5 bg-[var(--carousel-dot)] hover:bg-[var(--carousel-dot-active)]/70"}`}
+                      className={`h-2.5 rounded-full transition-all ${isActive ? "w-6 bg-[var(--carousel-dot-active)] sm:w-7" : "w-2.5 bg-[var(--carousel-dot)] hover:bg-[var(--carousel-dot-active)]/70"}`}
                     />
                   );
                 })}
               </div>
             </div>
-            <div className="h-1.5 w-full overflow-hidden rounded-full bg-[var(--carousel-control-border)]/40">
+            <div className="h-1 w-full overflow-hidden rounded-full bg-[var(--carousel-control-border)]/40 sm:h-1.5">
               <motion.div
                 key={safeIndex}
                 className="h-full rounded-full bg-[var(--carousel-dot-active)]"

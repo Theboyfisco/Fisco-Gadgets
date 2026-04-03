@@ -70,14 +70,14 @@ export function ThemeSwitcher() {
     <button
       onClick={() => applyTheme(theme === "dark" ? "light" : "dark")}
       aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
-      className="interactive-focus group relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[var(--interactive-border)] bg-[var(--interactive-bg)] text-[var(--interactive-fg)] transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:-translate-y-0.5 hover:border-[var(--interactive-border-strong)] hover:bg-[var(--interactive-active)] hover:shadow-[0_0_22px_-10px_var(--color-primary)]"
+      className="interactive-focus group relative flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[var(--interactive-border)] bg-[var(--interactive-bg)] text-[var(--interactive-fg)] transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:-translate-y-0.5 hover:border-[var(--interactive-border-strong)] hover:bg-[var(--interactive-active)] hover:shadow-[0_0_22px_-10px_var(--color-primary)] sm:h-10 sm:w-10"
     >
       <span className="absolute inset-0 bg-gradient-to-br from-primary/0 via-primary/0 to-primary/20 opacity-0 transition-opacity duration-[var(--motion-base)] ease-[var(--ease-standard)] group-hover:opacity-100" />
 
       {theme === "dark" ? (
-        <SunMedium size={18} className="relative z-10 transition-transform duration-[var(--motion-base)] ease-[var(--ease-standard)] group-hover:rotate-12" />
+        <SunMedium size={17} className="relative z-10 transition-transform duration-[var(--motion-base)] ease-[var(--ease-standard)] group-hover:rotate-12 sm:h-[18px] sm:w-[18px]" />
       ) : (
-        <Moon size={18} className="relative z-10 transition-transform duration-[var(--motion-base)] ease-[var(--ease-standard)] group-hover:-rotate-12" />
+        <Moon size={17} className="relative z-10 transition-transform duration-[var(--motion-base)] ease-[var(--ease-standard)] group-hover:-rotate-12 sm:h-[18px] sm:w-[18px]" />
       )}
     </button>
   );
