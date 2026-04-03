@@ -5,7 +5,7 @@ import { ShoppingBag, Menu, X, Smartphone, Laptop, Headphones, Search, Info, Mai
 import { useCart } from "../cart/CartProvider";
 import { useWishlist } from "../product/WishlistProvider";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import dynamic from "next/dynamic";
 import { createPortal } from "react-dom";
@@ -28,7 +28,9 @@ export function Navbar({ categories = [] }: NavbarProps) {
   const hydrated = useHydrated();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isBrowseOpen, setIsBrowseOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const browseMenuRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 18);
@@ -48,6 +50,29 @@ export function Navbar({ categories = [] }: NavbarProps) {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
+
+  useEffect(() => {
+    if (!isBrowseOpen) return;
+
+    const handlePointerDown = (event: MouseEvent) => {
+      if (!browseMenuRef.current) return;
+      if (browseMenuRef.current.contains(event.target as Node)) return;
+      setIsBrowseOpen(false);
+    };
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsBrowseOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handlePointerDown);
+    window.addEventListener("keydown", handleEscape);
+    return () => {
+      document.removeEventListener("mousedown", handlePointerDown);
+      window.removeEventListener("keydown", handleEscape);
+    };
+  }, [isBrowseOpen]);
 
   const categoryLinks = categories.map((category) => {
     const categoryKey = (category.slug ?? category.id).toLowerCase();
@@ -89,7 +114,7 @@ export function Navbar({ categories = [] }: NavbarProps) {
           paddingBottom: scrolled ? "0.2rem" : "0.4rem",
         }}
       >
-        <div className="container mx-auto flex h-16 items-center justify-between gap-2 px-4 sm:px-5 xl:h-[4.1rem] xl:gap-4">
+        <div className="container mx-auto flex h-16 items-center justify-between gap-2 px-3 sm:px-4 xl:h-[4.1rem] xl:gap-3 2xl:gap-4">
           <div className="flex shrink-0 items-center gap-2 sm:gap-3">
             <button
               className="interactive-focus -ml-2 rounded-xl p-2 text-secondary transition-colors hover:bg-[var(--interactive-hover)] hover:text-[var(--foreground)] xl:hidden"
@@ -103,7 +128,7 @@ export function Navbar({ categories = [] }: NavbarProps) {
             <BrandLogo />
           </div>
 
-          <nav className="hidden min-w-0 flex-1 items-center gap-2 overflow-x-auto rounded-full border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--interactive-bg-soft),var(--surface-soft))] px-3 py-1.5 shadow-[0_16px_44px_rgba(8,18,38,0.08)] no-scrollbar xl:flex">
+          <nav className="hidden min-w-0 flex-none items-center gap-1.5 overflow-x-auto overflow-y-visible rounded-full border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--interactive-bg-soft),var(--surface-soft))] px-2.5 py-1.5 shadow-[0_16px_44px_rgba(8,18,38,0.08)] no-scrollbar xl:flex xl:max-w-[min(58vw,48rem)] 2xl:max-w-none 2xl:px-3">
             {navLinks.map((link, index) => {
               const active = pathname === link.href;
               return (
@@ -112,7 +137,7 @@ export function Navbar({ categories = [] }: NavbarProps) {
                   href={link.href}
                   aria-current={active ? "page" : undefined}
                   className={`shrink-0 whitespace-nowrap rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
-                    index === 3 || index === 5 ? "xl:hidden 2xl:inline-flex" : ""
+                    index >= 5 ? "xl:hidden 2xl:inline-flex" : ""
                   } ${
                     active
                       ? "interactive-focus bg-[var(--interactive-active)] text-[var(--interactive-fg)]"
@@ -123,74 +148,104 @@ export function Navbar({ categories = [] }: NavbarProps) {
                 </Link>
               );
             })}
-            {showMegaMenu && (
-              <details className="group relative shrink-0">
-                <summary className="interactive-focus list-none rounded-full px-3 py-1.5 text-sm font-medium text-secondary transition-colors hover:bg-[var(--interactive-hover)] hover:text-[var(--interactive-fg)] [&::-webkit-details-marker]:hidden">
+            {showMegaMenu ? (
+              <div ref={browseMenuRef} className="relative shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setIsBrowseOpen((prev) => !prev)}
+                  aria-expanded={isBrowseOpen}
+                  aria-haspopup="menu"
+                  className={`interactive-focus rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
+                    isBrowseOpen
+                      ? "bg-[var(--interactive-active)] text-[var(--interactive-fg)]"
+                      : "text-secondary hover:bg-[var(--interactive-hover)] hover:text-[var(--interactive-fg)]"
+                  }`}
+                >
                   Browse
-                </summary>
-                <div className="absolute right-0 top-12 z-50 w-[560px] rounded-[1.75rem] border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--panel-bg-soft),var(--surface-card))] p-4 shadow-2xl backdrop-blur-2xl">
-                  <div className="grid gap-4 md:grid-cols-3">
-                    <div className="md:col-span-2">
-                      <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--text-soft)]">Categories</p>
-                      <div className="grid grid-cols-2 gap-2">
-                        {categoryLinks.map((link) => {
-                          const active = pathname === link.href;
-                          return (
-                            <Link
-                              key={link.name}
-                              href={link.href}
-                              aria-current={active ? "page" : undefined}
-                              className={`flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium transition-colors ${
-                                active
-                                  ? "bg-[var(--interactive-active)] text-[var(--interactive-fg)]"
-                                  : "text-secondary hover:bg-[var(--interactive-hover)] hover:text-[var(--interactive-fg)]"
-                              }`}
-                            >
-                              <link.icon size={16} className="text-primary" />
-                              {link.name}
-                            </Link>
-                          );
-                        })}
+                </button>
+                <AnimatePresence>
+                  {isBrowseOpen ? (
+                    <motion.div
+                      initial={{ opacity: 0, y: 8, scale: 0.98 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 8, scale: 0.98 }}
+                      transition={{ duration: MOTION.duration.base, ease: MOTION.ease.standard }}
+                      className="absolute right-0 top-12 z-[70] w-[560px] rounded-[1.75rem] border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--panel-bg-soft),var(--surface-card))] p-4 shadow-2xl backdrop-blur-2xl"
+                    >
+                      <div className="grid gap-4 md:grid-cols-3">
+                        <div className="md:col-span-2">
+                          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--text-soft)]">Categories</p>
+                          <div className="grid grid-cols-2 gap-2">
+                            {categoryLinks.map((link) => {
+                              const active = pathname === link.href;
+                              return (
+                                <Link
+                                  key={link.name}
+                                  href={link.href}
+                                  onClick={() => setIsBrowseOpen(false)}
+                                  aria-current={active ? "page" : undefined}
+                                  className={`flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium transition-colors ${
+                                    active
+                                      ? "bg-[var(--interactive-active)] text-[var(--interactive-fg)]"
+                                      : "text-secondary hover:bg-[var(--interactive-hover)] hover:text-[var(--interactive-fg)]"
+                                  }`}
+                                >
+                                  <link.icon size={16} className="text-primary" />
+                                  {link.name}
+                                </Link>
+                              );
+                            })}
+                          </div>
+                        </div>
+                        <div className="space-y-3">
+                          <Link
+                            href="/compare"
+                            onClick={() => setIsBrowseOpen(false)}
+                            className="block rounded-[1.5rem] border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-4 text-sm font-semibold text-[var(--foreground)] transition-colors hover:bg-[var(--interactive-hover)]"
+                          >
+                            Compare devices
+                            <p className="mt-2 text-xs font-normal text-secondary">Line up specs side by side.</p>
+                          </Link>
+                          <Link
+                            href="/browse"
+                            onClick={() => setIsBrowseOpen(false)}
+                            className="block rounded-[1.5rem] border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-4 text-sm font-semibold text-[var(--foreground)] transition-colors hover:bg-[var(--interactive-hover)]"
+                          >
+                            Browse all products
+                            <p className="mt-2 text-xs font-normal text-secondary">Full catalog with filters.</p>
+                          </Link>
+                        </div>
                       </div>
-                    </div>
-                    <div className="space-y-3">
-                      <Link
-                        href="/compare"
-                        className="block rounded-[1.5rem] border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-4 text-sm font-semibold text-[var(--foreground)] transition-colors hover:bg-[var(--interactive-hover)]"
-                      >
-                        Compare devices
-                        <p className="mt-2 text-xs font-normal text-secondary">Line up specs side by side.</p>
-                      </Link>
-                      <Link
-                        href="/#featured"
-                        className="block rounded-[1.5rem] border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-4 text-sm font-semibold text-[var(--foreground)] transition-colors hover:bg-[var(--interactive-hover)]"
-                      >
-                        Featured drops
-                        <p className="mt-2 text-xs font-normal text-secondary">Curated deals this week.</p>
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              </details>
+                    </motion.div>
+                  ) : null}
+                </AnimatePresence>
+              </div>
+            ) : (
+              <Link
+                href="/browse"
+                className="interactive-focus shrink-0 rounded-full px-3 py-1.5 text-sm font-medium text-secondary transition-colors hover:bg-[var(--interactive-hover)] hover:text-[var(--interactive-fg)]"
+              >
+                Browse
+              </Link>
             )}
           </nav>
 
           <div className="flex shrink-0 items-center justify-end gap-2 sm:gap-2.5 xl:ml-2">
             <button
               onClick={() => setIsSearchOpen(true)}
-              className="interactive-focus group hidden w-[clamp(12rem,17vw,15.5rem)] items-center gap-3 rounded-full border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--interactive-bg-soft),var(--surface-soft))] px-4 py-2 text-sm text-secondary shadow-[0_16px_40px_rgba(8,18,38,0.06)] transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:bg-[var(--interactive-active)] hover:text-[var(--interactive-fg)] xl:flex"
+              className="interactive-focus group hidden w-[clamp(11rem,15vw,14.25rem)] items-center gap-3 rounded-full border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--interactive-bg-soft),var(--surface-soft))] px-4 py-2 text-sm text-secondary shadow-[0_16px_40px_rgba(8,18,38,0.06)] transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:bg-[var(--interactive-active)] hover:text-[var(--interactive-fg)] 2xl:flex"
               aria-label="Open search"
             >
               <Search size={17} className="transition-colors group-hover:text-primary" />
               <span>Search gadgets...</span>
-              <kbd className="ml-auto hidden h-5 items-center gap-1 rounded border border-[var(--border-subtle)] bg-[var(--kbd-bg)] px-1.5 font-mono text-[10px] font-medium xl:inline-flex">
+              <kbd className="ml-auto hidden h-5 items-center gap-1 rounded border border-[var(--border-subtle)] bg-[var(--kbd-bg)] px-1.5 font-mono text-[10px] font-medium 2xl:inline-flex">
                 <span className="text-xs">⌘</span>K
               </kbd>
             </button>
 
             <button
               onClick={() => setIsSearchOpen(true)}
-              className="interactive-focus rounded-xl p-2 text-secondary transition-colors hover:bg-[var(--interactive-hover)] hover:text-[var(--foreground)] xl:hidden"
+              className="interactive-focus rounded-xl p-2 text-secondary transition-colors hover:bg-[var(--interactive-hover)] hover:text-[var(--foreground)] 2xl:hidden"
               aria-label="Open search"
             >
               <Search size={22} />

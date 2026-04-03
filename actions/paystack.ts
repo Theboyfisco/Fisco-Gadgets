@@ -6,6 +6,24 @@ import { captureOperationalAlert } from "@/lib/monitoring";
 const PAYSTACK_SECRET_KEY = process.env.PAYSTACK_SECRET_KEY;
 const PAYSTACK_MOCK_AUTH_URL = process.env.PAYSTACK_MOCK_AUTH_URL;
 
+function getCallbackBaseUrl() {
+  const explicit = process.env.NEXT_PUBLIC_APP_URL || process.env.APP_URL;
+  if (explicit) {
+    return explicit.replace(/\/+$/, "");
+  }
+
+  const vercelUrl = process.env.VERCEL_URL;
+  if (vercelUrl) {
+    return vercelUrl.startsWith("http") ? vercelUrl.replace(/\/+$/, "") : `https://${vercelUrl}`;
+  }
+
+  if (process.env.NODE_ENV !== "production") {
+    return "http://localhost:3000";
+  }
+
+  return null;
+}
+
 export async function initializePayment(orderId: string) {
   if (!PAYSTACK_SECRET_KEY && !PAYSTACK_MOCK_AUTH_URL) {
     await captureOperationalAlert({
@@ -38,6 +56,21 @@ export async function initializePayment(orderId: string) {
       };
     }
 
+    const callbackBaseUrl = getCallbackBaseUrl();
+    if (!callbackBaseUrl) {
+      await captureOperationalAlert({
+        source: "checkout.paystack_initialize",
+        severity: "critical",
+        message: "NEXT_PUBLIC_APP_URL is required in production for Paystack callback URL",
+        context: { orderId },
+      });
+      return { success: false, error: "Payment callback URL is not configured. Set NEXT_PUBLIC_APP_URL." };
+    }
+
+    const callbackUrl = new URL(`/checkout/success?orderId=${encodeURIComponent(orderId)}`, callbackBaseUrl).toString();
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 15000);
+
     const response = await fetch("https://api.paystack.co/transaction/initialize", {
       method: "POST",
       headers: {
@@ -46,24 +79,27 @@ export async function initializePayment(orderId: string) {
       },
       body: JSON.stringify({
         email: order.email,
-        amount: order.totalAmount * 100, // amount in kobo
-        callback_url: `${process.env.NEXT_PUBLIC_APP_URL}/checkout/success?orderId=${orderId}`,
+        amount: order.totalAmount * 100,
+        currency: "NGN",
+        callback_url: callbackUrl,
         metadata: {
           orderId: order.id,
         },
       }),
-    });
+      signal: controller.signal,
+    }).finally(() => clearTimeout(timeout));
 
-    const data = await response.json();
+    const raw = await response.text();
+    const data = raw ? JSON.parse(raw) : null;
 
-    if (!data.status) {
+    if (!response.ok || !data?.status || !data?.data?.authorization_url) {
       await captureOperationalAlert({
         source: "checkout.paystack_initialize",
         severity: "warning",
-        message: data.message || "Failed to initialize payment",
-        context: { orderId, paystackResponse: data },
+        message: data?.message || `Failed to initialize payment (${response.status})`,
+        context: { orderId, status: response.status, paystackResponse: data ?? raw },
       });
-      throw new Error(data.message || "Failed to initialize payment");
+      throw new Error(data?.message || "Failed to initialize payment");
     }
 
     return { 

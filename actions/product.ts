@@ -1,6 +1,8 @@
 "use server";
 
 import prisma from "@/lib/db";
+import { fallbackCategories, fallbackFeaturedProducts } from "@/lib/fallback-data";
+import { shouldUseDatabase } from "@/lib/should-use-database";
 
 function normalize(value: string) {
     return value.toLowerCase().replace(/[^a-z0-9\s]/g, " ").replace(/\s+/g, " ").trim();
@@ -81,8 +83,82 @@ function scoreProduct(product: any, variants: string[]) {
     return score;
 }
 
+function buildFallbackSearchPool() {
+    const categoryNameById = new Map(
+        fallbackCategories.map((category) => [category.slug ?? category.id, category.name]),
+    );
+
+    return fallbackFeaturedProducts.map((item, index) => ({
+        id: item.id,
+        name: item.name,
+        slug: item.slug ?? item.id,
+        description: "",
+        price: item.price,
+        stock: typeof item.stock === "number" ? item.stock : 0,
+        images: [item.image],
+        categoryId: item.categoryId,
+        brandId: item.brandId ?? null,
+        technicalSpecs: item.technicalSpecs,
+        brand: item.brandId
+            ? { name: item.brandId.replace(/[-_]+/g, " ").replace(/\b\w/g, (char) => char.toUpperCase()) }
+            : null,
+        category: { name: categoryNameById.get(item.categoryId) ?? item.categoryId },
+        createdAt: new Date(Date.UTC(2024, 0, 1 + index)),
+        updatedAt: new Date(Date.UTC(2024, 0, 1 + index)),
+    }));
+}
+
+function mapSearchProduct(product: any) {
+    return {
+        id: product.id,
+        name: product.name,
+        slug: product.slug,
+        price: product.price,
+        stock: product.stock,
+        images: product.images,
+        categoryId: product.categoryId,
+        brandId: product.brandId,
+        technicalSpecs: product.technicalSpecs,
+        brand: product.brand,
+        category: product.category,
+    };
+}
+
+function searchInMemoryProducts(products: any[], query: string) {
+    const trimmedQuery = query.trim();
+    if (!trimmedQuery) {
+        return products.slice().sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()).slice(0, 5);
+    }
+
+    if (trimmedQuery.length < 2) {
+        return [];
+    }
+
+    const variants = buildQueryVariants(trimmedQuery);
+    const ranked = products
+        .map((product) => ({ product, score: scoreProduct(product, variants) }))
+        .filter((entry) => entry.score > 0)
+        .sort((a, b) => b.score - a.score || b.product.updatedAt.getTime() - a.product.updatedAt.getTime())
+        .slice(0, 10)
+        .map((entry) => entry.product);
+
+    if (ranked.length > 0) {
+        return ranked;
+    }
+
+    return products
+        .filter((product) => typeof product.stock === "number" && product.stock > 0)
+        .sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())
+        .slice(0, 6);
+}
+
 export async function searchProducts(query: string) {
     const trimmedQuery = query.trim();
+    if (!shouldUseDatabase()) {
+        const fallbackMatches = searchInMemoryProducts(buildFallbackSearchPool(), trimmedQuery);
+        return fallbackMatches.map(mapSearchProduct);
+    }
+
     const variants = buildQueryVariants(trimmedQuery);
 
     if (!trimmedQuery) {
@@ -131,19 +207,7 @@ export async function searchProducts(query: string) {
         .filter((entry) => entry.score > 0)
         .sort((a, b) => b.score - a.score || b.product.createdAt.getTime() - a.product.createdAt.getTime())
         .slice(0, 10)
-        .map((entry) => ({
-            id: entry.product.id,
-            name: entry.product.name,
-            slug: entry.product.slug,
-            price: entry.product.price,
-            stock: entry.product.stock,
-            images: entry.product.images,
-            categoryId: entry.product.categoryId,
-            brandId: entry.product.brandId,
-            technicalSpecs: entry.product.technicalSpecs,
-            brand: entry.product.brand,
-            category: entry.product.category,
-        }));
+        .map((entry) => mapSearchProduct(entry.product));
 
     if (ranked.length > 0) {
         return ranked;
@@ -160,25 +224,25 @@ export async function searchProducts(query: string) {
         },
     });
 
-    return fallback.map((entry) => ({
-        id: entry.id,
-        name: entry.name,
-        slug: entry.slug,
-        price: entry.price,
-        stock: entry.stock,
-        images: entry.images,
-        categoryId: entry.categoryId,
-        brandId: entry.brandId,
-        technicalSpecs: entry.technicalSpecs,
-        brand: entry.brand,
-        category: entry.category,
-    }));
+    return fallback.map((entry) => mapSearchProduct(entry));
 }
 
 export async function searchProductsPaginated(query: string, page = 1, pageSize = 24) {
     const trimmedQuery = query.trim();
     const safePage = Number.isFinite(page) && page > 0 ? Math.floor(page) : 1;
     const safePageSize = Math.min(Math.max(Math.floor(pageSize), 1), 60);
+
+    if (!shouldUseDatabase()) {
+        const matches = searchInMemoryProducts(buildFallbackSearchPool(), trimmedQuery);
+        const total = matches.length;
+        const start = (safePage - 1) * safePageSize;
+        return {
+            total,
+            page: safePage,
+            pageSize: safePageSize,
+            items: matches.slice(start, start + safePageSize).map(mapSearchProduct),
+        };
+    }
 
     if (!trimmedQuery || trimmedQuery.length < 2) {
         return { total: 0, page: safePage, pageSize: safePageSize, items: [] as any[] };
@@ -212,18 +276,6 @@ export async function searchProductsPaginated(query: string, page = 1, pageSize 
         total,
         page: safePage,
         pageSize: safePageSize,
-        items: rows.map((row) => ({
-            id: row.id,
-            name: row.name,
-            slug: row.slug,
-            price: row.price,
-            stock: row.stock,
-            images: row.images,
-            categoryId: row.categoryId,
-            brandId: row.brandId,
-            technicalSpecs: row.technicalSpecs,
-            brand: row.brand,
-            category: row.category,
-        })),
+        items: rows.map((row) => mapSearchProduct(row)),
     };
 }

@@ -31,4 +31,3 @@ function getServerSnapshot() {
 export function useHydrated() {
   return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 }
-
