@@ -50,6 +50,12 @@ export default async function AdminCatalogPage() {
               Order console
             </Link>
             <Link
+              href="/admin/promos"
+              className="inline-flex items-center gap-2 rounded-full border border-[var(--interactive-border)] bg-[var(--surface-card)] px-4 py-2 text-sm font-semibold text-[var(--hero-foreground)] transition-colors hover:bg-[var(--interactive-hover)]"
+            >
+              Promo console
+            </Link>
+            <Link
               href="/admin/audit"
               className="inline-flex items-center gap-2 rounded-full border border-[var(--interactive-border)] bg-[var(--surface-card)] px-4 py-2 text-sm font-semibold text-[var(--hero-foreground)] transition-colors hover:bg-[var(--interactive-hover)]"
             >

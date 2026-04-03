@@ -12,7 +12,9 @@ This repo focuses on a tactile frontend (depth galleries, smooth motion, rich pr
 - Rich product detail pages with depth gallery and specs
 - Side-by-side product comparison flow
 - Fast cart and checkout experience
+- Dynamic promo engine (DB-backed + static fallback)
 - Paystack payment initialization and webhook-confirmed order updates
+- Admin promo console with audit logging
 - Mobile-first UX with strong purchase CTAs
 
 ---
@@ -21,7 +23,7 @@ This repo focuses on a tactile frontend (depth galleries, smooth motion, rich pr
 
 1. Discover products via landing, categories, and brand pages
 2. Inspect details and compare devices side-by-side
-3. Checkout quickly with server-validated order creation
+3. Apply promos and checkout with server-validated order creation
 4. Pay securely through Paystack
 5. Receive confirmed order updates via webhook verification
 
@@ -82,6 +84,14 @@ DATABASE_URL="postgresql://..."
 DIRECT_URL="postgresql://..."
 PAYSTACK_SECRET_KEY="sk_..."
 PAYSTACK_PUBLIC_KEY="pk_..."
+RESEND_API_KEY="re_..."
+SUPPORT_FROM_EMAIL="NOXtech Support <onboarding@resend.dev>"
+SUPPORT_INBOX_EMAIL="support@noxtech.com.ng"
+CLEANUP_CRON_SECRET="replace-with-random-secret"
+NEXT_PUBLIC_SUPPORT_WHATSAPP_NUMBER="2347031606782" # optional
+NEXT_PUBLIC_SUPPORT_WHATSAPP_DISPLAY="+234 703 160 6782" # optional
+NEXT_PUBLIC_SUPPORT_EMAIL="support@noxtech.com.ng" # optional
+NEXT_PUBLIC_SUPPORT_SALES_EMAIL="sales@noxtech.com.ng" # optional
 NEXT_PUBLIC_APP_URL="http://localhost:3000"
 ALERT_WEBHOOK_URL="https://your-alert-endpoint.example/webhook" # optional
 NOXTECH_FORCE_FALLBACK_DATA="false" # optional
@@ -119,6 +129,14 @@ Open `http://localhost:3000`.
 | `DIRECT_URL` | Direct connection for migrations |
 | `PAYSTACK_SECRET_KEY` | Server-side Paystack secret |
 | `PAYSTACK_PUBLIC_KEY` | Client-side Paystack public key |
+| `RESEND_API_KEY` | Resend API key for support/contact email delivery |
+| `SUPPORT_FROM_EMAIL` | Sender identity used by support email route |
+| `SUPPORT_INBOX_EMAIL` | Inbox address that receives support form submissions |
+| `CLEANUP_CRON_SECRET` | Secret header value required by `POST /api/orders/cleanup` (`x-cron-secret`) |
+| `NEXT_PUBLIC_SUPPORT_WHATSAPP_NUMBER` | Public WhatsApp number used across CTA and support links |
+| `NEXT_PUBLIC_SUPPORT_WHATSAPP_DISPLAY` | Public display format for support phone text in UI |
+| `NEXT_PUBLIC_SUPPORT_EMAIL` | Public support email shown in UI and used as fallback inbox |
+| `NEXT_PUBLIC_SUPPORT_SALES_EMAIL` | Public secondary sales email shown in contact UI |
 | `NEXT_PUBLIC_APP_URL` | Public base URL for redirects and webhooks |
 | `ALERT_WEBHOOK_URL` | Optional webhook for operational alerts |
 | `NOXTECH_FORCE_FALLBACK_DATA` | Force fallback mode even when DB exists (`true`/`false`) |
@@ -155,6 +173,16 @@ https://<your-domain>/api/paystack/webhook
 ```
 
 Prisma client generation runs automatically on install via `postinstall`.
+
+---
+
+## Admin surfaces
+
+- `/admin/products` — product CRUD and media library
+- `/admin/catalog` — category and brand management
+- `/admin/promos` — promo code CRUD, activation windows, usage caps
+- `/admin/orders` — order status management
+- `/admin/audit` — admin change trail
 
 ---
 

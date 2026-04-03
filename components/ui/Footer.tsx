@@ -5,9 +5,10 @@ import { Facebook, Instagram, Twitter, MapPin, Mail, Phone, CheckCircle2 } from 
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { BrandLogo } from "./BrandLogo";
+import { SUPPORT_EMAIL } from "@/lib/support-config";
 
 interface FooterProps {
-  categories?: { id: string; name: string }[];
+  categories?: { id: string; name: string; slug?: string }[];
 }
 
 const COPYRIGHT_YEAR = 2026;
@@ -48,7 +49,7 @@ export function Footer({ categories = [] }: FooterProps) {
               <ul className="space-y-3">
                 {categories.slice(0, 5).map((category) => (
                   <li key={category.id}>
-                    <Link href={`/category/${category.id}`} className="interactive-focus text-muted link-accent text-sm transition-colors">
+                    <Link href={`/category/${category.slug ?? category.id}`} className="interactive-focus text-muted link-accent text-sm transition-colors">
                       {category.name}
                     </Link>
                   </li>
@@ -144,7 +145,7 @@ export function Footer({ categories = [] }: FooterProps) {
               </li>
               <li className="text-muted flex items-center gap-2 text-sm">
                 <Mail size={16} className="shrink-0 text-primary" />
-                <span>support@noxtech.com.ng</span>
+                <span>{SUPPORT_EMAIL}</span>
               </li>
             </ul>
           </div>

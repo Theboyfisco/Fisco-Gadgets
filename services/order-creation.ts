@@ -1,4 +1,5 @@
-import { evaluatePromoCode } from "@/services/promo";
+import type { Prisma } from "@prisma/client";
+import { evaluatePromoCodeServer } from "@/services/promo-server";
 import { calculateShippingFee } from "@/services/shipping";
 
 export type StockProduct = {
@@ -43,7 +44,8 @@ export function assertStockAndBuildItems(items: OrderItemInput[], products: Stoc
   return { orderItems, itemsTotal };
 }
 
-export function buildOrderDraft(input: {
+export async function buildOrderDraft(input: {
+  dbClient?: Pick<Prisma.TransactionClient, "promoCode">;
   items: OrderItemInput[];
   products: StockProduct[];
   shipping: ShippingInput;
@@ -51,7 +53,8 @@ export function buildOrderDraft(input: {
 }) {
   const { orderItems, itemsTotal } = assertStockAndBuildItems(input.items, input.products);
   const shippingFee = calculateShippingFee(input.shipping.city, input.shipping.state, input.shipping.shippingType);
-  const promoResult = evaluatePromoCode({
+  const promoResult = await evaluatePromoCodeServer({
+    dbClient: input.dbClient,
     code: input.promoCode,
     itemsTotal,
     shippingFee,
@@ -72,6 +75,10 @@ export function buildOrderDraft(input: {
     discountAmount,
     totalAmount,
     promoCode: promoResult.applied ? promoResult.code : null,
+    promoId: promoResult.applied ? promoResult.promoId : undefined,
+    promoUsedCount: promoResult.applied ? promoResult.promoUsedCount : undefined,
+    promoMaxUses: promoResult.applied ? promoResult.promoMaxUses : undefined,
+    promoSource: promoResult.source,
     reservedUntil: new Date(Date.now() + 30 * 60 * 1000),
   };
 }

@@ -3,6 +3,7 @@ import { Reveal } from "@/components/ui/Reveal";
 import { OrderAdminConsole } from "@/components/admin/OrderAdminConsole";
 import { shouldUseDatabase } from "@/lib/should-use-database";
 import { requireAdmin } from "@/lib/admin-auth";
+import Link from "next/link";
 
 export default async function AdminOrdersPage() {
   await requireAdmin();
@@ -38,6 +39,26 @@ export default async function AdminOrdersPage() {
           <p className="mt-4 max-w-2xl text-sm text-[var(--hero-foreground-soft)] sm:text-base">
             Review orders, confirm payments, and move shipments forward without leaving the admin console.
           </p>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Link
+              href="/admin/promos"
+              className="inline-flex items-center gap-2 rounded-full border border-[var(--interactive-border)] bg-[var(--surface-card)] px-4 py-2 text-sm font-semibold text-[var(--hero-foreground)] transition-colors hover:bg-[var(--interactive-hover)]"
+            >
+              Promo console
+            </Link>
+            <Link
+              href="/admin/products"
+              className="inline-flex items-center gap-2 rounded-full border border-[var(--interactive-border)] bg-[var(--surface-card)] px-4 py-2 text-sm font-semibold text-[var(--hero-foreground)] transition-colors hover:bg-[var(--interactive-hover)]"
+            >
+              Product console
+            </Link>
+            <Link
+              href="/admin/audit"
+              className="inline-flex items-center gap-2 rounded-full border border-[var(--interactive-border)] bg-[var(--surface-card)] px-4 py-2 text-sm font-semibold text-[var(--hero-foreground)] transition-colors hover:bg-[var(--interactive-hover)]"
+            >
+              Audit log
+            </Link>
+          </div>
         </section>
       </Reveal>
 

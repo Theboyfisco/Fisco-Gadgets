@@ -11,7 +11,7 @@ import { Loader2 } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { MOTION } from "@/lib/motion";
 import { calculateShippingFee, estimateDeliveryWindow, PICKUP_DETAILS } from "@/services/shipping";
-import { evaluatePromoCode, listPromoRules } from "@/services/promo";
+import type { PromoComputation, PromoRule } from "@/services/promo";
 import { getCustomerViewer } from "@/actions/customer-auth";
 import { trackEvent } from "@/lib/analytics-client";
 import { SafeImage } from "@/components/ui/SafeImage";
@@ -41,6 +41,12 @@ function validateCheckoutForm(formData: CheckoutFormState) {
   return errors;
 }
 
+const EMPTY_PROMO_RESULT: PromoComputation = {
+  applied: false,
+  discountAmount: 0,
+  adjustedShippingFee: 0,
+};
+
 export default function CheckoutPage() {
     const { cartItems, clearCart } = useCart();
     const [step, setStep] = useState(1);
@@ -49,6 +55,9 @@ export default function CheckoutPage() {
     const [promoCode, setPromoCode] = useState("");
     const [promoTouched, setPromoTouched] = useState(false);
     const [promoMessage, setPromoMessage] = useState<string | null>(null);
+    const [promoRules, setPromoRules] = useState<PromoRule[]>([]);
+    const [promoResult, setPromoResult] = useState<PromoComputation>(EMPTY_PROMO_RESULT);
+    const [isPromoLoading, setIsPromoLoading] = useState(false);
     const prefersReducedMotion = useReducedMotion();
 
     // Form State
@@ -67,30 +76,63 @@ export default function CheckoutPage() {
     const itemsTotal = cartItems.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
     const shippingFee = calculateShippingFee(formData.city, formData.state, formData.shippingType);
     const eta = estimateDeliveryWindow(formData.city, formData.state, formData.shippingType);
-    const promoResult = evaluatePromoCode({ code: promoCode, itemsTotal, shippingFee });
     const appliedPromo = promoTouched && promoResult.applied;
     const effectiveShippingFee = appliedPromo ? promoResult.adjustedShippingFee : shippingFee;
     const discountAmount = appliedPromo ? promoResult.discountAmount : 0;
     const total = itemsTotal + effectiveShippingFee - discountAmount;
     const hasStockIssue = cartItems.some((item) => typeof item.product.stock === "number" && item.quantity > item.product.stock);
 
-    const handleApplyPromo = () => {
+    const fetchPromoSnapshot = async (code?: string | null) => {
+      const params = new URLSearchParams({
+        itemsTotal: String(itemsTotal),
+        shippingFee: String(shippingFee),
+      });
+      if (code?.trim()) {
+        params.set("code", code.trim());
+      }
+      const response = await fetch(`/api/promos?${params.toString()}`, { cache: "no-store" });
+      if (!response.ok) {
+        throw new Error("Unable to verify promo right now.");
+      }
+      const payload = (await response.json()) as { rules?: PromoRule[]; evaluation?: PromoComputation };
+      if (Array.isArray(payload.rules)) {
+        setPromoRules(payload.rules);
+      }
+      return payload.evaluation ?? { ...EMPTY_PROMO_RESULT, adjustedShippingFee: shippingFee };
+    };
+
+    const handleApplyPromo = async () => {
       setPromoTouched(true);
-      if (!promoCode.trim()) {
+      const normalized = promoCode.trim().toUpperCase();
+      if (!normalized) {
         setPromoMessage("Enter a promo code.");
+        setPromoResult({ ...EMPTY_PROMO_RESULT, adjustedShippingFee: shippingFee });
         return;
       }
-      if (!promoResult.applied) {
-        setPromoMessage(promoResult.reason || "Promo code is invalid.");
-        return;
+
+      setIsPromoLoading(true);
+      try {
+        const evaluation = await fetchPromoSnapshot(normalized);
+        setPromoResult(evaluation);
+        if (!evaluation.applied) {
+          setPromoMessage(evaluation.reason || "Promo code is invalid.");
+          return;
+        }
+        setPromoCode(evaluation.code || normalized);
+        setPromoMessage(`Promo ${evaluation.code || normalized} applied.`);
+      } catch (fetchError: any) {
+        setPromoResult({ ...EMPTY_PROMO_RESULT, adjustedShippingFee: shippingFee });
+        setPromoMessage(fetchError?.message || "Unable to apply promo code.");
+      } finally {
+        setIsPromoLoading(false);
       }
-      setPromoMessage(`Promo ${promoResult.code} applied.`);
     };
 
     const handleClearPromo = () => {
       setPromoTouched(false);
       setPromoCode("");
       setPromoMessage(null);
+      setPromoResult({ ...EMPTY_PROMO_RESULT, adjustedShippingFee: shippingFee });
     };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -110,6 +152,53 @@ export default function CheckoutPage() {
         }));
       })();
     }, []);
+
+    useEffect(() => {
+      fetchPromoSnapshot()
+        .then((evaluation) => {
+          if (!promoTouched) {
+            setPromoResult(evaluation);
+          }
+        })
+        .catch(() => null);
+      // initial rules load
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
+      if (!promoTouched || !promoCode.trim()) {
+        setPromoResult((prev) =>
+          prev.applied || prev.adjustedShippingFee !== shippingFee
+            ? { ...EMPTY_PROMO_RESULT, adjustedShippingFee: shippingFee }
+            : prev,
+        );
+        return;
+      }
+
+      let active = true;
+      setIsPromoLoading(true);
+      fetchPromoSnapshot(promoCode)
+        .then((evaluation) => {
+          if (!active) return;
+          setPromoResult(evaluation);
+          if (!evaluation.applied) {
+            setPromoMessage(evaluation.reason || "Promo code is invalid.");
+            return;
+          }
+          setPromoMessage(`Promo ${evaluation.code || promoCode.trim().toUpperCase()} applied.`);
+        })
+        .catch(() => null)
+        .finally(() => {
+          if (!active) return;
+          setIsPromoLoading(false);
+        });
+
+      return () => {
+        active = false;
+      };
+      // keep promo totals synced
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [itemsTotal, shippingFee, promoTouched, promoCode]);
 
     useEffect(() => {
       if (cartItems.length === 0) return;
@@ -510,20 +599,25 @@ export default function CheckoutPage() {
                                   <button
                                     type="button"
                                     onClick={handleApplyPromo}
-                                    className="rounded-full border border-[var(--border-subtle)] px-3 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-secondary transition-colors hover:text-[var(--foreground)]"
+                                    disabled={isPromoLoading}
+                                    className="rounded-full border border-[var(--border-subtle)] px-3 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-secondary transition-colors hover:text-[var(--foreground)] disabled:cursor-not-allowed disabled:opacity-60"
                                   >
-                                    Apply
+                                    {isPromoLoading ? "Checking..." : "Apply"}
                                   </button>
                                 </div>
                                 {promoTouched && promoMessage ? (
                                   <p className={`mt-2 text-xs ${promoResult.applied ? "text-primary" : "text-[var(--status-error)]"}`}>{promoMessage}</p>
                                 ) : null}
                                 <div className="mt-2 flex flex-wrap gap-2">
-                                  {listPromoRules().map((rule) => (
+                                  {promoRules.map((rule) => (
                                     <button
                                       key={rule.code}
                                       type="button"
-                                      onClick={() => setPromoCode(rule.code)}
+                                      onClick={() => {
+                                        setPromoCode(rule.code);
+                                        setPromoTouched(false);
+                                        setPromoMessage(null);
+                                      }}
                                       className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-soft)] px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-secondary transition-colors hover:text-[var(--foreground)]"
                                     >
                                       {rule.code}

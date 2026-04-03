@@ -5,21 +5,31 @@ import prisma from "@/lib/db";
 import { OrderStatus } from "@prisma/client";
 import { requireAdmin } from "@/lib/admin-auth";
 import { recordAdminAuditLog } from "@/lib/audit-log";
+import { decrementPromoUsageByCode } from "@/services/promo-usage";
 
 export async function updateOrderStatus(orderId: string, status: OrderStatus) {
   try {
     await requireAdmin();
     const existing = await prisma.order.findUnique({
       where: { id: orderId },
-      select: { status: true },
+      select: { status: true, promoCode: true },
     });
     if (!existing) {
       return { success: false, error: "Order not found" };
     }
+    if (existing.status === "CANCELLED" && status !== "CANCELLED") {
+      return { success: false, error: "Cancelled orders are terminal and cannot be reopened." };
+    }
 
-    await prisma.order.update({
-      where: { id: orderId },
-      data: { status },
+    await prisma.$transaction(async (tx) => {
+      if (status === "CANCELLED" && existing.status !== "CANCELLED" && existing.promoCode) {
+        await decrementPromoUsageByCode({ dbClient: tx, promoCode: existing.promoCode });
+      }
+
+      await tx.order.update({
+        where: { id: orderId },
+        data: { status },
+      });
     });
 
     await recordAdminAuditLog({

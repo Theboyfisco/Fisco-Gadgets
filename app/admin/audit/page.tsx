@@ -40,6 +40,12 @@ export default async function AdminAuditPage() {
           >
             Catalog
           </Link>
+          <Link
+            href="/admin/promos"
+            className="rounded-full border border-[var(--interactive-border)] bg-[var(--surface-card)] px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-secondary transition-colors hover:text-[var(--foreground)]"
+          >
+            Promos
+          </Link>
         </div>
       </div>
 

@@ -6,6 +6,7 @@ export type PromoRule = {
   kind: PromoKind;
   amount: number;
   minOrder?: number;
+  startsAt?: string;
   expiresAt?: string;
 };
 
@@ -40,40 +41,36 @@ export type PromoComputation = {
   reason?: string;
 };
 
+export type PromoEvaluationInput = {
+  code?: string | null;
+  itemsTotal: number;
+  shippingFee: number;
+};
+
+export function normalizePromoCode(code?: string | null) {
+  return (code ?? "").trim().toUpperCase();
+}
+
 export function listPromoRules() {
   return STATIC_PROMOS;
 }
 
-export function evaluatePromoCode(input: {
-  code?: string | null;
-  itemsTotal: number;
-  shippingFee: number;
-}) {
-  const normalized = (input.code ?? "").trim().toUpperCase();
-  if (!normalized) {
-    return {
-      applied: false,
-      discountAmount: 0,
-      adjustedShippingFee: input.shippingFee,
-    } satisfies PromoComputation;
-  }
-
-  const rule = STATIC_PROMOS.find((item) => item.code === normalized);
-  if (!rule) {
-    return {
-      applied: false,
-      discountAmount: 0,
-      adjustedShippingFee: input.shippingFee,
-      reason: "Promo code not found.",
-    } satisfies PromoComputation;
-  }
-
+export function evaluatePromoRule(rule: PromoRule, input: PromoEvaluationInput): PromoComputation {
   if (rule.minOrder && input.itemsTotal < rule.minOrder) {
     return {
       applied: false,
       discountAmount: 0,
       adjustedShippingFee: input.shippingFee,
       reason: `Promo requires at least ₦${rule.minOrder.toLocaleString()}.`,
+    } satisfies PromoComputation;
+  }
+
+  if (rule.startsAt && new Date(rule.startsAt).getTime() > Date.now()) {
+    return {
+      applied: false,
+      discountAmount: 0,
+      adjustedShippingFee: input.shippingFee,
+      reason: "Promo code is not active yet.",
     } satisfies PromoComputation;
   }
 
@@ -111,4 +108,27 @@ export function evaluatePromoCode(input: {
     discountAmount: Math.min(rule.amount, input.itemsTotal),
     adjustedShippingFee: input.shippingFee,
   } satisfies PromoComputation;
+}
+
+export function evaluatePromoCode(input: PromoEvaluationInput) {
+  const normalized = normalizePromoCode(input.code);
+  if (!normalized) {
+    return {
+      applied: false,
+      discountAmount: 0,
+      adjustedShippingFee: input.shippingFee,
+    } satisfies PromoComputation;
+  }
+
+  const rule = STATIC_PROMOS.find((item) => item.code === normalized);
+  if (!rule) {
+    return {
+      applied: false,
+      discountAmount: 0,
+      adjustedShippingFee: input.shippingFee,
+      reason: "Promo code not found.",
+    } satisfies PromoComputation;
+  }
+
+  return evaluatePromoRule(rule, input);
 }

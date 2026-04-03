@@ -17,6 +17,7 @@ import { estimateDeliveryWindow, PICKUP_DETAILS } from "@/services/shipping";
 import { FrequentlyBoughtTogether } from "@/components/product/FrequentlyBoughtTogether";
 import { ProductCommunityPanel } from "@/components/product/ProductCommunityPanel";
 import { SITE_NAME, toAbsoluteUrl, truncateDescription } from "@/lib/site-config";
+import { buildWhatsAppLink } from "@/lib/support-config";
 
 export const revalidate = 300;
 
@@ -161,8 +162,8 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
   const frequentlyBoughtProducts = frequentlyBoughtProductsRaw.map(mapProduct);
 
   const condition = String(technicalSpecs.condition || "New");
-  const whatsappMsg = encodeURIComponent(`Hi, I want to buy ${product.name} (Ref: ${product.id}) for ₦${product.price}.`);
-  const supportMessage = encodeURIComponent(`Hi, I need help with ${product.name} (Ref: ${product.id}).`);
+  const whatsappUrl = buildWhatsAppLink(`Hi, I want to buy ${product.name} (Ref: ${product.id}) for ₦${product.price}.`);
+  const supportUrl = buildWhatsAppLink(`Hi, I need help with ${product.name} (Ref: ${product.id}).`);
   const warrantyInfo = String(
     technicalSpecs.warranty ||
       technicalSpecs.warrantyCoverage ||
@@ -400,7 +401,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
               <div className="grid gap-3 sm:grid-cols-2">
                 <AddToCartButton product={product} className="flex-1 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] py-4 font-bold text-[var(--foreground)] outline-none transition-all hover:bg-[var(--surface-cta)] focus:ring-2 focus:ring-[var(--border-strong)] active:scale-95" />
                 <a
-                  href={`https://wa.me/2348000000000?text=${whatsappMsg}`}
+                  href={whatsappUrl}
                   className="flex flex-1 items-center justify-center gap-2 rounded-full bg-primary py-4 text-base font-bold text-[var(--primary-contrast)] shadow-[0_18px_40px_rgba(63,107,253,0.28)] transition-all hover:scale-[1.02] hover:bg-[var(--primary-hover)] active:scale-95"
                 >
                   <MessageCircle size={20} />
@@ -412,7 +413,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
                 <CompareButton product={product} showLabel className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-6 hover:bg-[var(--surface-cta)]" />
                 <WishlistButton product={product} showLabel className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-6 hover:bg-[var(--surface-cta)]" />
                 <a
-                  href={`https://wa.me/2348000000000?text=${supportMessage}`}
+                  href={supportUrl}
                   className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-6 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-secondary transition-colors hover:text-[var(--foreground)]"
                 >
                   Support

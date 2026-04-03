@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ShoppingBag, ArrowLeft, Menu, X, Smartphone, Laptop, Headphones, Search, Info, Mail, Heart, UserCircle2 } from "lucide-react";
+import { ShoppingBag, Menu, X, Smartphone, Laptop, Headphones, Search, Info, Mail, Heart, UserCircle2 } from "lucide-react";
 import { useCart } from "../cart/CartProvider";
 import { useWishlist } from "../product/WishlistProvider";
 import { usePathname } from "next/navigation";
@@ -24,7 +24,6 @@ export function Navbar({ categories = [] }: NavbarProps) {
   const { cartItems, toggleCart } = useCart();
   const { wishlistItems, toggleWishlistDrawer, isWishlistOpen } = useWishlist();
   const pathname = usePathname();
-  const isHome = pathname === "/";
 
   const hydrated = useHydrated();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -50,18 +49,22 @@ export function Navbar({ categories = [] }: NavbarProps) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  const categoryLinks = categories.map((category) => ({
-    name: category.name,
-    href: `/category/${category.slug ?? category.id}`,
-    icon:
-      category.id === "phones"
-        ? Smartphone
-        : category.id === "laptops"
-          ? Laptop
-          : category.id === "audio"
-            ? Headphones
-            : Smartphone,
-  }));
+  const categoryLinks = categories.map((category) => {
+    const categoryKey = (category.slug ?? category.id).toLowerCase();
+
+    return {
+      name: category.name,
+      href: `/category/${category.slug ?? category.id}`,
+      icon:
+        categoryKey === "phones"
+          ? Smartphone
+          : categoryKey === "laptops"
+            ? Laptop
+            : categoryKey === "audio"
+              ? Headphones
+              : Smartphone,
+    };
+  });
 
   const coreLinks = [
     { name: "Home", href: "/", icon: Smartphone },
@@ -82,12 +85,12 @@ export function Navbar({ categories = [] }: NavbarProps) {
         className="sticky top-0 z-40 w-full border-b border-[var(--border-subtle)] backdrop-blur-2xl transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)]"
         style={{
           backgroundColor: scrolled ? "var(--nav-bg-scrolled)" : "var(--nav-bg)",
-          paddingTop: scrolled ? "0.35rem" : "0.85rem",
-          paddingBottom: scrolled ? "0.35rem" : "0.85rem",
+          paddingTop: scrolled ? "0.2rem" : "0.4rem",
+          paddingBottom: scrolled ? "0.2rem" : "0.4rem",
         }}
       >
-        <div className="container mx-auto flex h-[4.25rem] items-center justify-between gap-2 px-4 sm:px-5 xl:h-[4.5rem] xl:gap-4">
-          <div className="flex shrink-0 items-center gap-3 sm:gap-4">
+        <div className="container mx-auto flex h-16 items-center justify-between gap-2 px-4 sm:px-5 xl:h-[4.1rem] xl:gap-4">
+          <div className="flex shrink-0 items-center gap-2 sm:gap-3">
             <button
               className="interactive-focus -ml-2 rounded-xl p-2 text-secondary transition-colors hover:bg-[var(--interactive-hover)] hover:text-[var(--foreground)] xl:hidden"
               onClick={() => setIsMobileMenuOpen(true)}
@@ -97,15 +100,7 @@ export function Navbar({ categories = [] }: NavbarProps) {
             >
               <Menu size={24} />
             </button>
-
-            {!isHome ? (
-              <Link href="/" className="interactive-focus group rounded-xl px-2 py-1.5 text-secondary transition-colors hover:bg-[var(--interactive-hover)] hover:text-[var(--foreground)]">
-                <ArrowLeft size={20} className="transition-transform group-hover:-translate-x-1" />
-                <span className="hidden font-medium sm:inline">Back</span>
-              </Link>
-            ) : (
-              <BrandLogo />
-            )}
+            <BrandLogo />
           </div>
 
           <nav className="hidden min-w-0 flex-1 items-center gap-2 overflow-x-auto rounded-full border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--interactive-bg-soft),var(--surface-soft))] px-3 py-1.5 shadow-[0_16px_44px_rgba(8,18,38,0.08)] no-scrollbar xl:flex">

@@ -7,6 +7,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useCart } from "@/components/cart/CartProvider";
 import { MOTION } from "@/lib/motion";
+import { buildWhatsAppLink } from "@/lib/support-config";
 
 export default function ComparePage() {
     const { compareItems, removeFromCompare, clearCompare } = useCompare();
@@ -123,7 +124,7 @@ export default function ComparePage() {
                                             Add to Cart
                                         </button>
                                         <a
-                                            href={`https://wa.me/2348000000000?text=${encodeURIComponent(`Hi, I'm comparing products and I'm interested in the ${product.name}`)}`}
+                                            href={buildWhatsAppLink(`Hi, I'm comparing products and I'm interested in the ${product.name}`)}
                                             className="flex w-full items-center justify-center gap-2 rounded-full border border-primary/20 bg-primary/10 py-3 text-sm font-bold text-primary transition-all hover:bg-primary/20"
                                         >
                                             <MessageCircle size={16} />

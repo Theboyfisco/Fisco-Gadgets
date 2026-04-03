@@ -32,7 +32,8 @@ export async function createOrder(input: CreateOrderInput) {
         throw new Error("One or more products not found");
       }
 
-      const orderDraft = buildOrderDraft({
+      const orderDraft = await buildOrderDraft({
+        dbClient: tx,
         items: validated.items,
         products: dbProducts.map((product: any) => ({
           id: product.id,
@@ -43,6 +44,27 @@ export async function createOrder(input: CreateOrderInput) {
         shipping: validated.shipping,
         promoCode: validated.promoCode,
       });
+
+      if (orderDraft.promoId && orderDraft.promoSource === "database") {
+        const reserveResult = await tx.promoCode.updateMany({
+          where: {
+            id: orderDraft.promoId,
+            active: true,
+            usedCount: orderDraft.promoUsedCount ?? undefined,
+            OR: [
+              { maxUses: null },
+              { maxUses: { gt: orderDraft.promoUsedCount ?? -1 } },
+            ],
+          },
+          data: {
+            usedCount: { increment: 1 },
+          },
+        });
+
+        if (reserveResult.count === 0) {
+          throw new Error("Promo code usage limit reached. Please refresh and try again.");
+        }
+      }
 
       // 5. Create Order + Items + Shipping Details
       const order = await tx.order.create({

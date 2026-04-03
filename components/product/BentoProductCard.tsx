@@ -1,11 +1,10 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import { ArrowUpRight, Eye, MessageCircle, ShoppingCart } from "lucide-react";
+import { ArrowUpRight, Eye, ShoppingCart } from "lucide-react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useState } from "react";
-import { CompareButton } from "./CompareButton";
 import { WishlistButton } from "./WishlistButton";
 import { Tilt3D } from "../ui/Tilt3D";
 import { SafeImage } from "@/components/ui/SafeImage";
@@ -14,9 +13,12 @@ import { normalizeTechnicalSpecs } from "@/lib/normalize-product";
 import { useCart } from "../cart/CartProvider";
 import { useHydrated } from "@/lib/useHydrated";
 
-const QuickViewModal = dynamic(() => import("./QuickViewModal").then((mod) => mod.QuickViewModal), {
-  ssr: false,
-});
+const QuickViewModal = dynamic(
+  () => import("./QuickViewModal").then((mod) => mod.QuickViewModal),
+  {
+    ssr: false,
+  },
+);
 
 export interface Product {
   id: string;
@@ -48,8 +50,10 @@ function categoryTint() {
 
 function categoryToneValue(categoryId: string) {
   if (categoryId.includes("phone")) return "var(--tone-phones)";
-  if (categoryId.includes("laptop") || categoryId.includes("macbook")) return "var(--tone-laptops)";
-  if (categoryId.includes("audio") || categoryId.includes("headphone")) return "var(--tone-audio)";
+  if (categoryId.includes("laptop") || categoryId.includes("macbook"))
+    return "var(--tone-laptops)";
+  if (categoryId.includes("audio") || categoryId.includes("headphone"))
+    return "var(--tone-audio)";
   return "var(--tone-generic)";
 }
 
@@ -59,7 +63,11 @@ function formatCategoryLabel(categoryId: string) {
     .replace(/\b\w/g, (char) => char.toUpperCase());
 }
 
-export function BentoProductCard({ product, featured = false, href }: BentoProductCardProps) {
+export function BentoProductCard({
+  product,
+  featured = false,
+  href,
+}: BentoProductCardProps) {
   const hydrated = useHydrated();
   const reducedMotionPreference = useReducedMotion();
   const prefersReducedMotion = hydrated && reducedMotionPreference;
@@ -67,11 +75,20 @@ export function BentoProductCard({ product, featured = false, href }: BentoProdu
   const [quickViewOpen, setQuickViewOpen] = useState(false);
   const specs = normalizeTechnicalSpecs(product.technicalSpecs);
   const isOutOfStock = typeof product.stock === "number" && product.stock <= 0;
-  const isLowStock = typeof product.stock === "number" && product.stock > 0 && product.stock <= 5;
-  const whatsappMsg = encodeURIComponent(`Hi, I'm interested in the ${product.name} listed for ₦${product.price}`);
-  const priceLabel = new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN" }).format(product.price);
+  const isLowStock =
+    typeof product.stock === "number" &&
+    product.stock > 0 &&
+    product.stock <= 5;
+  const priceLabel = new Intl.NumberFormat("en-NG", {
+    style: "currency",
+    currency: "NGN",
+  }).format(product.price);
   const toneValue = categoryToneValue(product.categoryId);
-  const stockLabel = isOutOfStock ? "Out of stock" : isLowStock ? `Only ${product.stock}` : "In stock";
+  const stockLabel = isOutOfStock
+    ? "Out of stock"
+    : isLowStock
+      ? `Only ${product.stock}`
+      : "In stock";
   const stockClass = isOutOfStock
     ? "border-[var(--status-error)]/45 bg-[var(--status-error)]/12 text-[var(--status-error)]"
     : isLowStock
@@ -85,7 +102,10 @@ export function BentoProductCard({ product, featured = false, href }: BentoProdu
     <Tilt3D className="h-full" maxTilt={featured ? 8 : 10}>
       <motion.article
         whileHover={prefersReducedMotion ? undefined : { y: -4 }}
-        transition={{ duration: MOTION.duration.base, ease: MOTION.ease.standard }}
+        transition={{
+          duration: MOTION.duration.base,
+          ease: MOTION.ease.standard,
+        }}
         className={containerClass}
       >
         <div
@@ -98,8 +118,14 @@ export function BentoProductCard({ product, featured = false, href }: BentoProdu
         <div className="[transform:translateZ(28px)]">
           <div className="relative mb-4 w-full overflow-hidden rounded-[20px] border border-[var(--interactive-border)] transition-all duration-[var(--motion-slow)] ease-[var(--ease-standard)] group-hover:border-[var(--interactive-border-strong)]">
             {href ? (
-              <Link href={href} className="group/image block h-full w-full" aria-label={`View ${product.name}`}>
-                <div className={`relative ${featured ? "h-[clamp(14rem,26vw,18.5rem)]" : "h-[clamp(12rem,22vw,15rem)]"} w-full`}>
+              <Link
+                href={href}
+                className="group/image block h-full w-full"
+                aria-label={`View ${product.name}`}
+              >
+                <div
+                  className={`relative ${featured ? "h-[clamp(14rem,26vw,18.5rem)]" : "h-[clamp(12rem,22vw,15rem)]"} w-full`}
+                >
                   <SafeImage
                     src={product.image}
                     alt={product.name}
@@ -108,7 +134,9 @@ export function BentoProductCard({ product, featured = false, href }: BentoProdu
                     quality={92}
                     loading="lazy"
                     className={`object-cover transition-transform duration-[620ms] ease-[var(--ease-standard)] will-change-transform [transform:translateZ(36px)_scale(1.02)] ${
-                      prefersReducedMotion ? "" : "group-hover/image:scale-[1.1]"
+                      prefersReducedMotion
+                        ? ""
+                        : "group-hover/image:scale-[1.1]"
                     }`}
                     placeholder={product.blurHash ? "blur" : "empty"}
                     blurDataURL={product.blurHash}
@@ -116,7 +144,9 @@ export function BentoProductCard({ product, featured = false, href }: BentoProdu
                 </div>
               </Link>
             ) : (
-              <div className={`relative ${featured ? "h-[clamp(14rem,26vw,18.5rem)]" : "h-[clamp(12rem,22vw,15rem)]"} w-full`}>
+              <div
+                className={`relative ${featured ? "h-[clamp(14rem,26vw,18.5rem)]" : "h-[clamp(12rem,22vw,15rem)]"} w-full`}
+              >
                 <SafeImage
                   src={product.image}
                   alt={product.name}
@@ -132,12 +162,16 @@ export function BentoProductCard({ product, featured = false, href }: BentoProdu
                 />
               </div>
             )}
-            <div className={`pointer-events-none absolute inset-0 bg-gradient-to-b ${categoryTint()} via-transparent to-[var(--surface-contrast)]`} />
+            <div
+              className={`pointer-events-none absolute inset-0 bg-gradient-to-b ${categoryTint()} via-transparent to-[var(--surface-contrast)]`}
+            />
             <div className="pointer-events-none absolute inset-0 bg-[image:var(--media-overlay-gradient)]" />
             <div className="absolute left-3 top-3 inline-flex items-center rounded-full border border-[var(--media-overlay-border)] bg-[var(--media-overlay-bg)] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--media-overlay-text)] backdrop-blur-md">
               {formatCategoryLabel(product.categoryId)}
             </div>
-            <div className={`absolute right-3 top-3 rounded-full border px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] backdrop-blur-md ${stockClass}`}>
+            <div
+              className={`absolute right-3 top-3 rounded-full border px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] backdrop-blur-md ${stockClass}`}
+            >
               {stockLabel}
             </div>
             <div className="pointer-events-none absolute inset-x-3 bottom-3 flex translate-y-2 items-end justify-between opacity-0 transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] group-hover:translate-y-0 group-hover:opacity-100 md:group-hover:translate-y-3 md:group-hover:opacity-0">
@@ -176,23 +210,11 @@ export function BentoProductCard({ product, featured = false, href }: BentoProdu
                 >
                   <ShoppingCart size={18} />
                 </button>
-                <div className="ml-2" onClick={(event) => event.stopPropagation()}>
-                  <WishlistButton product={product} variant="dock" />
-                </div>
-                <button
-                  type="button"
-                  className="ml-2 flex h-10 w-10 items-center justify-center rounded-xl border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] text-[var(--foreground)] shadow-[0_10px_24px_rgba(8,18,38,0.2)] transition-colors hover:border-[var(--interactive-border-strong)] hover:bg-[var(--interactive-active)]"
-                  aria-label={`Message about ${product.name} on WhatsApp`}
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    const url = `https://wa.me/2348000000000?text=${whatsappMsg}`;
-                    window.open(url, "_blank", "noopener,noreferrer");
-                  }}
+                <div
+                  className="ml-2"
+                  onClick={(event) => event.stopPropagation()}
                 >
-                  <MessageCircle size={18} />
-                </button>
-                <div className="ml-2" onClick={(event) => event.stopPropagation()}>
-                  <CompareButton product={product} variant="dock" />
+                  <WishlistButton product={product} variant="dock" />
                 </div>
               </div>
             </div>
@@ -200,9 +222,14 @@ export function BentoProductCard({ product, featured = false, href }: BentoProdu
 
           <div className="mb-3 flex items-start justify-between gap-3">
             <div className="min-w-0">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--text-soft)]">NOX Signature</p>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--text-soft)]">
+                NOX Signature
+              </p>
               {href ? (
-                <Link href={href} className="mt-2 block focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/25">
+                <Link
+                  href={href}
+                  className="mt-2 block focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/25"
+                >
                   <h3 className="line-clamp-2 text-lg font-semibold tracking-[-0.02em] text-[var(--foreground)] transition-colors duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:text-primary md:text-[1.45rem]">
                     {product.name}
                   </h3>
@@ -218,7 +245,9 @@ export function BentoProductCard({ product, featured = false, href }: BentoProdu
             </div>
           </div>
           <div className="flex items-end justify-between gap-3">
-            <p className="text-lg font-semibold tracking-[-0.02em] text-[var(--foreground)] md:text-xl">{priceLabel}</p>
+            <p className="text-lg font-semibold tracking-[-0.02em] text-[var(--foreground)] md:text-xl">
+              {priceLabel}
+            </p>
             {href ? (
               <Link
                 href={href}
@@ -229,21 +258,36 @@ export function BentoProductCard({ product, featured = false, href }: BentoProdu
               </Link>
             ) : null}
           </div>
-          <p className="mt-1 text-sm text-secondary">Concierge checkout, verified originals, and warranty-backed delivery.</p>
+          <p className="mt-1 text-sm text-secondary">
+            Concierge checkout, verified originals, and warranty-backed
+            delivery.
+          </p>
         </div>
 
         <div className="mt-4 grid grid-cols-3 gap-2.5 [transform:translateZ(18px)]">
           <div className="rounded-2xl border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--surface-soft),var(--surface-card))] px-3 py-2.5">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-soft)]">Battery</p>
-            <p className="mt-1 font-mono text-xs font-semibold text-[var(--foreground)]">{specs.battery || "4500mAh"}</p>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-soft)]">
+              Battery
+            </p>
+            <p className="mt-1 font-mono text-xs font-semibold text-[var(--foreground)]">
+              {specs.battery || "4500mAh"}
+            </p>
           </div>
           <div className="rounded-2xl border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--surface-soft),var(--surface-card))] px-3 py-2.5">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-soft)]">Storage</p>
-            <p className="mt-1 font-mono text-xs font-semibold text-[var(--foreground)]">{specs.storage || "128GB"}</p>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-soft)]">
+              Storage
+            </p>
+            <p className="mt-1 font-mono text-xs font-semibold text-[var(--foreground)]">
+              {specs.storage || "128GB"}
+            </p>
           </div>
           <div className="rounded-2xl border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--surface-soft),var(--surface-card))] px-3 py-2.5">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-soft)]">Memory</p>
-            <p className="mt-1 font-mono text-xs font-semibold text-[var(--foreground)]">{specs.ram || "8GB"}</p>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-soft)]">
+              Memory
+            </p>
+            <p className="mt-1 font-mono text-xs font-semibold text-[var(--foreground)]">
+              {specs.ram || "8GB"}
+            </p>
           </div>
         </div>
 
@@ -262,12 +306,19 @@ export function BentoProductCard({ product, featured = false, href }: BentoProdu
           >
             Add to cart
           </button>
-          <div className="shrink-0" onClick={(event) => event.stopPropagation()}>
+          <div
+            className="shrink-0"
+            onClick={(event) => event.stopPropagation()}
+          >
             <WishlistButton product={product} variant="dock" />
           </div>
         </div>
 
-        <QuickViewModal product={product} isOpen={quickViewOpen} onClose={() => setQuickViewOpen(false)} />
+        <QuickViewModal
+          product={product}
+          isOpen={quickViewOpen}
+          onClose={() => setQuickViewOpen(false)}
+        />
       </motion.article>
     </Tilt3D>
   );

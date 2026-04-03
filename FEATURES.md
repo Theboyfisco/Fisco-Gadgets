@@ -24,8 +24,10 @@ NOXTECH is a full-stack storefront focused on premium gadget shopping UX.
 
 - Prisma ORM with PostgreSQL
 - Server-side order creation and validation
+- Dynamic promo rule engine (database-backed with static fallback)
 - Paystack payment initialization
 - Webhook route for payment confirmation and order updates
+- Admin promo lifecycle management with audit logging
 
 ## Technical stack
 

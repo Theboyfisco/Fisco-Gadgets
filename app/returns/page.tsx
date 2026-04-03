@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ArrowLeft, RefreshCcw } from "lucide-react";
 import { Reveal } from "@/components/ui/Reveal";
+import { SUPPORT_EMAIL } from "@/lib/support-config";
 
 export default function ReturnsPage() {
   return (
@@ -33,7 +34,7 @@ export default function ReturnsPage() {
         <Reveal delay={0.05}>
           <section className="rounded-[1.5rem] border border-border-subtle bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] p-6 shadow-glass/20">
             <h2 className="mb-3 text-2xl font-bold text-[var(--foreground)]">Process a Return</h2>
-            <p className="mb-4">To initiate a return, immediately contact our support via WhatsApp or email (support@noxtech.com.ng). Do not ship items back without a Return Authorization number provided by our team.</p>
+            <p className="mb-4">To initiate a return, immediately contact our support via WhatsApp or email ({SUPPORT_EMAIL}). Do not ship items back without a Return Authorization number provided by our team.</p>
           </section>
         </Reveal>
 

@@ -27,8 +27,8 @@ test("assertStockAndBuildItems throws when stock is insufficient", () => {
   );
 });
 
-test("buildOrderDraft applies promo and shipping adjustments", () => {
-  const result = buildOrderDraft({
+test("buildOrderDraft applies promo and shipping adjustments", async () => {
+  const result = await buildOrderDraft({
     items: [{ productId: "p2", quantity: 1 }],
     products: sampleProducts,
     shipping: { city: "Lagos", state: "Lagos", shippingType: "DELIVERY" },

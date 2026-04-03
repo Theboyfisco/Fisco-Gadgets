@@ -14,6 +14,7 @@ import { CompareFloatingBar } from "@/components/product/CompareFloatingBar";
 import { WishlistWrapper } from "@/components/product/WishlistWrapper";
 import { ScrollProgress } from "@/components/ui/ScrollProgress";
 import { PageShell } from "@/components/ui/PageShell";
+import { SupportSpeedDial } from "@/components/ui/SupportSpeedDial";
 
 import prisma from "@/lib/db";
 import { fallbackCategories } from "@/lib/fallback-data";
@@ -106,6 +107,7 @@ export default async function RootLayout({
                 <CartWrapper />
                 <WishlistWrapper />
                 <CompareFloatingBar />
+                <SupportSpeedDial />
               </CartProvider>
             </WishlistProvider>
           </CompareProvider>

@@ -1,7 +1,21 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
+import { decrementPromoUsageByCode } from "@/services/promo-usage";
 
-export async function POST() {
+const CLEANUP_CRON_SECRET = process.env.CLEANUP_CRON_SECRET || process.env.CRON_SECRET || "";
+
+export async function POST(request: NextRequest) {
+  if (!CLEANUP_CRON_SECRET && process.env.NODE_ENV === "production") {
+    return NextResponse.json({ status: "error", message: "Cleanup endpoint is not configured." }, { status: 503 });
+  }
+
+  if (CLEANUP_CRON_SECRET) {
+    const secret = request.headers.get("x-cron-secret");
+    if (secret !== CLEANUP_CRON_SECRET) {
+      return NextResponse.json({ status: "error", message: "Unauthorized" }, { status: 401 });
+    }
+  }
+
   const now = new Date();
 
   const expiredOrders = await prisma.order.findMany({
@@ -29,6 +43,10 @@ export async function POST() {
         where: { id: order.id },
         data: { status: "CANCELLED", reservedUntil: null },
       });
+
+      if (order.promoCode) {
+        await decrementPromoUsageByCode({ dbClient: tx, promoCode: order.promoCode });
+      }
     }
   });
 

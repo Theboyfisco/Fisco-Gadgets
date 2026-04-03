@@ -93,6 +93,7 @@ export function OrderAdminConsole({ orders }: { orders: AdminOrder[] }) {
               onChange={(event) =>
                 setDraftStatuses((prev) => ({ ...prev, [order.id]: event.target.value as OrderStatus }))
               }
+              disabled={order.status === "CANCELLED"}
               className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-soft)] px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--foreground)] outline-none focus-visible:ring-2 focus-visible:ring-primary/25"
             >
               <option value="PENDING" className="bg-[var(--panel-bg)] text-[var(--foreground)]">PENDING</option>
@@ -103,10 +104,10 @@ export function OrderAdminConsole({ orders }: { orders: AdminOrder[] }) {
             <button
               type="button"
               onClick={() => handleSave(order.id)}
-              disabled={isPending}
+              disabled={isPending || order.status === "CANCELLED" || draftStatuses[order.id] === order.status}
               className="rounded-full bg-primary px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--primary-contrast)] disabled:opacity-60"
             >
-              {isPending ? "Saving..." : "Save status"}
+              {order.status === "CANCELLED" ? "Cancelled" : isPending ? "Saving..." : "Save status"}
             </button>
           </div>
         </div>

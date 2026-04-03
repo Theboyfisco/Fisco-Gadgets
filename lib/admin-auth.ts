@@ -45,13 +45,22 @@ function signPayload(payloadB64: string) {
   return crypto.createHmac("sha256", ADMIN_COOKIE_SECRET).update(payloadB64).digest("hex");
 }
 
+function constantTimeEqual(value: string, expected: string) {
+  const valueBuffer = Buffer.from(value, "utf8");
+  const expectedBuffer = Buffer.from(expected, "utf8");
+  if (valueBuffer.length !== expectedBuffer.length) {
+    return false;
+  }
+  return crypto.timingSafeEqual(valueBuffer, expectedBuffer);
+}
+
 export function verifySessionCookie(value?: string) {
   if (!value || !ADMIN_COOKIE_SECRET) return false;
   const parts = value.split(".");
   if (parts.length !== 2) return false;
   const [payloadB64, signature] = parts;
   const expected = signPayload(payloadB64);
-  if (signature !== expected) return false;
+  if (!constantTimeEqual(signature, expected)) return false;
 
   try {
     const payload = JSON.parse(fromBase64Url(payloadB64)) as { u: string; exp: number };
@@ -70,7 +79,7 @@ function parseSessionCookie(value?: string): AdminSessionPayload | null {
   if (parts.length !== 2) return null;
   const [payloadB64, signature] = parts;
   const expected = signPayload(payloadB64);
-  if (signature !== expected) return null;
+  if (!constantTimeEqual(signature, expected)) return null;
 
   try {
     const payload = JSON.parse(fromBase64Url(payloadB64)) as AdminSessionPayload;

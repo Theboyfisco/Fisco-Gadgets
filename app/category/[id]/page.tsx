@@ -119,7 +119,7 @@ export default async function CategoryPage({
           },
         })
         .catch(() => null)
-    : fallbackCategories.find((entry) => entry.id === categoryParam) ?? null;
+    : fallbackCategories.find((entry) => entry.id === categoryParam || entry.slug === categoryParam) ?? null;
 
   if (!category) {
     notFound();

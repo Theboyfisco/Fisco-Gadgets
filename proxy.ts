@@ -10,25 +10,34 @@ function fromBase64UrlToUtf8(value: string) {
   return new TextDecoder().decode(bytes);
 }
 
-function toHex(bytes: ArrayBuffer) {
-  return Array.from(new Uint8Array(bytes))
-    .map((byte) => byte.toString(16).padStart(2, "0"))
-    .join("");
+function fromHex(value: string) {
+  if (!/^[0-9a-f]+$/i.test(value) || value.length % 2 !== 0) {
+    return null;
+  }
+  const bytes = new Uint8Array(value.length / 2);
+  for (let index = 0; index < value.length; index += 2) {
+    bytes[index / 2] = Number.parseInt(value.slice(index, index + 2), 16);
+  }
+  return bytes;
 }
 
-async function signPayload(secret: string, payloadB64: string) {
+async function importHmacKey(secret: string) {
   const keyData = new TextEncoder().encode(secret);
-  const key = await crypto.subtle.importKey("raw", keyData, { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
-  const signature = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(payloadB64));
-  return toHex(signature);
+  return crypto.subtle.importKey("raw", keyData, { name: "HMAC", hash: "SHA-256" }, false, ["verify"]);
+}
+
+async function verifyPayloadSignature(secret: string, payloadB64: string, signatureHex: string) {
+  const signatureBytes = fromHex(signatureHex);
+  if (!signatureBytes) return false;
+  const key = await importHmacKey(secret);
+  return crypto.subtle.verify("HMAC", key, signatureBytes, new TextEncoder().encode(payloadB64));
 }
 
 async function isValidSession(token: string, secret: string) {
   const parts = token.split(".");
   if (parts.length !== 2) return false;
   const [payloadB64, signature] = parts;
-  const expected = await signPayload(secret, payloadB64);
-  if (signature !== expected) return false;
+  if (!(await verifyPayloadSignature(secret, payloadB64, signature))) return false;
 
   try {
     const payload = JSON.parse(fromBase64UrlToUtf8(payloadB64)) as { u?: string; exp?: number };

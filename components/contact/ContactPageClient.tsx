@@ -5,24 +5,72 @@ import Link from "next/link";
 import { useState } from "react";
 import { Reveal } from "@/components/ui/Reveal";
 import { useToast } from "@/components/ui/ToastProvider";
+import { SUPPORT_EMAIL, SUPPORT_SALES_EMAIL, SUPPORT_WHATSAPP_DISPLAY } from "@/lib/support-config";
 
 export function ContactPageClient({ initialMessage = "" }: { initialMessage?: string }) {
   const { pushToast } = useToast();
-  const [form, setForm] = useState({ name: "", email: "", message: initialMessage });
+  const [form, setForm] = useState({ name: "", email: "", orderRef: "", message: initialMessage });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = event.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    pushToast({
-      title: "Message sent",
-      description: "We will reply within 24 hours.",
-      variant: "success",
-    });
-    setForm({ name: "", email: "", message: "" });
+    if (isSubmitting) return;
+
+    const name = form.name.trim();
+    const email = form.email.trim();
+    const orderRef = form.orderRef.trim();
+    const message = form.message.trim();
+
+    if (!name || !email || !message) {
+      pushToast({
+        title: "Missing details",
+        description: "Name, email, and message are required.",
+        variant: "warning",
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const response = await fetch("/api/support/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          email,
+          orderRef: orderRef || undefined,
+          message,
+          path: typeof window === "undefined" ? undefined : window.location.pathname,
+          website: "",
+        }),
+      });
+
+      const data = await response.json().catch(() => null);
+      if (!response.ok || !data?.ok) {
+        throw new Error(data?.error || "Unable to send support message.");
+      }
+
+      pushToast({
+        title: "Message sent",
+        description: "Support has received your message and will reply shortly.",
+        variant: "success",
+      });
+      setForm({ name: "", email: "", orderRef: "", message: "" });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Please try again in a moment or message us on WhatsApp.";
+      pushToast({
+        title: "Send failed",
+        description: message,
+        variant: "warning",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -56,7 +104,7 @@ export function ContactPageClient({ initialMessage = "" }: { initialMessage?: st
             <div className="shrink-0 rounded-full bg-[var(--surface-card)] p-3 text-primary"><Phone /></div>
             <div>
               <h3 className="text-lg font-bold text-[var(--foreground)]">Phone & WhatsApp</h3>
-              <p className="text-secondary">+234 (0) 800 000 0000<br/>+234 (0) 801 111 1111</p>
+              <p className="text-secondary">{SUPPORT_WHATSAPP_DISPLAY}</p>
             </div>
           </div>
           </Reveal>
@@ -65,7 +113,7 @@ export function ContactPageClient({ initialMessage = "" }: { initialMessage?: st
             <div className="shrink-0 rounded-full bg-[var(--surface-card)] p-3 text-primary"><Mail /></div>
             <div>
               <h3 className="text-lg font-bold text-[var(--foreground)]">Email Support</h3>
-              <p className="text-secondary">support@noxtech.com.ng<br/>sales@noxtech.com.ng</p>
+              <p className="text-secondary">{SUPPORT_EMAIL}<br/>{SUPPORT_SALES_EMAIL}</p>
             </div>
           </div>
           </Reveal>
@@ -84,6 +132,7 @@ export function ContactPageClient({ initialMessage = "" }: { initialMessage?: st
           <div className="rounded-[2rem] border border-border-subtle bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] p-8 shadow-glass/40">
           <h3 className="mb-6 text-2xl font-bold text-[var(--foreground)]">Send a Message</h3>
           <form className="space-y-4" onSubmit={handleSubmit}>
+            <input type="text" name="website" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-secondary mb-1">Your Name</label>
               <input
@@ -92,6 +141,7 @@ export function ContactPageClient({ initialMessage = "" }: { initialMessage?: st
                 name="name"
                 value={form.name}
                 onChange={handleChange}
+                minLength={1}
                 required
                 className="w-full rounded-xl border border-border-subtle bg-[var(--surface-card)] px-4 py-3 text-[var(--foreground)] transition-colors placeholder:text-[var(--text-soft)] focus:border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/25"
                 placeholder="John Doe"
@@ -118,14 +168,31 @@ export function ContactPageClient({ initialMessage = "" }: { initialMessage?: st
                 rows={5}
                 value={form.message}
                 onChange={handleChange}
+                minLength={3}
                 required
                 className="w-full rounded-xl border border-border-subtle bg-[var(--surface-card)] px-4 py-3 text-[var(--foreground)] transition-colors placeholder:text-[var(--text-soft)] focus:border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/25"
                 placeholder="How can we help?"
               ></textarea>
             </div>
-            <button type="submit" className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary py-3 text-base font-bold text-[var(--primary-contrast)] transition-colors hover:bg-[var(--primary-hover)]">
+            <div>
+              <label htmlFor="orderRef" className="block text-sm font-medium text-secondary mb-1">Order Reference (optional)</label>
+              <input
+                type="text"
+                id="orderRef"
+                name="orderRef"
+                value={form.orderRef}
+                onChange={handleChange}
+                className="w-full rounded-xl border border-border-subtle bg-[var(--surface-card)] px-4 py-3 text-[var(--foreground)] transition-colors placeholder:text-[var(--text-soft)] focus:border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/25"
+                placeholder="e.g. NX-1042"
+              />
+            </div>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary py-3 text-base font-bold text-[var(--primary-contrast)] transition-colors hover:bg-[var(--primary-hover)] disabled:cursor-not-allowed disabled:opacity-60"
+            >
               <Send size={18} />
-              Send Message
+              {isSubmitting ? "Sending..." : "Send Message"}
             </button>
           </form>
         </div>

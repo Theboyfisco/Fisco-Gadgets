@@ -24,6 +24,10 @@ Add these in Vercel project settings:
 - `DIRECT_URL`
 - `PAYSTACK_SECRET_KEY`
 - `PAYSTACK_PUBLIC_KEY`
+- `RESEND_API_KEY`
+- `SUPPORT_FROM_EMAIL`
+- `SUPPORT_INBOX_EMAIL`
+- `CLEANUP_CRON_SECRET`
 - `NEXT_PUBLIC_APP_URL`
 
 Set `NEXT_PUBLIC_APP_URL` to your actual production domain.
@@ -46,6 +50,8 @@ Prisma client generation is handled by `postinstall` in `package.json`.
 - Cart and compare work
 - Checkout initializes payment
 - Paystack webhook endpoint is reachable
+- Promo codes load from `/api/promos` and apply at checkout
+- `/admin/promos` can create/update/deactivate promo rules
 
 ## 6. Troubleshooting
 

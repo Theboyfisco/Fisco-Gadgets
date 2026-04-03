@@ -3,6 +3,7 @@ import Image from "next/image";
 import prisma from "@/lib/db";
 import { requireCustomer } from "@/lib/customer-auth";
 import { Package, Truck, CheckCircle2, Clock3, XCircle, MessageCircle } from "lucide-react";
+import { buildWhatsAppLink } from "@/lib/support-config";
 
 function statusTone(status: "PENDING" | "PAID" | "SHIPPED" | "CANCELLED") {
   if (status === "PAID") return "text-primary border-primary/30 bg-primary/10";
@@ -75,9 +76,7 @@ export default async function AccountOrdersPage() {
             const itemsSubtotal = order.items.reduce((sum, item) => sum + item.priceAtPurchase * item.quantity, 0);
             const shippingFee = order.shippingDetails?.shippingFee ?? 0;
             const steps = trackingSteps(order.status);
-            const supportMessage = encodeURIComponent(
-              `Hi, I need support for order #${order.id.slice(-8).toUpperCase()} (${order.status}).`,
-            );
+            const supportUrl = buildWhatsAppLink(`Hi, I need support for order #${order.id.slice(-8).toUpperCase()} (${order.status}).`);
 
             return (
               <article
@@ -159,7 +158,7 @@ export default async function AccountOrdersPage() {
 
                 <div className="mt-4 flex flex-wrap items-center gap-3">
                   <a
-                    href={`https://wa.me/2348000000000?text=${supportMessage}`}
+                    href={supportUrl}
                     className="inline-flex items-center gap-2 rounded-full border border-[var(--interactive-border)] bg-[var(--surface-card)] px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-secondary transition-colors hover:text-[var(--foreground)]"
                   >
                     <MessageCircle size={14} />

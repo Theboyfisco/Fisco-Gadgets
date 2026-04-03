@@ -7,6 +7,7 @@ import { ResumePaymentButton } from "@/components/checkout/ResumePaymentButton";
 import { PICKUP_DETAILS } from "@/services/shipping";
 import { SuccessEventTracker } from "@/components/checkout/SuccessEventTracker";
 import { getPrimaryImage } from "@/lib/normalize-product";
+import { buildWhatsAppLink } from "@/lib/support-config";
 
 export default async function SuccessPage({ searchParams }: { searchParams: Promise<{ orderId: string }> }) {
     const { orderId } = await searchParams;
@@ -38,7 +39,7 @@ export default async function SuccessPage({ searchParams }: { searchParams: Prom
     const isPaid = order.status === "PAID";
     const isPending = order.status === "PENDING";
     const isPickup = order.shippingDetails?.shippingType === "LOCAL_PICKUP";
-    const supportMessage = encodeURIComponent(`Hi, I need help with order #${order.id.slice(-8).toUpperCase()}. Status: ${order.status}.`);
+    const supportUrl = buildWhatsAppLink(`Hi, I need help with order #${order.id.slice(-8).toUpperCase()}. Status: ${order.status}.`);
 
     return (
         <div className="container mx-auto flex flex-col items-center px-4 py-24">
@@ -155,7 +156,7 @@ export default async function SuccessPage({ searchParams }: { searchParams: Prom
                   </Link>
                 )}
                 <Link 
-                    href={`https://wa.me/2348000000000?text=${supportMessage}`}
+                    href={supportUrl}
                     className="flex flex-1 items-center justify-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] py-4 text-center font-bold text-[var(--foreground)] transition-all hover:bg-[var(--surface-cta)] active:scale-95"
                 >
                     Support
