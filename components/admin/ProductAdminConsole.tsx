@@ -1113,7 +1113,7 @@ export function ProductAdminConsole({
           </label>
         </section>
 
-        <section className="overflow-hidden rounded-[1.5rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] shadow-[0_18px_50px_rgba(var(--shadow-neutral-rgb),0.1)] sm:rounded-[2rem]">
+        <section className="overflow-x-hidden overflow-y-hidden rounded-[1.5rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] shadow-[0_18px_50px_rgba(var(--shadow-neutral-rgb),0.1)] sm:rounded-[2rem]">
           {filteredProducts.length > 0 ? (
             <div className="flex flex-col gap-3 border-b border-[var(--border-subtle)] px-3 py-3 sm:px-4 sm:py-4 sm:flex-row sm:items-center sm:justify-between">
               <div className="grid w-full grid-cols-1 gap-2 sm:flex sm:w-auto sm:flex-wrap sm:items-center">
@@ -1137,7 +1137,7 @@ export function ProductAdminConsole({
             </div>
           ) : null}
 
-          <div className="space-y-2.5 px-3 py-3 sm:space-y-3 sm:px-4 sm:py-4 xl:max-h-[calc(100vh-20.5rem)] xl:overflow-y-auto">
+          <div className="space-y-2.5 overflow-x-hidden px-3 py-3 sm:space-y-3 sm:px-4 sm:py-4 xl:max-h-[calc(100vh-20.5rem)] xl:overflow-y-auto">
             {filteredProducts.length === 0 ? (
               <div className="rounded-[1.75rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6 text-sm text-secondary">
                 No products match the current search.

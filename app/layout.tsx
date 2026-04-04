@@ -16,6 +16,7 @@ import { WishlistWrapper } from "@/components/product/WishlistWrapper";
 import { ScrollProgress } from "@/components/ui/ScrollProgress";
 import { PageShell } from "@/components/ui/PageShell";
 import { SupportSpeedDial } from "@/components/ui/SupportSpeedDial";
+import { CustomCursor } from "@/components/ui/CustomCursor";
 import { PWARegistration } from "@/components/pwa/PWARegistration";
 import { PWAInstallPrompt } from "@/components/pwa/PWAInstallPrompt";
 
@@ -39,6 +40,15 @@ const getCachedNavbarCategories = unstable_cache(
   ["navbar-categories"],
   { revalidate: 300 },
 );
+
+async function withTimeout<T>(promise: Promise<T>, timeoutMs: number, fallback: T): Promise<T> {
+  return Promise.race([
+    promise,
+    new Promise<T>((resolve) => {
+      setTimeout(() => resolve(fallback), timeoutMs);
+    }),
+  ]);
+}
 
 export const metadata: Metadata = {
   metadataBase: new URL(getBaseUrl()),
@@ -99,7 +109,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const categories = shouldUseDatabase()
-    ? await getCachedNavbarCategories().catch(() => fallbackNavbarCategories)
+    ? await withTimeout(getCachedNavbarCategories().catch(() => fallbackNavbarCategories), 1500, fallbackNavbarCategories)
     : fallbackNavbarCategories;
 
   return (
@@ -143,6 +153,7 @@ export default async function RootLayout({
                 <WishlistWrapper />
                 <CompareFloatingBar />
                 <SupportSpeedDial />
+                <CustomCursor />
                 <PWAInstallPrompt />
                 <PWARegistration />
               </CartProvider>

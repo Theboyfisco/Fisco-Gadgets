@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import type { Product } from "@/components/product/BentoProductCard";
 import { getCustomerListsClient, syncCustomerListClient } from "@/lib/customer-lists-api";
 
@@ -23,6 +23,7 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
   const [wishlistItems, setWishlistItems] = useState<Product[]>([]);
   const [isWishlistOpen, setIsWishlistOpen] = useState(false);
   const [hydrated, setHydrated] = useState(false);
+  const hasInitializedSync = useRef(false);
 
   useEffect(() => {
     try {
@@ -62,6 +63,10 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (!hydrated) return;
+    if (!hasInitializedSync.current) {
+      hasInitializedSync.current = true;
+      return;
+    }
     const timer = setTimeout(() => {
       syncCustomerListClient(
         "WISHLIST",

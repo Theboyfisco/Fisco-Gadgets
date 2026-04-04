@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import type { Product } from "@/components/product/BentoProductCard";
 import { useToast } from "@/components/ui/ToastProvider";
 import { getCustomerListsClient, syncCustomerCartClient, syncCustomerListClient } from "@/lib/customer-lists-api";
@@ -51,6 +51,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     const [savedForLater, setSavedForLater] = useState<Product[]>([]);
     const [isCartOpen, setIsCartOpen] = useState(false);
     const [mounted, setMounted] = useState(false);
+    const hasInitializedCartSync = useRef(false);
+    const hasInitializedSavedSync = useRef(false);
     const { pushToast } = useToast();
 
     const getMaxStock = (product: Product) => (typeof product.stock === "number" ? product.stock : Number.POSITIVE_INFINITY);
@@ -114,6 +116,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
     useEffect(() => {
         if (!mounted) return;
+        if (!hasInitializedCartSync.current) {
+            hasInitializedCartSync.current = true;
+            return;
+        }
         const timer = setTimeout(() => {
             syncCustomerCartClient(
                 cartItems.map((item) => ({
@@ -127,6 +133,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
     useEffect(() => {
         if (!mounted) return;
+        if (!hasInitializedSavedSync.current) {
+            hasInitializedSavedSync.current = true;
+            return;
+        }
         const timer = setTimeout(() => {
             syncCustomerListClient(
                 "SAVE_FOR_LATER",

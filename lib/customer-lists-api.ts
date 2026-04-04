@@ -22,17 +22,57 @@ const EMPTY_LISTS: CustomerListsResponse = {
   cart: [],
 };
 
+const LISTS_CACHE_TTL_MS = 8000;
+const LISTS_REQUEST_TIMEOUT_MS = 2500;
+let cachedLists: CustomerListsResponse = EMPTY_LISTS;
+let cachedListsAt = 0;
+let inflightListsRequest: Promise<CustomerListsResponse> | null = null;
+
+function invalidateListsCache() {
+  cachedListsAt = 0;
+}
+
 export async function getCustomerListsClient(): Promise<CustomerListsResponse> {
+  const now = Date.now();
+  if (cachedListsAt && now - cachedListsAt < LISTS_CACHE_TTL_MS) {
+    return cachedLists;
+  }
+
+  if (inflightListsRequest) {
+    return inflightListsRequest;
+  }
+
   try {
-    const response = await fetch("/api/account/lists", {
-      method: "GET",
-      cache: "no-store",
-    });
-    if (!response.ok) return EMPTY_LISTS;
-    const data = (await response.json()) as CustomerListsResponse;
-    return data;
+    inflightListsRequest = (async () => {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), LISTS_REQUEST_TIMEOUT_MS);
+      try {
+        const response = await fetch("/api/account/lists", {
+          method: "GET",
+          cache: "no-store",
+          signal: controller.signal,
+        });
+        if (!response.ok) {
+          cachedLists = EMPTY_LISTS;
+          cachedListsAt = Date.now();
+          return EMPTY_LISTS;
+        }
+        const data = (await response.json()) as CustomerListsResponse;
+        cachedLists = data;
+        cachedListsAt = Date.now();
+        return data;
+      } finally {
+        clearTimeout(timeout);
+      }
+    })();
+
+    return await inflightListsRequest;
   } catch {
+    cachedLists = EMPTY_LISTS;
+    cachedListsAt = Date.now();
     return EMPTY_LISTS;
+  } finally {
+    inflightListsRequest = null;
   }
 }
 
@@ -43,6 +83,7 @@ export async function syncCustomerListClient(listType: CustomerListType, product
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ action: "syncList", listType, productIds }),
     });
+    invalidateListsCache();
     if (!response.ok) return { success: false, authenticated: false };
     return (await response.json()) as { success: boolean; authenticated: boolean };
   } catch {
@@ -57,6 +98,7 @@ export async function syncCustomerCartClient(items: CartSyncItem[]) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ action: "syncCart", items }),
     });
+    invalidateListsCache();
     if (!response.ok) return { success: false, authenticated: false };
     return (await response.json()) as { success: boolean; authenticated: boolean };
   } catch {
@@ -71,6 +113,7 @@ export async function trackRecentProductClient(productId: string) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ action: "trackRecent", productId }),
     });
+    invalidateListsCache();
     if (!response.ok) return { success: false, authenticated: false };
     return (await response.json()) as { success: boolean; authenticated: boolean };
   } catch {

@@ -14,6 +14,15 @@ import { SITE_NAME, truncateDescription, toAbsoluteUrl } from "@/lib/site-config
 
 export const revalidate = 300;
 
+async function withTimeout<T>(promise: Promise<T>, timeoutMs: number, fallback: T): Promise<T> {
+  return Promise.race([
+    promise,
+    new Promise<T>((resolve) => {
+      setTimeout(() => resolve(fallback), timeoutMs);
+    }),
+  ]);
+}
+
 export async function generateMetadata(): Promise<Metadata> {
   const useDatabase = shouldUseDatabase();
   if (!useDatabase) {
@@ -24,10 +33,11 @@ export async function generateMetadata(): Promise<Metadata> {
     };
   }
 
-  const [productCount, categoryCount] = await Promise.all([
-    prisma.product.count().catch(() => 0),
-    prisma.category.count().catch(() => 0),
-  ]);
+  const [productCount, categoryCount] = await withTimeout(
+    Promise.all([prisma.product.count().catch(() => 0), prisma.category.count().catch(() => 0)]),
+    1400,
+    [0, 0] as const,
+  );
 
   const description = truncateDescription(
     `Shop ${productCount || "premium"} gadgets across ${categoryCount || "multiple"} curated categories with concierge checkout and nationwide delivery in Nigeria.`,
@@ -47,18 +57,23 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Home() {
+  const fallbackHomeData = [[], fallbackCategories] as const;
   const [dbProducts, dbCategories] = shouldUseDatabase()
-    ? await Promise.all([
-        prisma.product
-          .findMany({
-            take: 10,
-            orderBy: { createdAt: "desc" },
-            include: { category: true },
-          })
-          .catch(() => []),
-        prisma.category.findMany().catch(() => fallbackCategories),
-      ])
-    : [[], fallbackCategories];
+    ? await withTimeout(
+        Promise.all([
+          prisma.product
+            .findMany({
+              take: 10,
+              orderBy: { createdAt: "desc" },
+              include: { category: true },
+            })
+            .catch(() => []),
+          prisma.category.findMany().catch(() => fallbackCategories),
+        ]),
+        1800,
+        fallbackHomeData,
+      )
+    : fallbackHomeData;
 
   const featuredProducts =
     dbProducts.length > 0

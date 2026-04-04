@@ -216,6 +216,12 @@
     --category-pill-border-hover: rgba(255, 255, 255, 0.4);
     --category-pill-title: #f6f9ff;
     --category-pill-subtitle: rgba(246, 249, 255, 0.82);
+    --scrollbar-track: rgba(255, 255, 255, 0.04);
+    --scrollbar-thumb: rgba(132, 156, 255, 0.42);
+    --scrollbar-thumb-hover: rgba(154, 179, 255, 0.62);
+    --cursor-dot: rgba(232, 240, 255, 0.94);
+    --cursor-ring: rgba(132, 156, 255, 0.76);
+    --cursor-ring-bg: rgba(132, 156, 255, 0.14);
   }
 
   /* ─── LIGHT THEME ─── */
@@ -394,11 +400,18 @@
     --category-pill-border-hover: rgba(255, 255, 255, 0.5);
     --category-pill-title: #ffffff;
     --category-pill-subtitle: rgba(255, 255, 255, 0.88);
+    --scrollbar-track: rgba(12, 26, 48, 0.06);
+    --scrollbar-thumb: rgba(45, 82, 212, 0.48);
+    --scrollbar-thumb-hover: rgba(30, 63, 182, 0.7);
+    --cursor-dot: rgba(9, 28, 68, 0.92);
+    --cursor-ring: rgba(45, 82, 212, 0.72);
+    --cursor-ring-bg: rgba(45, 82, 212, 0.12);
   }
 
   html {
     scroll-behavior: smooth;
     color-scheme: light dark;
+    overflow-x: clip;
   }
 
   body {
@@ -412,6 +425,7 @@
       0 0,
       0 0;
     color: var(--foreground);
+    overflow-x: clip;
   }
 
   .container {
@@ -525,6 +539,35 @@
   }
 }
 
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+*::-webkit-scrollbar {
+  width: 0.72rem;
+  height: 0.72rem;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+*::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  background: linear-gradient(180deg, var(--scrollbar-thumb), color-mix(in oklab, var(--scrollbar-thumb) 78%, black 22%));
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--scrollbar-thumb-hover), color-mix(in oklab, var(--scrollbar-thumb-hover) 82%, black 18%));
+}
+
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
 .custom-scrollbar::-webkit-scrollbar {
   width: 6px;
 }
@@ -540,11 +583,57 @@
 }
 
 .no-scrollbar::-webkit-scrollbar {
-  display: none;
+  display: none !important;
 }
 .no-scrollbar {
   -ms-overflow-style: none;
-  scrollbar-width: none;
+  scrollbar-width: none !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html.custom-cursor-enabled,
+  html.custom-cursor-enabled body,
+  html.custom-cursor-enabled a,
+  html.custom-cursor-enabled button,
+  html.custom-cursor-enabled [role="button"],
+  html.custom-cursor-enabled [data-cursor="interactive"] {
+    cursor: none !important;
+  }
+
+  html.custom-cursor-enabled input,
+  html.custom-cursor-enabled textarea {
+    cursor: text !important;
+  }
+
+  .custom-cursor-ring,
+  .custom-cursor-dot {
+    position: fixed;
+    left: 0;
+    top: 0;
+    pointer-events: none;
+    z-index: 130;
+    opacity: 0;
+    will-change: transform, opacity;
+  }
+
+  .custom-cursor-ring {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 999px;
+    border: 1.5px solid var(--cursor-ring);
+    background: var(--cursor-ring-bg);
+    box-shadow: 0 0 0 1px color-mix(in oklab, var(--cursor-ring) 35%, transparent);
+    transition: opacity var(--motion-fast) var(--ease-standard);
+  }
+
+  .custom-cursor-dot {
+    width: 0.48rem;
+    height: 0.48rem;
+    border-radius: 999px;
+    background: var(--cursor-dot);
+    box-shadow: 0 0 24px color-mix(in oklab, var(--cursor-dot) 34%, transparent);
+    transition: opacity var(--motion-fast) var(--ease-standard);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
