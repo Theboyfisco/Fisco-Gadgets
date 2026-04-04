@@ -26,14 +26,19 @@ export async function POST(req: NextRequest) {
 
   const existing = await prisma.mediaAsset.findUnique({ where: { id } });
   if (!existing) {
-    return NextResponse.json({ success: false, error: "Asset not found" }, { status: 404 });
+    // Treat repeated deletes as success to keep the endpoint idempotent.
+    return NextResponse.json({ success: true, deleted: false });
   }
 
   const relative = existing.url.startsWith("/uploads/") ? existing.url.slice("/uploads/".length) : existing.filename;
   const filePath = path.join(process.cwd(), "public", "uploads", relative);
 
   await unlink(filePath).catch(() => null);
-  await prisma.mediaAsset.delete({ where: { id } });
+  const deleted = await prisma.mediaAsset.deleteMany({ where: { id } });
+  if (deleted.count === 0) {
+    // Another request may have deleted it between findUnique and deleteMany.
+    return NextResponse.json({ success: true, deleted: false });
+  }
 
   await recordAdminAuditLog({
     action: "media.delete",
@@ -47,5 +52,5 @@ export async function POST(req: NextRequest) {
     },
   });
 
-  return NextResponse.json({ success: true });
+  return NextResponse.json({ success: true, deleted: true });
 }

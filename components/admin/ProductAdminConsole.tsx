@@ -160,6 +160,10 @@ function isValidUrl(value: string) {
   }
 }
 
+function isValidImageValue(value: string) {
+  return value.startsWith("/") || isValidUrl(value);
+}
+
 function validateDraft(draft: ProductFormState): ProductFormErrors {
   const errors: ProductFormErrors = {};
   if (draft.name.trim().length < 2) errors.name = "Name must be at least 2 characters.";
@@ -180,8 +184,8 @@ function validateDraft(draft: ProductFormState): ProductFormErrors {
     .filter(Boolean);
   if (images.length === 0) {
     errors.imagesText = "Add at least one image.";
-  } else if (images.some((image) => !isValidUrl(image))) {
-    errors.imagesText = "All images must be valid URLs.";
+  } else if (images.some((image) => !isValidImageValue(image))) {
+    errors.imagesText = "All images must be valid URLs or root-relative paths (for example, /uploads/file.jpg).";
   }
 
   const validSpecs = draft.technicalSpecs.filter((item) => item.key.trim() && item.value.trim());
@@ -278,6 +282,17 @@ export function ProductAdminConsole({
   const selectedCount = selectedProductIds.length;
   const allPageSelected =
     pageProductIds.length > 0 && pageProductIds.every((productId) => selectedProductIds.includes(productId));
+  const lowStockCount = products.filter((product) => product.stock <= 3).length;
+  const noBrandCount = products.filter((product) => !product.brandId).length;
+  const previewImage = draft.imagesText
+    .split("\n")
+    .map((item) => item.trim())
+    .find(Boolean);
+  const filledSpecsCount = draft.technicalSpecs.filter((item) => item.key.trim() && item.value.trim()).length;
+  const selectedUpdatedLabel =
+    !isCreating && selectedProduct
+      ? new Date(selectedProduct.updatedAt).toLocaleDateString("en-NG", { day: "numeric", month: "short", year: "numeric" })
+      : null;
 
   useEffect(() => {
     setAvailableBrands(brands);
@@ -1032,53 +1047,61 @@ export function ProductAdminConsole({
   };
 
   return (
-    <div className="grid gap-6 xl:grid-cols-[360px_minmax(0,1fr)]">
-      <div className="space-y-6">
-        <section className="rounded-[2rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card-strong),var(--surface-card))] p-5 shadow-[0_22px_64px_rgba(var(--shadow-neutral-rgb),0.12)]">
-          <div className="mb-5 flex items-center justify-between">
+    <div className="grid gap-4 sm:gap-6 lg:grid-cols-[minmax(320px,420px)_minmax(0,1fr)] xl:grid-cols-[minmax(350px,450px)_minmax(0,1fr)]">
+      <div className="self-start space-y-4 sm:space-y-6 lg:sticky lg:top-24">
+        <section className="rounded-[1.5rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card-strong),var(--surface-card))] p-4 shadow-[0_22px_64px_rgba(var(--shadow-neutral-rgb),0.12)] sm:rounded-[2rem] sm:p-6">
+          <div className="mb-5 flex flex-wrap items-start justify-between gap-3 sm:mb-6 sm:gap-4">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--text-soft)]">Inventory</p>
-              <h2 className="mt-2 text-2xl font-bold text-[var(--foreground)]">Products</h2>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--text-soft)]">Control deck</p>
+              <h2 className="mt-2 text-2xl font-bold text-[var(--foreground)]">Catalog rail</h2>
+              <p className="mt-2 max-w-sm text-sm text-secondary">
+                Search the live inventory, move through pages quickly, and open a fresh draft without leaving the rail.
+              </p>
             </div>
-            <div className="flex flex-wrap items-center justify-end gap-2">
-              <label className="interactive-focus inline-flex cursor-pointer items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-soft)] px-3 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-secondary transition-colors hover:text-[var(--foreground)]">
-                Import CSV
-                <input type="file" accept=".csv,text/csv" onChange={handleImportCsv} className="sr-only" />
-              </label>
-              <button
-                type="button"
-                onClick={handleExportCsv}
-                className="interactive-focus inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-soft)] px-3 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-secondary transition-colors hover:text-[var(--foreground)]"
-              >
-                Export CSV
-              </button>
-              <button
-                type="button"
-                onClick={resetToCreate}
-                className="interactive-focus inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-[var(--primary-contrast)] shadow-[0_18px_40px_rgba(var(--shadow-brand-rgb),0.25)] transition-colors hover:bg-[var(--primary-hover)]"
-              >
-                <Plus size={16} />
-                New
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={resetToCreate}
+              className="interactive-focus inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-[var(--primary-contrast)] shadow-[0_18px_40px_rgba(var(--shadow-brand-rgb),0.25)] transition-colors hover:bg-[var(--primary-hover)]"
+            >
+              <Plus size={16} />
+              New
+            </button>
           </div>
 
-          <div className="mb-4 grid grid-cols-3 gap-3">
-            <div className="rounded-[1.35rem] border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-3">
-              <p className="text-[10px] uppercase tracking-[0.2em] text-[var(--text-soft)]">Count</p>
+          <div className="grid gap-2 sm:grid-cols-2">
+            <label className="interactive-focus inline-flex cursor-pointer items-center justify-center rounded-[1rem] border border-[var(--border-subtle)] bg-[var(--surface-soft)] px-3 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-secondary transition-colors hover:text-[var(--foreground)]">
+              Import CSV
+              <input type="file" accept=".csv,text/csv" onChange={handleImportCsv} className="sr-only" />
+            </label>
+            <button
+              type="button"
+              onClick={handleExportCsv}
+              className="interactive-focus inline-flex items-center justify-center rounded-[1rem] border border-[var(--border-subtle)] bg-[var(--surface-soft)] px-3 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-secondary transition-colors hover:text-[var(--foreground)]"
+            >
+              Export CSV
+            </button>
+          </div>
+
+          <div className="mt-4 grid grid-cols-1 gap-2.5 min-[390px]:grid-cols-2 sm:gap-3">
+            <div className="rounded-[1.2rem] border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-3">
+              <p className="text-[10px] uppercase tracking-[0.2em] text-[var(--text-soft)]">Products</p>
               <p className="mt-2 text-xl font-semibold text-[var(--foreground)]">{products.length}</p>
             </div>
-            <div className="rounded-[1.35rem] border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-3">
-              <p className="text-[10px] uppercase tracking-[0.2em] text-[var(--text-soft)]">Stock</p>
+            <div className="rounded-[1.2rem] border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-3">
+              <p className="text-[10px] uppercase tracking-[0.2em] text-[var(--text-soft)]">Stock pool</p>
               <p className="mt-2 text-xl font-semibold text-[var(--foreground)]">{totalStock}</p>
             </div>
-            <div className="rounded-[1.35rem] border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-3">
-              <p className="text-[10px] uppercase tracking-[0.2em] text-[var(--text-soft)]">Categories</p>
-              <p className="mt-2 text-xl font-semibold text-[var(--foreground)]">{categories.length}</p>
+            <div className="rounded-[1.2rem] border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-3">
+              <p className="text-[10px] uppercase tracking-[0.2em] text-[var(--text-soft)]">Low stock</p>
+              <p className="mt-2 text-xl font-semibold text-[var(--foreground)]">{lowStockCount}</p>
+            </div>
+            <div className="rounded-[1.2rem] border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-3">
+              <p className="text-[10px] uppercase tracking-[0.2em] text-[var(--text-soft)]">No brand</p>
+              <p className="mt-2 text-xl font-semibold text-[var(--foreground)]">{noBrandCount}</p>
             </div>
           </div>
 
-          <label className="relative block">
+          <label className="relative mt-3 block sm:mt-4">
             <Search size={16} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-secondary" />
             <input
               type="search"
@@ -1090,14 +1113,14 @@ export function ProductAdminConsole({
           </label>
         </section>
 
-        <section className="space-y-3">
+        <section className="overflow-hidden rounded-[1.5rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] shadow-[0_18px_50px_rgba(var(--shadow-neutral-rgb),0.1)] sm:rounded-[2rem]">
           {filteredProducts.length > 0 ? (
-            <div className="flex flex-wrap items-center justify-between gap-2 rounded-[1.25rem] border border-[var(--border-subtle)] bg-[var(--surface-soft)] px-3 py-2">
-              <div className="flex flex-wrap items-center gap-2">
+            <div className="flex flex-col gap-3 border-b border-[var(--border-subtle)] px-3 py-3 sm:px-4 sm:py-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="grid w-full grid-cols-1 gap-2 sm:flex sm:w-auto sm:flex-wrap sm:items-center">
                 <button
                   type="button"
                   onClick={togglePageSelection}
-                  className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-secondary transition-colors hover:text-[var(--foreground)]"
+                  className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-secondary transition-colors hover:text-[var(--foreground)]"
                 >
                   {allPageSelected ? "Unselect page" : "Select page"}
                 </button>
@@ -1105,26 +1128,28 @@ export function ProductAdminConsole({
                   type="button"
                   onClick={clearSelection}
                   disabled={selectedCount === 0}
-                  className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-secondary transition-colors hover:text-[var(--foreground)] disabled:opacity-50"
+                  className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-secondary transition-colors hover:text-[var(--foreground)] disabled:opacity-50"
                 >
                   Clear selected
                 </button>
               </div>
-              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--text-soft)]">{selectedCount} selected</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--text-soft)] sm:text-right">{selectedCount} selected</p>
             </div>
           ) : null}
 
-          {filteredProducts.length === 0 ? (
-            <div className="rounded-[1.75rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] p-6 text-sm text-secondary">
-              No products match the current search.
-            </div>
-          ) : (
-            paginatedProducts.map((product) => {
+          <div className="space-y-2.5 px-3 py-3 sm:space-y-3 sm:px-4 sm:py-4 xl:max-h-[calc(100vh-20.5rem)] xl:overflow-y-auto">
+            {filteredProducts.length === 0 ? (
+              <div className="rounded-[1.75rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6 text-sm text-secondary">
+                No products match the current search.
+              </div>
+            ) : (
+              paginatedProducts.map((product) => {
               const active = !isCreating && product.id === selectedId;
               const checked = selectedProductIds.includes(product.id);
+              const thumbnail = product.images[0];
               return (
-                <div key={product.id} className="flex items-start gap-3">
-                  <label className="mt-4 inline-flex cursor-pointer items-center">
+                <div key={product.id} className="flex items-start gap-2 sm:gap-3">
+                  <label className="mt-3 inline-flex shrink-0 cursor-pointer items-center sm:mt-4">
                     <input
                       type="checkbox"
                       checked={checked}
@@ -1133,46 +1158,64 @@ export function ProductAdminConsole({
                       aria-label={`Select ${product.name}`}
                     />
                   </label>
-                  <button
-                    type="button"
-                    onClick={() => selectProduct(product.id)}
-                    className={`interactive-focus w-full rounded-[1.75rem] border p-4 text-left transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] ${
+                    <button
+                      type="button"
+                      onClick={() => selectProduct(product.id)}
+                      className={`interactive-focus w-full rounded-[1.4rem] border p-3 text-left transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] min-[390px]:rounded-[1.75rem] min-[390px]:p-4 ${
                       active
                         ? "border-primary/40 bg-[linear-gradient(180deg,var(--surface-card-strong),var(--surface-card))] shadow-[0_20px_50px_rgba(var(--shadow-neutral-rgb),0.12)]"
                         : "border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] hover:border-[var(--interactive-border-strong)] hover:-translate-y-0.5"
                     }`}
                   >
-                    <div className="mb-3 flex items-start justify-between gap-4">
-                      <div className="min-w-0">
-                        <p className="truncate text-sm font-semibold text-[var(--foreground)]">{product.name}</p>
-                        <p className="mt-1 truncate text-xs uppercase tracking-[0.16em] text-[var(--text-soft)]">{product.slug}</p>
+                    <div className="flex flex-col gap-2.5 sm:flex-row sm:gap-3">
+                      <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-[1.15rem] border border-[var(--border-subtle)] bg-[var(--surface-soft)] sm:h-24 sm:w-24">
+                        {thumbnail ? (
+                          <SafeImage src={thumbnail} alt={product.name} fill className="object-cover" sizes="80px" />
+                        ) : (
+                          <div className="flex h-full items-center justify-center text-[var(--text-soft)]">
+                            <Boxes size={18} />
+                          </div>
+                        )}
                       </div>
-                      <span className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-soft)] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-primary">
-                        {formatCondition(product.condition)}
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-3 gap-2 text-xs">
-                      <div className="rounded-[1rem] bg-[var(--surface-soft)] px-3 py-2">
-                        <p className="text-[var(--text-soft)]">Price</p>
-                        <p className="mt-1 font-semibold text-[var(--foreground)]">{formatCurrency(product.price)}</p>
-                      </div>
-                      <div className="rounded-[1rem] bg-[var(--surface-soft)] px-3 py-2">
-                        <p className="text-[var(--text-soft)]">Stock</p>
-                        <p className="mt-1 font-semibold text-[var(--foreground)]">{product.stock}</p>
-                      </div>
-                      <div className="rounded-[1rem] bg-[var(--surface-soft)] px-3 py-2">
-                        <p className="text-[var(--text-soft)]">Category</p>
-                        <p className="mt-1 truncate font-semibold text-[var(--foreground)]">{product.categoryName}</p>
+                      <div className="min-w-0 flex-1">
+                        <div className="mb-2.5 flex flex-wrap items-start justify-between gap-2 sm:mb-3">
+                          <div className="min-w-0">
+                            <p className="truncate text-[15px] font-semibold leading-tight text-[var(--foreground)]">{product.name}</p>
+                            <p className="mt-1 truncate text-xs uppercase tracking-[0.16em] text-[var(--text-soft)]">{product.slug}</p>
+                          </div>
+                          <span className="shrink-0 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-soft)] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-primary">
+                            {formatCondition(product.condition)}
+                          </span>
+                        </div>
+                        <div className="grid grid-cols-1 gap-2 text-xs min-[390px]:grid-cols-2 sm:gap-2.5">
+                          <div className="rounded-[1rem] bg-[var(--surface-soft)] px-3 py-2">
+                            <p className="text-[11px] uppercase tracking-[0.08em] text-[var(--text-soft)]">Price</p>
+                            <p className="mt-1 font-semibold text-[var(--foreground)]">{formatCurrency(product.price)}</p>
+                          </div>
+                          <div className="rounded-[1rem] bg-[var(--surface-soft)] px-3 py-2">
+                            <p className="text-[11px] uppercase tracking-[0.08em] text-[var(--text-soft)]">Stock</p>
+                            <p className="mt-1 font-semibold text-[var(--foreground)]">{product.stock}</p>
+                          </div>
+                          <div className="rounded-[1rem] bg-[var(--surface-soft)] px-3 py-2">
+                            <p className="text-[11px] uppercase tracking-[0.08em] text-[var(--text-soft)]">Category</p>
+                            <p className="mt-1 truncate font-semibold text-[var(--foreground)]">{product.categoryName}</p>
+                          </div>
+                          <div className="rounded-[1rem] bg-[var(--surface-soft)] px-3 py-2">
+                            <p className="text-[11px] uppercase tracking-[0.08em] text-[var(--text-soft)]">Brand</p>
+                            <p className="mt-1 truncate font-semibold text-[var(--foreground)]">{product.brandName || "None"}</p>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </button>
                 </div>
               );
-            })
-          )}
+              })
+            )}
+          </div>
 
           {filteredProducts.length > ADMIN_PRODUCTS_PAGE_SIZE ? (
-            <div className="mt-3 flex items-center justify-between rounded-[1.25rem] border border-[var(--border-subtle)] bg-[var(--surface-soft)] px-3 py-2">
+            <div className="flex flex-col gap-2 border-t border-[var(--border-subtle)] px-3 py-3 min-[390px]:flex-row min-[390px]:items-center min-[390px]:justify-between sm:px-4">
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--text-soft)]">
                 Page {currentPage} of {totalPages}
               </p>
@@ -1198,7 +1241,7 @@ export function ProductAdminConsole({
           ) : null}
 
           {selectedCount > 0 ? (
-            <section className="rounded-[1.5rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] p-4">
+            <section className="mx-4 mb-4 rounded-[1.5rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card-strong),var(--surface-card))] p-4">
               <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-soft)]">
                   Bulk actions for {selectedCount} product{selectedCount === 1 ? "" : "s"}
@@ -1302,49 +1345,73 @@ export function ProductAdminConsole({
       </div>
 
       <motion.section
+        id="product-editor"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-        className="rounded-[2rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card-strong),var(--surface-card))] p-6 shadow-[0_24px_70px_rgba(var(--shadow-neutral-rgb),0.14)]"
+        className="rounded-[2.2rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card-strong),var(--surface-card))] p-6 shadow-[0_24px_70px_rgba(var(--shadow-neutral-rgb),0.14)]"
       >
-        <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--text-soft)]">
-              {isCreating ? "Create product" : "Edit product"}
-            </p>
-            <h2 className="mt-2 text-3xl font-bold text-[var(--foreground)]">
-              {isCreating ? "New inventory entry" : draft.name || "Product editor"}
-            </h2>
-            <p className="mt-2 max-w-2xl text-sm text-secondary">
-              Update catalog data, media, specs, pricing, and inventory without leaving the app’s visual system.
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-3">
-            {!isCreating && (
+        <div className="mb-6 rounded-[1.9rem] border border-[var(--border-subtle)] bg-[linear-gradient(145deg,rgba(255,255,255,0.09),rgba(255,255,255,0.02))] p-5">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--text-soft)]">
+                {isCreating ? "Create product" : "Edit product"}
+              </p>
+              <h2 className="mt-2 text-3xl font-bold tracking-[-0.03em] text-[var(--foreground)]">
+                {isCreating ? "Build a new catalog entry" : draft.name || "Product editor"}
+              </h2>
+              <p className="mt-2 max-w-2xl text-sm text-secondary">
+                Work across editorial details, pricing, media, and technical specs in one surface.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              {!isCreating && (
+                <button
+                  type="button"
+                  onClick={handleDelete}
+                  disabled={isPending}
+                  className="interactive-focus inline-flex items-center gap-2 rounded-full border border-[var(--status-error)]/25 bg-[var(--status-error)]/10 px-4 py-2 text-sm font-semibold text-[var(--status-error)] transition-colors hover:bg-[var(--status-error)]/15 disabled:opacity-50"
+                >
+                  <Trash2 size={16} />
+                  Delete
+                </button>
+              )}
               <button
                 type="button"
-                onClick={handleDelete}
+                onClick={handleSubmit}
                 disabled={isPending}
-                className="interactive-focus inline-flex items-center gap-2 rounded-full border border-[var(--status-error)]/25 bg-[var(--status-error)]/10 px-4 py-2 text-sm font-semibold text-[var(--status-error)] transition-colors hover:bg-[var(--status-error)]/15 disabled:opacity-50"
+                className="interactive-focus inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-[var(--primary-contrast)] shadow-[0_18px_40px_rgba(var(--shadow-brand-rgb),0.25)] transition-colors hover:bg-[var(--primary-hover)] disabled:opacity-60"
               >
-                <Trash2 size={16} />
-                Delete
+                <Save size={16} />
+                {isPending ? "Saving..." : isCreating ? "Create product" : "Save changes"}
               </button>
-            )}
-            <button
-              type="button"
-              onClick={handleSubmit}
-              disabled={isPending}
-              className="interactive-focus inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-[var(--primary-contrast)] shadow-[0_18px_40px_rgba(var(--shadow-brand-rgb),0.25)] transition-colors hover:bg-[var(--primary-hover)] disabled:opacity-60"
-            >
-              <Save size={16} />
-              {isPending ? "Saving..." : isCreating ? "Create product" : "Save changes"}
-            </button>
+            </div>
+          </div>
+
+          <div className="mt-5 grid gap-3 sm:grid-cols-3">
+            <div className="rounded-[1.2rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
+              <p className="text-[10px] uppercase tracking-[0.16em] text-[var(--text-soft)]">Images</p>
+              <p className="mt-2 text-xl font-semibold text-[var(--foreground)]">
+                {draft.imagesText.split("\n").map((item) => item.trim()).filter(Boolean).length}
+              </p>
+            </div>
+            <div className="rounded-[1.2rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
+              <p className="text-[10px] uppercase tracking-[0.16em] text-[var(--text-soft)]">Specs</p>
+              <p className="mt-2 text-xl font-semibold text-[var(--foreground)]">{filledSpecsCount}</p>
+            </div>
+            <div className="rounded-[1.2rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
+              <p className="text-[10px] uppercase tracking-[0.16em] text-[var(--text-soft)]">Status</p>
+              <p className="mt-2 text-sm font-semibold text-[var(--foreground)]">{isCreating ? "Draft creation" : "Live editing"}</p>
+            </div>
           </div>
         </div>
 
         <div className="mb-8 grid gap-4 xl:grid-cols-[minmax(0,1fr)_280px]">
           <div className="rounded-[1.75rem] border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-4">
+            <div className="mb-4 border-b border-[var(--border-subtle)] pb-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--text-soft)]">Editorial details</p>
+              <p className="mt-1 text-sm text-secondary">Define the public identity, slug, story, pricing, and placement.</p>
+            </div>
             <div className="grid gap-4 md:grid-cols-2">
               <label className="block">
                 <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.16em] text-[var(--text-soft)]">Name</span>
@@ -1491,10 +1558,10 @@ export function ProductAdminConsole({
             </div>
           </div>
 
-          <div className="overflow-hidden rounded-[1.75rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-soft),var(--surface-card))]">
+          <div className="overflow-hidden rounded-[1.9rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-soft),var(--surface-card))] shadow-[0_18px_45px_rgba(var(--shadow-neutral-rgb),0.1)]">
             <div
               className="relative h-full min-h-56 bg-cover bg-center"
-              style={{ backgroundImage: draft.imagesText.split("\n").find(Boolean) ? `url(${draft.imagesText.split("\n").find(Boolean)})` : undefined }}
+              style={{ backgroundImage: previewImage ? `url(${previewImage})` : undefined }}
             >
               <div className="absolute inset-0 bg-[image:var(--media-overlay-strong-gradient)]" />
               <div className="relative z-10 flex h-full flex-col justify-between p-4">
@@ -1506,6 +1573,9 @@ export function ProductAdminConsole({
                   <p className="text-lg font-semibold text-[var(--media-overlay-text)]">{draft.name || "Product title"}</p>
                   <p className="mt-1 text-sm text-[var(--media-overlay-soft-text)]">
                     {draft.price ? formatCurrency(Number(draft.price) || 0) : "Add price"} • {formatCondition(draft.condition)}
+                  </p>
+                  <p className="mt-2 text-xs uppercase tracking-[0.16em] text-[var(--media-overlay-soft-text)]">
+                    {draft.brandId ? "Brand linked" : "No brand"} • {draft.categoryId ? "Category linked" : "Choose category"}
                   </p>
                 </div>
               </div>
@@ -1637,17 +1707,20 @@ export function ProductAdminConsole({
           </div>
         </div>
 
-        <div className="mt-6 rounded-[1.5rem] border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-4">
+        <div className="mt-6 rounded-[1.6rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-soft),var(--surface-card))] p-4">
           <div className="flex flex-wrap items-center gap-3 text-xs uppercase tracking-[0.18em] text-[var(--text-soft)]">
             <span className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-3 py-1.5">
               <Package2 size={14} />
               {isCreating ? "Create mode" : "Editing live product"}
             </span>
-            {!isCreating && selectedProduct && (
+            {!isCreating && selectedUpdatedLabel && (
               <span className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-3 py-1.5">
-                Updated {new Date(selectedProduct.updatedAt).toLocaleDateString("en-NG", { day: "numeric", month: "short", year: "numeric" })}
+                Updated {selectedUpdatedLabel}
               </span>
             )}
+            <span className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-3 py-1.5">
+              {draft.brandId ? "Branded" : "Needs brand"}
+            </span>
           </div>
         </div>
       </motion.section>
