@@ -18,19 +18,26 @@ import { FrequentlyBoughtTogether } from "@/components/product/FrequentlyBoughtT
 import { ProductCommunityPanel } from "@/components/product/ProductCommunityPanel";
 import { SITE_NAME, toAbsoluteUrl, truncateDescription } from "@/lib/site-config";
 import { buildWhatsAppLink } from "@/lib/support-config";
+import { cache } from "react";
 
 export const revalidate = 300;
 
-export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
-  const resolvedParams = await params;
-  const dbProduct = await prisma.product
-    .findFirst({
+const getProductByIdentifier = cache(async (identifier: string) => {
+  try {
+    return await prisma.product.findFirst({
       where: {
-        OR: [{ id: resolvedParams.id }, { slug: resolvedParams.id }],
+        OR: [{ id: identifier }, { slug: identifier }],
       },
       include: { category: true, brand: true },
-    })
-    .catch(() => null);
+    });
+  } catch {
+    return null;
+  }
+});
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const resolvedParams = await params;
+  const dbProduct = await getProductByIdentifier(resolvedParams.id);
 
   if (!dbProduct) {
     return {
@@ -59,13 +66,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
 export default async function ProductPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = await params;
-
-  const dbProduct = await prisma.product.findFirst({
-    where: {
-      OR: [{ id: resolvedParams.id }, { slug: resolvedParams.id }],
-    },
-    include: { category: true, brand: true },
-  });
+  const dbProduct = await getProductByIdentifier(resolvedParams.id);
 
   if (!dbProduct) {
     notFound();

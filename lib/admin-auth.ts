@@ -2,30 +2,18 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import crypto from "crypto";
 import bcrypt from "bcryptjs";
+import prisma from "@/lib/db";
 
 const ADMIN_COOKIE = "noxtech_admin_session_v1";
 const SESSION_TTL_MS = 1000 * 60 * 60 * 6;
 
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
-const SUPABASE_SERVICE_ROLE_KEY =
-  process.env.SUPABASE_SERVICE_ROLE_KEY ||
-  process.env.service_role_key ||
-  process.env.service_role ||
-  process.env.SUPABASE_SERVICE_ROLE ||
-  "";
 const ADMIN_COOKIE_SECRET = process.env.ADMIN_SECRET || "";
 
-type SupabaseAdminUser = {
+type AdminCredentialRecord = {
   id: string;
   username: string;
   password_hash: string;
 };
-
-function assertSupabaseConfigured() {
-  if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
-    throw new Error("Supabase admin auth is not configured. Set NEXT_PUBLIC_SUPABASE_URL and service role key.");
-  }
-}
 
 function assertCookieSecret() {
   if (!ADMIN_COOKIE_SECRET) {
@@ -90,53 +78,33 @@ function parseSessionCookie(value?: string): AdminSessionPayload | null {
   }
 }
 
-async function supabaseRequest<T>(path: string, init?: RequestInit): Promise<T> {
-  assertSupabaseConfigured();
-  const url = `${SUPABASE_URL}/rest/v1/${path}`;
-  const response = await fetch(url, {
-    ...init,
-    headers: {
-      apikey: SUPABASE_SERVICE_ROLE_KEY,
-      Authorization: `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
-      "Content-Type": "application/json",
-      ...(init?.headers || {}),
-    },
-    cache: "no-store",
-  });
-
-  if (!response.ok) {
-    const body = await response.text();
-    throw new Error(`Supabase request failed (${response.status}): ${body}`);
-  }
-
-  if (response.status === 204) {
-    return undefined as T;
-  }
-  return response.json() as Promise<T>;
-}
-
 async function findAdminByUsername(username: string) {
-  const encoded = encodeURIComponent(username);
-  const result = await supabaseRequest<SupabaseAdminUser[]>(
-    `admin_credentials?select=id,username,password_hash&username=eq.${encoded}&limit=1`,
-  );
-  return result[0] || null;
+  const result = await prisma.$queryRaw<AdminCredentialRecord[]>`
+    SELECT id, username, password_hash
+    FROM admin_credentials
+    WHERE username = ${username}
+    LIMIT 1
+  `;
+  return result[0] ?? null;
 }
 
 export async function hasAdminUser() {
-  const result = await supabaseRequest<Array<{ id: string }>>("admin_credentials?select=id&limit=1");
+  const result = await prisma.$queryRaw<Array<{ id: string }>>`
+    SELECT id
+    FROM admin_credentials
+    LIMIT 1
+  `;
   return result.length > 0;
 }
 
 export async function createAdminUser(username: string, password: string) {
   const passwordHash = await bcrypt.hash(password, 12);
-  const payload = [{ username, password_hash: passwordHash }];
-  const result = await supabaseRequest<SupabaseAdminUser[]>("admin_credentials", {
-    method: "POST",
-    headers: { Prefer: "return=representation" },
-    body: JSON.stringify(payload),
-  });
-  return result[0];
+  const result = await prisma.$queryRaw<AdminCredentialRecord[]>`
+    INSERT INTO admin_credentials (username, password_hash)
+    VALUES (${username}, ${passwordHash})
+    RETURNING id, username, password_hash
+  `;
+  return result[0] ?? null;
 }
 
 export async function authenticateAdmin(username: string, password: string) {

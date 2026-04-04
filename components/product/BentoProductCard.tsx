@@ -163,7 +163,7 @@ export function BentoProductCard({
               </div>
             )}
             <div
-              className={`pointer-events-none absolute inset-0 bg-gradient-to-b ${categoryTint()} via-transparent to-[var(--surface-contrast)]`}
+              className={`pointer-events-none absolute inset-0 bg-gradient-to-b ${categoryTint()} via-transparent to-[var(--product-media-overlay-end)]`}
             />
             <div className="pointer-events-none absolute inset-0 bg-[image:var(--media-overlay-gradient)]" />
             <div className="absolute left-2.5 top-2.5 inline-flex items-center rounded-full border border-[var(--media-overlay-border)] bg-[var(--media-overlay-bg)] px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.2em] text-[var(--media-overlay-text)] backdrop-blur-md sm:left-3 sm:top-3 sm:px-3 sm:text-[10px] sm:tracking-[0.22em]">

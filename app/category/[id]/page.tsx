@@ -12,8 +12,21 @@ import { fallbackCategories, fallbackFeaturedProducts } from "@/lib/fallback-dat
 import { getPrimaryImage, normalizeTechnicalSpecs } from "@/lib/normalize-product";
 import { shouldUseDatabase } from "@/lib/should-use-database";
 import { SITE_NAME, truncateDescription, toAbsoluteUrl } from "@/lib/site-config";
+import { cache } from "react";
 
 export const revalidate = 300;
+
+const getCategoryByIdentifier = cache(async (identifier: string) => {
+  try {
+    return await prisma.category.findFirst({
+      where: {
+        OR: [{ id: identifier }, { slug: identifier }],
+      },
+    });
+  } catch {
+    return null;
+  }
+});
 
 function categoryTone(categoryId: string) {
   if (categoryId === "phones") return "from-[var(--tone-phones)]";
@@ -33,13 +46,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const useDatabase = shouldUseDatabase();
 
   const category = useDatabase
-    ? await prisma.category
-        .findFirst({
-          where: {
-            OR: [{ id }, { slug: id }],
-          },
-        })
-        .catch(() => null)
+    ? await getCategoryByIdentifier(id)
     : fallbackCategories.find((entry) => entry.id === id || entry.slug === id) ?? null;
 
   if (!category) {
@@ -112,13 +119,7 @@ export default async function CategoryPage({
         : { createdAt: "desc" };
 
   const category = useDatabase
-    ? await prisma.category
-        .findFirst({
-          where: {
-            OR: [{ id: categoryParam }, { slug: categoryParam }],
-          },
-        })
-        .catch(() => null)
+    ? await getCategoryByIdentifier(categoryParam)
     : fallbackCategories.find((entry) => entry.id === categoryParam || entry.slug === categoryParam) ?? null;
 
   if (!category) {

@@ -5,16 +5,11 @@ import type { Prisma } from "@prisma/client";
 
 const currencySafeValue = (value: number | null | undefined) => (typeof value === "number" ? value : 0);
 
-export default async function AccountProfilePage() {
-  const customer = await requireCustomer();
-  const ordersWhere: Prisma.OrderWhereInput = {
-    OR: [{ customerId: customer.id }, { email: customer.email }],
-  };
-
+async function loadProfileData(customerId: string, ordersWhere: Prisma.OrderWhereInput) {
   const [dbCustomer, totalOrders, paidOrders, cancelledOrders, totalSpentAgg, listCounts, latestShippingOrder, recentOrders] =
     await Promise.all([
       prisma.customer.findUnique({
-        where: { id: customer.id },
+        where: { id: customerId },
         select: {
           fullName: true,
           email: true,
@@ -43,7 +38,7 @@ export default async function AccountProfilePage() {
       }),
       prisma.customerProductListItem.groupBy({
         by: ["listType"],
-        where: { customerId: customer.id },
+        where: { customerId },
         _count: { _all: true },
       }),
       prisma.order.findFirst({
@@ -82,6 +77,46 @@ export default async function AccountProfilePage() {
       }),
     ] as const);
 
+  return {
+    dbCustomer,
+    totalOrders,
+    paidOrders,
+    cancelledOrders,
+    totalSpentAgg,
+    listCounts,
+    latestShippingOrder,
+    recentOrders,
+  };
+}
+
+type ProfileData = Awaited<ReturnType<typeof loadProfileData>>;
+
+export default async function AccountProfilePage() {
+  const customer = await requireCustomer();
+  const ordersWhere: Prisma.OrderWhereInput = {
+    OR: [{ customerId: customer.id }, { email: customer.email }],
+  };
+
+  let dataWarning: string | null = null;
+  const fallbackData: ProfileData = {
+    dbCustomer: null,
+    totalOrders: 0,
+    paidOrders: 0,
+    cancelledOrders: 0,
+    totalSpentAgg: { _sum: { totalAmount: 0 } } as ProfileData["totalSpentAgg"],
+    listCounts: [],
+    latestShippingOrder: null,
+    recentOrders: [],
+  };
+
+  let profileData = fallbackData;
+  try {
+    profileData = await loadProfileData(customer.id, ordersWhere);
+  } catch (error) {
+    console.error("Failed to load customer profile data", error);
+    dataWarning = "Some profile details could not be loaded. Try refreshing the page.";
+  }
+
   const listSummary = {
     wishlist: 0,
     compare: 0,
@@ -90,7 +125,7 @@ export default async function AccountProfilePage() {
     cart: 0,
   };
 
-  for (const row of listCounts) {
+  for (const row of profileData.listCounts) {
     if (row.listType === "WISHLIST") listSummary.wishlist = row._count._all;
     if (row.listType === "COMPARE") listSummary.compare = row._count._all;
     if (row.listType === "RECENT") listSummary.recent = row._count._all;
@@ -101,30 +136,31 @@ export default async function AccountProfilePage() {
   return (
     <CustomerProfileConsole
       customer={{
-        fullName: dbCustomer?.fullName ?? customer.fullName ?? null,
-        email: dbCustomer?.email ?? customer.email,
-        createdAtIso: (dbCustomer?.createdAt ?? new Date()).toISOString(),
+        fullName: profileData.dbCustomer?.fullName ?? customer.fullName ?? null,
+        email: profileData.dbCustomer?.email ?? customer.email,
+        createdAtIso: (profileData.dbCustomer?.createdAt ?? new Date()).toISOString(),
       }}
       orderSummary={{
-        totalOrders,
-        activeOrders: Math.max(totalOrders - cancelledOrders, 0),
-        paidOrders,
-        cancelledOrders,
-        totalSpent: currencySafeValue(totalSpentAgg._sum?.totalAmount),
+        totalOrders: profileData.totalOrders,
+        activeOrders: Math.max(profileData.totalOrders - profileData.cancelledOrders, 0),
+        paidOrders: profileData.paidOrders,
+        cancelledOrders: profileData.cancelledOrders,
+        totalSpent: currencySafeValue(profileData.totalSpentAgg._sum?.totalAmount),
       }}
       listSummary={listSummary}
+      dataWarning={dataWarning}
       latestShipping={
-        latestShippingOrder?.shippingDetails
+        profileData.latestShippingOrder?.shippingDetails
           ? {
-              fullName: latestShippingOrder.shippingDetails.fullName,
-              address: latestShippingOrder.shippingDetails.address,
-              city: latestShippingOrder.shippingDetails.city,
-              state: latestShippingOrder.shippingDetails.state,
-              shippingType: latestShippingOrder.shippingDetails.shippingType,
+              fullName: profileData.latestShippingOrder.shippingDetails.fullName,
+              address: profileData.latestShippingOrder.shippingDetails.address,
+              city: profileData.latestShippingOrder.shippingDetails.city,
+              state: profileData.latestShippingOrder.shippingDetails.state,
+              shippingType: profileData.latestShippingOrder.shippingDetails.shippingType,
             }
           : null
       }
-      recentOrders={recentOrders.map((order) => ({
+      recentOrders={profileData.recentOrders.map((order) => ({
         id: order.id,
         status: order.status,
         totalAmount: order.totalAmount,

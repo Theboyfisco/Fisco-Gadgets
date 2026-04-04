@@ -7,8 +7,20 @@ import { fallbackFeaturedProducts } from "@/lib/fallback-data";
 import { getPrimaryImage, normalizeTechnicalSpecs } from "@/lib/normalize-product";
 import { shouldUseDatabase } from "@/lib/should-use-database";
 import { SITE_NAME, truncateDescription, toAbsoluteUrl } from "@/lib/site-config";
+import { cache } from "react";
 
 export const revalidate = 300;
+
+const getBrandByIdentifier = cache(async (identifier: string) => {
+  const normalized = identifier.toLowerCase();
+  try {
+    return await prisma.brand.findFirst({
+      where: { OR: [{ id: identifier }, { slug: normalized }] },
+    });
+  } catch {
+    return null;
+  }
+});
 
 function brandTone(brandId: string) {
   if (brandId.toLowerCase() === "apple") return "from-[var(--tone-apple)]";
@@ -21,13 +33,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const brandParam = resolvedParams.id.toLowerCase();
   const useDatabase = shouldUseDatabase();
 
-  const brand = useDatabase
-    ? await prisma.brand
-        .findFirst({
-          where: { OR: [{ id: resolvedParams.id }, { slug: brandParam }] },
-        })
-        .catch(() => null)
-    : null;
+  const brand = useDatabase ? await getBrandByIdentifier(resolvedParams.id) : null;
 
   const brandName = brand?.name ?? (resolvedParams.id.charAt(0).toUpperCase() + resolvedParams.id.slice(1));
   const canonicalPath = `/brand/${brand?.slug ?? brandParam}`;
@@ -53,13 +59,7 @@ export default async function BrandPage({ params }: { params: Promise<{ id: stri
   const resolvedParams = await params;
   const brandId = resolvedParams.id;
 
-  const brand = shouldUseDatabase()
-    ? await prisma.brand
-        .findFirst({
-          where: { slug: brandId.toLowerCase() },
-        })
-        .catch(() => null)
-    : null;
+  const brand = shouldUseDatabase() ? await getBrandByIdentifier(brandId) : null;
 
   const dbProducts = shouldUseDatabase() && brand
     ? await prisma.product

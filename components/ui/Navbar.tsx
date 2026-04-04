@@ -4,8 +4,8 @@ import Link from "next/link";
 import { ShoppingBag, Menu, X, Smartphone, Laptop, Headphones, Search, Info, Mail, Heart, UserCircle2 } from "lucide-react";
 import { useCart } from "../cart/CartProvider";
 import { useWishlist } from "../product/WishlistProvider";
-import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import dynamic from "next/dynamic";
 import { createPortal } from "react-dom";
@@ -24,13 +24,12 @@ export function Navbar({ categories = [] }: NavbarProps) {
   const { cartItems, toggleCart } = useCart();
   const { wishlistItems, toggleWishlistDrawer, isWishlistOpen } = useWishlist();
   const pathname = usePathname();
+  const router = useRouter();
 
   const hydrated = useHydrated();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [isBrowseOpen, setIsBrowseOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const browseMenuRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 18);
@@ -51,45 +50,30 @@ export function Navbar({ categories = [] }: NavbarProps) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  useEffect(() => {
-    if (!isBrowseOpen) return;
+  const categoryLinks = useMemo(
+    () =>
+      categories.map((category) => {
+        const categoryKey = (category.slug ?? category.id).toLowerCase();
+        const categoryName = category.name.toLowerCase();
+        const isPhones = categoryKey === "phones" || categoryName.includes("phone");
+        const isLaptops = categoryKey === "laptops" || categoryName.includes("laptop") || categoryName.includes("macbook");
+        const isAudio = categoryKey === "audio" || categoryName.includes("audio") || categoryName.includes("headphone");
 
-    const handlePointerDown = (event: MouseEvent) => {
-      if (!browseMenuRef.current) return;
-      if (browseMenuRef.current.contains(event.target as Node)) return;
-      setIsBrowseOpen(false);
-    };
-
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setIsBrowseOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handlePointerDown);
-    window.addEventListener("keydown", handleEscape);
-    return () => {
-      document.removeEventListener("mousedown", handlePointerDown);
-      window.removeEventListener("keydown", handleEscape);
-    };
-  }, [isBrowseOpen]);
-
-  const categoryLinks = categories.map((category) => {
-    const categoryKey = (category.slug ?? category.id).toLowerCase();
-
-    return {
-      name: category.name,
-      href: `/category/${category.slug ?? category.id}`,
-      icon:
-        categoryKey === "phones"
-          ? Smartphone
-          : categoryKey === "laptops"
-            ? Laptop
-            : categoryKey === "audio"
-              ? Headphones
-              : Smartphone,
-    };
-  });
+        return {
+          name: category.name,
+          href: `/category/${category.slug ?? category.id}`,
+          icon:
+            isPhones
+              ? Smartphone
+              : isLaptops
+                ? Laptop
+                : isAudio
+                  ? Headphones
+                  : Smartphone,
+        };
+      }),
+    [categories],
+  );
 
   const coreLinks = [
     { name: "Home", href: "/", icon: Smartphone },
@@ -97,9 +81,69 @@ export function Navbar({ categories = [] }: NavbarProps) {
     { name: "Contact", href: "/contact", icon: Mail },
   ];
 
-  const visibleCategories = categoryLinks.slice(0, 3);
+  const visibleCategories = useMemo(() => {
+    const seen = new Set<string>();
+    const pickPreferred = (matcher: (slug: string, name: string) => boolean) => {
+      const found = categoryLinks.find((entry) => {
+        const slug = (entry.href.split("/").pop() || "").toLowerCase();
+        const name = entry.name.toLowerCase();
+        return !seen.has(entry.href) && matcher(slug, name);
+      });
+      if (found) {
+        seen.add(found.href);
+      }
+      return found;
+    };
+
+    // Strict navbar order: Smartphones, Laptops, Audio, Accessories
+    const prioritized = [
+      pickPreferred(
+        (slug, name) =>
+          slug === "phones" ||
+          slug === "smartphones" ||
+          name.includes("smartphone") ||
+          (name.includes("phone") && !name.includes("headphone")),
+      ),
+      pickPreferred(
+        (slug, name) =>
+          slug === "laptops" ||
+          slug.includes("laptop") ||
+          slug.includes("macbook") ||
+          name.includes("laptop") ||
+          name.includes("macbook"),
+      ),
+      pickPreferred(
+        (slug, name) =>
+          slug === "audio" ||
+          slug.includes("audio") ||
+          slug.includes("headphone") ||
+          name.includes("audio") ||
+          name.includes("headphone"),
+      ),
+      pickPreferred((slug, name) => slug === "accessories" || slug.includes("accessor") || name.includes("accessor")),
+    ].filter((entry): entry is (typeof categoryLinks)[number] => Boolean(entry));
+
+    const rest = categoryLinks.filter((entry) => !seen.has(entry.href));
+    return [...prioritized, ...rest].slice(0, 4);
+  }, [categoryLinks]);
   const navLinks = [coreLinks[0], ...visibleCategories, ...coreLinks.slice(1)];
-  const showMegaMenu = categoryLinks.length > visibleCategories.length;
+
+  useEffect(() => {
+    const routes = new Set<string>([
+      "/",
+      "/browse",
+      "/about",
+      "/contact",
+      "/compare",
+      "/wishlist",
+      "/account/profile",
+      "/account/orders",
+      ...categoryLinks.slice(0, 4).map((entry) => entry.href),
+    ]);
+    routes.forEach((route) => {
+      router.prefetch(route);
+    });
+  }, [categoryLinks, router]);
 
   const renderSearchOverlay = hydrated;
   const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
@@ -131,7 +175,7 @@ export function Navbar({ categories = [] }: NavbarProps) {
           </div>
 
           <nav className="hidden min-w-0 flex-none items-center gap-1.5 overflow-x-auto overflow-y-visible rounded-full border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--interactive-bg-soft),var(--surface-soft))] px-2.5 py-1.5 shadow-[0_16px_44px_rgba(var(--shadow-neutral-rgb),0.08)] no-scrollbar xl:flex xl:max-w-[min(58vw,48rem)] 2xl:max-w-none 2xl:px-3">
-            {navLinks.map((link, index) => {
+            {navLinks.map((link) => {
               const active = pathname === link.href;
               return (
                 <Link
@@ -139,8 +183,6 @@ export function Navbar({ categories = [] }: NavbarProps) {
                   href={link.href}
                   aria-current={active ? "page" : undefined}
                   className={`shrink-0 whitespace-nowrap rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
-                    index >= 5 ? "xl:hidden 2xl:inline-flex" : ""
-                  } ${
                     active
                       ? "interactive-focus bg-[var(--interactive-active)] text-[var(--interactive-fg)]"
                       : "interactive-focus text-secondary hover:bg-[var(--interactive-hover)] hover:text-[var(--interactive-fg)]"
@@ -150,86 +192,6 @@ export function Navbar({ categories = [] }: NavbarProps) {
                 </Link>
               );
             })}
-            {showMegaMenu ? (
-              <div ref={browseMenuRef} className="relative shrink-0">
-                <button
-                  type="button"
-                  onClick={() => setIsBrowseOpen((prev) => !prev)}
-                  aria-expanded={isBrowseOpen}
-                  aria-haspopup="menu"
-                  className={`interactive-focus rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
-                    isBrowseOpen
-                      ? "bg-[var(--interactive-active)] text-[var(--interactive-fg)]"
-                      : "text-secondary hover:bg-[var(--interactive-hover)] hover:text-[var(--interactive-fg)]"
-                  }`}
-                >
-                  Browse
-                </button>
-                <AnimatePresence>
-                  {isBrowseOpen ? (
-                    <motion.div
-                      initial={{ opacity: 0, y: 8, scale: 0.98 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: 8, scale: 0.98 }}
-                      transition={{ duration: MOTION.duration.base, ease: MOTION.ease.standard }}
-                      className="absolute right-0 top-12 z-[70] w-[560px] rounded-[1.75rem] border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--panel-bg-soft),var(--surface-card))] p-4 shadow-2xl backdrop-blur-2xl"
-                    >
-                      <div className="grid gap-4 md:grid-cols-3">
-                        <div className="md:col-span-2">
-                          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--text-soft)]">Categories</p>
-                          <div className="grid grid-cols-2 gap-2">
-                            {categoryLinks.map((link) => {
-                              const active = pathname === link.href;
-                              return (
-                                <Link
-                                  key={link.name}
-                                  href={link.href}
-                                  onClick={() => setIsBrowseOpen(false)}
-                                  aria-current={active ? "page" : undefined}
-                                  className={`flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium transition-colors ${
-                                    active
-                                      ? "bg-[var(--interactive-active)] text-[var(--interactive-fg)]"
-                                      : "text-secondary hover:bg-[var(--interactive-hover)] hover:text-[var(--interactive-fg)]"
-                                  }`}
-                                >
-                                  <link.icon size={16} className="text-primary" />
-                                  {link.name}
-                                </Link>
-                              );
-                            })}
-                          </div>
-                        </div>
-                        <div className="space-y-3">
-                          <Link
-                            href="/compare"
-                            onClick={() => setIsBrowseOpen(false)}
-                            className="block rounded-[1.5rem] border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-4 text-sm font-semibold text-[var(--foreground)] transition-colors hover:bg-[var(--interactive-hover)]"
-                          >
-                            Compare devices
-                            <p className="mt-2 text-xs font-normal text-secondary">Line up specs side by side.</p>
-                          </Link>
-                          <Link
-                            href="/browse"
-                            onClick={() => setIsBrowseOpen(false)}
-                            className="block rounded-[1.5rem] border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-4 text-sm font-semibold text-[var(--foreground)] transition-colors hover:bg-[var(--interactive-hover)]"
-                          >
-                            Browse all products
-                            <p className="mt-2 text-xs font-normal text-secondary">Full catalog with filters.</p>
-                          </Link>
-                        </div>
-                      </div>
-                    </motion.div>
-                  ) : null}
-                </AnimatePresence>
-              </div>
-            ) : (
-              <Link
-                href="/browse"
-                className="interactive-focus shrink-0 rounded-full px-3 py-1.5 text-sm font-medium text-secondary transition-colors hover:bg-[var(--interactive-hover)] hover:text-[var(--interactive-fg)]"
-              >
-                Browse
-              </Link>
-            )}
           </nav>
 
           <div className="flex shrink-0 items-center justify-end gap-1 sm:gap-1.5 xl:ml-2 xl:gap-2">

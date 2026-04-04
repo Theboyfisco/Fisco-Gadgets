@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import { Manrope, Space_Grotesk } from "next/font/google";
+import { unstable_cache } from "next/cache";
 import "./globals.css";
 
 import { CartProvider } from "@/components/cart/CartProvider";
@@ -22,6 +23,22 @@ import prisma from "@/lib/db";
 import { fallbackCategories } from "@/lib/fallback-data";
 import { shouldUseDatabase } from "@/lib/should-use-database";
 import { SITE_NAME, getBaseUrl } from "@/lib/site-config";
+
+const fallbackNavbarCategories = fallbackCategories.map((category) => ({
+  id: category.id,
+  name: category.name,
+  slug: category.slug ?? category.id,
+}));
+
+const getCachedNavbarCategories = unstable_cache(
+  async () =>
+    prisma.category.findMany({
+      select: { id: true, name: true, slug: true },
+      orderBy: { name: "asc" },
+    }),
+  ["navbar-categories"],
+  { revalidate: 300 },
+);
 
 export const metadata: Metadata = {
   metadataBase: new URL(getBaseUrl()),
@@ -82,10 +99,8 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const categories = shouldUseDatabase()
-    ? await prisma.category
-        .findMany({ select: { id: true, name: true, slug: true } })
-        .catch(() => fallbackCategories.map((category) => ({ id: category.id, name: category.name, slug: category.slug ?? category.id })))
-    : fallbackCategories.map((category) => ({ id: category.id, name: category.name, slug: category.slug ?? category.id }));
+    ? await getCachedNavbarCategories().catch(() => fallbackNavbarCategories)
+    : fallbackNavbarCategories;
 
   return (
     <html lang="en" data-theme="dark" suppressHydrationWarning>

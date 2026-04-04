@@ -12,7 +12,7 @@ export default async function AdminSetupPage() {
         <div className="w-full max-w-xl rounded-[2rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6">
           <h1 className="text-2xl font-bold text-[var(--foreground)]">Admin setup unavailable</h1>
           <p className="mt-2 text-sm text-secondary">
-            {error instanceof Error ? error.message : "Unable to reach Supabase admin credentials store."}
+            {error instanceof Error ? error.message : "Unable to reach the admin credentials store."}
           </p>
         </div>
       </div>

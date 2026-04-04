@@ -6,6 +6,9 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     optimizePackageImports: ["lucide-react"],
+    // Turbopack filesystem cache can occasionally corrupt on Windows dev setups.
+    // Keep Turbopack enabled but disable on-disk cache for stability.
+    turbopackFileSystemCacheForDev: false,
   },
   typescript: {
     // `tsc --noEmit` runs in the build script so builds stay type-safe

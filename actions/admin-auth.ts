@@ -17,6 +17,9 @@ export async function setupAdmin(username: string, password: string) {
     }
 
     const user = await createAdminUser(username.trim(), password);
+    if (!user) {
+      return { success: false, error: "Could not create admin account." };
+    }
     await createAdminSession(user.username);
     return { success: true };
   } catch (error) {

@@ -132,6 +132,7 @@
     --surface-soft: rgba(255, 255, 255, 0.045);
     --surface-cta: var(--interactive-hover);
     --surface-contrast: var(--surface-inverse);
+    --product-media-overlay-end: rgba(5, 8, 18, 0.84);
     --nav-bg: rgba(7, 9, 15, 0.68);
     --nav-bg-scrolled: rgba(7, 9, 15, 0.92);
     --support-fab-bg: linear-gradient(160deg, rgba(109, 136, 255, 0.9), rgba(83, 206, 222, 0.82));
@@ -305,6 +306,7 @@
     --surface-soft: rgba(12, 26, 48, 0.035);
     --surface-cta: var(--interactive-hover);
     --surface-contrast: var(--surface-inverse);
+    --product-media-overlay-end: rgba(10, 24, 48, 0.38);
     --nav-bg: rgba(250, 252, 255, 0.84);
     --nav-bg-scrolled: rgba(250, 252, 255, 0.96);
     --support-fab-bg: linear-gradient(160deg, rgba(59, 104, 244, 0.96), rgba(24, 153, 184, 0.9));
@@ -370,12 +372,12 @@
     --media-card-pill-text: rgba(255, 255, 255, 0.94);
     --media-card-line-bg: rgba(255, 255, 255, 0.28);
     --media-card-line-fill: rgba(255, 255, 255, 0.95);
-    --media-overlay-bg: rgba(12, 24, 46, 0.2);
-    --media-overlay-border: rgba(255, 255, 255, 0.32);
+    --media-overlay-bg: rgba(12, 24, 46, 0.14);
+    --media-overlay-border: rgba(255, 255, 255, 0.26);
     --media-overlay-text: rgba(245, 249, 255, 0.95);
     --media-overlay-soft-text: rgba(234, 243, 255, 0.86);
-    --media-overlay-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.2), transparent 40%, rgba(9, 21, 43, 0.52));
-    --media-overlay-strong-gradient: linear-gradient(180deg, transparent, rgba(9, 21, 43, 0.66));
+    --media-overlay-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.26), transparent 44%, rgba(9, 21, 43, 0.36));
+    --media-overlay-strong-gradient: linear-gradient(180deg, transparent, rgba(9, 21, 43, 0.5));
     --media-overlay-action-bg: rgba(255, 255, 255, 0.32);
     --category-card-surface: rgba(255, 255, 255, 0.68);
     --category-card-border: rgba(12, 26, 48, 0.08);

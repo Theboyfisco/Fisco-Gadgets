@@ -1,8 +1,9 @@
 import { PrismaClient } from '@prisma/client'
 
 const prismaClientSingleton = () => {
+  const enableQueryLogging = process.env.PRISMA_QUERY_LOGS === '1'
   return new PrismaClient({
-    log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
+    log: enableQueryLogging ? ['query', 'error', 'warn'] : ['error', 'warn'],
   })
 }
 

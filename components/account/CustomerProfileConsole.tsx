@@ -8,6 +8,7 @@ import { changeCustomerPassword, updateCustomerProfile } from "@/actions/custome
 type ProfileOrderStatus = "PENDING" | "PAID" | "SHIPPED" | "CANCELLED";
 
 type ProfileProps = {
+  dataWarning?: string | null;
   customer: {
     fullName: string | null;
     email: string;
@@ -51,6 +52,7 @@ function statusTone(status: ProfileOrderStatus) {
 }
 
 export function CustomerProfileConsole({
+  dataWarning,
   customer,
   orderSummary,
   listSummary,
@@ -99,15 +101,20 @@ export function CustomerProfileConsole({
     setProfileFeedback(null);
     setProfileError(null);
 
-    const result = await updateCustomerProfile({ fullName });
-    if (!result.success) {
-      setProfileError(result.error || "Unable to update profile.");
-      setProfilePending(false);
-      return;
-    }
+    try {
+      const result = await updateCustomerProfile({ fullName });
+      if (!result.success) {
+        setProfileError(result.error || "Unable to update profile.");
+        return;
+      }
 
-    setProfileFeedback(result.message || "Profile updated.");
-    setProfilePending(false);
+      setProfileFeedback(result.message || "Profile updated.");
+    } catch (error) {
+      console.error("Profile update request failed", error);
+      setProfileError("Unable to update profile right now. Please try again.");
+    } finally {
+      setProfilePending(false);
+    }
   };
 
   const submitPassword = async (event: React.FormEvent) => {
@@ -116,27 +123,38 @@ export function CustomerProfileConsole({
     setPasswordFeedback(null);
     setPasswordError(null);
 
-    const result = await changeCustomerPassword({
-      currentPassword,
-      newPassword,
-      confirmPassword,
-    });
+    try {
+      const result = await changeCustomerPassword({
+        currentPassword,
+        newPassword,
+        confirmPassword,
+      });
 
-    if (!result.success) {
-      setPasswordError(result.error || "Unable to change password.");
+      if (!result.success) {
+        setPasswordError(result.error || "Unable to change password.");
+        return;
+      }
+
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+      setPasswordFeedback(result.message || "Password changed.");
+    } catch (error) {
+      console.error("Password update request failed", error);
+      setPasswordError("Unable to change password right now. Please try again.");
+    } finally {
       setPasswordPending(false);
-      return;
     }
-
-    setCurrentPassword("");
-    setNewPassword("");
-    setConfirmPassword("");
-    setPasswordFeedback(result.message || "Password changed.");
-    setPasswordPending(false);
   };
 
   return (
     <div className="container mx-auto flex-1 px-4 py-10">
+      {dataWarning ? (
+        <section className="mb-4 rounded-2xl border border-amber-300/70 bg-amber-50 px-4 py-3 dark:border-amber-500/40 dark:bg-amber-500/10">
+          <p className="text-sm font-medium text-amber-800 dark:text-amber-300">{dataWarning}</p>
+        </section>
+      ) : null}
+
       <section className="mb-8 rounded-[2rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card-strong),var(--surface-card))] p-6 shadow-[0_24px_70px_rgba(var(--shadow-neutral-rgb),0.14)]">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="flex items-start gap-4">

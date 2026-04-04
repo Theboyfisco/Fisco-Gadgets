@@ -8,6 +8,8 @@ import { getPrimaryImage, normalizeTechnicalSpecs } from "@/lib/normalize-produc
 import { shouldUseDatabase } from "@/lib/should-use-database";
 import { SITE_NAME, truncateDescription } from "@/lib/site-config";
 
+export const revalidate = 180;
+
 type BrowseParams = {
   category?: string;
   brand?: string;
@@ -118,7 +120,17 @@ export default async function BrowsePage({
                 }
               : {}),
           },
-          include: {
+          select: {
+            id: true,
+            name: true,
+            slug: true,
+            price: true,
+            stock: true,
+            images: true,
+            categoryId: true,
+            brandId: true,
+            technicalSpecs: true,
+            updatedAt: true,
             category: { select: { name: true, slug: true } },
             brand: { select: { name: true, slug: true } },
           },

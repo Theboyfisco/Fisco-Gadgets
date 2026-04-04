@@ -33,19 +33,23 @@ export async function updateCustomerProfile(input: z.infer<typeof UpdateProfileS
   }
 
   const customer = await requireCustomer();
+  try {
+    await prisma.customer.update({
+      where: { id: customer.id },
+      data: {
+        fullName: normalizedName.length > 0 ? normalizedName : null,
+      },
+    });
 
-  await prisma.customer.update({
-    where: { id: customer.id },
-    data: {
-      fullName: normalizedName.length > 0 ? normalizedName : null,
-    },
-  });
+    revalidatePath("/account/profile");
+    revalidatePath("/account/orders");
+    revalidatePath("/", "layout");
 
-  revalidatePath("/account/profile");
-  revalidatePath("/account/orders");
-  revalidatePath("/", "layout");
-
-  return { success: true, message: "Profile updated successfully." };
+    return { success: true, message: "Profile updated successfully." };
+  } catch (error) {
+    console.error("Failed to update customer profile", { customerId: customer.id, error });
+    return { success: false, error: "Could not update profile right now. Please try again." };
+  }
 }
 
 export async function changeCustomerPassword(input: z.infer<typeof ChangePasswordSchema>) {
@@ -55,33 +59,37 @@ export async function changeCustomerPassword(input: z.infer<typeof ChangePasswor
   }
 
   const customer = await requireCustomer();
-  const dbCustomer = await prisma.customer.findUnique({
-    where: { id: customer.id },
-    select: { passwordHash: true },
-  });
+  try {
+    const dbCustomer = await prisma.customer.findUnique({
+      where: { id: customer.id },
+      select: { passwordHash: true },
+    });
 
-  if (!dbCustomer) {
-    return { success: false, error: "Customer account not found." };
+    if (!dbCustomer) {
+      return { success: false, error: "Customer account not found." };
+    }
+
+    const currentMatches = await bcrypt.compare(parsed.data.currentPassword, dbCustomer.passwordHash);
+    if (!currentMatches) {
+      return { success: false, error: "Current password is incorrect." };
+    }
+
+    const isSamePassword = await bcrypt.compare(parsed.data.newPassword, dbCustomer.passwordHash);
+    if (isSamePassword) {
+      return { success: false, error: "New password must be different from current password." };
+    }
+
+    const passwordHash = await bcrypt.hash(parsed.data.newPassword, 12);
+    await prisma.customer.update({
+      where: { id: customer.id },
+      data: { passwordHash },
+    });
+
+    revalidatePath("/account/profile");
+
+    return { success: true, message: "Password changed successfully." };
+  } catch (error) {
+    console.error("Failed to change customer password", { customerId: customer.id, error });
+    return { success: false, error: "Could not change password right now. Please try again." };
   }
-
-  const currentMatches = await bcrypt.compare(parsed.data.currentPassword, dbCustomer.passwordHash);
-  if (!currentMatches) {
-    return { success: false, error: "Current password is incorrect." };
-  }
-
-  const isSamePassword = await bcrypt.compare(parsed.data.newPassword, dbCustomer.passwordHash);
-  if (isSamePassword) {
-    return { success: false, error: "New password must be different from current password." };
-  }
-
-  const passwordHash = await bcrypt.hash(parsed.data.newPassword, 12);
-  await prisma.customer.update({
-    where: { id: customer.id },
-    data: { passwordHash },
-  });
-
-  revalidatePath("/account/profile");
-
-  return { success: true, message: "Password changed successfully." };
 }
-
