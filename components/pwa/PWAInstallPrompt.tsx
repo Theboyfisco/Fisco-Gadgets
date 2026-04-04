@@ -103,7 +103,7 @@ export function PWAInstallPrompt() {
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 12, scale: 0.98 }}
         transition={{ duration: 0.28, ease: "easeOut" }}
-        className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-[max(1rem,env(safe-area-inset-left))] z-[75] w-[min(25rem,calc(100vw-1.5rem))] rounded-[1.1rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-3 shadow-[0_24px_58px_rgba(8,18,38,0.24)] backdrop-blur-xl sm:p-4"
+        className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-[max(1rem,env(safe-area-inset-left))] z-[75] w-[min(25rem,calc(100vw-1.5rem))] rounded-[1.1rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-3 shadow-[0_24px_58px_rgba(var(--shadow-neutral-rgb),0.24)] backdrop-blur-xl sm:p-4"
         aria-live="polite"
       >
         <div className="flex items-start justify-between gap-3">
@@ -145,3 +145,4 @@ export function PWAInstallPrompt() {
     </AnimatePresence>
   );
 }
+

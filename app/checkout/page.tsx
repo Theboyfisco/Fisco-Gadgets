@@ -341,7 +341,7 @@ export default function CheckoutPage() {
 
             <div className="grid grid-cols-1 gap-12 lg:grid-cols-3">
                 <div className="lg:col-span-2">
-                    <div className="mb-8 rounded-[1.75rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] p-5 shadow-[0_18px_50px_rgba(8,18,38,0.08)]">
+                    <div className="mb-8 rounded-[1.75rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] p-5 shadow-[0_18px_50px_rgba(var(--shadow-neutral-rgb),0.08)]">
                       <div className="mb-4">
                         <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--text-soft)]">Checkout flow</p>
                         <h1 className="mt-2 text-3xl font-bold tracking-[-0.03em] text-[var(--foreground)]">Secure, clean, and low-friction</h1>
@@ -374,7 +374,7 @@ export default function CheckoutPage() {
                             animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
                             exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: -12 }}
                             transition={{ duration: MOTION.duration.base, ease: MOTION.ease.standard }}
-                            className="space-y-6 rounded-[1.75rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] p-6 shadow-[0_18px_50px_rgba(8,18,38,0.08)]"
+                            className="space-y-6 rounded-[1.75rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] p-6 shadow-[0_18px_50px_rgba(var(--shadow-neutral-rgb),0.08)]"
                         >
                             <h2 className="mb-6 flex items-center gap-2 text-2xl font-bold text-[var(--foreground)]">
                                 <User className="text-primary" /> Delivery Details
@@ -489,7 +489,7 @@ export default function CheckoutPage() {
                             animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
                             exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: -12 }}
                             transition={{ duration: MOTION.duration.base, ease: MOTION.ease.standard }}
-                            className="space-y-6 rounded-[1.75rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] p-6 shadow-[0_18px_50px_rgba(8,18,38,0.08)]"
+                            className="space-y-6 rounded-[1.75rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] p-6 shadow-[0_18px_50px_rgba(var(--shadow-neutral-rgb),0.08)]"
                         >
                             <h2 className="mb-6 flex items-center gap-2 text-2xl font-bold text-[var(--foreground)]">
                                 <CreditCard className="text-primary" /> Payment Method
@@ -542,7 +542,7 @@ export default function CheckoutPage() {
                             animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, scale: 1 }}
                             exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, scale: 0.98 }}
                             transition={{ duration: MOTION.duration.base, ease: MOTION.ease.standard }}
-                            className="rounded-[1.75rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] py-12 text-center shadow-[0_18px_50px_rgba(8,18,38,0.08)]"
+                            className="rounded-[1.75rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] py-12 text-center shadow-[0_18px_50px_rgba(var(--shadow-neutral-rgb),0.08)]"
                         >
                             <div className="w-20 h-20 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-6 text-primary">
                                 <ShieldCheck size={48} />
@@ -561,7 +561,7 @@ export default function CheckoutPage() {
 
                 {/* Order Summary */}
                 <div className="lg:col-span-1">
-                    <div className="sticky top-24 rounded-[1.75rem] border border-border-subtle bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] p-6 shadow-[0_18px_50px_rgba(8,18,38,0.08)]">
+                    <div className="sticky top-24 rounded-[1.75rem] border border-border-subtle bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] p-6 shadow-[0_18px_50px_rgba(var(--shadow-neutral-rgb),0.08)]">
                         <h3 className="mb-6 border-b border-border-subtle pb-4 text-xl font-bold text-[var(--foreground)]">Order Summary</h3>
                         <div className="space-y-4 mb-6 max-h-[400px] overflow-y-auto pr-2">
                             {cartItems.map((item) => (
@@ -665,5 +665,6 @@ export default function CheckoutPage() {
         </div>
     );
 }
+
 
 

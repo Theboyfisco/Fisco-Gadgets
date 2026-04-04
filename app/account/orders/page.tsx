@@ -41,7 +41,7 @@ export default async function AccountOrdersPage() {
 
   return (
     <div className="container mx-auto flex-1 px-4 py-10">
-      <div className="mb-8 rounded-[2rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card-strong),var(--surface-card))] p-6 shadow-[0_24px_70px_rgba(8,18,38,0.14)]">
+      <div className="mb-8 rounded-[2rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card-strong),var(--surface-card))] p-6 shadow-[0_24px_70px_rgba(var(--shadow-neutral-rgb),0.14)]">
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--text-soft)]">My account</p>
         <h1 className="mt-2 text-3xl font-bold text-[var(--foreground)]">Order history & tracking</h1>
         <p className="mt-2 text-sm text-secondary">
@@ -81,7 +81,7 @@ export default async function AccountOrdersPage() {
             return (
               <article
                 key={order.id}
-                className="rounded-[1.75rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] p-5 shadow-[0_18px_50px_rgba(8,18,38,0.08)]"
+                className="rounded-[1.75rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] p-5 shadow-[0_18px_50px_rgba(var(--shadow-neutral-rgb),0.08)]"
               >
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div>
@@ -177,3 +177,4 @@ export default async function AccountOrdersPage() {
     </div>
   );
 }
+

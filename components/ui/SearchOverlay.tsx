@@ -239,7 +239,7 @@ export function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; onClose: (
                         onMouseEnter={() => setActiveIndex(index)}
                         className={`group rounded-[1.35rem] border p-3 transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] ${
                           active
-                            ? "border-primary/40 bg-[linear-gradient(180deg,var(--surface-card-strong),var(--surface-card))] shadow-[0_16px_34px_rgba(8,18,38,0.1)]"
+                            ? "border-primary/40 bg-[linear-gradient(180deg,var(--surface-card-strong),var(--surface-card))] shadow-[0_16px_34px_rgba(var(--shadow-neutral-rgb),0.1)]"
                             : "border-transparent hover:border-[var(--interactive-border-strong)] hover:bg-[var(--surface-card)]"
                         }`}
                       >
@@ -392,3 +392,4 @@ export function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; onClose: (
     </AnimatePresence>
   );
 }
+

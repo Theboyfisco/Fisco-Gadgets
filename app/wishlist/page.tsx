@@ -28,7 +28,7 @@ export default function WishlistPage() {
       </Reveal>
 
       {wishlistItems.length === 0 ? (
-        <div className="rounded-[1.75rem] border border-border-subtle bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] p-12 text-center shadow-[0_18px_50px_rgba(8,18,38,0.08)]">
+        <div className="rounded-[1.75rem] border border-border-subtle bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] p-12 text-center shadow-[0_18px_50px_rgba(var(--shadow-neutral-rgb),0.08)]">
           <p className="text-lg text-secondary">Your wishlist is empty.</p>
           <Link href="/" className="interactive-focus link-accent mt-2 inline-block text-sm">
             Browse featured drops
@@ -42,3 +42,4 @@ export default function WishlistPage() {
     </div>
   );
 }
+

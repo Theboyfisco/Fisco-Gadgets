@@ -311,7 +311,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
           </Reveal>
 
           <Reveal delay={0.06} className="flex flex-col">
-            <div className="rounded-[1.7rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card-strong),var(--surface-card))] p-4 shadow-[0_24px_80px_rgba(8,18,38,0.16)] backdrop-blur-2xl sm:rounded-[2rem] sm:p-6">
+            <div className="rounded-[1.7rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card-strong),var(--surface-card))] p-4 shadow-[0_24px_80px_rgba(var(--shadow-neutral-rgb),0.16)] backdrop-blur-2xl sm:rounded-[2rem] sm:p-6">
               <div className="mb-4 flex flex-wrap items-center gap-3">
                 <div className="inline-flex max-w-max items-center rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-medium text-primary sm:text-sm">
                   {condition}
@@ -505,7 +505,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
 
         <Reveal className="mx-auto mt-16 max-w-5xl">
           <div className="grid gap-6 lg:grid-cols-3">
-            <div className="rounded-[2rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6 shadow-[0_18px_60px_rgba(8,18,38,0.18)]">
+            <div className="rounded-[2rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6 shadow-[0_18px_60px_rgba(var(--shadow-neutral-rgb),0.18)]">
               <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[var(--interactive-border)] bg-[var(--surface-soft)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-secondary">
                 <Package size={14} className="text-primary" />
                 In the box
@@ -518,7 +518,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
                 ))}
               </div>
             </div>
-            <div className="rounded-[2rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6 shadow-[0_18px_60px_rgba(8,18,38,0.18)]">
+            <div className="rounded-[2rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6 shadow-[0_18px_60px_rgba(var(--shadow-neutral-rgb),0.18)]">
               <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[var(--interactive-border)] bg-[var(--surface-soft)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-secondary">
                 <RefreshCcw size={14} className="text-primary" />
                 Returns
@@ -530,7 +530,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
                 <ArrowRight size={14} />
               </Link>
             </div>
-            <div className="rounded-[2rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6 shadow-[0_18px_60px_rgba(8,18,38,0.18)]">
+            <div className="rounded-[2rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6 shadow-[0_18px_60px_rgba(var(--shadow-neutral-rgb),0.18)]">
               <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[var(--interactive-border)] bg-[var(--surface-soft)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-secondary">
                 <ShieldCheck size={14} className="text-primary" />
                 Coverage
@@ -611,4 +611,5 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
     </div>
   );
 }
+
 

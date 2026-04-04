@@ -80,7 +80,7 @@ export function ContactPageClient({ initialMessage = "" }: { initialMessage?: st
         Back to Home
       </Link>
       <Reveal>
-        <div className="mb-12 max-w-3xl rounded-[2rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] p-8 shadow-[0_18px_50px_rgba(8,18,38,0.08)]">
+        <div className="mb-12 max-w-3xl rounded-[2rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] p-8 shadow-[0_18px_50px_rgba(var(--shadow-neutral-rgb),0.08)]">
           <h1 className="mb-6 text-4xl font-extrabold tracking-tight text-[var(--foreground)] md:text-5xl">Contact Us</h1>
           <p className="text-secondary text-lg">
             Experiencing issues with an order or just want to chat gadgets? Drop us a line and our dedicated team will get back to you as soon as possible.
@@ -201,3 +201,4 @@ export function ContactPageClient({ initialMessage = "" }: { initialMessage?: st
     </div>
   );
 }
+

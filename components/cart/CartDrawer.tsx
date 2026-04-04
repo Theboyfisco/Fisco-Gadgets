@@ -124,7 +124,7 @@ export function CartDrawer({
                         {/* Cart Items list */}
                         {cartItems.length === 0 ? (
                             <div className="flex flex-1 flex-col items-center justify-center text-center">
-                                <div className="mb-4 flex h-24 w-24 items-center justify-center rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] text-secondary shadow-[0_18px_50px_rgba(8,18,38,0.1)]">
+                                <div className="mb-4 flex h-24 w-24 items-center justify-center rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] text-secondary shadow-[0_18px_50px_rgba(var(--shadow-neutral-rgb),0.1)]">
                                     <ShoppingBag size={48} />
                                 </div>
                                 <p className="text-secondary text-lg">Your gadget stash is empty.</p>
@@ -135,7 +135,7 @@ export function CartDrawer({
                         ) : (
                             <div className="flex-1 overflow-y-auto space-y-4 pr-2">
                                 {cartItems.map((item) => (
-                                    <div key={item.product.id} className="flex items-center gap-4 rounded-[1.5rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card-strong),var(--surface-card))] p-4 shadow-[0_16px_34px_rgba(8,18,38,0.08)]">
+                                    <div key={item.product.id} className="flex items-center gap-4 rounded-[1.5rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card-strong),var(--surface-card))] p-4 shadow-[0_16px_34px_rgba(var(--shadow-neutral-rgb),0.08)]">
                                         <div className="relative h-14 w-14 overflow-hidden rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-cta)]">
                                             {item.product.image && <SafeImage src={item.product.image} alt={item.product.name} fill className="object-cover" />}
                                         </div>
@@ -272,4 +272,5 @@ export function CartDrawer({
         </AnimatePresence>
     );
 }
+
 

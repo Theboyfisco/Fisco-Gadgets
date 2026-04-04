@@ -15,7 +15,7 @@ export default async function AdminProductsPage() {
     return (
       <div className="container mx-auto flex-1 px-4 py-10">
         <Reveal>
-          <div className="rounded-[2rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card-strong),var(--surface-card))] p-8 shadow-[0_24px_70px_rgba(8,18,38,0.12)]">
+          <div className="rounded-[2rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card-strong),var(--surface-card))] p-8 shadow-[0_24px_70px_rgba(var(--shadow-neutral-rgb),0.12)]">
             <div className="mb-5 inline-flex rounded-full border border-[var(--interactive-border)] bg-[var(--surface-soft)] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--text-soft)]">
               Admin console
             </div>
@@ -132,7 +132,7 @@ export default async function AdminProductsPage() {
 
       {categories.length === 0 ? (
         <Reveal>
-          <div className="rounded-[1.75rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] p-8 text-center shadow-[0_18px_50px_rgba(8,18,38,0.08)]">
+          <div className="rounded-[1.75rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] p-8 text-center shadow-[0_18px_50px_rgba(var(--shadow-neutral-rgb),0.08)]">
             <div className="mx-auto mb-4 inline-flex rounded-full bg-[var(--status-error)]/10 p-3 text-[var(--status-error)]">
               <ShieldAlert size={22} />
             </div>
@@ -167,3 +167,4 @@ export default async function AdminProductsPage() {
     </div>
   );
 }
+

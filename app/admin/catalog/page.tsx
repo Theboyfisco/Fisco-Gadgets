@@ -12,7 +12,7 @@ export default async function AdminCatalogPage() {
     return (
       <div className="container mx-auto flex-1 px-4 py-10">
         <Reveal>
-          <div className="rounded-[2rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card-strong),var(--surface-card))] p-8 shadow-[0_24px_70px_rgba(8,18,38,0.12)]">
+          <div className="rounded-[2rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card-strong),var(--surface-card))] p-8 shadow-[0_24px_70px_rgba(var(--shadow-neutral-rgb),0.12)]">
             <h1 className="text-4xl font-bold tracking-[-0.03em] text-[var(--foreground)]">Catalog taxonomy is unavailable in build-only mode.</h1>
             <p className="mt-4 max-w-2xl text-sm text-secondary">Set a live `DATABASE_URL` to manage categories and brands.</p>
           </div>
@@ -82,3 +82,4 @@ export default async function AdminCatalogPage() {
     </div>
   );
 }
+

@@ -130,7 +130,7 @@ export function Navbar({ categories = [] }: NavbarProps) {
             <BrandLogo />
           </div>
 
-          <nav className="hidden min-w-0 flex-none items-center gap-1.5 overflow-x-auto overflow-y-visible rounded-full border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--interactive-bg-soft),var(--surface-soft))] px-2.5 py-1.5 shadow-[0_16px_44px_rgba(8,18,38,0.08)] no-scrollbar xl:flex xl:max-w-[min(58vw,48rem)] 2xl:max-w-none 2xl:px-3">
+          <nav className="hidden min-w-0 flex-none items-center gap-1.5 overflow-x-auto overflow-y-visible rounded-full border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--interactive-bg-soft),var(--surface-soft))] px-2.5 py-1.5 shadow-[0_16px_44px_rgba(var(--shadow-neutral-rgb),0.08)] no-scrollbar xl:flex xl:max-w-[min(58vw,48rem)] 2xl:max-w-none 2xl:px-3">
             {navLinks.map((link, index) => {
               const active = pathname === link.href;
               return (
@@ -235,7 +235,7 @@ export function Navbar({ categories = [] }: NavbarProps) {
           <div className="flex shrink-0 items-center justify-end gap-1 sm:gap-1.5 xl:ml-2 xl:gap-2">
             <button
               onClick={() => setIsSearchOpen(true)}
-              className="interactive-focus group hidden w-[clamp(10rem,14vw,13rem)] items-center gap-3 rounded-full border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--interactive-bg-soft),var(--surface-soft))] px-3.5 py-2 text-sm text-secondary shadow-[0_16px_40px_rgba(8,18,38,0.06)] transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:bg-[var(--interactive-active)] hover:text-[var(--interactive-fg)] xl:flex"
+              className="interactive-focus group hidden w-[clamp(10rem,14vw,13rem)] items-center gap-3 rounded-full border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--interactive-bg-soft),var(--surface-soft))] px-3.5 py-2 text-sm text-secondary shadow-[0_16px_40px_rgba(var(--shadow-neutral-rgb),0.06)] transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:bg-[var(--interactive-active)] hover:text-[var(--interactive-fg)] xl:flex"
               aria-label="Open search"
             >
               <Search size={17} className="transition-colors group-hover:text-primary" />
@@ -403,4 +403,5 @@ export function Navbar({ categories = [] }: NavbarProps) {
     </>
   );
 }
+
 

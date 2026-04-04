@@ -1,6 +1,6 @@
 export function LoadingSkeleton() {
     return (
-        <div className="relative w-full space-y-5 overflow-hidden rounded-[1.5rem] bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] p-4 shadow-[0_18px_44px_rgba(8,18,38,0.08)]">
+        <div className="relative w-full space-y-5 overflow-hidden rounded-[1.5rem] bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] p-4 shadow-[0_18px_44px_rgba(var(--shadow-neutral-rgb),0.08)]">
             {/* Shimmer Effect */}
             <div className="absolute inset-0 z-10 -translate-x-full animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-[var(--surface-cta)] to-transparent" />
 
@@ -17,3 +17,4 @@ export function LoadingSkeleton() {
         </div>
     );
 }
+

@@ -71,7 +71,7 @@ export default async function SuccessPage({ searchParams }: { searchParams: Prom
                     : " was cancelled after the reservation expired. Please create a new order if you still need these items."}
             </p>
 
-            <div className="mb-12 w-full max-w-2xl overflow-hidden rounded-[2rem] border border-border-subtle bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] shadow-[0_24px_80px_rgba(8,18,38,0.12)]">
+            <div className="mb-12 w-full max-w-2xl overflow-hidden rounded-[2rem] border border-border-subtle bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] shadow-[0_24px_80px_rgba(var(--shadow-neutral-rgb),0.12)]">
                 <div className="border-b border-border-subtle bg-[var(--surface-soft)] p-6">
                     <h2 className="flex items-center gap-2 text-xl font-bold text-[var(--foreground)]">
                         <Package className="text-primary" /> Order Summary
@@ -166,4 +166,5 @@ export default async function SuccessPage({ searchParams }: { searchParams: Prom
         </div>
     );
 }
+
 

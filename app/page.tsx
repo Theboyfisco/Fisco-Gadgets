@@ -91,8 +91,8 @@ export default async function Home() {
 
           <div className="relative z-10 grid items-center gap-[clamp(1.25rem,3vw,3rem)] xl:grid-cols-2">
             <Reveal className="order-2 xl:order-1">
-              <div className="max-w-[58rem] rounded-[clamp(1.2rem,2vw,2rem)] border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--surface-secondary),var(--surface-primary))] p-[clamp(0.9rem,1.8vw,1.8rem)] shadow-[0_24px_80px_rgba(15,23,42,0.1)] backdrop-blur-2xl">
-                <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-[var(--interactive-border)] bg-[var(--surface-primary)] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--hero-foreground)] shadow-[0_10px_30px_rgba(15,23,42,0.08)] sm:mb-5 sm:text-xs sm:tracking-[0.16em]">
+              <div className="max-w-[58rem] rounded-[clamp(1.2rem,2vw,2rem)] border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--surface-secondary),var(--surface-primary))] p-[clamp(0.9rem,1.8vw,1.8rem)] shadow-[0_24px_80px_rgba(var(--shadow-neutral-rgb),0.1)] backdrop-blur-2xl">
+                <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-[var(--interactive-border)] bg-[var(--surface-primary)] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--hero-foreground)] shadow-[0_10px_30px_rgba(var(--shadow-neutral-rgb),0.08)] sm:mb-5 sm:text-xs sm:tracking-[0.16em]">
                   Built for modern shopping in Nigeria
                 </p>
                 <h1 className="mb-5 max-w-3xl text-[clamp(2rem,8.3vw,4.9rem)] font-extrabold leading-[1.03] tracking-tight text-[var(--hero-foreground)] sm:mb-6">
@@ -265,4 +265,5 @@ export default async function Home() {
     </div>
   );
 }
+
 

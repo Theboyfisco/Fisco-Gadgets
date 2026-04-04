@@ -39,7 +39,7 @@ export function CustomerRegisterForm() {
     <div className="container mx-auto flex min-h-[70vh] items-center justify-center px-4 py-14">
       <form
         onSubmit={onSubmit}
-        className="w-full max-w-lg rounded-[2rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card-strong),var(--surface-card))] p-6 shadow-[0_22px_70px_rgba(8,18,38,0.12)]"
+        className="w-full max-w-lg rounded-[2rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card-strong),var(--surface-card))] p-6 shadow-[0_22px_70px_rgba(var(--shadow-neutral-rgb),0.12)]"
       >
         <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[var(--interactive-border)] bg-[var(--surface-soft)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-secondary">
           <UserPlus size={14} className="text-primary" />
@@ -113,3 +113,4 @@ export function CustomerRegisterForm() {
     </div>
   );
 }
+

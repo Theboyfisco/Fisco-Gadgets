@@ -94,7 +94,7 @@ export function QuickViewModal({ product, isOpen, onClose }: QuickViewModalProps
             ref={dialogRef}
           >
             <div className="grid gap-6 p-6 md:grid-cols-[1.1fr_0.9fr]">
-              <div className="relative overflow-hidden rounded-[1.75rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[0_24px_80px_rgba(8,18,38,0.16)]">
+              <div className="relative overflow-hidden rounded-[1.75rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[0_24px_80px_rgba(var(--shadow-neutral-rgb),0.16)]">
                 {product.image && (
                   <SafeImage src={product.image} alt={product.name} fill className="object-cover" sizes="(max-width: 768px) 90vw, 50vw" />
                 )}
@@ -123,7 +123,7 @@ export function QuickViewModal({ product, isOpen, onClose }: QuickViewModalProps
                 </div>
 
                 {specs.length > 0 && (
-                  <div className="mt-6 space-y-3 rounded-[1.5rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4 shadow-[0_16px_34px_rgba(8,18,38,0.08)]">
+                  <div className="mt-6 space-y-3 rounded-[1.5rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4 shadow-[0_16px_34px_rgba(var(--shadow-neutral-rgb),0.08)]">
                     {specs.map(([key, value]) => (
                       <div key={key} className="flex items-center justify-between text-sm">
                         <span className="text-secondary">{key.replace(/([A-Z])/g, " $1").trim()}</span>
@@ -158,3 +158,4 @@ export function QuickViewModal({ product, isOpen, onClose }: QuickViewModalProps
   if (!hydrated) return null;
   return createPortal(content, document.body);
 }
+

@@ -56,6 +56,7 @@
     --text-main: #eef4ff;
     --text-muted: #c7d3ea;
     --text-soft: #a8b7d4;
+    --shadow-neutral-rgb: 6, 10, 28;
     --accent-primary: oklch(0.72 0.16 252);
     --accent-primary-hover: #8eaaff;
     --accent-primary-soft: rgba(118, 150, 255, 0.16);
@@ -217,34 +218,35 @@
   /* ─── LIGHT THEME ─── */
   :root[data-theme="light"],
   :root.light-theme {
-    --bg-primary: #f5f7fc;
-    --bg-secondary: #edf2fb;
-    --bg-tertiary: #dfe7f4;
-    --surface-primary: rgba(255, 255, 255, 0.95);
-    --surface-secondary: rgba(255, 255, 255, 1);
-    --surface-tertiary: rgba(226, 233, 246, 0.92);
-    --surface-inverse: rgba(15, 23, 42, 0.58);
-    --text-main: #0e1a30;
-    --text-muted: #44536f;
-    --text-soft: #66748f;
-    --accent-primary: oklch(0.58 0.16 252);
-    --accent-primary-hover: #475ccb;
-    --accent-primary-soft: rgba(76, 101, 217, 0.14);
-    --accent-primary-text: #f7fbff;
-    --accent-link: #304fc4;
-    --accent-link-hover: #1f3fb0;
+    --bg-primary: #f6f8fc;
+    --bg-secondary: #eef2f8;
+    --bg-tertiary: #e5ebf4;
+    --surface-primary: rgba(255, 255, 255, 0.94);
+    --surface-secondary: #ffffff;
+    --surface-tertiary: rgba(245, 249, 255, 0.94);
+    --surface-inverse: rgba(10, 21, 42, 0.78);
+    --text-main: #101b33;
+    --text-muted: #41526d;
+    --text-soft: #60708a;
+    --shadow-neutral-rgb: 15, 29, 54;
+    --accent-primary: oklch(0.56 0.18 256);
+    --accent-primary-hover: #2f52d9;
+    --accent-primary-soft: rgba(54, 86, 218, 0.12);
+    --accent-primary-text: #f9fbff;
+    --accent-link: #2147c5;
+    --accent-link-hover: #1838a7;
     --status-error: oklch(0.577 0.245 27);
     --status-success: oklch(0.57 0.16 156);
-    --focus-ring: #2748c9;
-    --focus-ring-offset: #f5f7fc;
-    --interactive-hover: rgba(15, 23, 42, 0.08);
-    --interactive-active: rgba(15, 23, 42, 0.12);
-    --interactive-border-strong: rgba(15, 23, 42, 0.2);
+    --focus-ring: #2448c4;
+    --focus-ring-offset: #f6f8fc;
+    --interactive-hover: rgba(12, 26, 48, 0.06);
+    --interactive-active: rgba(12, 26, 48, 0.1);
+    --interactive-border-strong: rgba(12, 26, 48, 0.18);
     --background: var(--bg-primary);
     --foreground: var(--text-main);
     --base: var(--bg-primary);
     --primary: var(--accent-primary);
-    --border-subtle-color: oklch(0.85 0.02 260);
+    --border-subtle-color: oklch(0.9 0.01 255);
     --secondary: var(--text-muted);
     --error: var(--status-error);
     --success: var(--status-success);
@@ -252,133 +254,133 @@
     --primary-contrast: var(--accent-primary-text);
     --primary-hover: var(--accent-primary-hover);
     --primary-soft: var(--accent-primary-soft);
-    --brand-gradient-start: #3f6bfd;
-    --brand-gradient-mid: #4f66db;
-    --brand-gradient-end: #209ab2;
-    --brand-tint-primary: rgba(80, 104, 220, 0.28);
-    --brand-tint-secondary: rgba(39, 167, 194, 0.22);
-    --carousel-surface: rgba(255, 255, 255, 0.86);
-    --carousel-border: rgba(88, 109, 188, 0.24);
-    --carousel-shadow: 0 24px 64px rgba(28, 45, 89, 0.16);
+    --brand-gradient-start: #3b68f4;
+    --brand-gradient-mid: #4a60da;
+    --brand-gradient-end: #1899b8;
+    --brand-tint-primary: rgba(72, 103, 224, 0.24);
+    --brand-tint-secondary: rgba(24, 153, 184, 0.18);
+    --carousel-surface: rgba(255, 255, 255, 0.92);
+    --carousel-border: rgba(57, 81, 144, 0.18);
+    --carousel-shadow: 0 16px 42px rgba(13, 30, 55, 0.14);
     --carousel-overlay:
-      linear-gradient(175deg, rgba(255, 255, 255, 0.1), rgba(21, 34, 69, 0.64)),
-      radial-gradient(circle at 16% 20%, rgba(79, 109, 229, 0.2), transparent 44%),
-      radial-gradient(circle at 83% 14%, rgba(36, 173, 200, 0.19), transparent 40%);
-    --carousel-glow-1: rgba(89, 111, 203, 0.28);
-    --carousel-glow-2: rgba(34, 170, 198, 0.22);
-    --carousel-control-bg: rgba(244, 248, 255, 0.72);
-    --carousel-control-border: rgba(84, 108, 195, 0.28);
-    --carousel-dot: rgba(50, 71, 130, 0.36);
-    --carousel-dot-active: #0f2149;
-    --tone-phones: rgba(48, 126, 236, 0.36);
-    --tone-laptops: rgba(84, 98, 224, 0.34);
-    --tone-audio: rgba(40, 174, 147, 0.34);
-    --tone-generic: rgba(75, 99, 215, 0.34);
-    --tone-apple: rgba(186, 193, 214, 0.24);
-    --tone-samsung: rgba(67, 88, 207, 0.34);
-    --tone-brand: rgba(47, 156, 179, 0.32);
+      linear-gradient(175deg, rgba(255, 255, 255, 0.25), rgba(236, 243, 255, 0.78)),
+      radial-gradient(circle at 16% 20%, rgba(73, 111, 232, 0.14), transparent 44%),
+      radial-gradient(circle at 83% 14%, rgba(24, 153, 184, 0.13), transparent 40%);
+    --carousel-glow-1: rgba(73, 111, 232, 0.2);
+    --carousel-glow-2: rgba(24, 153, 184, 0.16);
+    --carousel-control-bg: rgba(255, 255, 255, 0.86);
+    --carousel-control-border: rgba(73, 101, 182, 0.24);
+    --carousel-dot: rgba(45, 66, 120, 0.34);
+    --carousel-dot-active: #162745;
+    --tone-phones: rgba(45, 126, 235, 0.3);
+    --tone-laptops: rgba(73, 93, 222, 0.28);
+    --tone-audio: rgba(35, 165, 140, 0.26);
+    --tone-generic: rgba(67, 94, 214, 0.28);
+    --tone-apple: rgba(170, 179, 202, 0.2);
+    --tone-samsung: rgba(60, 84, 206, 0.28);
+    --tone-brand: rgba(28, 146, 173, 0.26);
     --background-gradient:
       radial-gradient(
-        circle at 13% 15%,
-        rgba(92, 124, 236, 0.09),
-        transparent 43%
+        circle at 14% 14%,
+        rgba(77, 111, 232, 0.07),
+        transparent 46%
       ),
       radial-gradient(
-        circle at 86% 14%,
-        rgba(45, 155, 187, 0.07),
-        transparent 39%
+        circle at 84% 12%,
+        rgba(24, 153, 184, 0.06),
+        transparent 42%
       ),
-      linear-gradient(rgba(15, 23, 42, 0.035) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(15, 23, 42, 0.035) 1px, transparent 1px);
-    --accent-halo-1: rgba(92, 124, 236, 0.12);
-    --accent-halo-2: rgba(45, 155, 187, 0.08);
-    --surface-1: rgba(8, 17, 31, 0.07);
-    --surface-2: rgba(255, 255, 255, 0.9);
+      linear-gradient(rgba(18, 34, 59, 0.018) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(18, 34, 59, 0.018) 1px, transparent 1px);
+    --accent-halo-1: rgba(77, 111, 232, 0.1);
+    --accent-halo-2: rgba(24, 153, 184, 0.07);
+    --surface-1: rgba(8, 17, 31, 0.06);
+    --surface-2: rgba(255, 255, 255, 0.94);
     --surface-card: var(--surface-primary);
     --surface-card-strong: var(--surface-secondary);
-    --surface-soft: rgba(15, 23, 42, 0.04);
+    --surface-soft: rgba(12, 26, 48, 0.035);
     --surface-cta: var(--interactive-hover);
     --surface-contrast: var(--surface-inverse);
-    --nav-bg: rgba(248, 250, 251, 0.88);
-    --nav-bg-scrolled: rgba(248, 250, 251, 0.98);
-    --support-fab-bg: linear-gradient(160deg, rgba(78, 109, 238, 0.96), rgba(36, 172, 197, 0.9));
-    --support-fab-border: rgba(81, 108, 196, 0.3);
-    --support-fab-foreground: #f7fbff;
-    --support-fab-shadow: 0 0 0 1px rgba(81, 108, 196, 0.18), 0 16px 36px rgba(32, 52, 106, 0.18);
-    --support-menu-bg: rgba(255, 255, 255, 0.74);
-    --support-menu-border: rgba(76, 97, 169, 0.2);
-    --support-menu-shadow: 0 20px 45px rgba(15, 23, 42, 0.14);
-    --support-menu-item-bg: rgba(255, 255, 255, 0.68);
-    --support-menu-item-border: rgba(76, 97, 169, 0.2);
-    --support-menu-item-hover: rgba(255, 255, 255, 0.96);
+    --nav-bg: rgba(250, 252, 255, 0.84);
+    --nav-bg-scrolled: rgba(250, 252, 255, 0.96);
+    --support-fab-bg: linear-gradient(160deg, rgba(59, 104, 244, 0.96), rgba(24, 153, 184, 0.9));
+    --support-fab-border: rgba(59, 92, 186, 0.28);
+    --support-fab-foreground: #f9fbff;
+    --support-fab-shadow: 0 0 0 1px rgba(66, 98, 191, 0.16), 0 14px 30px rgba(22, 44, 90, 0.16);
+    --support-menu-bg: rgba(255, 255, 255, 0.86);
+    --support-menu-border: rgba(65, 85, 148, 0.18);
+    --support-menu-shadow: 0 16px 38px rgba(16, 30, 53, 0.12);
+    --support-menu-item-bg: rgba(255, 255, 255, 0.84);
+    --support-menu-item-border: rgba(65, 85, 148, 0.16);
+    --support-menu-item-hover: rgba(255, 255, 255, 0.98);
     --interactive-bg: var(--interactive-hover);
-    --interactive-bg-soft: rgba(255, 255, 255, 0.92);
-    --interactive-border: rgba(15, 23, 42, 0.1);
+    --interactive-bg-soft: rgba(255, 255, 255, 0.9);
+    --interactive-border: rgba(12, 26, 48, 0.1);
     --interactive-fg: var(--text-main);
-    --mobile-drawer-bg: #f8fafb;
-    --border-subtle: rgba(15, 23, 42, 0.1);
+    --mobile-drawer-bg: #f8fbff;
+    --border-subtle: rgba(12, 26, 48, 0.1);
     --border-strong: var(--interactive-border-strong);
-    --overlay: rgba(15, 23, 42, 0.35);
-    --overlay-strong: rgba(248, 250, 251, 0.96);
-    --panel-bg: #f5f7f9;
-    --panel-bg-soft: rgba(255, 255, 255, 0.94);
-    --footer-bg: #f0f3f5;
-    --footer-panel: rgba(255, 255, 255, 0.75);
-    --kbd-bg: rgba(15, 23, 42, 0.06);
-    --hero-surface: rgba(255, 255, 255, 0.88);
-    --hero-border: rgba(15, 23, 42, 0.12);
-    --hero-shadow: 0 30px 80px rgba(15, 23, 42, 0.12);
+    --overlay: rgba(9, 20, 38, 0.36);
+    --overlay-strong: rgba(247, 250, 255, 0.95);
+    --panel-bg: #f8fafd;
+    --panel-bg-soft: rgba(255, 255, 255, 0.96);
+    --footer-bg: #eef2f8;
+    --footer-panel: rgba(255, 255, 255, 0.82);
+    --kbd-bg: rgba(12, 26, 48, 0.05);
+    --hero-surface: rgba(255, 255, 255, 0.9);
+    --hero-border: rgba(17, 32, 59, 0.1);
+    --hero-shadow: 0 24px 64px rgba(16, 28, 49, 0.12);
     --hero-illustration: url("/hero-brand-scene-light.svg");
-    --hero-foreground: #0e1a30;
-    --hero-foreground-soft: #44536f;
+    --hero-foreground: #101b33;
+    --hero-foreground-soft: #41526d;
     --hero-overlay:
       radial-gradient(
         circle at 20% 20%,
-        rgba(255, 255, 255, 0.55),
-        transparent 38%
+        rgba(255, 255, 255, 0.62),
+        transparent 40%
       ),
       radial-gradient(
         circle at 80% 25%,
-        rgba(87, 121, 255, 0.14),
-        transparent 40%
+        rgba(73, 111, 232, 0.1),
+        transparent 42%
       ),
       linear-gradient(
         to bottom,
-        rgba(245, 247, 252, 0.66),
-        rgba(245, 247, 252, 0.76)
+        rgba(246, 249, 254, 0.58),
+        rgba(246, 249, 254, 0.84)
       );
-    --media-card-surface: rgba(255, 255, 255, 0.8);
-    --media-card-border: rgba(15, 23, 42, 0.1);
-    --media-card-shadow: 0 28px 70px rgba(15, 23, 42, 0.14);
+    --media-card-surface: rgba(255, 255, 255, 0.84);
+    --media-card-border: rgba(12, 26, 48, 0.09);
+    --media-card-shadow: 0 20px 54px rgba(17, 31, 56, 0.16);
     --media-card-overlay:
-      radial-gradient(circle at top, rgba(16, 185, 129, 0.14), transparent 45%),
+      radial-gradient(circle at top, rgba(16, 185, 129, 0.12), transparent 45%),
       radial-gradient(
         circle at 20% 80%,
-        rgba(16, 185, 129, 0.12),
+        rgba(16, 185, 129, 0.1),
         transparent 42%
       ),
-      linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(15, 23, 42, 0.6));
+      linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(13, 26, 48, 0.54));
     --media-card-foreground: #ffffff;
     --media-card-pill-bg: rgba(255, 255, 255, 0.2);
     --media-card-pill-border: rgba(255, 255, 255, 0.36);
     --media-card-pill-text: rgba(255, 255, 255, 0.94);
     --media-card-line-bg: rgba(255, 255, 255, 0.28);
     --media-card-line-fill: rgba(255, 255, 255, 0.95);
-    --media-overlay-bg: rgba(13, 24, 44, 0.2);
-    --media-overlay-border: rgba(255, 255, 255, 0.34);
+    --media-overlay-bg: rgba(12, 24, 46, 0.2);
+    --media-overlay-border: rgba(255, 255, 255, 0.32);
     --media-overlay-text: rgba(245, 249, 255, 0.95);
     --media-overlay-soft-text: rgba(234, 243, 255, 0.86);
-    --media-overlay-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.2), transparent 40%, rgba(10, 20, 42, 0.55));
-    --media-overlay-strong-gradient: linear-gradient(180deg, transparent, rgba(10, 20, 42, 0.72));
+    --media-overlay-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.2), transparent 40%, rgba(9, 21, 43, 0.52));
+    --media-overlay-strong-gradient: linear-gradient(180deg, transparent, rgba(9, 21, 43, 0.66));
     --media-overlay-action-bg: rgba(255, 255, 255, 0.32);
-    --category-card-surface: rgba(255, 255, 255, 0.6);
-    --category-card-border: rgba(15, 23, 42, 0.08);
-    --category-card-shadow: 0 20px 60px rgba(15, 23, 42, 0.1);
-    --category-card-shadow-hover: 0 28px 80px rgba(15, 23, 42, 0.18);
+    --category-card-surface: rgba(255, 255, 255, 0.68);
+    --category-card-border: rgba(12, 26, 48, 0.08);
+    --category-card-shadow: 0 16px 46px rgba(15, 29, 54, 0.1);
+    --category-card-shadow-hover: 0 22px 64px rgba(15, 29, 54, 0.16);
     --category-card-overlay: linear-gradient(
       to top,
-      rgba(15, 23, 42, 0.72),
-      rgba(15, 23, 42, 0.4),
+      rgba(10, 21, 43, 0.66),
+      rgba(10, 21, 43, 0.34),
       transparent
     );
     --category-pill-bg: rgba(255, 255, 255, 0.16);
@@ -390,7 +392,7 @@
 
   html {
     scroll-behavior: smooth;
-    color-scheme: dark;
+    color-scheme: light dark;
   }
 
   body {

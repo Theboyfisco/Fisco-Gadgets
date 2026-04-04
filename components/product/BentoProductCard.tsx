@@ -95,8 +95,8 @@ export function BentoProductCard({
       ? "border-[var(--status-error)]/35 bg-[var(--status-error)]/10 text-[var(--status-error)]"
       : "border-[var(--interactive-border)] bg-[var(--surface-card-strong)] text-primary";
   const containerClass = featured
-    ? "relative isolate group flex h-full flex-col overflow-hidden rounded-[24px] border border-[var(--interactive-border)] bg-[linear-gradient(155deg,var(--surface-card-strong),var(--surface-card)_48%,var(--surface-soft))] p-3.5 shadow-[0_30px_100px_rgba(8,18,38,0.18)] backdrop-blur-xl transition-all duration-[var(--motion-slow)] ease-[var(--ease-standard)] hover:-translate-y-1.5 hover:border-[var(--interactive-border-strong)] hover:shadow-[0_42px_115px_rgba(8,18,38,0.25)] sm:p-4 md:rounded-[26px] md:p-5"
-    : "relative isolate group flex h-full flex-col overflow-hidden rounded-[22px] border border-[var(--border-subtle)] bg-[linear-gradient(155deg,var(--surface-card),var(--surface-soft)_56%,var(--surface-card))] p-3.5 shadow-[0_18px_52px_rgba(8,18,38,0.12)] backdrop-blur-xl transition-all duration-[var(--motion-slow)] ease-[var(--ease-standard)] hover:-translate-y-1 hover:border-[var(--interactive-border-strong)] hover:shadow-[0_30px_86px_rgba(8,18,38,0.2)] sm:p-4 md:rounded-[24px]";
+    ? "relative isolate group flex h-full flex-col overflow-hidden rounded-[24px] border border-[var(--interactive-border)] bg-[linear-gradient(155deg,var(--surface-card-strong),var(--surface-card)_48%,var(--surface-soft))] p-3.5 shadow-[0_30px_100px_rgba(var(--shadow-neutral-rgb),0.18)] backdrop-blur-xl transition-all duration-[var(--motion-slow)] ease-[var(--ease-standard)] hover:-translate-y-1.5 hover:border-[var(--interactive-border-strong)] hover:shadow-[0_42px_115px_rgba(var(--shadow-neutral-rgb),0.25)] sm:p-4 md:rounded-[26px] md:p-5"
+    : "relative isolate group flex h-full flex-col overflow-hidden rounded-[22px] border border-[var(--border-subtle)] bg-[linear-gradient(155deg,var(--surface-card),var(--surface-soft)_56%,var(--surface-card))] p-3.5 shadow-[0_18px_52px_rgba(var(--shadow-neutral-rgb),0.12)] backdrop-blur-xl transition-all duration-[var(--motion-slow)] ease-[var(--ease-standard)] hover:-translate-y-1 hover:border-[var(--interactive-border-strong)] hover:shadow-[0_30px_86px_rgba(var(--shadow-neutral-rgb),0.2)] sm:p-4 md:rounded-[24px]";
 
   return (
     <Tilt3D className="h-full" maxTilt={featured ? 8 : 10}>
@@ -113,7 +113,7 @@ export function BentoProductCard({
           style={{ background: toneValue, opacity: 0.32 }}
         />
         <div className="pointer-events-none absolute inset-x-8 bottom-0 h-24 rounded-full bg-primary/8 blur-3xl transition-opacity duration-[var(--motion-slow)] ease-[var(--ease-standard)] group-hover:opacity-100" />
-        <div className="pointer-events-none absolute inset-0 rounded-[inherit] bg-[linear-gradient(180deg,transparent,rgba(8,18,38,0.06))] opacity-60" />
+        <div className="pointer-events-none absolute inset-0 rounded-[inherit] bg-[linear-gradient(180deg,transparent,rgba(var(--shadow-neutral-rgb),0.06))] opacity-60" />
 
         <div className="[transform:translateZ(28px)]">
           <div className="relative mb-3.5 w-full overflow-hidden rounded-[18px] border border-[var(--interactive-border)] transition-all duration-[var(--motion-slow)] ease-[var(--ease-standard)] group-hover:border-[var(--interactive-border-strong)] sm:mb-4 sm:rounded-[20px]">
@@ -183,7 +183,7 @@ export function BentoProductCard({
               </div>
             </div>
             <div className="pointer-events-none absolute inset-x-3 bottom-3 z-20 hidden translate-y-3 opacity-0 transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:translate-y-0 group-focus-within:opacity-100 md:block">
-              <div className="pointer-events-auto flex items-center justify-center rounded-[1rem] border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--panel-bg-soft),var(--surface-card))] p-2 shadow-[0_18px_45px_rgba(8,18,38,0.28)] backdrop-blur-xl">
+              <div className="pointer-events-auto flex items-center justify-center rounded-[1rem] border border-[var(--interactive-border)] bg-[linear-gradient(180deg,var(--panel-bg-soft),var(--surface-card))] p-2 shadow-[0_18px_45px_rgba(var(--shadow-neutral-rgb),0.28)] backdrop-blur-xl">
                 <button
                   className="inline-flex h-10 min-w-[8.75rem] items-center justify-center gap-2 rounded-xl border border-primary/30 bg-primary/12 px-4 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--foreground)] transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:border-primary/50 hover:bg-primary/18 hover:text-primary"
                   aria-label={`Quick preview ${product.name}`}
@@ -323,3 +323,4 @@ export function BentoProductCard({
     </Tilt3D>
   );
 }
+

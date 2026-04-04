@@ -57,7 +57,7 @@ export function CompareButton({ product, className = "", showLabel = false, vari
         >
             <motion.div
                 whileTap={{ scale: 0.8 }}
-                className={`inline-flex items-center justify-center border shadow-[0_12px_30px_rgba(8,18,38,0.12)] transition-colors duration-[var(--motion-base)] ease-[var(--ease-standard)] ${
+                className={`inline-flex items-center justify-center border shadow-[0_12px_30px_rgba(var(--shadow-neutral-rgb),0.12)] transition-colors duration-[var(--motion-base)] ease-[var(--ease-standard)] ${
                     isDock
                         ? active
                             ? "h-10 w-10 rounded-xl border-primary/40 bg-primary/18"
@@ -77,3 +77,4 @@ export function CompareButton({ product, className = "", showLabel = false, vari
         </button>
     );
 }
+

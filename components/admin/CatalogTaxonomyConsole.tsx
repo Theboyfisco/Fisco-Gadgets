@@ -147,7 +147,7 @@ export function CatalogTaxonomyConsole({ categories, brands }: TaxonomyConsolePr
 
   return (
     <div className="grid gap-6 xl:grid-cols-2">
-      <section className="rounded-[1.75rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 shadow-[0_18px_50px_rgba(8,18,38,0.08)]">
+      <section className="rounded-[1.75rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 shadow-[0_18px_50px_rgba(var(--shadow-neutral-rgb),0.08)]">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-xl font-semibold text-[var(--foreground)]">Categories</h2>
           <button
@@ -240,7 +240,7 @@ export function CatalogTaxonomyConsole({ categories, brands }: TaxonomyConsolePr
         </div>
       </section>
 
-      <section className="rounded-[1.75rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 shadow-[0_18px_50px_rgba(8,18,38,0.08)]">
+      <section className="rounded-[1.75rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 shadow-[0_18px_50px_rgba(var(--shadow-neutral-rgb),0.08)]">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-xl font-semibold text-[var(--foreground)]">Brands</h2>
           <button
@@ -335,3 +335,4 @@ export function CatalogTaxonomyConsole({ categories, brands }: TaxonomyConsolePr
     </div>
   );
 }
+

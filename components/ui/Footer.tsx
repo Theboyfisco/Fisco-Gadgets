@@ -29,7 +29,7 @@ export function Footer({ categories = [] }: FooterProps) {
   return (
     <footer className="mt-auto w-full border-t border-[var(--border-subtle)] bg-[var(--footer-bg)] pt-[clamp(2.5rem,5vw,4.5rem)]">
       <div className="container mx-auto">
-        <div className="mb-[clamp(2rem,3.6vw,3rem)] rounded-[clamp(1.2rem,2vw,2rem)] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--footer-panel),var(--surface-soft))] p-[clamp(1rem,2vw,2rem)] shadow-[0_24px_80px_rgba(8,18,38,0.12)] backdrop-blur-xl">
+        <div className="mb-[clamp(2rem,3.6vw,3rem)] rounded-[clamp(1.2rem,2vw,2rem)] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--footer-panel),var(--surface-soft))] p-[clamp(1rem,2vw,2rem)] shadow-[0_24px_80px_rgba(var(--shadow-neutral-rgb),0.12)] backdrop-blur-xl">
           <div className="grid grid-cols-1 gap-[clamp(1rem,2vw,2rem)] md:grid-cols-2 xl:grid-cols-4">
             <div className="lg:col-span-2">
               <BrandLogo className="mb-4" />
@@ -101,7 +101,7 @@ export function Footer({ categories = [] }: FooterProps) {
         </div>
 
         <div className="mb-[clamp(1.8rem,3vw,2.5rem)] grid grid-cols-1 gap-[clamp(1rem,2vw,1.8rem)] lg:grid-cols-3">
-          <div className="rounded-[1.75rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-soft),var(--surface-card))] p-5 shadow-[0_18px_44px_rgba(8,18,38,0.08)]">
+          <div className="rounded-[1.75rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-soft),var(--surface-card))] p-5 shadow-[0_18px_44px_rgba(var(--shadow-neutral-rgb),0.08)]">
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-[0.14em] text-[var(--foreground)]">Join Updates</h3>
             {subscribed ? (
               <motion.div
@@ -132,7 +132,7 @@ export function Footer({ categories = [] }: FooterProps) {
             )}
           </div>
 
-          <div className="rounded-[1.75rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-soft),var(--surface-card))] p-5 shadow-[0_18px_44px_rgba(8,18,38,0.08)]">
+          <div className="rounded-[1.75rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-soft),var(--surface-card))] p-5 shadow-[0_18px_44px_rgba(var(--shadow-neutral-rgb),0.08)]">
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-[0.14em] text-[var(--foreground)]">Contact</h3>
             <ul className="space-y-3">
               <li className="text-muted flex items-start gap-2 text-sm">
@@ -150,7 +150,7 @@ export function Footer({ categories = [] }: FooterProps) {
             </ul>
           </div>
 
-          <div className="rounded-[1.75rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-soft),var(--surface-card))] p-5 shadow-[0_18px_44px_rgba(8,18,38,0.08)]">
+          <div className="rounded-[1.75rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-soft),var(--surface-card))] p-5 shadow-[0_18px_44px_rgba(var(--shadow-neutral-rgb),0.08)]">
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-[0.14em] text-[var(--foreground)]">Social</h3>
             <div className="flex gap-3">
               <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="interactive-focus rounded-full border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-2 text-secondary transition-all hover:border-[var(--interactive-border-strong)] hover:bg-[var(--interactive-hover)] hover:text-primary">
@@ -181,4 +181,5 @@ export function Footer({ categories = [] }: FooterProps) {
     </footer>
   );
 }
+
 

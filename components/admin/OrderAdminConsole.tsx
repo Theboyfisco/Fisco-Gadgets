@@ -55,7 +55,7 @@ export function OrderAdminConsole({ orders }: { orders: AdminOrder[] }) {
   return (
     <div className="space-y-4">
       {orders.map((order) => (
-        <div key={order.id} className="rounded-[1.75rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 shadow-[0_18px_50px_rgba(8,18,38,0.08)]">
+        <div key={order.id} className="rounded-[1.75rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 shadow-[0_18px_50px_rgba(var(--shadow-neutral-rgb),0.08)]">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--text-soft)]">Order</p>
@@ -115,3 +115,4 @@ export function OrderAdminConsole({ orders }: { orders: AdminOrder[] }) {
     </div>
   );
 }
+

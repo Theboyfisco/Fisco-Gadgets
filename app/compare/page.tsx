@@ -29,7 +29,7 @@ export default function ComparePage() {
     if (compareItems.length === 0) {
         return (
             <div className="container mx-auto px-4 py-32 text-center">
-                <div className="mx-auto mb-8 flex h-28 w-28 items-center justify-center rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] text-secondary/40 shadow-[0_18px_50px_rgba(8,18,38,0.1)]">
+                <div className="mx-auto mb-8 flex h-28 w-28 items-center justify-center rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] text-secondary/40 shadow-[0_18px_50px_rgba(var(--shadow-neutral-rgb),0.1)]">
                     <ShoppingCart size={80} />
                 </div>
                 <h1 className="mb-4 text-4xl font-extrabold text-[var(--foreground)]">Comparison List is Empty</h1>
@@ -146,4 +146,5 @@ export default function ComparePage() {
         </div>
     );
 }
+
 

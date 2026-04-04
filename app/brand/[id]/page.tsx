@@ -112,7 +112,7 @@ export default async function BrandPage({ params }: { params: Promise<{ id: stri
       </Reveal>
 
       {products.length === 0 ? (
-        <div className="rounded-[1.75rem] border border-border-subtle bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] p-12 text-center shadow-[0_18px_50px_rgba(8,18,38,0.08)]">
+        <div className="rounded-[1.75rem] border border-border-subtle bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] p-12 text-center shadow-[0_18px_50px_rgba(var(--shadow-neutral-rgb),0.08)]">
           <p className="text-lg text-secondary">No products found for this brand.</p>
         </div>
       ) : (
@@ -123,3 +123,4 @@ export default async function BrandPage({ params }: { params: Promise<{ id: stri
     </div>
   );
 }
+
