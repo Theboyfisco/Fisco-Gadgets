@@ -4,6 +4,7 @@ import { Reveal } from "@/components/ui/Reveal";
 import { requireAdmin } from "@/lib/admin-auth";
 import { shouldUseDatabase } from "@/lib/should-use-database";
 import { CatalogTaxonomyConsole } from "@/components/admin/CatalogTaxonomyConsole";
+import { AdminSectionNav } from "@/components/admin/AdminSectionNav";
 
 export default async function AdminCatalogPage() {
   await requireAdmin();
@@ -11,6 +12,8 @@ export default async function AdminCatalogPage() {
   if (!shouldUseDatabase()) {
     return (
       <div className="container mx-auto flex-1 px-4 py-10">
+        <AdminSectionNav activePath="/admin/catalog" />
+
         <Reveal>
           <div className="rounded-[2rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card-strong),var(--surface-card))] p-8 shadow-[0_24px_70px_rgba(var(--shadow-neutral-rgb),0.12)]">
             <h1 className="text-4xl font-bold tracking-[-0.03em] text-[var(--foreground)]">Catalog taxonomy is unavailable in build-only mode.</h1>
@@ -28,6 +31,8 @@ export default async function AdminCatalogPage() {
 
   return (
     <div className="container mx-auto flex-1 px-4 py-10">
+      <AdminSectionNav activePath="/admin/catalog" />
+
       <Reveal className="mb-8">
         <section className="overflow-hidden rounded-[2.4rem] border border-[var(--hero-border)] bg-[var(--hero-surface)] p-6 shadow-[var(--hero-shadow)] sm:p-8 lg:p-10">
           <h1 className="max-w-3xl text-4xl font-bold tracking-[-0.04em] text-[var(--hero-foreground)] sm:text-5xl">

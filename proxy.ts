@@ -61,9 +61,10 @@ export async function proxy(request: NextRequest) {
   const token = request.cookies.get(ADMIN_COOKIE)?.value;
 
   if (!secret || !token || !(await isValidSession(token, secret))) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/admin/login";
-    return NextResponse.redirect(url);
+    const loginUrl = new URL("/admin/login", request.url);
+    const destination = `${request.nextUrl.pathname}${request.nextUrl.search}`;
+    loginUrl.searchParams.set("next", destination);
+    return NextResponse.redirect(loginUrl);
   }
 
   return NextResponse.next();

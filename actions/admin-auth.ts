@@ -9,14 +9,16 @@ export async function setupAdmin(username: string, password: string) {
       return { success: false, error: "Admin already exists." };
     }
 
-    if (!username || username.trim().length < 3) {
+    const normalizedUsername = username.trim().toLowerCase();
+
+    if (!normalizedUsername || normalizedUsername.length < 3) {
       return { success: false, error: "Username must be at least 3 characters." };
     }
     if (!password || password.length < 8) {
       return { success: false, error: "Password must be at least 8 characters." };
     }
 
-    const user = await createAdminUser(username.trim(), password);
+    const user = await createAdminUser(normalizedUsername, password);
     if (!user) {
       return { success: false, error: "Could not create admin account." };
     }
@@ -29,7 +31,8 @@ export async function setupAdmin(username: string, password: string) {
 
 export async function loginAdmin(username: string, password: string) {
   try {
-    const user = await authenticateAdmin(username.trim(), password);
+    const normalizedUsername = username.trim().toLowerCase();
+    const user = await authenticateAdmin(normalizedUsername, password);
     if (!user) {
       return { success: false, error: "Invalid credentials." };
     }

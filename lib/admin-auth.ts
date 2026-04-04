@@ -15,6 +15,10 @@ type AdminCredentialRecord = {
   password_hash: string;
 };
 
+function normalizeAdminUsername(username: string) {
+  return username.trim().toLowerCase();
+}
+
 function assertCookieSecret() {
   if (!ADMIN_COOKIE_SECRET) {
     throw new Error("ADMIN_SECRET is required for middleware session signing.");
@@ -79,10 +83,12 @@ function parseSessionCookie(value?: string): AdminSessionPayload | null {
 }
 
 async function findAdminByUsername(username: string) {
+  const normalizedUsername = normalizeAdminUsername(username);
+  if (!normalizedUsername) return null;
   const result = await prisma.$queryRaw<AdminCredentialRecord[]>`
     SELECT id, username, password_hash
     FROM admin_credentials
-    WHERE username = ${username}
+    WHERE LOWER(username) = LOWER(${normalizedUsername})
     LIMIT 1
   `;
   return result[0] ?? null;
@@ -98,10 +104,13 @@ export async function hasAdminUser() {
 }
 
 export async function createAdminUser(username: string, password: string) {
+  const normalizedUsername = normalizeAdminUsername(username);
+  if (!normalizedUsername) return null;
+
   const passwordHash = await bcrypt.hash(password, 12);
   const result = await prisma.$queryRaw<AdminCredentialRecord[]>`
     INSERT INTO admin_credentials (username, password_hash)
-    VALUES (${username}, ${passwordHash})
+    VALUES (${normalizedUsername}, ${passwordHash})
     RETURNING id, username, password_hash
   `;
   return result[0] ?? null;

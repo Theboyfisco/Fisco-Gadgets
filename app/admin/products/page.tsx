@@ -3,6 +3,7 @@ import { Database, ShieldAlert, Sparkles } from "lucide-react";
 import prisma from "@/lib/db";
 import { Reveal } from "@/components/ui/Reveal";
 import { ProductAdminConsole } from "@/components/admin/ProductAdminConsole";
+import { AdminSectionNav } from "@/components/admin/AdminSectionNav";
 import { shouldUseDatabase } from "@/lib/should-use-database";
 import { normalizeTechnicalSpecs } from "@/lib/normalize-product";
 import { requireAdmin } from "@/lib/admin-auth";
@@ -14,6 +15,8 @@ export default async function AdminProductsPage() {
   if (!databaseEnabled) {
     return (
       <div className="container mx-auto flex-1 px-4 py-10">
+        <AdminSectionNav activePath="/admin/products" />
+
         <Reveal>
           <div className="rounded-[2rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card-strong),var(--surface-card))] p-8 shadow-[0_24px_70px_rgba(var(--shadow-neutral-rgb),0.12)]">
             <div className="mb-5 inline-flex rounded-full border border-[var(--interactive-border)] bg-[var(--surface-soft)] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--text-soft)]">
@@ -58,6 +61,8 @@ export default async function AdminProductsPage() {
 
   return (
     <div className="container mx-auto flex-1 px-4 py-10">
+      <AdminSectionNav activePath="/admin/products" />
+
       <Reveal className="mb-8">
         <section className="overflow-hidden rounded-[2.4rem] border border-[var(--hero-border)] bg-[var(--hero-surface)] p-6 shadow-[var(--hero-shadow)] sm:p-8 lg:p-10">
           <div className="pointer-events-none absolute" />
@@ -97,12 +102,13 @@ export default async function AdminProductsPage() {
                 >
                   View audit log
                 </Link>
-                <Link
+                <a
                   href="/admin/logout"
+                  rel="nofollow"
                   className="inline-flex items-center gap-2 rounded-full border border-[var(--interactive-border)] bg-[var(--surface-card)] px-4 py-2 text-sm font-semibold text-[var(--hero-foreground)] transition-colors hover:bg-[var(--interactive-hover)]"
                 >
                   Log out
-                </Link>
+                </a>
               </div>
             </div>
             <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">

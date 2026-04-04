@@ -1,17 +1,23 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Shield, ArrowRight } from "lucide-react";
 import { loginAdmin } from "@/actions/admin-auth";
 import Link from "next/link";
 
 export default function AdminLoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const requestedPath = searchParams.get("next");
+  const safeNextPath =
+    requestedPath && requestedPath.startsWith("/admin") && !requestedPath.startsWith("/admin/login")
+      ? requestedPath
+      : "/admin";
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -25,7 +31,7 @@ export default function AdminLoginPage() {
       return;
     }
 
-    router.replace("/admin/products");
+    router.replace(safeNextPath);
   };
 
   return (
