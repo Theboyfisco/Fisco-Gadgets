@@ -60,8 +60,16 @@ export function CatalogTaxonomyConsole({ categories, brands }: TaxonomyConsolePr
   const [categoryErrors, setCategoryErrors] = useState<{ name?: string; slug?: string; image?: string }>({});
   const [brandErrors, setBrandErrors] = useState<{ name?: string; slug?: string; image?: string }>({});
 
-  const selectedCategory = useMemo(() => categories.find((item) => item.id === categoryId) ?? null, [categories, categoryId]);
-  const selectedBrand = useMemo(() => brands.find((item) => item.id === brandId) ?? null, [brands, brandId]);
+  const selectedCategory = useMemo(() => {
+    if (categoryId === null) return null;
+    return categories.find((item) => item.id === categoryId) ?? categories[0] ?? null;
+  }, [categories, categoryId]);
+  const selectedBrand = useMemo(() => {
+    if (brandId === null) return null;
+    return brands.find((item) => item.id === brandId) ?? brands[0] ?? null;
+  }, [brands, brandId]);
+  const isCategoryCreateMode = categoryId === null;
+  const isBrandCreateMode = brandId === null;
 
   const validateCategory = () => {
     const errors: { name?: string; slug?: string; image?: string } = {};
@@ -84,64 +92,88 @@ export function CatalogTaxonomyConsole({ categories, brands }: TaxonomyConsolePr
   const saveCategory = (createNew = false) => {
     if (!validateCategory()) return;
     startTransition(async () => {
-      const payload = {
-        name: categoryDraft.name.trim(),
-        slug: slugify(categoryDraft.slug || categoryDraft.name),
-        image: categoryDraft.image.trim(),
-      };
-      const result = createNew || !categoryId ? await createCategory(payload) : await updateCategory(categoryId, payload);
-      if (!result.success) {
-        pushToast({ title: "Category save failed", description: result.error, variant: "warning" });
-        return;
+      try {
+        const payload = {
+          name: categoryDraft.name.trim(),
+          slug: slugify(categoryDraft.slug || categoryDraft.name),
+          image: categoryDraft.image.trim(),
+        };
+        const categoryTargetId = selectedCategory?.id ?? null;
+        const result = createNew || isCategoryCreateMode || !categoryTargetId ? await createCategory(payload) : await updateCategory(categoryTargetId, payload);
+        if (!result.success) {
+          pushToast({ title: "Category save failed", description: result.error, variant: "warning" });
+          return;
+        }
+        pushToast({ title: createNew || isCategoryCreateMode || !categoryTargetId ? "Category created" : "Category updated", description: payload.name, variant: "success" });
+        router.refresh();
+      } catch {
+        pushToast({ title: "Category save failed", description: "Unable to save category right now.", variant: "warning" });
       }
-      pushToast({ title: createNew || !categoryId ? "Category created" : "Category updated", description: payload.name, variant: "success" });
-      router.refresh();
     });
   };
 
   const saveBrand = (createNew = false) => {
     if (!validateBrand()) return;
     startTransition(async () => {
-      const payload = {
-        name: brandDraft.name.trim(),
-        slug: slugify(brandDraft.slug || brandDraft.name),
-        image: brandDraft.image.trim() || null,
-      };
-      const result = createNew || !brandId ? await createBrand(payload) : await updateBrand(brandId, payload);
-      if (!result.success) {
-        pushToast({ title: "Brand save failed", description: result.error, variant: "warning" });
-        return;
+      try {
+        const payload = {
+          name: brandDraft.name.trim(),
+          slug: slugify(brandDraft.slug || brandDraft.name),
+          image: brandDraft.image.trim() || null,
+        };
+        const brandTargetId = selectedBrand?.id ?? null;
+        const result = createNew || isBrandCreateMode || !brandTargetId ? await createBrand(payload) : await updateBrand(brandTargetId, payload);
+        if (!result.success) {
+          pushToast({ title: "Brand save failed", description: result.error, variant: "warning" });
+          return;
+        }
+        pushToast({ title: createNew || isBrandCreateMode || !brandTargetId ? "Brand created" : "Brand updated", description: payload.name, variant: "success" });
+        router.refresh();
+      } catch {
+        pushToast({ title: "Brand save failed", description: "Unable to save brand right now.", variant: "warning" });
       }
-      pushToast({ title: createNew || !brandId ? "Brand created" : "Brand updated", description: payload.name, variant: "success" });
-      router.refresh();
     });
   };
 
   const removeCategory = () => {
-    if (!categoryId || !selectedCategory) return;
+    if (!selectedCategory) return;
     if (!window.confirm(`Delete category "${selectedCategory.name}"?`)) return;
     startTransition(async () => {
-      const result = await deleteCategory(categoryId);
-      if (!result.success) {
-        pushToast({ title: "Delete failed", description: result.error, variant: "warning" });
-        return;
+      try {
+        const result = await deleteCategory(selectedCategory.id);
+        if (!result.success) {
+          pushToast({ title: "Delete failed", description: result.error, variant: "warning" });
+          return;
+        }
+        pushToast({ title: "Category deleted", description: selectedCategory.name, variant: "info" });
+        setCategoryId(null);
+        setCategoryDraft({ name: "", slug: "", image: "" });
+        setCategoryErrors({});
+        router.refresh();
+      } catch {
+        pushToast({ title: "Delete failed", description: "Unable to delete category right now.", variant: "warning" });
       }
-      pushToast({ title: "Category deleted", description: selectedCategory.name, variant: "info" });
-      router.refresh();
     });
   };
 
   const removeBrand = () => {
-    if (!brandId || !selectedBrand) return;
+    if (!selectedBrand) return;
     if (!window.confirm(`Delete brand "${selectedBrand.name}"?`)) return;
     startTransition(async () => {
-      const result = await deleteBrand(brandId);
-      if (!result.success) {
-        pushToast({ title: "Delete failed", description: result.error, variant: "warning" });
-        return;
+      try {
+        const result = await deleteBrand(selectedBrand.id);
+        if (!result.success) {
+          pushToast({ title: "Delete failed", description: result.error, variant: "warning" });
+          return;
+        }
+        pushToast({ title: "Brand deleted", description: selectedBrand.name, variant: "info" });
+        setBrandId(null);
+        setBrandDraft({ name: "", slug: "", image: "" });
+        setBrandErrors({});
+        router.refresh();
+      } catch {
+        pushToast({ title: "Delete failed", description: "Unable to delete brand right now.", variant: "warning" });
       }
-      pushToast({ title: "Brand deleted", description: selectedBrand.name, variant: "info" });
-      router.refresh();
     });
   };
 
@@ -174,7 +206,7 @@ export function CatalogTaxonomyConsole({ categories, brands }: TaxonomyConsolePr
                 setCategoryErrors({});
               }}
               className={`w-full rounded-xl border px-3 py-2 text-left text-sm ${
-                category.id === categoryId
+                category.id === selectedCategory?.id
                   ? "border-primary/40 bg-primary/10 text-[var(--foreground)]"
                   : "border-[var(--border-subtle)] bg-[var(--surface-soft)] text-secondary"
               }`}
@@ -224,9 +256,9 @@ export function CatalogTaxonomyConsole({ categories, brands }: TaxonomyConsolePr
             className="rounded-full bg-primary px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--primary-contrast)] disabled:opacity-60"
           >
             <Save size={14} className="mr-1 inline-block" />
-            {isPending ? "Saving..." : categoryId ? "Save" : "Create"}
+            {isPending ? "Saving..." : isCategoryCreateMode ? "Create" : "Save"}
           </button>
-          {!categoryId ? null : (
+          {isCategoryCreateMode || !selectedCategory ? null : (
             <button
               type="button"
               onClick={removeCategory}
@@ -267,7 +299,7 @@ export function CatalogTaxonomyConsole({ categories, brands }: TaxonomyConsolePr
                 setBrandErrors({});
               }}
               className={`w-full rounded-xl border px-3 py-2 text-left text-sm ${
-                brand.id === brandId
+                brand.id === selectedBrand?.id
                   ? "border-primary/40 bg-primary/10 text-[var(--foreground)]"
                   : "border-[var(--border-subtle)] bg-[var(--surface-soft)] text-secondary"
               }`}
@@ -317,9 +349,9 @@ export function CatalogTaxonomyConsole({ categories, brands }: TaxonomyConsolePr
             className="rounded-full bg-primary px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--primary-contrast)] disabled:opacity-60"
           >
             <Save size={14} className="mr-1 inline-block" />
-            {isPending ? "Saving..." : brandId ? "Save" : "Create"}
+            {isPending ? "Saving..." : isBrandCreateMode ? "Create" : "Save"}
           </button>
-          {!brandId ? null : (
+          {isBrandCreateMode || !selectedBrand ? null : (
             <button
               type="button"
               onClick={removeBrand}

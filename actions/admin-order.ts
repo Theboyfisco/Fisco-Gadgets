@@ -3,13 +3,15 @@
 import { revalidatePath } from "next/cache";
 import prisma from "@/lib/db";
 import { OrderStatus } from "@prisma/client";
-import { requireAdmin } from "@/lib/admin-auth";
+import { isAdminSessionValid } from "@/lib/admin-auth";
 import { recordAdminAuditLog } from "@/lib/audit-log";
 import { decrementPromoUsageByCode } from "@/services/promo-usage";
 
 export async function updateOrderStatus(orderId: string, status: OrderStatus) {
   try {
-    await requireAdmin();
+    if (!(await isAdminSessionValid())) {
+      return { success: false, error: "Admin session expired. Sign in again." };
+    }
     const existing = await prisma.order.findUnique({
       where: { id: orderId },
       select: { status: true, promoCode: true },

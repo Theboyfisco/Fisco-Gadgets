@@ -4,7 +4,7 @@ import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import prisma from "@/lib/db";
 import { ProductMutationSchema, type ProductMutationInput } from "@/lib/validations/product";
-import { requireAdmin } from "@/lib/admin-auth";
+import { isAdminSessionValid } from "@/lib/admin-auth";
 import { recordAdminAuditLog } from "@/lib/audit-log";
 
 function slugify(input: string) {
@@ -65,7 +65,9 @@ function normalizeProductInput(input: ProductMutationInput): ProductMutationInpu
 
 export async function createProduct(input: ProductMutationInput) {
   try {
-    await requireAdmin();
+    if (!(await isAdminSessionValid())) {
+      return { success: false, error: "Admin session expired. Sign in again." };
+    }
     const validated = ProductMutationSchema.parse(normalizeProductInput(input));
 
     const product = await prisma.product.create({
@@ -97,10 +99,12 @@ export async function createProduct(input: ProductMutationInput) {
 
 export async function updateProduct(productId: string, input: ProductMutationInput) {
   try {
-    await requireAdmin();
+    if (!(await isAdminSessionValid())) {
+      return { success: false, error: "Admin session expired. Sign in again." };
+    }
     const validated = ProductMutationSchema.parse(normalizeProductInput(input));
 
-  const existing = await prisma.product.findUnique({
+    const existing = await prisma.product.findUnique({
       where: { id: productId },
       select: {
         categoryId: true,
@@ -163,7 +167,9 @@ export async function updateProduct(productId: string, input: ProductMutationInp
 
 export async function deleteProduct(productId: string) {
   try {
-    await requireAdmin();
+    if (!(await isAdminSessionValid())) {
+      return { success: false, error: "Admin session expired. Sign in again." };
+    }
     const existing = await prisma.product.findUnique({
       where: { id: productId },
       select: {
@@ -226,7 +232,9 @@ export async function deleteProduct(productId: string) {
 
 export async function bulkUpsertProducts(inputs: ProductMutationInput[]) {
   try {
-    await requireAdmin();
+    if (!(await isAdminSessionValid())) {
+      return { success: false, error: "Admin session expired. Sign in again." };
+    }
     if (!Array.isArray(inputs) || inputs.length === 0) {
       return { success: false, error: "No products provided." };
     }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { updateOrderStatus } from "@/actions/admin-order";
 import type { OrderStatus } from "@prisma/client";
 import { useToast } from "@/components/ui/ToastProvider";
@@ -18,6 +19,7 @@ type AdminOrder = {
 };
 
 export function OrderAdminConsole({ orders }: { orders: AdminOrder[] }) {
+  const router = useRouter();
   const { pushToast } = useToast();
   const [isPending, startTransition] = useTransition();
   const [draftStatuses, setDraftStatuses] = useState<Record<string, OrderStatus>>(
@@ -25,22 +27,34 @@ export function OrderAdminConsole({ orders }: { orders: AdminOrder[] }) {
   );
 
   const handleSave = (orderId: string) => {
-    const nextStatus = draftStatuses[orderId];
+    const currentOrder = orders.find((order) => order.id === orderId);
+    const nextStatus = draftStatuses[orderId] ?? currentOrder?.status;
+    if (!nextStatus) return;
     startTransition(async () => {
-      const result = await updateOrderStatus(orderId, nextStatus);
-      if (!result.success) {
+      try {
+        const result = await updateOrderStatus(orderId, nextStatus);
+        if (!result.success) {
+          pushToast({
+            title: "Update failed",
+            description: result.error || "Unable to update order",
+            variant: "warning",
+          });
+          return;
+        }
+
+        pushToast({
+          title: "Order updated",
+          description: `Status set to ${nextStatus}`,
+          variant: "success",
+        });
+        router.refresh();
+      } catch {
         pushToast({
           title: "Update failed",
-          description: result.error || "Unable to update order",
+          description: "Unable to update order right now.",
           variant: "warning",
         });
-        return;
       }
-      pushToast({
-        title: "Order updated",
-        description: `Status set to ${nextStatus}`,
-        variant: "success",
-      });
     });
   };
 
@@ -89,7 +103,7 @@ export function OrderAdminConsole({ orders }: { orders: AdminOrder[] }) {
 
           <div className="mt-4 flex flex-wrap items-center gap-3">
             <select
-              value={draftStatuses[order.id]}
+              value={draftStatuses[order.id] ?? order.status}
               onChange={(event) =>
                 setDraftStatuses((prev) => ({ ...prev, [order.id]: event.target.value as OrderStatus }))
               }
@@ -104,7 +118,7 @@ export function OrderAdminConsole({ orders }: { orders: AdminOrder[] }) {
             <button
               type="button"
               onClick={() => handleSave(order.id)}
-              disabled={isPending || order.status === "CANCELLED" || draftStatuses[order.id] === order.status}
+              disabled={isPending || order.status === "CANCELLED" || (draftStatuses[order.id] ?? order.status) === order.status}
               className="rounded-full bg-primary px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--primary-contrast)] disabled:opacity-60"
             >
               {order.status === "CANCELLED" ? "Cancelled" : isPending ? "Saving..." : "Save status"}

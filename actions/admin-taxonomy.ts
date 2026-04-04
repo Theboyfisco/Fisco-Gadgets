@@ -3,7 +3,7 @@
 import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import prisma from "@/lib/db";
-import { requireAdmin } from "@/lib/admin-auth";
+import { isAdminSessionValid } from "@/lib/admin-auth";
 import { recordAdminAuditLog } from "@/lib/audit-log";
 import {
   BrandMutationSchema,
@@ -30,7 +30,9 @@ function revalidateTaxonomyPaths() {
 
 export async function createCategory(input: CategoryMutationInput) {
   try {
-    await requireAdmin();
+    if (!(await isAdminSessionValid())) {
+      return { success: false, error: "Admin session expired. Sign in again." };
+    }
     const validated = CategoryMutationSchema.parse(input);
     const category = await prisma.category.create({ data: validated });
     await recordAdminAuditLog({
@@ -48,7 +50,9 @@ export async function createCategory(input: CategoryMutationInput) {
 
 export async function updateCategory(categoryId: string, input: CategoryMutationInput) {
   try {
-    await requireAdmin();
+    if (!(await isAdminSessionValid())) {
+      return { success: false, error: "Admin session expired. Sign in again." };
+    }
     const validated = CategoryMutationSchema.parse(input);
     const existing = await prisma.category.findUnique({ where: { id: categoryId } });
     if (!existing) return { success: false, error: "Category not found." };
@@ -73,7 +77,9 @@ export async function updateCategory(categoryId: string, input: CategoryMutation
 
 export async function deleteCategory(categoryId: string) {
   try {
-    await requireAdmin();
+    if (!(await isAdminSessionValid())) {
+      return { success: false, error: "Admin session expired. Sign in again." };
+    }
     const existing = await prisma.category.findUnique({ where: { id: categoryId } });
     if (!existing) return { success: false, error: "Category not found." };
 
@@ -93,7 +99,9 @@ export async function deleteCategory(categoryId: string) {
 
 export async function createBrand(input: BrandMutationInput) {
   try {
-    await requireAdmin();
+    if (!(await isAdminSessionValid())) {
+      return { success: false, error: "Admin session expired. Sign in again." };
+    }
     const validated = BrandMutationSchema.parse({
       ...input,
       image: input.image ? input.image.trim() : null,
@@ -114,7 +122,9 @@ export async function createBrand(input: BrandMutationInput) {
 
 export async function updateBrand(brandId: string, input: BrandMutationInput) {
   try {
-    await requireAdmin();
+    if (!(await isAdminSessionValid())) {
+      return { success: false, error: "Admin session expired. Sign in again." };
+    }
     const validated = BrandMutationSchema.parse({
       ...input,
       image: input.image ? input.image.trim() : null,
@@ -142,7 +152,9 @@ export async function updateBrand(brandId: string, input: BrandMutationInput) {
 
 export async function deleteBrand(brandId: string) {
   try {
-    await requireAdmin();
+    if (!(await isAdminSessionValid())) {
+      return { success: false, error: "Admin session expired. Sign in again." };
+    }
     const existing = await prisma.brand.findUnique({ where: { id: brandId } });
     if (!existing) return { success: false, error: "Brand not found." };
 

@@ -3,7 +3,7 @@
 import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import prisma from "@/lib/db";
-import { requireAdmin } from "@/lib/admin-auth";
+import { isAdminSessionValid } from "@/lib/admin-auth";
 import { recordAdminAuditLog } from "@/lib/audit-log";
 import { PromoMutationSchema, type PromoMutationInput } from "@/lib/validations/promo";
 
@@ -44,7 +44,9 @@ function normalizePromoInput(input: PromoMutationInput) {
 
 export async function createPromoCode(input: PromoMutationInput) {
   try {
-    await requireAdmin();
+    if (!(await isAdminSessionValid())) {
+      return { success: false, error: "Admin session expired. Sign in again." };
+    }
     const validated = PromoMutationSchema.parse(input);
     const payload = normalizePromoInput(validated);
 
@@ -78,7 +80,9 @@ export async function createPromoCode(input: PromoMutationInput) {
 
 export async function updatePromoCode(promoId: string, input: PromoMutationInput) {
   try {
-    await requireAdmin();
+    if (!(await isAdminSessionValid())) {
+      return { success: false, error: "Admin session expired. Sign in again." };
+    }
     const validated = PromoMutationSchema.parse(input);
     const payload = normalizePromoInput(validated);
 
@@ -136,7 +140,9 @@ export async function updatePromoCode(promoId: string, input: PromoMutationInput
 
 export async function deletePromoCode(promoId: string) {
   try {
-    await requireAdmin();
+    if (!(await isAdminSessionValid())) {
+      return { success: false, error: "Admin session expired. Sign in again." };
+    }
     const existing = await prisma.promoCode.findUnique({
       where: { id: promoId },
     });

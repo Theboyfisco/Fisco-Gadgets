@@ -88,7 +88,10 @@ export function PromoAdminConsole({ promos }: { promos: PromoItem[] }) {
   const [draft, setDraft] = useState<PromoDraft>(() => toDraft(promos[0] ?? null));
   const [errors, setErrors] = useState<PromoErrors>({});
 
-  const selectedPromo = useMemo(() => promos.find((item) => item.id === selectedId) ?? null, [promos, selectedId]);
+  const selectedPromo = useMemo(() => {
+    if (isCreating) return null;
+    return promos.find((item) => item.id === selectedId) ?? promos[0] ?? null;
+  }, [isCreating, promos, selectedId]);
 
   const startCreateMode = () => {
     setIsCreating(true);
@@ -159,59 +162,76 @@ export function PromoAdminConsole({ promos }: { promos: PromoItem[] }) {
     if (!validateDraft()) return;
 
     startTransition(async () => {
-      const payload = {
-        code: draft.code.trim().toUpperCase(),
-        description: draft.description.trim() || null,
-        kind: draft.kind,
-        amount: draft.kind === "FREE_SHIPPING" ? 0 : Number(draft.amount),
-        minOrder: draft.minOrder.trim() ? Number(draft.minOrder) : null,
-        active: draft.active,
-        startsAt: toIsoString(draft.startsAt),
-        endsAt: toIsoString(draft.endsAt),
-        maxUses: draft.maxUses.trim() ? Number(draft.maxUses) : null,
-      } as const;
+      try {
+        const payload = {
+          code: draft.code.trim().toUpperCase(),
+          description: draft.description.trim() || null,
+          kind: draft.kind,
+          amount: draft.kind === "FREE_SHIPPING" ? 0 : Number(draft.amount),
+          minOrder: draft.minOrder.trim() ? Number(draft.minOrder) : null,
+          active: draft.active,
+          startsAt: toIsoString(draft.startsAt),
+          endsAt: toIsoString(draft.endsAt),
+          maxUses: draft.maxUses.trim() ? Number(draft.maxUses) : null,
+        } as const;
 
-      const result = isCreating || !selectedId ? await createPromoCode(payload) : await updatePromoCode(selectedId, payload);
-      if (!result.success) {
+        const promoTargetId = selectedPromo?.id ?? null;
+        const result = isCreating || !promoTargetId ? await createPromoCode(payload) : await updatePromoCode(promoTargetId, payload);
+        if (!result.success) {
+          pushToast({
+            title: "Promo save failed",
+            description: result.error || "Unable to save promo code.",
+            variant: "warning",
+          });
+          return;
+        }
+
+        pushToast({
+          title: isCreating || !promoTargetId ? "Promo created" : "Promo updated",
+          description: payload.code,
+          variant: "success",
+        });
+
+        router.refresh();
+      } catch {
         pushToast({
           title: "Promo save failed",
-          description: result.error || "Unable to save promo code.",
+          description: "Unable to save promo code right now.",
           variant: "warning",
         });
-        return;
       }
-
-      pushToast({
-        title: isCreating || !selectedId ? "Promo created" : "Promo updated",
-        description: payload.code,
-        variant: "success",
-      });
-
-      router.refresh();
     });
   };
 
   const handleDelete = () => {
-    if (!selectedId || !selectedPromo) return;
+    if (!selectedPromo) return;
     if (!window.confirm(`Delete promo "${selectedPromo.code}"?`)) return;
 
     startTransition(async () => {
-      const result = await deletePromoCode(selectedId);
-      if (!result.success) {
+      try {
+        const result = await deletePromoCode(selectedPromo.id);
+        if (!result.success) {
+          pushToast({
+            title: "Delete failed",
+            description: result.error || "Unable to delete promo.",
+            variant: "warning",
+          });
+          return;
+        }
+
+        pushToast({
+          title: "Promo deleted",
+          description: selectedPromo.code,
+          variant: "info",
+        });
+        router.refresh();
+      } catch {
         pushToast({
           title: "Delete failed",
-          description: result.error || "Unable to delete promo.",
+          description: "Unable to delete promo right now.",
           variant: "warning",
         });
-        return;
       }
-
-      pushToast({
-        title: "Promo deleted",
-        description: selectedPromo.code,
-        variant: "info",
-      });
-      router.refresh();
     });
   };
 
@@ -236,7 +256,7 @@ export function PromoAdminConsole({ promos }: { promos: PromoItem[] }) {
               type="button"
               onClick={() => selectPromo(promo.id)}
               className={`w-full rounded-xl border p-3 text-left text-sm ${
-                promo.id === selectedId && !isCreating
+                promo.id === selectedPromo?.id && !isCreating
                   ? "border-primary/40 bg-primary/10 text-[var(--foreground)]"
                   : "border-[var(--border-subtle)] bg-[var(--surface-soft)] text-secondary"
               }`}

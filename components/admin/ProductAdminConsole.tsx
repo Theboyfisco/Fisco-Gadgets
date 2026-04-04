@@ -156,7 +156,6 @@ function validateDraft(draft: ProductFormState): ProductFormErrors {
   if (!Number.isFinite(stock) || stock < 0) errors.stock = "Stock must be zero or more.";
 
   if (!draft.categoryId) errors.categoryId = "Choose a category.";
-  if (!draft.brandId) errors.brandId = "Choose a brand.";
 
   const images = draft.imagesText
     .split("\n")
@@ -257,6 +256,27 @@ export function ProductAdminConsole({
       setCurrentPage(totalPages);
     }
   }, [currentPage, totalPages]);
+
+  useEffect(() => {
+    if (isCreating) return;
+    if (!products.length) {
+      setIsCreating(true);
+      setSelectedId(null);
+      setDraft(toFormState(null, categories, brands));
+      setSlugTouched(false);
+      setValidationErrors({});
+      return;
+    }
+    const exists = selectedId ? products.some((product) => product.id === selectedId) : false;
+    if (!exists) {
+      const first = products[0];
+      setIsCreating(false);
+      setSelectedId(first.id);
+      setDraft(toFormState(first, categories, brands));
+      setSlugTouched(false);
+      setValidationErrors({});
+    }
+  }, [isCreating, products, selectedId, categories, brands]);
 
   const loadMediaAssets = async () => {
     setIsMediaLoading(true);
@@ -412,26 +432,34 @@ export function ProductAdminConsole({
     if (!asset.id) return;
     if (!window.confirm(`Delete media asset "${asset.filename}"?`)) return;
     startTransition(async () => {
-      const response = await fetch("/api/admin/media/delete", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: asset.id }),
-      });
-      const data = await response.json();
-      if (!data.success) {
+      try {
+        const response = await fetch("/api/admin/media/delete", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: asset.id }),
+        });
+        const data = await response.json();
+        if (!data.success) {
+          pushToast({
+            title: "Delete failed",
+            description: data.error || "Unable to delete media asset.",
+            variant: "warning",
+          });
+          return;
+        }
+        pushToast({
+          title: "Media deleted",
+          description: asset.filename,
+          variant: "info",
+        });
+        await loadMediaAssets();
+      } catch {
         pushToast({
           title: "Delete failed",
-          description: data.error || "Unable to delete media asset.",
+          description: "Unable to delete media asset right now.",
           variant: "warning",
         });
-        return;
       }
-      pushToast({
-        title: "Media deleted",
-        description: asset.filename,
-        variant: "info",
-      });
-      await loadMediaAssets();
     });
   };
 
@@ -546,21 +574,29 @@ export function ProductAdminConsole({
     });
 
     startTransition(async () => {
-      const result = await bulkUpsertProducts(payload);
-      if (!result.success) {
+      try {
+        const result = await bulkUpsertProducts(payload);
+        if (!result.success) {
+          pushToast({
+            title: "Import failed",
+            description: result.error,
+            variant: "warning",
+          });
+          return;
+        }
+        pushToast({
+          title: "Import complete",
+          description: `Created: ${"created" in result ? result.created : 0}, Updated: ${"updated" in result ? result.updated : 0}`,
+          variant: "success",
+        });
+        router.refresh();
+      } catch {
         pushToast({
           title: "Import failed",
-          description: result.error,
+          description: "Unable to import CSV right now.",
           variant: "warning",
         });
-        return;
       }
-      pushToast({
-        title: "Import complete",
-        description: `Created: ${"created" in result ? result.created : 0}, Updated: ${"updated" in result ? result.updated : 0}`,
-        variant: "success",
-      });
-      router.refresh();
     });
 
     event.target.value = "";
@@ -581,30 +617,37 @@ export function ProductAdminConsole({
     const payload = buildPayload();
 
     startTransition(async () => {
-      const result = isCreating || !selectedId ? await createProduct(payload) : await updateProduct(selectedId, payload);
+      try {
+        const result = isCreating || !selectedId ? await createProduct(payload) : await updateProduct(selectedId, payload);
+        if (!result.success) {
+          pushToast({
+            title: "Product save failed",
+            description: result.error,
+            variant: "warning",
+          });
+          return;
+        }
 
-      if (!result.success) {
+        pushToast({
+          title: isCreating ? "Product created" : "Product updated",
+          description: payload.name,
+          variant: "success",
+        });
+
+        setIsCreating(false);
+        if (result.productId) {
+          setSelectedId(result.productId);
+        }
+        setSlugTouched(false);
+        setValidationErrors({});
+        router.refresh();
+      } catch {
         pushToast({
           title: "Product save failed",
-          description: result.error,
+          description: "Unable to save product right now.",
           variant: "warning",
         });
-        return;
       }
-
-      pushToast({
-        title: isCreating ? "Product created" : "Product updated",
-        description: payload.name,
-        variant: "success",
-      });
-
-      setIsCreating(false);
-      if (result.productId) {
-        setSelectedId(result.productId);
-      }
-      setSlugTouched(false);
-      setValidationErrors({});
-      router.refresh();
     });
   };
 
@@ -613,21 +656,22 @@ export function ProductAdminConsole({
     if (!window.confirm(`Delete ${selectedProduct.name}? This cannot be undone.`)) return;
 
     startTransition(async () => {
-      const result = await deleteProduct(selectedId);
-      if (!result.success) {
-        pushToast({
-          title: "Delete failed",
-          description: result.error,
-          variant: "warning",
-        });
-        return;
-      }
+      try {
+        const result = await deleteProduct(selectedId);
+        if (!result.success) {
+          pushToast({
+            title: "Delete failed",
+            description: result.error,
+            variant: "warning",
+          });
+          return;
+        }
 
-      pushToast({
-        title: "Product deleted",
-        description: selectedProduct.name,
-        variant: "info",
-      });
+        pushToast({
+          title: "Product deleted",
+          description: selectedProduct.name,
+          variant: "info",
+        });
 
         const nextProduct = products.find((product) => product.id !== selectedId) ?? null;
         setSelectedId(nextProduct?.id ?? null);
@@ -635,7 +679,14 @@ export function ProductAdminConsole({
         setDraft(toFormState(nextProduct, categories, brands));
         setSlugTouched(false);
         setValidationErrors({});
-      router.refresh();
+        router.refresh();
+      } catch {
+        pushToast({
+          title: "Delete failed",
+          description: "Unable to delete product right now.",
+          variant: "warning",
+        });
+      }
     });
   };
 
@@ -923,6 +974,9 @@ export function ProductAdminConsole({
                   }}
                   className="interactive-focus w-full rounded-[1rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-sm text-[var(--foreground)] outline-none focus-visible:ring-2 focus-visible:ring-primary/25"
                 >
+                  <option value="" className="bg-[var(--panel-bg)] text-[var(--foreground)]">
+                    No brand
+                  </option>
                   {brands.map((brand) => (
                     <option key={brand.id} value={brand.id} className="bg-[var(--panel-bg)] text-[var(--foreground)]">
                       {brand.name}
