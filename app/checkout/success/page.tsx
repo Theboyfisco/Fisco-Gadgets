@@ -44,7 +44,7 @@ export default async function SuccessPage({ searchParams }: { searchParams: Prom
     return (
         <div className="container mx-auto flex flex-col items-center px-4 py-24">
             <SuccessEventTracker orderId={order.id} status={order.status} />
-            <div className={`mb-8 flex h-24 w-24 items-center justify-center rounded-full border shadow-[0_18px_50px_rgba(63,107,253,0.18)] animate-in zoom-in duration-700 ${
+            <div className={`mb-8 flex h-24 w-24 items-center justify-center rounded-full border shadow-[0_18px_50px_rgba(var(--shadow-brand-rgb),0.18)] animate-in zoom-in duration-700 ${
               isPaid
                 ? "border-primary/20 bg-primary/10 text-primary"
                 : isPending
@@ -166,5 +166,6 @@ export default async function SuccessPage({ searchParams }: { searchParams: Prom
         </div>
     );
 }
+
 
 

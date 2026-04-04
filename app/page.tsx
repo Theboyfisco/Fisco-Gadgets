@@ -118,7 +118,7 @@ export default async function Home() {
                 <div className="flex flex-col gap-3 sm:flex-row">
                   <Link
                     href="#featured"
-                    className="relative inline-flex w-full items-center justify-center gap-2 overflow-hidden rounded-full bg-primary px-8 py-3 text-sm font-semibold text-[var(--primary-contrast)] shadow-[0_18px_40px_rgba(63,107,253,0.28)] transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:scale-[1.02] hover:bg-[var(--primary-hover)] sm:w-auto"
+                    className="relative inline-flex w-full items-center justify-center gap-2 overflow-hidden rounded-full bg-primary px-8 py-3 text-sm font-semibold text-[var(--primary-contrast)] shadow-[0_18px_40px_rgba(var(--shadow-brand-rgb),0.28)] transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:scale-[1.02] hover:bg-[var(--primary-hover)] sm:w-auto"
                   >
                     <span className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.35),transparent_55%)] opacity-0 transition-opacity duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:opacity-100" />
                     Shop Featured
@@ -265,5 +265,6 @@ export default async function Home() {
     </div>
   );
 }
+
 
 

@@ -32,7 +32,7 @@ export function CustomerRegisterForm() {
       return;
     }
 
-    router.replace("/account/orders");
+    router.replace("/account/profile");
   };
 
   return (
@@ -113,4 +113,5 @@ export function CustomerRegisterForm() {
     </div>
   );
 }
+
 

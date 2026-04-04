@@ -255,7 +255,7 @@ export function Navbar({ categories = [] }: NavbarProps) {
 
             <ThemeSwitcher />
             <Link
-              href="/account/orders"
+              href="/account/profile"
               className={iconButtonClass}
               aria-label="Account"
             >
@@ -403,5 +403,6 @@ export function Navbar({ categories = [] }: NavbarProps) {
     </>
   );
 }
+
 
 

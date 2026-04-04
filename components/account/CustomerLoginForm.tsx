@@ -25,7 +25,7 @@ export function CustomerLoginForm() {
       return;
     }
 
-    router.replace("/account/orders");
+    router.replace("/account/profile");
   };
 
   return (
@@ -84,4 +84,5 @@ export function CustomerLoginForm() {
     </div>
   );
 }
+
 

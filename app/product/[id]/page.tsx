@@ -402,7 +402,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
                 <AddToCartButton product={product} className="flex-1 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] py-4 font-bold text-[var(--foreground)] outline-none transition-all hover:bg-[var(--surface-cta)] focus:ring-2 focus:ring-[var(--border-strong)] active:scale-95" />
                 <a
                   href={whatsappUrl}
-                  className="flex flex-1 items-center justify-center gap-2 rounded-full bg-primary py-4 text-base font-bold text-[var(--primary-contrast)] shadow-[0_18px_40px_rgba(63,107,253,0.28)] transition-all hover:scale-[1.02] hover:bg-[var(--primary-hover)] active:scale-95"
+                  className="flex flex-1 items-center justify-center gap-2 rounded-full bg-primary py-4 text-base font-bold text-[var(--primary-contrast)] shadow-[0_18px_40px_rgba(var(--shadow-brand-rgb),0.28)] transition-all hover:scale-[1.02] hover:bg-[var(--primary-hover)] active:scale-95"
                 >
                   <MessageCircle size={20} />
                   Buy via WhatsApp
@@ -611,5 +611,6 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
     </div>
   );
 }
+
 
 

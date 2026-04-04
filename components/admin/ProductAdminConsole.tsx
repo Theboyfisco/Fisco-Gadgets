@@ -663,7 +663,7 @@ export function ProductAdminConsole({
               <button
                 type="button"
                 onClick={resetToCreate}
-                className="interactive-focus inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-[var(--primary-contrast)] shadow-[0_18px_40px_rgba(63,107,253,0.25)] transition-colors hover:bg-[var(--primary-hover)]"
+                className="interactive-focus inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-[var(--primary-contrast)] shadow-[0_18px_40px_rgba(var(--shadow-brand-rgb),0.25)] transition-colors hover:bg-[var(--primary-hover)]"
               >
                 <Plus size={16} />
                 New
@@ -806,7 +806,7 @@ export function ProductAdminConsole({
               type="button"
               onClick={handleSubmit}
               disabled={isPending}
-              className="interactive-focus inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-[var(--primary-contrast)] shadow-[0_18px_40px_rgba(63,107,253,0.25)] transition-colors hover:bg-[var(--primary-hover)] disabled:opacity-60"
+              className="interactive-focus inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-[var(--primary-contrast)] shadow-[0_18px_40px_rgba(var(--shadow-brand-rgb),0.25)] transition-colors hover:bg-[var(--primary-hover)] disabled:opacity-60"
             >
               <Save size={16} />
               {isPending ? "Saving..." : isCreating ? "Create product" : "Save changes"}
@@ -1099,4 +1099,5 @@ export function ProductAdminConsole({
     </div>
   );
 }
+
 

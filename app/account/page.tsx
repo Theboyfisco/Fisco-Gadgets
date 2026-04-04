@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 
 export default function AccountIndexPage() {
-  redirect("/account/orders");
+  redirect("/account/profile");
 }
+

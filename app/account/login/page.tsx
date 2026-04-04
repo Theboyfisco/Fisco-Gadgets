@@ -5,8 +5,9 @@ import { CustomerLoginForm } from "@/components/account/CustomerLoginForm";
 export default async function CustomerLoginPage() {
   const customer = await getCurrentCustomer();
   if (customer) {
-    redirect("/account/orders");
+    redirect("/account/profile");
   }
 
   return <CustomerLoginForm />;
 }
+

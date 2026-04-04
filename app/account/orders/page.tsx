@@ -49,6 +49,12 @@ export default async function AccountOrdersPage() {
         </p>
         <div className="mt-4 flex flex-wrap gap-3">
           <Link
+            href="/account/profile"
+            className="rounded-full border border-[var(--interactive-border)] bg-[var(--surface-card)] px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-secondary transition-colors hover:text-[var(--foreground)]"
+          >
+            Profile
+          </Link>
+          <Link
             href="/"
             className="rounded-full border border-[var(--interactive-border)] bg-[var(--surface-card)] px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-secondary transition-colors hover:text-[var(--foreground)]"
           >

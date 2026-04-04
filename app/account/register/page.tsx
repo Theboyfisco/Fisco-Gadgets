@@ -5,8 +5,9 @@ import { CustomerRegisterForm } from "@/components/account/CustomerRegisterForm"
 export default async function CustomerRegisterPage() {
   const customer = await getCurrentCustomer();
   if (customer) {
-    redirect("/account/orders");
+    redirect("/account/profile");
   }
 
   return <CustomerRegisterForm />;
 }
+

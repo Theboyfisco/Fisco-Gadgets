@@ -197,7 +197,7 @@ export function BentoProductCard({
                   Preview
                 </button>
                 <button
-                  className="ml-2 flex h-10 w-10 items-center justify-center rounded-xl border border-primary/25 bg-primary/12 text-primary shadow-[0_10px_24px_rgba(63,107,253,0.2)] transition-colors hover:border-primary/40 hover:bg-primary/22 disabled:cursor-not-allowed disabled:opacity-60"
+                  className="ml-2 flex h-10 w-10 items-center justify-center rounded-xl border border-primary/25 bg-primary/12 text-primary shadow-[0_10px_24px_rgba(var(--shadow-brand-rgb),0.2)] transition-colors hover:border-primary/40 hover:bg-primary/22 disabled:cursor-not-allowed disabled:opacity-60"
                   aria-label={`Add ${product.name} to cart`}
                   onClick={(event) => {
                     event.stopPropagation();
@@ -293,7 +293,7 @@ export function BentoProductCard({
 
         <div className="mt-3.5 flex items-center gap-2 [transform:translateZ(20px)] md:hidden">
           <button
-            className="flex-1 rounded-full border border-primary/25 bg-primary px-4 py-2.5 text-sm font-semibold text-[var(--primary-contrast)] shadow-[0_16px_36px_rgba(63,107,253,0.22)] transition-colors hover:bg-[var(--primary-hover)] disabled:cursor-not-allowed disabled:opacity-60"
+            className="flex-1 rounded-full border border-primary/25 bg-primary px-4 py-2.5 text-sm font-semibold text-[var(--primary-contrast)] shadow-[0_16px_36px_rgba(var(--shadow-brand-rgb),0.22)] transition-colors hover:bg-[var(--primary-hover)] disabled:cursor-not-allowed disabled:opacity-60"
             aria-label={`Add ${product.name} to cart`}
             onClick={(event) => {
               event.stopPropagation();
@@ -323,4 +323,5 @@ export function BentoProductCard({
     </Tilt3D>
   );
 }
+
 
