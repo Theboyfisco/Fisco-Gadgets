@@ -5,7 +5,14 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Boxes, ImagePlus, Package2, PencilLine, Plus, Save, Search, Trash2 } from "lucide-react";
 import type { Condition } from "@prisma/client";
-import { bulkUpsertProducts, createProduct, deleteProduct, updateProduct } from "@/actions/admin-product";
+import { createBrand } from "@/actions/admin-taxonomy";
+import {
+  bulkDeleteProducts,
+  bulkUpdateProducts,
+  createProduct,
+  deleteProduct,
+  updateProduct,
+} from "@/actions/admin-product";
 import { useToast } from "@/components/ui/ToastProvider";
 import { SafeImage } from "@/components/ui/SafeImage";
 
@@ -54,6 +61,14 @@ type ProductFormState = {
   technicalSpecs: SpecField[];
 };
 
+type BulkEditState = {
+  categoryId: string;
+  brandId: string;
+  condition: string;
+  price: string;
+  stock: string;
+};
+
 type MediaAsset = {
   id?: string;
   filename: string;
@@ -81,6 +96,8 @@ type ProductFormErrors = Partial<
 
 const CONDITION_OPTIONS: Condition[] = ["NEW", "OPEN_BOX", "REFURBISHED"];
 const ADMIN_PRODUCTS_PAGE_SIZE = 12;
+const BULK_NO_CHANGE = "__NO_CHANGE__";
+const BULK_CLEAR_BRAND = "__CLEAR_BRAND__";
 
 function slugify(input: string) {
   return input
@@ -217,9 +234,20 @@ export function ProductAdminConsole({
   const [isPending, startTransition] = useTransition();
   const [query, setQuery] = useState("");
   const deferredQuery = useDeferredValue(query);
+  const [availableBrands, setAvailableBrands] = useState<AdminBrand[]>(brands);
   const [selectedId, setSelectedId] = useState<string | null>(products[0]?.id ?? null);
+  const [selectedProductIds, setSelectedProductIds] = useState<string[]>([]);
   const [isCreating, setIsCreating] = useState(products.length === 0);
   const [draft, setDraft] = useState<ProductFormState>(() => toFormState(products[0] ?? null, categories, brands));
+  const [bulkEdit, setBulkEdit] = useState<BulkEditState>({
+    categoryId: BULK_NO_CHANGE,
+    brandId: BULK_NO_CHANGE,
+    condition: BULK_NO_CHANGE,
+    price: "",
+    stock: "",
+  });
+  const [newBrandName, setNewBrandName] = useState("");
+  const [newBrandImage, setNewBrandImage] = useState("");
   const [slugTouched, setSlugTouched] = useState(false);
   const [validationErrors, setValidationErrors] = useState<ProductFormErrors>({});
   const [mediaAssets, setMediaAssets] = useState<MediaAsset[]>([]);
@@ -246,6 +274,14 @@ export function ProductAdminConsole({
     const start = (currentPage - 1) * ADMIN_PRODUCTS_PAGE_SIZE;
     return filteredProducts.slice(start, start + ADMIN_PRODUCTS_PAGE_SIZE);
   }, [currentPage, filteredProducts]);
+  const pageProductIds = useMemo(() => paginatedProducts.map((product) => product.id), [paginatedProducts]);
+  const selectedCount = selectedProductIds.length;
+  const allPageSelected =
+    pageProductIds.length > 0 && pageProductIds.every((productId) => selectedProductIds.includes(productId));
+
+  useEffect(() => {
+    setAvailableBrands(brands);
+  }, [brands]);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -262,7 +298,7 @@ export function ProductAdminConsole({
     if (!products.length) {
       setIsCreating(true);
       setSelectedId(null);
-      setDraft(toFormState(null, categories, brands));
+      setDraft(toFormState(null, categories, availableBrands));
       setSlugTouched(false);
       setValidationErrors({});
       return;
@@ -272,11 +308,15 @@ export function ProductAdminConsole({
       const first = products[0];
       setIsCreating(false);
       setSelectedId(first.id);
-      setDraft(toFormState(first, categories, brands));
+      setDraft(toFormState(first, categories, availableBrands));
       setSlugTouched(false);
       setValidationErrors({});
     }
-  }, [isCreating, products, selectedId, categories, brands]);
+  }, [isCreating, products, selectedId, categories, availableBrands]);
+
+  useEffect(() => {
+    setSelectedProductIds((current) => current.filter((productId) => products.some((product) => product.id === productId)));
+  }, [products]);
 
   const loadMediaAssets = async () => {
     setIsMediaLoading(true);
@@ -336,7 +376,7 @@ export function ProductAdminConsole({
   const resetToCreate = () => {
     setIsCreating(true);
     setSelectedId(null);
-    setDraft(toFormState(null, categories, brands));
+    setDraft(toFormState(null, categories, availableBrands));
     setSlugTouched(false);
     setValidationErrors({});
   };
@@ -345,9 +385,103 @@ export function ProductAdminConsole({
     const product = products.find((item) => item.id === productId) ?? null;
     setIsCreating(false);
     setSelectedId(productId);
-    setDraft(toFormState(product, categories, brands));
+    setDraft(toFormState(product, categories, availableBrands));
     setSlugTouched(false);
     setValidationErrors({});
+  };
+
+  const toggleProductSelection = (productId: string, checked: boolean) => {
+    setSelectedProductIds((current) => {
+      const next = new Set(current);
+      if (checked) {
+        next.add(productId);
+      } else {
+        next.delete(productId);
+      }
+      return Array.from(next);
+    });
+  };
+
+  const togglePageSelection = () => {
+    setSelectedProductIds((current) => {
+      const next = new Set(current);
+      if (allPageSelected) {
+        for (const productId of pageProductIds) {
+          next.delete(productId);
+        }
+      } else {
+        for (const productId of pageProductIds) {
+          next.add(productId);
+        }
+      }
+      return Array.from(next);
+    });
+  };
+
+  const clearSelection = () => {
+    setSelectedProductIds([]);
+  };
+
+  const handleCreateBrand = () => {
+    const name = newBrandName.trim();
+    if (name.length < 2) {
+      pushToast({
+        title: "Brand name required",
+        description: "Enter at least 2 characters to create a brand.",
+        variant: "warning",
+      });
+      return;
+    }
+
+    const image = newBrandImage.trim();
+    if (image && !isValidUrl(image)) {
+      pushToast({
+        title: "Invalid image URL",
+        description: "Brand image must be a valid URL.",
+        variant: "warning",
+      });
+      return;
+    }
+
+    startTransition(async () => {
+      try {
+        const payload = {
+          name,
+          slug: slugify(name),
+          image: image || null,
+        };
+        const result = await createBrand(payload);
+        if (!result.success || !result.brandId) {
+          pushToast({
+            title: "Brand creation failed",
+            description: result.error || "Unable to create brand right now.",
+            variant: "warning",
+          });
+          return;
+        }
+
+        const createdBrand = { id: result.brandId, name };
+        setAvailableBrands((current) => {
+          if (current.some((brand) => brand.id === createdBrand.id)) return current;
+          return [...current, createdBrand].sort((a, b) => a.name.localeCompare(b.name));
+        });
+        setDraft((current) => ({ ...current, brandId: createdBrand.id }));
+        setNewBrandName("");
+        setNewBrandImage("");
+        pushToast({
+          title: "Brand created",
+          description: name,
+          variant: "success",
+        });
+        router.refresh();
+      } catch {
+        pushToast({
+          title: "Brand creation failed",
+          description: "Unable to create brand right now.",
+          variant: "warning",
+        });
+      }
+    });
   };
 
   const buildPayload = () => ({
@@ -540,14 +674,24 @@ export function ProductAdminConsole({
       return;
     }
 
-    const categoriesByName = new Map(categories.map((item) => [item.name.toLowerCase(), item.id]));
-    const brandsByName = new Map(brands.map((item) => [item.name.toLowerCase(), item.id]));
-    const payload = lines.slice(1).map((line) => {
+    const categoriesByKey = new Map<string, string>();
+    for (const category of categories) {
+      categoriesByKey.set(category.id.toLowerCase(), category.id);
+      categoriesByKey.set(category.name.toLowerCase(), category.id);
+    }
+    const unknownCategories = new Set<string>();
+
+    const rows = lines.slice(1).map((line) => {
       const cells = parseCsvRow(line);
-      const categoryName = cells[idx("category")] || "";
-      const brandName = idx("brand") >= 0 ? cells[idx("brand")] || "" : "";
+      const categoryValue = (cells[idx("category")] || "").trim();
+      const brandValue = idx("brand") >= 0 ? (cells[idx("brand")] || "").trim() : "";
       const imagesRaw = idx("images") >= 0 ? cells[idx("images")] || "" : "";
       const specsRaw = idx("technicalspecs") >= 0 ? cells[idx("technicalspecs")] || "" : "{}";
+      const resolvedCategoryId = categoriesByKey.get(categoryValue.toLowerCase());
+
+      if (!resolvedCategoryId && categoryValue) {
+        unknownCategories.add(categoryValue);
+      }
 
       return {
         name: cells[idx("name")] || "",
@@ -556,8 +700,8 @@ export function ProductAdminConsole({
         price: Number(cells[idx("price")] || 0),
         stock: Number(cells[idx("stock")] || 0),
         condition: (cells[idx("condition")] || "NEW").toUpperCase() as Condition,
-        categoryId: categoriesByName.get(categoryName.toLowerCase()) || categoryName,
-        brandId: brandName ? brandsByName.get(brandName.toLowerCase()) || brandName : null,
+        categoryId: resolvedCategoryId || categoryValue,
+        brandValue,
         images: imagesRaw
           .split("|")
           .map((item) => item.trim())
@@ -573,20 +717,67 @@ export function ProductAdminConsole({
       };
     });
 
+    if (unknownCategories.size > 0) {
+      const unknownCategoriesList = Array.from(unknownCategories).slice(0, 4);
+      const fragments: string[] = [];
+      if (unknownCategoriesList.length > 0) {
+        fragments.push(`Unknown categories: ${unknownCategoriesList.join(", ")}`);
+      }
+      pushToast({
+        title: "Import failed",
+        description: fragments.join(" | "),
+        variant: "warning",
+      });
+      event.target.value = "";
+      return;
+    }
+
     startTransition(async () => {
       try {
-        const result = await bulkUpsertProducts(payload);
-        if (!result.success) {
+        const response = await fetch("/api/admin/products/import", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ rows }),
+        });
+        const result = (await response.json()) as {
+          success: boolean;
+          error?: string;
+          created?: number;
+          updated?: number;
+          createdBrands?: Array<{ id: string; name: string }>;
+        };
+
+        if (!response.ok || !result.success) {
           pushToast({
             title: "Import failed",
-            description: result.error,
+            description: result.error || "Unable to import CSV right now.",
             variant: "warning",
           });
           return;
         }
+
+        if (Array.isArray(result.createdBrands) && result.createdBrands.length > 0) {
+          setAvailableBrands((current) => {
+            const existingById = new Set(current.map((brand) => brand.id));
+            const merged = [...current];
+            for (const brand of result.createdBrands || []) {
+              if (!existingById.has(brand.id)) {
+                merged.push({ id: brand.id, name: brand.name });
+                existingById.add(brand.id);
+              }
+            }
+            return merged.sort((a, b) => a.name.localeCompare(b.name));
+          });
+          pushToast({
+            title: "Missing brands created",
+            description: result.createdBrands.slice(0, 4).map((brand) => brand.name).join(", "),
+            variant: "info",
+          });
+        }
+
         pushToast({
           title: "Import complete",
-          description: `Created: ${"created" in result ? result.created : 0}, Updated: ${"updated" in result ? result.updated : 0}`,
+          description: `Created: ${result.created ?? 0}, Updated: ${result.updated ?? 0}`,
           variant: "success",
         });
         router.refresh();
@@ -676,7 +867,7 @@ export function ProductAdminConsole({
         const nextProduct = products.find((product) => product.id !== selectedId) ?? null;
         setSelectedId(nextProduct?.id ?? null);
         setIsCreating(!nextProduct);
-        setDraft(toFormState(nextProduct, categories, brands));
+        setDraft(toFormState(nextProduct, categories, availableBrands));
         setSlugTouched(false);
         setValidationErrors({});
         router.refresh();
@@ -684,6 +875,156 @@ export function ProductAdminConsole({
         pushToast({
           title: "Delete failed",
           description: "Unable to delete product right now.",
+          variant: "warning",
+        });
+      }
+    });
+  };
+
+  const handleBulkUpdate = () => {
+    if (selectedProductIds.length === 0) {
+      pushToast({
+        title: "Nothing selected",
+        description: "Select one or more products first.",
+        variant: "warning",
+      });
+      return;
+    }
+
+    const payload: {
+      categoryId?: string;
+      brandId?: string | null;
+      condition?: Condition;
+      price?: number;
+      stock?: number;
+    } = {};
+
+    if (bulkEdit.categoryId !== BULK_NO_CHANGE) {
+      payload.categoryId = bulkEdit.categoryId;
+    }
+    if (bulkEdit.brandId === BULK_CLEAR_BRAND) {
+      payload.brandId = null;
+    } else if (bulkEdit.brandId !== BULK_NO_CHANGE) {
+      payload.brandId = bulkEdit.brandId;
+    }
+    if (bulkEdit.condition !== BULK_NO_CHANGE) {
+      payload.condition = bulkEdit.condition as Condition;
+    }
+
+    if (bulkEdit.price.trim()) {
+      const price = Number(bulkEdit.price);
+      if (!Number.isFinite(price) || price < 0 || !Number.isInteger(price)) {
+        pushToast({
+          title: "Invalid price",
+          description: "Bulk price must be a whole number that is zero or more.",
+          variant: "warning",
+        });
+        return;
+      }
+      payload.price = price;
+    }
+
+    if (bulkEdit.stock.trim()) {
+      const stock = Number(bulkEdit.stock);
+      if (!Number.isFinite(stock) || stock < 0 || !Number.isInteger(stock)) {
+        pushToast({
+          title: "Invalid stock",
+          description: "Bulk stock must be a whole number that is zero or more.",
+          variant: "warning",
+        });
+        return;
+      }
+      payload.stock = stock;
+    }
+
+    if (Object.keys(payload).length === 0) {
+      pushToast({
+        title: "No bulk changes selected",
+        description: "Choose at least one field to update.",
+        variant: "warning",
+      });
+      return;
+    }
+
+    startTransition(async () => {
+      try {
+        const result = await bulkUpdateProducts(selectedProductIds, payload);
+        if (!result.success) {
+          pushToast({
+            title: "Bulk update failed",
+            description: result.error || "Unable to update selected products.",
+            variant: "warning",
+          });
+          return;
+        }
+
+        pushToast({
+          title: "Bulk update complete",
+          description: `${result.updated} product${result.updated === 1 ? "" : "s"} updated.`,
+          variant: "success",
+        });
+        setSelectedProductIds([]);
+        router.refresh();
+      } catch {
+        pushToast({
+          title: "Bulk update failed",
+          description: "Unable to update selected products right now.",
+          variant: "warning",
+        });
+      }
+    });
+  };
+
+  const handleBulkDelete = () => {
+    if (selectedProductIds.length === 0) {
+      pushToast({
+        title: "Nothing selected",
+        description: "Select one or more products first.",
+        variant: "warning",
+      });
+      return;
+    }
+    if (
+      !window.confirm(
+        `Delete ${selectedProductIds.length} selected product${selectedProductIds.length === 1 ? "" : "s"}? This cannot be undone.`,
+      )
+    ) {
+      return;
+    }
+
+    startTransition(async () => {
+      try {
+        const result = await bulkDeleteProducts(selectedProductIds);
+        if (!result.success && result.deleted === 0) {
+          pushToast({
+            title: "Bulk delete failed",
+            description: result.error || "Unable to delete selected products.",
+            variant: "warning",
+          });
+          return;
+        }
+
+        if (result.deleted > 0) {
+          pushToast({
+            title: "Bulk delete complete",
+            description: `${result.deleted} product${result.deleted === 1 ? "" : "s"} deleted.`,
+            variant: "info",
+          });
+        }
+        if (result.blocked.length > 0) {
+          pushToast({
+            title: "Some products were skipped",
+            description: result.error || `${result.blocked.length} product(s) are linked to orders and cannot be deleted.`,
+            variant: "warning",
+          });
+        }
+
+        setSelectedProductIds([]);
+        router.refresh();
+      } catch {
+        pushToast({
+          title: "Bulk delete failed",
+          description: "Unable to delete selected products right now.",
           variant: "warning",
         });
       }
@@ -750,6 +1091,29 @@ export function ProductAdminConsole({
         </section>
 
         <section className="space-y-3">
+          {filteredProducts.length > 0 ? (
+            <div className="flex flex-wrap items-center justify-between gap-2 rounded-[1.25rem] border border-[var(--border-subtle)] bg-[var(--surface-soft)] px-3 py-2">
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  onClick={togglePageSelection}
+                  className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-secondary transition-colors hover:text-[var(--foreground)]"
+                >
+                  {allPageSelected ? "Unselect page" : "Select page"}
+                </button>
+                <button
+                  type="button"
+                  onClick={clearSelection}
+                  disabled={selectedCount === 0}
+                  className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-secondary transition-colors hover:text-[var(--foreground)] disabled:opacity-50"
+                >
+                  Clear selected
+                </button>
+              </div>
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--text-soft)]">{selectedCount} selected</p>
+            </div>
+          ) : null}
+
           {filteredProducts.length === 0 ? (
             <div className="rounded-[1.75rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] p-6 text-sm text-secondary">
               No products match the current search.
@@ -757,44 +1121,56 @@ export function ProductAdminConsole({
           ) : (
             paginatedProducts.map((product) => {
               const active = !isCreating && product.id === selectedId;
+              const checked = selectedProductIds.includes(product.id);
               return (
-                <button
-                  key={product.id}
-                  type="button"
-                  onClick={() => selectProduct(product.id)}
-                  className={`interactive-focus w-full rounded-[1.75rem] border p-4 text-left transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] ${
-                    active
-                      ? "border-primary/40 bg-[linear-gradient(180deg,var(--surface-card-strong),var(--surface-card))] shadow-[0_20px_50px_rgba(var(--shadow-neutral-rgb),0.12)]"
-                      : "border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] hover:border-[var(--interactive-border-strong)] hover:-translate-y-0.5"
-                  }`}
-                >
-                  <div className="mb-3 flex items-start justify-between gap-4">
-                    <div className="min-w-0">
-                      <p className="truncate text-sm font-semibold text-[var(--foreground)]">{product.name}</p>
-                      <p className="mt-1 truncate text-xs uppercase tracking-[0.16em] text-[var(--text-soft)]">{product.slug}</p>
+                <div key={product.id} className="flex items-start gap-3">
+                  <label className="mt-4 inline-flex cursor-pointer items-center">
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      onChange={(event) => toggleProductSelection(product.id, event.target.checked)}
+                      className="h-4 w-4 rounded border-[var(--border-subtle)] accent-primary"
+                      aria-label={`Select ${product.name}`}
+                    />
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => selectProduct(product.id)}
+                    className={`interactive-focus w-full rounded-[1.75rem] border p-4 text-left transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] ${
+                      active
+                        ? "border-primary/40 bg-[linear-gradient(180deg,var(--surface-card-strong),var(--surface-card))] shadow-[0_20px_50px_rgba(var(--shadow-neutral-rgb),0.12)]"
+                        : "border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] hover:border-[var(--interactive-border-strong)] hover:-translate-y-0.5"
+                    }`}
+                  >
+                    <div className="mb-3 flex items-start justify-between gap-4">
+                      <div className="min-w-0">
+                        <p className="truncate text-sm font-semibold text-[var(--foreground)]">{product.name}</p>
+                        <p className="mt-1 truncate text-xs uppercase tracking-[0.16em] text-[var(--text-soft)]">{product.slug}</p>
+                      </div>
+                      <span className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-soft)] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-primary">
+                        {formatCondition(product.condition)}
+                      </span>
                     </div>
-                    <span className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-soft)] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-primary">
-                      {formatCondition(product.condition)}
-                    </span>
-                  </div>
-                  <div className="grid grid-cols-3 gap-2 text-xs">
-                    <div className="rounded-[1rem] bg-[var(--surface-soft)] px-3 py-2">
-                      <p className="text-[var(--text-soft)]">Price</p>
-                      <p className="mt-1 font-semibold text-[var(--foreground)]">{formatCurrency(product.price)}</p>
+                    <div className="grid grid-cols-3 gap-2 text-xs">
+                      <div className="rounded-[1rem] bg-[var(--surface-soft)] px-3 py-2">
+                        <p className="text-[var(--text-soft)]">Price</p>
+                        <p className="mt-1 font-semibold text-[var(--foreground)]">{formatCurrency(product.price)}</p>
+                      </div>
+                      <div className="rounded-[1rem] bg-[var(--surface-soft)] px-3 py-2">
+                        <p className="text-[var(--text-soft)]">Stock</p>
+                        <p className="mt-1 font-semibold text-[var(--foreground)]">{product.stock}</p>
+                      </div>
+                      <div className="rounded-[1rem] bg-[var(--surface-soft)] px-3 py-2">
+                        <p className="text-[var(--text-soft)]">Category</p>
+                        <p className="mt-1 truncate font-semibold text-[var(--foreground)]">{product.categoryName}</p>
+                      </div>
                     </div>
-                    <div className="rounded-[1rem] bg-[var(--surface-soft)] px-3 py-2">
-                      <p className="text-[var(--text-soft)]">Stock</p>
-                      <p className="mt-1 font-semibold text-[var(--foreground)]">{product.stock}</p>
-                    </div>
-                    <div className="rounded-[1rem] bg-[var(--surface-soft)] px-3 py-2">
-                      <p className="text-[var(--text-soft)]">Category</p>
-                      <p className="mt-1 truncate font-semibold text-[var(--foreground)]">{product.categoryName}</p>
-                    </div>
-                  </div>
-                </button>
+                  </button>
+                </div>
               );
             })
           )}
+
           {filteredProducts.length > ADMIN_PRODUCTS_PAGE_SIZE ? (
             <div className="mt-3 flex items-center justify-between rounded-[1.25rem] border border-[var(--border-subtle)] bg-[var(--surface-soft)] px-3 py-2">
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--text-soft)]">
@@ -819,6 +1195,108 @@ export function ProductAdminConsole({
                 </button>
               </div>
             </div>
+          ) : null}
+
+          {selectedCount > 0 ? (
+            <section className="rounded-[1.5rem] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--surface-card),var(--surface-soft))] p-4">
+              <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-soft)]">
+                  Bulk actions for {selectedCount} product{selectedCount === 1 ? "" : "s"}
+                </p>
+                <button
+                  type="button"
+                  onClick={clearSelection}
+                  className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-secondary"
+                >
+                  Clear
+                </button>
+              </div>
+              <div className="grid gap-3 md:grid-cols-2">
+                <select
+                  value={bulkEdit.categoryId}
+                  onChange={(event) => setBulkEdit((current) => ({ ...current, categoryId: event.target.value }))}
+                  className="rounded-[1rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-3 py-2 text-sm text-[var(--foreground)]"
+                >
+                  <option value={BULK_NO_CHANGE} className="bg-[var(--panel-bg)] text-[var(--foreground)]">
+                    Keep current category
+                  </option>
+                  {categories.map((category) => (
+                    <option key={category.id} value={category.id} className="bg-[var(--panel-bg)] text-[var(--foreground)]">
+                      Set category: {category.name}
+                    </option>
+                  ))}
+                </select>
+
+                <select
+                  value={bulkEdit.brandId}
+                  onChange={(event) => setBulkEdit((current) => ({ ...current, brandId: event.target.value }))}
+                  className="rounded-[1rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-3 py-2 text-sm text-[var(--foreground)]"
+                >
+                  <option value={BULK_NO_CHANGE} className="bg-[var(--panel-bg)] text-[var(--foreground)]">
+                    Keep current brand
+                  </option>
+                  <option value={BULK_CLEAR_BRAND} className="bg-[var(--panel-bg)] text-[var(--foreground)]">
+                    Clear brand
+                  </option>
+                  {availableBrands.map((brand) => (
+                    <option key={brand.id} value={brand.id} className="bg-[var(--panel-bg)] text-[var(--foreground)]">
+                      Set brand: {brand.name}
+                    </option>
+                  ))}
+                </select>
+
+                <select
+                  value={bulkEdit.condition}
+                  onChange={(event) => setBulkEdit((current) => ({ ...current, condition: event.target.value }))}
+                  className="rounded-[1rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-3 py-2 text-sm text-[var(--foreground)]"
+                >
+                  <option value={BULK_NO_CHANGE} className="bg-[var(--panel-bg)] text-[var(--foreground)]">
+                    Keep current condition
+                  </option>
+                  {CONDITION_OPTIONS.map((option) => (
+                    <option key={option} value={option} className="bg-[var(--panel-bg)] text-[var(--foreground)]">
+                      Set condition: {formatCondition(option)}
+                    </option>
+                  ))}
+                </select>
+
+                <input
+                  type="number"
+                  min="0"
+                  value={bulkEdit.price}
+                  onChange={(event) => setBulkEdit((current) => ({ ...current, price: event.target.value }))}
+                  placeholder="Set price for selected (optional)"
+                  className="rounded-[1rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-3 py-2 text-sm text-[var(--foreground)] placeholder:text-[var(--text-soft)]"
+                />
+
+                <input
+                  type="number"
+                  min="0"
+                  value={bulkEdit.stock}
+                  onChange={(event) => setBulkEdit((current) => ({ ...current, stock: event.target.value }))}
+                  placeholder="Set stock for selected (optional)"
+                  className="rounded-[1rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-3 py-2 text-sm text-[var(--foreground)] placeholder:text-[var(--text-soft)]"
+                />
+              </div>
+              <div className="mt-4 flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={handleBulkUpdate}
+                  disabled={isPending}
+                  className="rounded-full bg-primary px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--primary-contrast)] disabled:opacity-60"
+                >
+                  {isPending ? "Applying..." : "Apply updates"}
+                </button>
+                <button
+                  type="button"
+                  onClick={handleBulkDelete}
+                  disabled={isPending}
+                  className="rounded-full border border-[var(--status-error)]/25 bg-[var(--status-error)]/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--status-error)] disabled:opacity-60"
+                >
+                  {isPending ? "Deleting..." : "Delete selected"}
+                </button>
+              </div>
+            </section>
           ) : null}
         </section>
       </div>
@@ -964,7 +1442,7 @@ export function ProductAdminConsole({
                   <p className="mt-2 text-xs font-medium text-[var(--status-error)]">{validationErrors.categoryId}</p>
                 ) : null}
               </label>
-              <label className="block">
+              <div className="block">
                 <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.16em] text-[var(--text-soft)]">Brand</span>
                 <select
                   value={draft.brandId}
@@ -977,7 +1455,7 @@ export function ProductAdminConsole({
                   <option value="" className="bg-[var(--panel-bg)] text-[var(--foreground)]">
                     No brand
                   </option>
-                  {brands.map((brand) => (
+                  {availableBrands.map((brand) => (
                     <option key={brand.id} value={brand.id} className="bg-[var(--panel-bg)] text-[var(--foreground)]">
                       {brand.name}
                     </option>
@@ -986,7 +1464,30 @@ export function ProductAdminConsole({
                 {validationErrors.brandId ? (
                   <p className="mt-2 text-xs font-medium text-[var(--status-error)]">{validationErrors.brandId}</p>
                 ) : null}
-              </label>
+                <div className="mt-3 space-y-2 rounded-[1rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-3">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--text-soft)]">Quick add brand</p>
+                  <input
+                    value={newBrandName}
+                    onChange={(event) => setNewBrandName(event.target.value)}
+                    placeholder="Brand name"
+                    className="interactive-focus w-full rounded-[0.85rem] border border-[var(--border-subtle)] bg-[var(--surface-soft)] px-3 py-2 text-xs text-[var(--foreground)] outline-none placeholder:text-[var(--text-soft)] focus-visible:ring-2 focus-visible:ring-primary/25"
+                  />
+                  <input
+                    value={newBrandImage}
+                    onChange={(event) => setNewBrandImage(event.target.value)}
+                    placeholder="Image URL (optional)"
+                    className="interactive-focus w-full rounded-[0.85rem] border border-[var(--border-subtle)] bg-[var(--surface-soft)] px-3 py-2 text-xs text-[var(--foreground)] outline-none placeholder:text-[var(--text-soft)] focus-visible:ring-2 focus-visible:ring-primary/25"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleCreateBrand}
+                    disabled={isPending}
+                    className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-soft)] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-secondary transition-colors hover:text-[var(--foreground)] disabled:opacity-60"
+                  >
+                    Add brand
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
 

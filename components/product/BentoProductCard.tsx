@@ -323,5 +323,3 @@ export function BentoProductCard({
     </Tilt3D>
   );
 }
-
-

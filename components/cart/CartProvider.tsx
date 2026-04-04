@@ -3,7 +3,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import type { Product } from "@/components/product/BentoProductCard";
 import { useToast } from "@/components/ui/ToastProvider";
-import { getCustomerLists, syncCustomerCart, syncCustomerList } from "@/actions/customer-lists";
+import { getCustomerListsClient, syncCustomerCartClient, syncCustomerListClient } from "@/lib/customer-lists-api";
 import { trackEvent } from "@/lib/analytics-client";
 
 export interface CartItem {
@@ -92,7 +92,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         if (!mounted) return;
         let cancelled = false;
         (async () => {
-            const synced = await getCustomerLists();
+            const synced = await getCustomerListsClient();
             if (cancelled || !synced.authenticated) return;
             if (synced.cart.length > 0) {
                 setCartItems((prev) => {
@@ -115,7 +115,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     useEffect(() => {
         if (!mounted) return;
         const timer = setTimeout(() => {
-            syncCustomerCart(
+            syncCustomerCartClient(
                 cartItems.map((item) => ({
                     productId: item.product.id,
                     quantity: item.quantity,
@@ -128,7 +128,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     useEffect(() => {
         if (!mounted) return;
         const timer = setTimeout(() => {
-            syncCustomerList(
+            syncCustomerListClient(
                 "SAVE_FOR_LATER",
                 savedForLater.map((item) => item.id),
             ).catch(() => null);

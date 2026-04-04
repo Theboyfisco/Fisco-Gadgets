@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import type { Product } from "@/components/product/BentoProductCard";
-import { getCustomerLists, syncCustomerList } from "@/actions/customer-lists";
+import { getCustomerListsClient, syncCustomerListClient } from "@/lib/customer-lists-api";
 
 interface WishlistContextType {
   wishlistItems: Product[];
@@ -46,7 +46,7 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
     if (!hydrated) return;
     let cancelled = false;
     (async () => {
-      const synced = await getCustomerLists();
+      const synced = await getCustomerListsClient();
       if (cancelled || !synced.authenticated) return;
       if (synced.wishlist.length > 0) {
         setWishlistItems((prev) => {
@@ -63,7 +63,7 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (!hydrated) return;
     const timer = setTimeout(() => {
-      syncCustomerList(
+      syncCustomerListClient(
         "WISHLIST",
         wishlistItems.map((item) => item.id),
       ).catch(() => null);

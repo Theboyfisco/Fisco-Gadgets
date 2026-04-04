@@ -34,6 +34,16 @@ function mapCartRow(row: any) {
   };
 }
 
+async function filterExistingProductIds(productIds: string[]) {
+  if (productIds.length === 0) return [];
+  const existing = await prisma.product.findMany({
+    where: { id: { in: productIds } },
+    select: { id: true },
+  });
+  const existingSet = new Set(existing.map((item) => item.id));
+  return productIds.filter((id) => existingSet.has(id));
+}
+
 export async function getCustomerLists() {
   const customer = await getCurrentCustomer();
   if (!customer) {
@@ -76,51 +86,27 @@ export async function syncCustomerList(listType: CustomerListType, productIds: s
   }
 
   const uniqueIds = Array.from(new Set(productIds.filter(Boolean))).slice(0, MAX_ITEMS[listType]);
+  const validIds = await filterExistingProductIds(uniqueIds);
 
-  await prisma.$transaction(async (tx) => {
-    if (uniqueIds.length === 0) {
-      await tx.customerProductListItem.deleteMany({
-        where: {
-          customerId: customer.id,
-          listType,
-        },
-      });
-      return;
-    }
-
-    await tx.customerProductListItem.deleteMany({
-      where: {
-        customerId: customer.id,
-        listType,
-        productId: { notIn: uniqueIds },
-      },
-    });
-
-    for (let index = 0; index < uniqueIds.length; index += 1) {
-      const productId = uniqueIds[index];
-      await tx.customerProductListItem.upsert({
-        where: {
-          customerId_productId_listType: {
-            customerId: customer.id,
-            productId,
-            listType,
-          },
-        },
-        update: {
-          rank: index,
-          quantity: null,
-          updatedAt: new Date(),
-        },
-        create: {
-          customerId: customer.id,
-          productId,
-          listType,
-          rank: index,
-          quantity: null,
-        },
-      });
-    }
+  await prisma.customerProductListItem.deleteMany({
+    where: {
+      customerId: customer.id,
+      listType,
+    },
   });
+
+  if (validIds.length > 0) {
+    await prisma.customerProductListItem.createMany({
+      data: validIds.map((productId, index) => ({
+        customerId: customer.id,
+        productId,
+        listType,
+        rank: index,
+        quantity: null,
+      })),
+      skipDuplicates: true,
+    });
+  }
 
   return { success: true, authenticated: true };
 }
@@ -131,43 +117,49 @@ export async function trackRecentProduct(productId: string) {
     return { success: false, authenticated: false };
   }
 
-  await prisma.$transaction(async (tx) => {
-    await tx.customerProductListItem.upsert({
-      where: {
-        customerId_productId_listType: {
-          customerId: customer.id,
-          productId,
-          listType: "RECENT",
-        },
-      },
-      update: {
-        updatedAt: new Date(),
-      },
-      create: {
+  const existingProduct = await prisma.product.findUnique({
+    where: { id: productId },
+    select: { id: true },
+  });
+  if (!existingProduct) {
+    return { success: false, authenticated: true };
+  }
+
+  await prisma.customerProductListItem.upsert({
+    where: {
+      customerId_productId_listType: {
         customerId: customer.id,
         productId,
         listType: "RECENT",
       },
-    });
-
-    const recents = await tx.customerProductListItem.findMany({
-      where: {
-        customerId: customer.id,
-        listType: "RECENT",
-      },
-      orderBy: {
-        updatedAt: "desc",
-      },
-      select: { id: true },
-    });
-
-    const overflow = recents.slice(MAX_ITEMS.RECENT).map((row) => row.id);
-    if (overflow.length > 0) {
-      await tx.customerProductListItem.deleteMany({
-        where: { id: { in: overflow } },
-      });
-    }
+    },
+    update: {
+      updatedAt: new Date(),
+    },
+    create: {
+      customerId: customer.id,
+      productId,
+      listType: "RECENT",
+    },
   });
+
+  const recents = await prisma.customerProductListItem.findMany({
+    where: {
+      customerId: customer.id,
+      listType: "RECENT",
+    },
+    orderBy: {
+      updatedAt: "desc",
+    },
+    select: { id: true },
+  });
+
+  const overflow = recents.slice(MAX_ITEMS.RECENT).map((row) => row.id);
+  if (overflow.length > 0) {
+    await prisma.customerProductListItem.deleteMany({
+      where: { id: { in: overflow } },
+    });
+  }
 
   return { success: true, authenticated: true };
 }
@@ -185,48 +177,26 @@ export async function syncCustomerCart(items: Array<{ productId: string; quantit
         .map((item) => [item.productId, { productId: item.productId, quantity: Math.min(Math.max(1, item.quantity), 20) }]),
     ).values(),
   ).slice(0, MAX_ITEMS.CART);
+  const validProductIds = await filterExistingProductIds(normalized.map((item) => item.productId));
+  const validProductIdSet = new Set(validProductIds);
+  const validItems = normalized.filter((item) => validProductIdSet.has(item.productId));
 
-  await prisma.$transaction(async (tx) => {
-    if (normalized.length === 0) {
-      await tx.customerProductListItem.deleteMany({
-        where: { customerId: customer.id, listType: "CART" },
-      });
-      return;
-    }
-
-    await tx.customerProductListItem.deleteMany({
-      where: {
-        customerId: customer.id,
-        listType: "CART",
-        productId: { notIn: normalized.map((item) => item.productId) },
-      },
-    });
-
-    for (let index = 0; index < normalized.length; index += 1) {
-      const item = normalized[index];
-      await tx.customerProductListItem.upsert({
-        where: {
-          customerId_productId_listType: {
-            customerId: customer.id,
-            productId: item.productId,
-            listType: "CART",
-          },
-        },
-        update: {
-          rank: index,
-          quantity: item.quantity,
-          updatedAt: new Date(),
-        },
-        create: {
-          customerId: customer.id,
-          productId: item.productId,
-          listType: "CART",
-          rank: index,
-          quantity: item.quantity,
-        },
-      });
-    }
+  await prisma.customerProductListItem.deleteMany({
+    where: { customerId: customer.id, listType: "CART" },
   });
+
+  if (validItems.length > 0) {
+    await prisma.customerProductListItem.createMany({
+      data: validItems.map((item, index) => ({
+        customerId: customer.id,
+        productId: item.productId,
+        listType: "CART",
+        rank: index,
+        quantity: item.quantity,
+      })),
+      skipDuplicates: true,
+    });
+  }
 
   return { success: true, authenticated: true };
 }

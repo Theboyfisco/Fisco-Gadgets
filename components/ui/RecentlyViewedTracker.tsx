@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { trackRecentProduct } from "@/actions/customer-lists";
+import { trackRecentProductClient } from "@/lib/customer-lists-api";
 import { trackEvent } from "@/lib/analytics-client";
 
 type RecentlyViewedProduct = {
@@ -36,7 +36,7 @@ export function RecentlyViewedTracker({ product }: { product: RecentlyViewedProd
         categoryId: product.categoryId,
       },
     });
-    trackRecentProduct(product.id).catch(() => null);
+    trackRecentProductClient(product.id).catch(() => null);
   }, [product]);
 
   return null;
