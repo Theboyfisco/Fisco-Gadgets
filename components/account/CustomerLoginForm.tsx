@@ -10,6 +10,7 @@ export function CustomerLoginForm() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -18,7 +19,7 @@ export function CustomerLoginForm() {
     setLoading(true);
     setError(null);
 
-    const result = await loginCustomer({ email, password });
+    const result = await loginCustomer({ email, password, rememberMe });
     if (!result.success) {
       setError(result.error || "Unable to sign in.");
       setLoading(false);
@@ -61,6 +62,16 @@ export function CustomerLoginForm() {
             className="interactive-focus w-full rounded-[1rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-sm text-[var(--foreground)] outline-none placeholder:text-[var(--text-soft)] focus-visible:ring-2 focus-visible:ring-primary/25"
             placeholder="Your password"
           />
+        </label>
+
+        <label className="mt-4 flex items-center gap-3 text-sm text-secondary">
+          <input
+            type="checkbox"
+            checked={rememberMe}
+            onChange={(event) => setRememberMe(event.target.checked)}
+            className="h-4 w-4 rounded border border-[var(--border-subtle)] text-primary focus-visible:ring-2 focus-visible:ring-primary/25"
+          />
+          Remember me for 30 days
         </label>
 
         {error && <p className="mt-4 text-sm font-semibold text-[var(--status-error)]">{error}</p>}

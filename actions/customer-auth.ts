@@ -20,6 +20,7 @@ const RegisterSchema = z.object({
 const LoginSchema = z.object({
   email: z.string().email("Valid email is required"),
   password: z.string().min(1, "Password is required"),
+  rememberMe: z.boolean().optional(),
 });
 
 export async function registerCustomer(input: z.infer<typeof RegisterSchema>) {
@@ -56,7 +57,7 @@ export async function loginCustomer(input: z.infer<typeof LoginSchema>) {
     return { success: false, error: "Invalid email or password." };
   }
 
-  await createCustomerSession(customer.id);
+  await createCustomerSession(customer.id, { rememberMe: parsed.data.rememberMe ?? false });
   revalidatePath("/", "layout");
   return { success: true };
 }
