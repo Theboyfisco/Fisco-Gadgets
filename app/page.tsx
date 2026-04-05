@@ -36,7 +36,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const [productCount, categoryCount] = await withTimeout(
     Promise.all([prisma.product.count().catch(() => 0), prisma.category.count().catch(() => 0)]),
     1400,
-    [0, 0] as const,
+    [0, 0],
   );
 
   const description = truncateDescription(
@@ -57,7 +57,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Home() {
-  const fallbackHomeData = [[], fallbackCategories] as const;
+  const fallbackHomeData: [any[], typeof fallbackCategories] = [[], fallbackCategories];
   const [dbProducts, dbCategories] = shouldUseDatabase()
     ? await withTimeout(
         Promise.all([
