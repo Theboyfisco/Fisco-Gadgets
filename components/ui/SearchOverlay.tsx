@@ -288,6 +288,7 @@ export function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; onClose: (
                           </button>
                           <Link
                             href={`/product/${product.slug ?? product.id}`}
+                            prefetch={false}
                             onClick={onClose}
                             className="rounded-full border border-[var(--border-subtle)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-secondary transition-colors hover:border-primary/40 hover:text-primary"
                           >

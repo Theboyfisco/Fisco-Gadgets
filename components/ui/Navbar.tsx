@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ShoppingBag, Menu, X, Smartphone, Laptop, Headphones, Search, Info, Mail, Heart, UserCircle2 } from "lucide-react";
 import { useCart } from "../cart/CartProvider";
 import { useWishlist } from "../product/WishlistProvider";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import dynamic from "next/dynamic";
@@ -24,7 +24,6 @@ export function Navbar({ categories = [] }: NavbarProps) {
   const { cartItems, toggleCart } = useCart();
   const { wishlistItems, toggleWishlistDrawer, isWishlistOpen } = useWishlist();
   const pathname = usePathname();
-  const router = useRouter();
 
   const hydrated = useHydrated();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -127,23 +126,6 @@ export function Navbar({ categories = [] }: NavbarProps) {
     return [...prioritized, ...rest].slice(0, 4);
   }, [categoryLinks]);
   const navLinks = [coreLinks[0], ...visibleCategories, ...coreLinks.slice(1)];
-
-  useEffect(() => {
-    const routes = new Set<string>([
-      "/",
-      "/browse",
-      "/about",
-      "/contact",
-      "/compare",
-      "/wishlist",
-      "/account/profile",
-      "/account/orders",
-      ...categoryLinks.slice(0, 4).map((entry) => entry.href),
-    ]);
-    routes.forEach((route) => {
-      router.prefetch(route);
-    });
-  }, [categoryLinks, router]);
 
   const renderSearchOverlay = hydrated;
   const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);

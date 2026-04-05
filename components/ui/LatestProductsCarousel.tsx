@@ -162,6 +162,7 @@ export function LatestProductsCarousel({ products }: LatestProductsCarouselProps
             <div className="flex flex-col gap-2.5 rounded-2xl border border-[var(--carousel-control-border)] bg-[var(--carousel-control-bg)] p-2.5 backdrop-blur-md sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:p-3">
               <Link
                 href={`/product/${activeProduct.slug ?? activeProduct.id}`}
+                prefetch={false}
                 className="inline-flex w-full items-center justify-center rounded-full border border-[var(--media-card-pill-border)] bg-[var(--surface-card-strong)] px-5 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--foreground)] transition hover:border-primary/40 hover:bg-primary/25 sm:w-auto sm:px-6 sm:text-xs sm:tracking-[0.22em]"
               >
                 View Product
