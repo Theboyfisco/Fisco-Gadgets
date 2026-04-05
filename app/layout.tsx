@@ -15,10 +15,7 @@ import { CompareFloatingBar } from "@/components/product/CompareFloatingBar";
 import { WishlistWrapper } from "@/components/product/WishlistWrapper";
 import { ScrollProgress } from "@/components/ui/ScrollProgress";
 import { PageShell } from "@/components/ui/PageShell";
-import { SupportSpeedDial } from "@/components/ui/SupportSpeedDial";
-import { CustomCursor } from "@/components/ui/CustomCursor";
-import { PWARegistration } from "@/components/pwa/PWARegistration";
-import { PWAInstallPrompt } from "@/components/pwa/PWAInstallPrompt";
+import { ClientEnhancements } from "@/components/ui/ClientEnhancements";
 
 import prisma from "@/lib/db";
 import { fallbackCategories } from "@/lib/fallback-data";
@@ -109,7 +106,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const categories = shouldUseDatabase()
-    ? await withTimeout(getCachedNavbarCategories().catch(() => fallbackNavbarCategories), 1500, fallbackNavbarCategories)
+    ? await withTimeout(getCachedNavbarCategories().catch(() => fallbackNavbarCategories), 500, fallbackNavbarCategories)
     : fallbackNavbarCategories;
 
   return (
@@ -152,10 +149,7 @@ export default async function RootLayout({
                 <CartWrapper />
                 <WishlistWrapper />
                 <CompareFloatingBar />
-                <SupportSpeedDial />
-                <CustomCursor />
-                <PWAInstallPrompt />
-                <PWARegistration />
+                <ClientEnhancements />
               </CartProvider>
             </WishlistProvider>
           </CompareProvider>

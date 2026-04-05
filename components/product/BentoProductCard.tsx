@@ -120,6 +120,7 @@ export function BentoProductCard({
             {href ? (
               <Link
                 href={href}
+                prefetch={false}
                 className="group/image block h-full w-full"
                 aria-label={`View ${product.name}`}
               >
@@ -228,6 +229,7 @@ export function BentoProductCard({
               {href ? (
                 <Link
                   href={href}
+                  prefetch={false}
                   className="mt-2 block focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/25"
                 >
                   <h3 className="line-clamp-2 text-[1.2rem] font-semibold tracking-[-0.02em] text-[var(--foreground)] transition-colors duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:text-primary sm:text-lg md:text-[1.45rem]">
@@ -251,6 +253,7 @@ export function BentoProductCard({
             {href ? (
               <Link
                 href={href}
+                prefetch={false}
                 className="interactive-focus inline-flex items-center gap-1.5 rounded-full border border-[var(--interactive-border)] bg-[var(--surface-soft)] px-2.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-secondary transition-colors hover:text-[var(--foreground)] sm:px-3 sm:text-xs sm:tracking-[0.18em]"
               >
                 Details

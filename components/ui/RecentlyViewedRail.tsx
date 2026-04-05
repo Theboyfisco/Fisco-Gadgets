@@ -117,6 +117,7 @@ export function RecentlyViewedRail() {
             >
               <Link
                 href={`/product/${item.slug ?? item.id}`}
+                prefetch={false}
                 className="group block overflow-hidden rounded-[1.6rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-3 transition-all duration-[var(--motion-base)] ease-[var(--ease-standard)] hover:-translate-y-1 hover:shadow-[0_24px_60px_rgba(var(--shadow-neutral-rgb),0.22)]"
               >
                 <div className="relative mb-3 h-40 overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-cta)]">

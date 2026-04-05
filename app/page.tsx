@@ -35,7 +35,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
   const [productCount, categoryCount] = await withTimeout(
     Promise.all([prisma.product.count().catch(() => 0), prisma.category.count().catch(() => 0)]),
-    1400,
+    500,
     [0, 0],
   );
 
@@ -59,9 +59,9 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function Home() {
   const fallbackHomeData: [any[], typeof fallbackCategories] = [[], fallbackCategories];
   const [dbProducts, dbCategories] = shouldUseDatabase()
-    ? await withTimeout(
-        Promise.all([
-          prisma.product
+      ? await withTimeout(
+          Promise.all([
+            prisma.product
             .findMany({
               take: 10,
               orderBy: { createdAt: "desc" },
@@ -70,7 +70,7 @@ export default async function Home() {
             .catch(() => []),
           prisma.category.findMany().catch(() => fallbackCategories),
         ]),
-        1800,
+        650,
         fallbackHomeData,
       )
     : fallbackHomeData;

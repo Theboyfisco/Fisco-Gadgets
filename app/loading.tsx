@@ -1,11 +1,15 @@
-export default function GlobalLoading() {
+export default function RootLoading() {
   return (
-    <div className="container mx-auto flex min-h-[48vh] items-center justify-center px-4 py-10">
-      <div className="flex items-center gap-3 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-5 py-3 text-sm font-semibold text-secondary">
-        <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-primary" />
-        Loading page...
+    <div className="container mx-auto px-4 py-10">
+      <div className="animate-pulse space-y-4">
+        <div className="h-10 w-48 rounded-xl bg-[var(--surface-soft)]" />
+        <div className="h-48 rounded-2xl bg-[var(--surface-soft)]" />
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          <div className="h-56 rounded-2xl bg-[var(--surface-soft)]" />
+          <div className="h-56 rounded-2xl bg-[var(--surface-soft)]" />
+          <div className="h-56 rounded-2xl bg-[var(--surface-soft)]" />
+        </div>
       </div>
     </div>
   );
 }
-

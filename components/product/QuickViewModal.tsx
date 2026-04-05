@@ -137,6 +137,7 @@ export function QuickViewModal({ product, isOpen, onClose }: QuickViewModalProps
                   <AddToCartButton product={product} className="rounded-full bg-primary py-3 text-sm font-semibold text-[var(--primary-contrast)] transition-colors hover:bg-[var(--primary-hover)]" />
                   <Link
                     href={`/product/${product.slug ?? product.id}`}
+                    prefetch={false}
                     className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] py-3 text-center text-sm font-semibold text-[var(--foreground)] transition-colors hover:bg-[var(--surface-cta)]"
                   >
                     View details

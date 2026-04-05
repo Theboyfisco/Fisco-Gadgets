@@ -18,22 +18,149 @@ import { FrequentlyBoughtTogether } from "@/components/product/FrequentlyBoughtT
 import { ProductCommunityPanel } from "@/components/product/ProductCommunityPanel";
 import { SITE_NAME, toAbsoluteUrl, truncateDescription } from "@/lib/site-config";
 import { buildWhatsAppLink } from "@/lib/support-config";
-import { cache } from "react";
+import { unstable_cache } from "next/cache";
 
 export const revalidate = 300;
 
-const getProductByIdentifier = cache(async (identifier: string) => {
-  try {
-    return await prisma.product.findFirst({
-      where: {
-        OR: [{ id: identifier }, { slug: identifier }],
-      },
-      include: { category: true, brand: true },
-    });
-  } catch {
-    return null;
-  }
-});
+const getProductByIdentifier = unstable_cache(
+  async (identifier: string) => {
+    try {
+      return await prisma.product.findFirst({
+        where: {
+          OR: [{ id: identifier }, { slug: identifier }],
+        },
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+          description: true,
+          price: true,
+          stock: true,
+          images: true,
+          categoryId: true,
+          brandId: true,
+          condition: true,
+          technicalSpecs: true,
+          category: {
+            select: {
+              name: true,
+              slug: true,
+            },
+          },
+          brand: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      });
+    } catch {
+      return null;
+    }
+  },
+  ["product-by-identifier"],
+  { revalidate: 300 },
+);
+
+const getProductAncillaryData = unstable_cache(
+  async (productId: string, categoryId: string) => {
+    const [relatedProductsRaw, sourceOrders, reviewsRaw, questionsRaw] = await Promise.all([
+      prisma.product
+        .findMany({
+          where: {
+            categoryId,
+            id: { not: productId },
+          },
+          take: 6,
+          orderBy: [{ updatedAt: "desc" }],
+          select: {
+            id: true,
+            name: true,
+            slug: true,
+            price: true,
+            stock: true,
+            images: true,
+            categoryId: true,
+            brandId: true,
+            technicalSpecs: true,
+          },
+        })
+        .catch(() => []),
+      prisma.orderItem
+        .findMany({
+          where: {
+            productId,
+            order: {
+              status: "PAID",
+            },
+          },
+          select: { orderId: true },
+          take: 120,
+        })
+        .catch(() => []),
+      prisma.productReview
+        .findMany({
+          where: { productId },
+          include: {
+            customer: {
+              select: { fullName: true, email: true },
+            },
+          },
+          orderBy: { createdAt: "desc" },
+          take: 20,
+        })
+        .catch(() => []),
+      prisma.productQuestion
+        .findMany({
+          where: { productId },
+          orderBy: { createdAt: "desc" },
+          take: 20,
+        })
+        .catch(() => []),
+    ]);
+
+    const sourceOrderIds = Array.from(new Set(sourceOrders.map((item) => item.orderId)));
+    const frequentlyBoughtIds =
+      sourceOrderIds.length > 0
+        ? await prisma.orderItem
+            .groupBy({
+              by: ["productId"],
+              where: {
+                orderId: { in: sourceOrderIds },
+                productId: { not: productId },
+              },
+              _count: { productId: true },
+              orderBy: { _count: { productId: "desc" } },
+              take: 3,
+            })
+            .catch(() => [])
+        : [];
+
+    const frequentlyBoughtProductsRaw =
+      frequentlyBoughtIds.length > 0
+        ? await prisma.product
+            .findMany({
+              where: { id: { in: frequentlyBoughtIds.map((item) => item.productId) } },
+              select: {
+                id: true,
+                name: true,
+                slug: true,
+                price: true,
+                stock: true,
+                images: true,
+                categoryId: true,
+                brandId: true,
+                technicalSpecs: true,
+              },
+            })
+            .catch(() => [])
+        : [];
+
+    return { relatedProductsRaw, reviewsRaw, questionsRaw, frequentlyBoughtProductsRaw };
+  },
+  ["product-ancillary-data"],
+  { revalidate: 180 },
+);
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const resolvedParams = await params;
@@ -76,66 +203,10 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
   const technicalSpecs = normalizeTechnicalSpecs(dbProduct.technicalSpecs);
   const eta = estimateDeliveryWindow(undefined, undefined, "DELIVERY");
 
-  const [relatedProductsRaw, sourceOrders, reviewsRaw, questionsRaw] = await Promise.all([
-    prisma.product.findMany({
-      where: {
-        categoryId: dbProduct.categoryId,
-        id: { not: dbProduct.id },
-      },
-      take: 6,
-      orderBy: [{ updatedAt: "desc" }],
-      include: { category: true, brand: true },
-    }),
-    prisma.orderItem.findMany({
-      where: {
-        productId: dbProduct.id,
-        order: {
-          status: "PAID",
-        },
-      },
-      select: { orderId: true },
-      take: 120,
-    }),
-    prisma.productReview.findMany({
-      where: { productId: dbProduct.id },
-      include: {
-        customer: {
-          select: { fullName: true, email: true },
-        },
-      },
-      orderBy: { createdAt: "desc" },
-      take: 20,
-    }),
-    prisma.productQuestion.findMany({
-      where: { productId: dbProduct.id },
-      orderBy: { createdAt: "desc" },
-      take: 20,
-    }),
-  ]);
-
-  const sourceOrderIds = Array.from(new Set(sourceOrders.map((item) => item.orderId)));
-
-  const frequentlyBoughtIds =
-    sourceOrderIds.length > 0
-      ? await prisma.orderItem.groupBy({
-          by: ["productId"],
-          where: {
-            orderId: { in: sourceOrderIds },
-            productId: { not: dbProduct.id },
-          },
-          _count: { productId: true },
-          orderBy: { _count: { productId: "desc" } },
-          take: 3,
-        })
-      : [];
-
-  const frequentlyBoughtProductsRaw =
-    frequentlyBoughtIds.length > 0
-      ? await prisma.product.findMany({
-          where: { id: { in: frequentlyBoughtIds.map((item) => item.productId) } },
-          include: { category: true, brand: true },
-        })
-      : [];
+  const { relatedProductsRaw, reviewsRaw, questionsRaw, frequentlyBoughtProductsRaw } = await getProductAncillaryData(
+    dbProduct.id,
+    dbProduct.categoryId,
+  );
 
   const product = {
     id: dbProduct.id,
