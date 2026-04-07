@@ -1,8 +1,9 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import { type ReactNode } from "react";
 import { MOTION } from "@/lib/motion";
+import { useSafeReducedMotion } from "@/lib/useSafeReducedMotion";
 
 interface RevealProps {
   children: ReactNode;
@@ -12,7 +13,7 @@ interface RevealProps {
 }
 
 export function Reveal({ children, className = "", delay = 0, y = 16 }: RevealProps) {
-  const reducedMotion = useReducedMotion();
+  const reducedMotion = useSafeReducedMotion();
 
   return (
     <motion.div

@@ -8,6 +8,8 @@ import type { CartItem } from "./CartProvider";
 import { MOTION } from "@/lib/motion";
 import { useBodyScrollLock } from "@/lib/useBodyScrollLock";
 import { SafeImage } from "@/components/ui/SafeImage";
+import { useSafeReducedMotion } from "@/lib/useSafeReducedMotion";
+import { useHydrated } from "@/lib/useHydrated";
 
 interface CartDrawerProps {
     isOpen: boolean;
@@ -39,7 +41,8 @@ export function CartDrawer({
     onClearSaved,
 }: CartDrawerProps) {
     const total = cartItems.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
-    const prefersReducedMotion = useReducedMotion();
+    const prefersReducedMotion = useSafeReducedMotion();
+    const hydrated = useHydrated();
     const dialogRef = useRef<HTMLDivElement>(null);
     const lastActiveRef = useRef<HTMLElement | null>(null);
 
@@ -142,7 +145,7 @@ export function CartDrawer({
                                         <div className="flex-1">
                                             <h4 className="font-semibold text-[var(--foreground)]">{item.product.name}</h4>
                                             <p className="text-primary text-sm">
-                                                {new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN" }).format(item.product.price)}
+                                                {hydrated ? new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN" }).format(item.product.price) : `₦${item.product.price.toLocaleString()}`}
                                             </p>
                                             {typeof item.product.stock === "number" && item.product.stock <= 0 && (
                                                 <p className="mt-1 text-xs font-semibold text-[var(--status-error)]">Out of stock</p>
@@ -171,7 +174,7 @@ export function CartDrawer({
                                         </div>
                                         <div className="text-right text-xs text-secondary">
                                             <p className="font-semibold text-[var(--foreground)]">
-                                                {new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN" }).format(item.product.price * item.quantity)}
+                                                {hydrated ? new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN" }).format(item.product.price * item.quantity) : `₦${(item.product.price * item.quantity).toLocaleString()}`}
                                             </p>
                                             <p>Line total</p>
                                         </div>
@@ -239,7 +242,7 @@ export function CartDrawer({
                                     </div>
                                     <div className="mt-2 flex justify-between text-lg font-bold text-[var(--foreground)]">
                                         <span>Total</span>
-                                        <span>{new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN" }).format(total)}</span>
+                                        <span>{hydrated ? new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN" }).format(total) : `₦${total.toLocaleString()}`}</span>
                                     </div>
                                 </div>
                                 <div className="flex gap-3">

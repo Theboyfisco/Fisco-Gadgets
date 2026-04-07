@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { useReducedMotion } from "framer-motion";
 import { Tilt3D } from "@/components/ui/Tilt3D";
 import { trackEvent } from "@/lib/analytics-client";
 import { SafeImage } from "@/components/ui/SafeImage";
+import { useSafeReducedMotion } from "@/lib/useSafeReducedMotion";
 
 interface ProductDepthGalleryProps {
   name: string;
@@ -20,7 +20,7 @@ export function ProductDepthGallery({ name, images, condition = "New" }: Product
 
   const [activeIndex, setActiveIndex] = useState(0);
   const activeImage = safeImages[activeIndex] ?? safeImages[0];
-  const prefersReducedMotion = useReducedMotion();
+  const prefersReducedMotion = useSafeReducedMotion();
 
   useEffect(() => {
     if (activeIndex === 0) return;

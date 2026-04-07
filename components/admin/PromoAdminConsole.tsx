@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Plus, Save, Tag, Trash2 } from "lucide-react";
 import { createPromoCode, deletePromoCode, updatePromoCode } from "@/actions/admin-promo";
 import { useToast } from "@/components/ui/ToastProvider";
+import { useHydrated } from "@/lib/useHydrated";
 
 type PromoItem = {
   id: string;
@@ -82,6 +83,7 @@ function toDraft(promo: PromoItem | null): PromoDraft {
 export function PromoAdminConsole({ promos }: { promos: PromoItem[] }) {
   const router = useRouter();
   const { pushToast } = useToast();
+  const hydrated = useHydrated();
   const [isPending, startTransition] = useTransition();
   const [selectedId, setSelectedId] = useState<string | null>(promos[0]?.id ?? null);
   const [isCreating, setIsCreating] = useState(promos.length === 0);
@@ -274,7 +276,7 @@ export function PromoAdminConsole({ promos }: { promos: PromoItem[] }) {
                 </span>
               </div>
               <p className="mt-1 text-xs uppercase tracking-[0.16em]">
-                {promo.kind} • {promo.kind === "PERCENT" ? `${promo.amount}%` : promo.kind === "FREE_SHIPPING" ? "Free shipping" : `₦${promo.amount.toLocaleString()}`}
+                {promo.kind} • {promo.kind === "PERCENT" ? `${promo.amount}%` : promo.kind === "FREE_SHIPPING" ? "Free shipping" : `₦${hydrated ? promo.amount.toLocaleString() : promo.amount}`}
               </p>
               <p className="mt-1 text-xs text-[var(--text-soft)]">
                 Used {promo.usedCount}
@@ -461,7 +463,7 @@ export function PromoAdminConsole({ promos }: { promos: PromoItem[] }) {
                 </>
               ) : null}{" "}
               • Orders <span className="font-semibold text-[var(--foreground)]">{selectedPromo.orderCount}</span> • Last updated{" "}
-              {new Date(selectedPromo.updatedAt).toLocaleString("en-NG")}
+              {hydrated ? new Date(selectedPromo.updatedAt).toLocaleString("en-NG") : "..."}
             </p>
           </div>
         ) : null}

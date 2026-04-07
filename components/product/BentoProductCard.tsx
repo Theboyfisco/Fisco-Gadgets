@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import { ArrowUpRight, Eye, ShoppingCart } from "lucide-react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
@@ -12,6 +12,7 @@ import { MOTION } from "@/lib/motion";
 import { normalizeTechnicalSpecs } from "@/lib/normalize-product";
 import { useCart } from "../cart/CartProvider";
 import { useHydrated } from "@/lib/useHydrated";
+import { useSafeReducedMotion } from "@/lib/useSafeReducedMotion";
 
 const QuickViewModal = dynamic(
   () => import("./QuickViewModal").then((mod) => mod.QuickViewModal),
@@ -69,8 +70,7 @@ export function BentoProductCard({
   href,
 }: BentoProductCardProps) {
   const hydrated = useHydrated();
-  const reducedMotionPreference = useReducedMotion();
-  const prefersReducedMotion = hydrated && reducedMotionPreference;
+  const prefersReducedMotion = useSafeReducedMotion();
   const { addToCart } = useCart();
   const [quickViewOpen, setQuickViewOpen] = useState(false);
   const specs = normalizeTechnicalSpecs(product.technicalSpecs);

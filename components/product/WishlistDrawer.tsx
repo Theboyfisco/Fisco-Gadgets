@@ -1,6 +1,8 @@
 "use client";
 
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { useSafeReducedMotion } from "@/lib/useSafeReducedMotion";
+import { useHydrated } from "@/lib/useHydrated";
 import { Heart, Trash2, X } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -19,7 +21,8 @@ interface WishlistDrawerProps {
 }
 
 export function WishlistDrawer({ isOpen, onClose, wishlistItems, onRemove, onClear }: WishlistDrawerProps) {
-  const prefersReducedMotion = useReducedMotion();
+  const prefersReducedMotion = useSafeReducedMotion();
+  const hydrated = useHydrated();
   const dialogRef = useRef<HTMLDivElement>(null);
   const lastActiveRef = useRef<HTMLElement | null>(null);
   const { addToCart } = useCart();
@@ -122,7 +125,7 @@ export function WishlistDrawer({ isOpen, onClose, wishlistItems, onRemove, onCle
                     <div className="flex-1">
                       <h4 className="font-semibold text-[var(--foreground)]">{item.name}</h4>
                       <p className="text-primary text-sm">
-                        {new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN" }).format(item.price)}
+                        {hydrated ? new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN" }).format(item.price) : `₦${item.price.toLocaleString()}`}
                       </p>
                     </div>
                     <button

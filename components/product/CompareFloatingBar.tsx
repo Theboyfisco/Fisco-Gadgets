@@ -1,7 +1,8 @@
 "use client";
 
 import { useCompare } from "./CompareProvider";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useSafeReducedMotion } from "@/lib/useSafeReducedMotion";
 import { Scale, X, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { MOTION } from "@/lib/motion";
@@ -9,7 +10,7 @@ import { SafeImage } from "@/components/ui/SafeImage";
 
 export function CompareFloatingBar() {
     const { compareItems, removeFromCompare, clearCompare } = useCompare();
-    const prefersReducedMotion = useReducedMotion();
+    const prefersReducedMotion = useSafeReducedMotion();
 
     if (compareItems.length === 0) return null;
 

@@ -1,7 +1,8 @@
 "use client";
 
-import { motion, useMotionTemplate, useMotionValue, useReducedMotion, useSpring, useTransform } from "framer-motion";
+import { motion, useMotionTemplate, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { type ReactNode, useState } from "react";
+import { useSafeReducedMotion } from "@/lib/useSafeReducedMotion";
 
 interface Tilt3DProps {
   children: ReactNode;
@@ -11,7 +12,7 @@ interface Tilt3DProps {
 }
 
 export function Tilt3D({ children, className = "", maxTilt = 9, spotlightOpacity = 0.32 }: Tilt3DProps) {
-  const prefersReducedMotion = useReducedMotion();
+  const prefersReducedMotion = useSafeReducedMotion();
   const rotateX = useMotionValue(0);
   const rotateY = useMotionValue(0);
   const springX = useSpring(rotateX, { stiffness: 180, damping: 18, mass: 0.45 });

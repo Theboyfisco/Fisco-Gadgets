@@ -213,14 +213,11 @@ export function Navbar({ categories = [] }: NavbarProps) {
               aria-controls="wishlist-drawer"
             >
               <Heart size={20} />
-              <span
-                suppressHydrationWarning
-                className={`absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full border border-[var(--background)] bg-primary text-[10px] font-bold text-[var(--primary-contrast)] transition-opacity duration-[var(--motion-base)] ease-[var(--ease-standard)] ${
-                  wishlistItems.length > 0 ? "opacity-100" : "opacity-0"
-                }`}
-              >
-                {wishlistItems.length}
-              </span>
+              {hydrated && wishlistItems.length > 0 && (
+                <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full border border-[var(--background)] bg-primary text-[10px] font-bold text-[var(--primary-contrast)] transition-opacity duration-[var(--motion-base)] ease-[var(--ease-standard)]">
+                  {wishlistItems.length}
+                </span>
+              )}
             </button>
             <button
               onClick={toggleCart}
@@ -230,14 +227,11 @@ export function Navbar({ categories = [] }: NavbarProps) {
               aria-controls="cart-drawer"
             >
               <ShoppingBag size={20} />
-              <span
-                suppressHydrationWarning
-                className={`absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full border border-[var(--background)] bg-primary text-[10px] font-bold text-[var(--primary-contrast)] transition-opacity duration-[var(--motion-base)] ease-[var(--ease-standard)] ${
-                  cartCount > 0 ? "opacity-100" : "opacity-0"
-                }`}
-              >
-                {cartCount}
-              </span>
+              {hydrated && cartCount > 0 && (
+                <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full border border-[var(--background)] bg-primary text-[10px] font-bold text-[var(--primary-contrast)] transition-opacity duration-[var(--motion-base)] ease-[var(--ease-standard)]">
+                  {cartCount}
+                </span>
+              )}
             </button>
           </div>
         </div>

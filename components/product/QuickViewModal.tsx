@@ -1,6 +1,7 @@
 "use client";
 
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { useSafeReducedMotion } from "@/lib/useSafeReducedMotion";
 import { X } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useMemo, useRef } from "react";
@@ -21,7 +22,7 @@ interface QuickViewModalProps {
 }
 
 export function QuickViewModal({ product, isOpen, onClose }: QuickViewModalProps) {
-  const prefersReducedMotion = useReducedMotion();
+  const prefersReducedMotion = useSafeReducedMotion();
   const dialogRef = useRef<HTMLDivElement>(null);
   const lastActiveRef = useRef<HTMLElement | null>(null);
   const hydrated = useHydrated();
@@ -110,7 +111,7 @@ export function QuickViewModal({ product, isOpen, onClose }: QuickViewModalProps
                       {product.name}
                     </h2>
                     <p className="mt-2 text-xl font-semibold text-primary">
-                      {new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN" }).format(product.price)}
+                      {hydrated ? new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN" }).format(product.price) : `₦${product.price.toLocaleString()}`}
                     </p>
                   </div>
                   <button

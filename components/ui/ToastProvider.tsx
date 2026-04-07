@@ -1,8 +1,9 @@
 "use client";
 
 import { createContext, useCallback, useContext, useMemo, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { CheckCircle2, Info, AlertTriangle } from "lucide-react";
+import { useSafeReducedMotion } from "@/lib/useSafeReducedMotion";
 
 type ToastVariant = "success" | "info" | "warning";
 
@@ -29,7 +30,7 @@ function iconForVariant(variant: ToastVariant) {
 
 export function ToastProvider({ children }: { children: React.ReactNode }) {
   const [toasts, setToasts] = useState<Toast[]>([]);
-  const prefersReducedMotion = useReducedMotion();
+  const prefersReducedMotion = useSafeReducedMotion();
 
   const pushToast = useCallback((toast: Omit<Toast, "id">) => {
     const id = crypto.randomUUID();

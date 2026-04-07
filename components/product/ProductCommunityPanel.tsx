@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { MessageCircleQuestion, Star, BellRing } from "lucide-react";
 import { subscribeBackInStock, submitProductQuestion, submitProductReview } from "@/actions/product-engagement";
+import { useHydrated } from "@/lib/useHydrated";
 
 type Review = {
   id: string;
@@ -47,6 +48,7 @@ export function ProductCommunityPanel({
   const [alertEmail, setAlertEmail] = useState("");
   const [feedback, setFeedback] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+  const hydrated = useHydrated();
 
   const handleReviewSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -183,7 +185,9 @@ export function ProductCommunityPanel({
               <div key={review.id} className="rounded-[1rem] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
                 <div className="flex items-center justify-between gap-2">
                   <p className="text-sm font-semibold text-[var(--foreground)]">{review.author}</p>
-                  <p className="text-xs text-secondary">{new Date(review.createdAt).toLocaleDateString("en-NG")}</p>
+                  <p className="text-xs text-secondary">
+                    {hydrated ? new Date(review.createdAt).toLocaleDateString("en-NG") : "—"}
+                  </p>
                 </div>
                 <p className="mt-1 text-xs text-primary">{`${"★".repeat(review.rating)}${"☆".repeat(5 - review.rating)}`}</p>
                 {review.title ? <p className="mt-2 text-sm font-semibold text-[var(--foreground)]">{review.title}</p> : null}

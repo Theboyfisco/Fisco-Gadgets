@@ -1,83 +1,45 @@
 # NOXTECH
 
-Premium gadget storefront built for the Nigerian market, pairing an immersive, modern shopping UI with a production-grade checkout and payment pipeline.
+NOXTECH is a premium gadget storefront for the Nigerian market, built with Next.js App Router, Prisma, PostgreSQL, and Paystack.
 
-This repo focuses on a tactile frontend (depth galleries, smooth motion, rich product pages) and a reliable backend (Prisma + PostgreSQL + Paystack orchestration).
+It includes:
+- storefront browsing (home, category, brand, product)
+- cart, wishlist, compare, and search
+- checkout + promo validation
+- Paystack payment initialization and webhook confirmation
+- customer account routes
+- admin tools for products, catalog, promos, orders, and audit logs
 
----
-
-## Highlights
-
-- Curated category and brand storefronts
-- Rich product detail pages with depth gallery and specs
-- Side-by-side product comparison flow
-- Fast cart and checkout experience
-- Dynamic promo engine (DB-backed + static fallback)
-- Paystack payment initialization and webhook-confirmed order updates
-- Admin promo console with audit logging
-- Mobile-first UX with strong purchase CTAs
-
----
-
-## Product journey
-
-1. Discover products via landing, categories, and brand pages
-2. Inspect details and compare devices side-by-side
-3. Apply promos and checkout with server-validated order creation
-4. Pay securely through Paystack
-5. Receive confirmed order updates via webhook verification
-
----
-
-## Tech stack (current)
-
-**Frontend**
-
+## Stack
 - Next.js `16.1.6` (App Router)
-- React `19.2.3` + TypeScript `5.x`
+- React `19.2.3`
+- TypeScript `5.x`
 - Tailwind CSS `v4`
-- Framer Motion `12.x`
-
-**Backend and data**
-
 - Prisma `6.2.1`
-- PostgreSQL (pooled runtime connection + direct migration connection)
-- Server actions / API routes for checkout + payments
+- PostgreSQL
+- Paystack
 
-**Payments**
+## Project Structure
+- `app/` route segments and API handlers
+- `components/` UI + feature components
+- `actions/` server actions
+- `lib/` shared utilities/auth/config
+- `services/` domain services (orders, promo, shipping)
+- `prisma/` schema, migrations, seed
+- `tests/` unit and e2e tests
 
-- Paystack initialization + webhook verification
-
----
-
-## Project structure
-
-- `app/` — routes, layouts, and page-level composition
-- `components/` — reusable UI and feature components
-- `actions/` — server actions for search, checkout, and payment initiation
-- `lib/` — shared utilities (db, helpers)
-- `prisma/` — schema, migrations, and seed scripts
-
----
-
-## Local setup
-
-### Prerequisites
-
+## Quick Start
+### 1) Prerequisites
 - Node.js 20+
 - npm
-- PostgreSQL (local or hosted, e.g. Supabase)
+- PostgreSQL
 
-### 1) Install dependencies
-
+### 2) Install
 ```bash
 npm install
 ```
 
-### 2) Configure environment variables
-
-Create `.env` and set:
-
+### 3) Configure `.env`
 ```bash
 DATABASE_URL="postgresql://..."
 DIRECT_URL="postgresql://..."
@@ -87,111 +49,102 @@ RESEND_API_KEY="re_..."
 SUPPORT_FROM_EMAIL="NOXtech Support <onboarding@resend.dev>"
 SUPPORT_INBOX_EMAIL="support@noxtech.com.ng"
 CLEANUP_CRON_SECRET="replace-with-random-secret"
-NEXT_PUBLIC_SUPPORT_WHATSAPP_NUMBER="2347031606782" # optional
-NEXT_PUBLIC_SUPPORT_WHATSAPP_DISPLAY="+234 703 160 6782" # optional
-NEXT_PUBLIC_SUPPORT_EMAIL="support@noxtech.com.ng" # optional
-NEXT_PUBLIC_SUPPORT_SALES_EMAIL="sales@noxtech.com.ng" # optional
 NEXT_PUBLIC_APP_URL="http://localhost:3000"
 ALERT_WEBHOOK_URL="https://your-alert-endpoint.example/webhook" # optional
 NOXTECH_FORCE_FALLBACK_DATA="false" # optional
 NOXTECH_ENABLE_DB_DURING_BUILD="false" # optional
 ```
 
-### 3) Prepare Prisma
+Optional public support fields:
+```bash
+NEXT_PUBLIC_SUPPORT_WHATSAPP_NUMBER="2347031606782"
+NEXT_PUBLIC_SUPPORT_WHATSAPP_DISPLAY="+234 703 160 6782"
+NEXT_PUBLIC_SUPPORT_EMAIL="support@noxtech.com.ng"
+NEXT_PUBLIC_SUPPORT_SALES_EMAIL="sales@noxtech.com.ng"
+```
 
+### 4) Prisma setup
 ```bash
 npx prisma generate
 npx prisma migrate deploy
 ```
 
 Optional seed:
-
 ```bash
 npx prisma db seed
 ```
 
-### 4) Run the app
-
+### 5) Run
 ```bash
 npm run dev
 ```
-
 Open `http://localhost:3000`.
 
----
-
-## Environment variables
-
-| Variable | Purpose |
-| --- | --- |
-| `DATABASE_URL` | Runtime pooled connection string |
-| `DIRECT_URL` | Direct connection for migrations |
-| `PAYSTACK_SECRET_KEY` | Server-side Paystack secret |
-| `PAYSTACK_PUBLIC_KEY` | Client-side Paystack public key |
-| `RESEND_API_KEY` | Resend API key for support/contact email delivery |
-| `SUPPORT_FROM_EMAIL` | Sender identity used by support email route |
-| `SUPPORT_INBOX_EMAIL` | Inbox address that receives support form submissions |
-| `CLEANUP_CRON_SECRET` | Secret header value required by `POST /api/orders/cleanup` (`x-cron-secret`) |
-| `NEXT_PUBLIC_SUPPORT_WHATSAPP_NUMBER` | Public WhatsApp number used across CTA and support links |
-| `NEXT_PUBLIC_SUPPORT_WHATSAPP_DISPLAY` | Public display format for support phone text in UI |
-| `NEXT_PUBLIC_SUPPORT_EMAIL` | Public support email shown in UI and used as fallback inbox |
-| `NEXT_PUBLIC_SUPPORT_SALES_EMAIL` | Public secondary sales email shown in contact UI |
-| `NEXT_PUBLIC_APP_URL` | Public base URL for redirects and webhooks |
-| `ALERT_WEBHOOK_URL` | Optional webhook for operational alerts |
-| `NOXTECH_FORCE_FALLBACK_DATA` | Force fallback mode even when DB exists (`true`/`false`) |
-| `NOXTECH_ENABLE_DB_DURING_BUILD` | Allow DB reads during Next build phase (`true`/`false`) |
-| `PAYSTACK_MOCK_AUTH_URL` | Optional local/e2e mock redirect URL for payment initialization |
-
----
-
 ## Scripts
+- `npm run dev` start dev server (webpack mode)
+- `npm run dev:turbo` start dev server (turbopack)
+- `npm run dev:webpack` explicit webpack dev mode
+- `npm run clean:next` remove `.next` cache/build output
+- `npm run build` typecheck + production build
+- `npm run start` start production server
+- `npm run lint` run ESLint
+- `npm run test:unit` run unit tests
+- `npm run test:e2e` run Playwright tests
+- `npm run scrape:images` run image scrape utility
 
-| Command | Description |
-| --- | --- |
-| `npm run dev` | Start local development server |
-| `npm run build` | Create production build |
-| `npm run start` | Run production server |
-| `npm run lint` | Run ESLint |
-| `npm run test:unit` | Run unit tests (shipping, stock/order logic, validation) |
-| `npm run test:e2e` | Run Playwright end-to-end tests |
-| `npx tsc --noEmit` | Type-check without emitting files |
-| `npm run scrape:images` | Scrape and save product images |
+## Key Routes
+### Storefront
+- `/`
+- `/browse`
+- `/category/[id]`
+- `/brand/[id]`
+- `/product/[id]`
+- `/search`
+- `/compare`
+- `/wishlist`
+- `/checkout`
+- `/checkout/success`
 
----
+### Account
+- `/account`
+- `/account/login`
+- `/account/register`
+- `/account/profile`
+- `/account/orders`
+
+### Admin
+- `/admin/setup`
+- `/admin/login`
+- `/admin/products`
+- `/admin/catalog`
+- `/admin/promos`
+- `/admin/orders`
+- `/admin/audit`
+
+## API Endpoints (Selected)
+- `POST /api/paystack/webhook`
+- `GET /api/promos`
+- `POST /api/orders/cleanup`
+- `POST /api/support/contact`
+- `GET/POST /api/account/lists`
 
 ## Deployment (Vercel)
-
-1. Push your repository to GitHub
-2. Import project in Vercel
-3. Add all environment variables from `.env`
-4. Build command: `npm run build`
-5. Configure Paystack webhook:
+1. Push repo to GitHub
+2. Import project into Vercel
+3. Add all required environment variables
+4. Use build command: `npm run build`
+5. Set Paystack webhook URL:
 
 ```text
 https://<your-domain>/api/paystack/webhook
 ```
 
-Prisma client generation runs automatically on install via `postinstall`.
+`prisma generate` runs automatically via `postinstall`.
 
----
-
-## Admin surfaces
-
-- `/admin/products` — product CRUD and media library
-- `/admin/catalog` — category and brand management
-- `/admin/promos` — promo code CRUD, activation windows, usage caps
-- `/admin/orders` — order status management
-- `/admin/audit` — admin change trail
-
----
-
-## Security notes
-
-- Keep secrets only in `.env` or your deployment platform settings
-- Never commit real API keys
-- Rotate keys immediately if exposed
-- Ensure webhook signature verification remains enabled
-
----
+## Security Notes
+- Never commit real secrets
+- Keep webhook signature verification enabled
+- Restrict cron endpoint with `CLEANUP_CRON_SECRET`
+- Rotate exposed keys immediately
 
 

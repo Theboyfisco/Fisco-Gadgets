@@ -19,15 +19,7 @@ const RECENT_SEARCH_KEY = "noxtech_recent_searches_v1";
 export function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<any[]>([]);
-  const [recentSearches, setRecentSearches] = useState<string[]>(() => {
-    if (typeof window === "undefined") return [];
-    try {
-      const stored = localStorage.getItem(RECENT_SEARCH_KEY);
-      return stored ? (JSON.parse(stored) as string[]) : [];
-    } catch {
-      return [];
-    }
-  });
+  const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [quickViewProduct, setQuickViewProduct] = useState<any | null>(null);
   const router = useRouter();
@@ -37,6 +29,17 @@ export function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; onClose: (
   const deferredQuery = useDeferredValue(query);
 
   useBodyScrollLock(isOpen);
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(RECENT_SEARCH_KEY);
+      if (stored) {
+        setRecentSearches(JSON.parse(stored) as string[]);
+      }
+    } catch {
+      // Ignore storage issues.
+    }
+  }, []);
 
   useEffect(() => {
     if (!isOpen) return;

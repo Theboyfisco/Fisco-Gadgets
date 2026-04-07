@@ -1,6 +1,7 @@
 "use client";
 
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { useSafeReducedMotion } from "@/lib/useSafeReducedMotion";
 import { CircleHelp, Mail, MessageCircle, Send, X } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
@@ -29,7 +30,7 @@ export function SupportSpeedDial() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [form, setForm] = useState<SupportFormState>(INITIAL_FORM);
   const rootRef = useRef<HTMLDivElement>(null);
-  const prefersReducedMotion = useReducedMotion();
+  const prefersReducedMotion = useSafeReducedMotion();
   const { pushToast } = useToast();
   const onProductPage = pathname?.startsWith("/product/");
 

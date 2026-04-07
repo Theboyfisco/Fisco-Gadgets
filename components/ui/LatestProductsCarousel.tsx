@@ -4,7 +4,8 @@ import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { useSafeReducedMotion } from "@/lib/useSafeReducedMotion";
 import { MOTION } from "@/lib/motion";
 import { useHydrated } from "@/lib/useHydrated";
 import { DEFAULT_PRODUCT_IMAGE } from "@/lib/normalize-product";
@@ -27,7 +28,7 @@ const AUTOPLAY_INTERVAL = 4500;
 
 export function LatestProductsCarousel({ products }: LatestProductsCarouselProps) {
   const hydrated = useHydrated();
-  const reducedMotionPreference = useReducedMotion();
+  const prefersReducedMotion = useSafeReducedMotion();
   const visibleProducts = useMemo(
     () =>
       products.map((product) => ({
@@ -38,8 +39,6 @@ export function LatestProductsCarousel({ products }: LatestProductsCarouselProps
   );
   const [activeIndex, setActiveIndex] = useState(0);
   const [pageHidden, setPageHidden] = useState(false);
-  const prefersReducedMotion = hydrated && reducedMotionPreference;
-
   const count = visibleProducts.length;
   const safeIndex = count ? activeIndex % count : 0;
   const activeProduct = visibleProducts[safeIndex] ?? visibleProducts[0];
@@ -74,10 +73,10 @@ export function LatestProductsCarousel({ products }: LatestProductsCarouselProps
     );
   }
 
-  const formattedPrice = new Intl.NumberFormat("en-NG", {
+  const formattedPrice = hydrated ? new Intl.NumberFormat("en-NG", {
     style: "currency",
     currency: "NGN",
-  }).format(activeProduct.price);
+  }).format(activeProduct.price) : `₦${activeProduct.price.toLocaleString()}`;
 
   return (
     <div
