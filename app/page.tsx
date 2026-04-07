@@ -102,7 +102,7 @@ export default async function Home() {
             style={{ backgroundImage: "var(--hero-illustration)" }}
           />
           <div className="absolute inset-0 bg-[var(--hero-overlay)]" />
-          <div className="absolute inset-y-0 left-0 w-full bg-[linear-gradient(90deg,var(--hero-surface)_0%,rgba(255,255,255,0.08)_56%,transparent_100%)] lg:w-[64%]" />
+          <div className="absolute inset-y-0 left-0 w-full bg-[linear-gradient(90deg,var(--hero-surface)_0%,var(--hero-fade)_56%,transparent_100%)] lg:w-[64%]" />
 
           <div className="relative z-10 grid items-center gap-[clamp(1.25rem,3vw,3rem)] xl:grid-cols-2">
             <Reveal className="order-2 xl:order-1">

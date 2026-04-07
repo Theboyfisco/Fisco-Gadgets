@@ -165,6 +165,7 @@
     --hero-illustration: url("/hero-brand-scene.svg");
     --hero-foreground: #f6f9ff;
     --hero-foreground-soft: rgba(246, 249, 255, 0.82);
+    --hero-fade: rgba(255, 255, 255, 0.06);
     --hero-overlay:
       radial-gradient(
         circle at 20% 20%,
@@ -247,7 +248,7 @@
     --accent-link: #2147c5;
     --accent-link-hover: #1838a7;
     --status-error: oklch(0.577 0.245 27);
-    --status-success: oklch(0.57 0.16 156);
+    --status-success: oklch(0.68 0.18 154);
     --focus-ring: #2448c4;
     --focus-ring-offset: #f6f8fc;
     --interactive-hover: rgba(12, 26, 48, 0.06);
@@ -274,9 +275,9 @@
     --carousel-border: rgba(57, 81, 144, 0.18);
     --carousel-shadow: 0 16px 42px rgba(13, 30, 55, 0.14);
     --carousel-overlay:
-      linear-gradient(175deg, rgba(255, 255, 255, 0.25), rgba(236, 243, 255, 0.78)),
-      radial-gradient(circle at 16% 20%, rgba(73, 111, 232, 0.14), transparent 44%),
-      radial-gradient(circle at 83% 14%, rgba(24, 153, 184, 0.13), transparent 40%);
+      linear-gradient(175deg, rgba(8, 26, 62, 0.04), rgba(8, 22, 48, 0.72)),
+      radial-gradient(circle at 16% 20%, rgba(73, 111, 232, 0.08), transparent 44%),
+      radial-gradient(circle at 83% 14%, rgba(24, 153, 184, 0.06), transparent 40%);
     --carousel-glow-1: rgba(73, 111, 232, 0.2);
     --carousel-glow-2: rgba(24, 153, 184, 0.16);
     --carousel-control-bg: rgba(255, 255, 255, 0.86);
@@ -324,7 +325,7 @@
     --support-menu-shadow: 0 16px 38px rgba(16, 30, 53, 0.12);
     --support-menu-item-bg: rgba(255, 255, 255, 0.84);
     --support-menu-item-border: rgba(65, 85, 148, 0.16);
-    --support-menu-item-hover: rgba(255, 255, 255, 0.98);
+    --support-menu-item-hover: rgba(12, 26, 48, 0.05);
     --interactive-bg: var(--interactive-hover);
     --interactive-bg-soft: rgba(255, 255, 255, 0.9);
     --interactive-border: rgba(12, 26, 48, 0.1);
@@ -333,7 +334,7 @@
     --border-subtle: rgba(12, 26, 48, 0.1);
     --border-strong: var(--interactive-border-strong);
     --overlay: rgba(9, 20, 38, 0.36);
-    --overlay-strong: rgba(247, 250, 255, 0.95);
+    --overlay-strong: rgba(7, 12, 24, 0.45);
     --panel-bg: #f8fafd;
     --panel-bg-soft: rgba(255, 255, 255, 0.96);
     --footer-bg: #eef2f8;
@@ -345,6 +346,7 @@
     --hero-illustration: url("/hero-brand-scene-light.svg");
     --hero-foreground: #101b33;
     --hero-foreground-soft: #41526d;
+    --hero-fade: rgba(12, 26, 48, 0.04);
     --hero-overlay:
       radial-gradient(
         circle at 20% 20%,
@@ -365,13 +367,13 @@
     --media-card-border: rgba(12, 26, 48, 0.09);
     --media-card-shadow: 0 20px 54px rgba(17, 31, 56, 0.16);
     --media-card-overlay:
-      radial-gradient(circle at top, rgba(16, 185, 129, 0.12), transparent 45%),
+      radial-gradient(circle at top, rgba(16, 185, 129, 0.08), transparent 45%),
       radial-gradient(
         circle at 20% 80%,
-        rgba(16, 185, 129, 0.1),
+        rgba(16, 185, 129, 0.06),
         transparent 42%
       ),
-      linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(13, 26, 48, 0.54));
+      linear-gradient(180deg, rgba(10, 24, 48, 0.04), rgba(7, 18, 42, 0.76));
     --media-card-foreground: #ffffff;
     --media-card-pill-bg: rgba(255, 255, 255, 0.2);
     --media-card-pill-border: rgba(255, 255, 255, 0.36);
@@ -406,6 +408,11 @@
     --cursor-dot: rgba(9, 28, 68, 0.92);
     --cursor-ring: rgba(45, 82, 212, 0.72);
     --cursor-ring-bg: rgba(45, 82, 212, 0.12);
+  }
+
+  /* Support for logo visibility in light mode */
+  [data-theme="light"] .brand-logo-img {
+    filter: invert(1) brightness(0.15) contrast(1.2);
   }
 
   html {
