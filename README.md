@@ -57,7 +57,6 @@ This repo focuses on a tactile frontend (depth galleries, smooth motion, rich pr
 - `actions/` — server actions for search, checkout, and payment initiation
 - `lib/` — shared utilities (db, helpers)
 - `prisma/` — schema, migrations, and seed scripts
-- `docs/` — supporting documentation
 
 ---
 
@@ -195,10 +194,4 @@ Prisma client generation runs automatically on install via `postinstall`.
 
 ---
 
-## Related docs
-
-- `FEATURES.md`
-- `BACKEND_SETUP.md`
-- `deployment_guide.md`
-- `info.md`
 
